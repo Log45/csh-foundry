@@ -22,6 +22,9 @@ services:
     profiles: ["api"]
     environment:
       FOUNDRY_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-foundry}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-foundry}
+      FOUNDRY_TRUSTED_LOCAL_IDENTITY: ${FOUNDRY_TRUSTED_LOCAL_IDENTITY:-false}
+      FOUNDRY_LOCAL_TENANT_ID: ${FOUNDRY_LOCAL_TENANT_ID:-}
+      FOUNDRY_LOCAL_PRINCIPAL_ID: ${FOUNDRY_LOCAL_PRINCIPAL_ID:-}
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:

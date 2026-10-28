@@ -1,0 +1,3 @@
+PASS Docker GET /health/live: 200 {"status": "ok"}
+PASS Docker GET /health/ready: 200 {"status": "ready"}
+PASS Docker GET /api/v1/ontologies: 401 {"error": {"code": "authentication_required", "message": "Authentication is required"}}

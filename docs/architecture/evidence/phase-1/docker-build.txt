@@ -1,0 +1,103 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 398B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from api.Dockerfile
+#2 transferring dockerfile: 315B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for ghcr.io/astral-sh/uv:0.9.5
+#3 ...
+
+#4 [internal] load metadata for docker.io/library/python:3.12.12-slim-bookworm
+#4 DONE 0.3s
+
+#3 [internal] load metadata for ghcr.io/astral-sh/uv:0.9.5
+#3 DONE 0.4s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 91B done
+#5 DONE 0.0s
+
+#6 FROM ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7
+#6 resolve ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7 0.0s done
+#6 DONE 0.0s
+
+#7 [stage-0 1/5] FROM docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#7 resolve docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c 0.0s done
+#7 DONE 0.0s
+
+#8 [internal] load build context
+#8 transferring context: 16.85MB 0.4s done
+#8 DONE 0.5s
+
+#9 [stage-0 2/5] COPY --from=ghcr.io/astral-sh/uv:0.9.5 /uv /usr/local/bin/uv
+#9 CACHED
+
+#10 [stage-0 3/5] WORKDIR /app
+#10 CACHED
+
+#11 [stage-0 4/5] COPY . .
+#11 DONE 0.1s
+
+#12 [stage-0 5/5] RUN uv sync --frozen --no-dev
+#12 0.299 Using CPython 3.12.12 interpreter at: /usr/local/bin/python3.12
+#12 0.300 Creating virtual environment at: .venv
+#12 0.352    Building ontology-schema @ file:///app/packages/ontology-schema
+#12 0.353    Building ontology-platform-api @ file:///app/services/api
+#12 0.421 Downloading pydantic-core (2.0MiB)
+#12 0.421 Downloading psycopg-binary (6.5MiB)
+#12 0.422 Downloading polars-runtime-32 (44.4MiB)
+#12 0.422 Downloading sqlalchemy (3.3MiB)
+#12 0.738  Downloading pydantic-core
+#12 0.928  Downloading sqlalchemy
+#12 1.084  Downloading psycopg-binary
+#12 1.506       Built ontology-schema @ file:///app/packages/ontology-schema
+#12 1.506       Built ontology-platform-api @ file:///app/services/api
+#12 2.223  Downloading polars-runtime-32
+#12 2.224 Prepared 27 packages in 1.91s
+#12 2.244 Installed 27 packages in 19ms
+#12 2.244  + alembic==1.20.1
+#12 2.244  + annotated-doc==0.0.5
+#12 2.244  + annotated-types==0.8.0
+#12 2.244  + anyio==4.15.1
+#12 2.244  + click==8.5.0
+#12 2.244  + fastapi==0.162.0
+#12 2.244  + greenlet==3.5.6
+#12 2.244  + h11==0.16.0
+#12 2.244  + idna==3.20
+#12 2.244  + mako==1.4.3
+#12 2.244  + markupsafe==3.0.4
+#12 2.244  + ontology-platform-api==0.0.1 (from file:///app/services/api)
+#12 2.244  + ontology-schema==0.0.1 (from file:///app/packages/ontology-schema)
+#12 2.244  + opentelemetry-api==1.45.1
+#12 2.244  + polars==1.44.2
+#12 2.244  + polars-runtime-32==1.44.2
+#12 2.244  + psycopg==3.3.6
+#12 2.244  + psycopg-binary==3.3.6
+#12 2.245  + pydantic==2.14.1
+#12 2.245  + pydantic-core==2.50.1
+#12 2.245  + pydantic-settings==2.16.2
+#12 2.245  + python-dotenv==1.2.4
+#12 2.245  + sqlalchemy==2.0.55
+#12 2.245  + starlette==1.10.0
+#12 2.245  + typing-extensions==4.16.0
+#12 2.245  + typing-inspection==0.4.4
+#12 2.245  + uvicorn==0.54.0
+#12 DONE 2.5s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 4.7s done
+#13 exporting manifest sha256:0981c59b30fe498dfe155c7376d7a3976a226fbe86902fcfef458411494414fa done
+#13 exporting config sha256:1d885b896e7cad28788e67ee0b41d5b44e41638d3bb04de55a915e2a31f1ba93 done
+#13 exporting attestation manifest sha256:7dd54c7539d0bb1c02e9ef866267de3ec7d07e7822d3c507c77fc2100abae1dc done
+#13 exporting manifest list sha256:03b1d93b84635dc204aece4b96023847600d504274f8ea2ced683e733bc109ba done
+#13 naming to docker.io/library/csh-foundry-api:latest done
+#13 unpacking to docker.io/library/csh-foundry-api:latest
+#13 unpacking to docker.io/library/csh-foundry-api:latest 1.0s done
+#13 DONE 5.7s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+ api  Built

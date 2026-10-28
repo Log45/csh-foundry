@@ -1,4 +1,4 @@
-name: Phase 0 validation
+name: Phase 1 validation
 on: [push, pull_request]
 jobs:
   foundation:

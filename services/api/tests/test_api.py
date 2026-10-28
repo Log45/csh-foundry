@@ -47,3 +47,23 @@ def test_readiness_database_error():
         assert response.status_code == 503
         assert "private" not in response.text
         assert response.json()["error"]["code"] == "database_unavailable"
+
+
+def test_local_settings_reject_missing_or_blank_identity():
+    from uuid import uuid4
+
+    import pytest
+    from pydantic import ValidationError
+
+    for values in [
+        {},
+        {"local_tenant_id": uuid4()},
+        {"local_tenant_id": uuid4(), "local_principal_id": "  "},
+    ]:
+        with pytest.raises(ValidationError):
+            Settings(
+                database_url=SecretStr("postgresql+psycopg://localhost/unused"),
+                trusted_local_identity=True,
+                _env_file=None,
+                **values,
+            )

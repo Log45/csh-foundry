@@ -4,6 +4,7 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 from ontology_platform.config import Settings
+from ontology_platform.db.governance import SCHEMA_REVISION
 from ontology_platform.db.models import Tenant
 from ontology_platform.db.session import make_engine, transaction
 from ontology_platform.main import create_app
@@ -25,7 +26,7 @@ def test_database_transaction_and_readiness():
         with engine.connect() as connection:
             assert (
                 connection.execute(text("SELECT version_num FROM alembic_version")).scalar()
-                == "0001_tenants"
+                == SCHEMA_REVISION
             )
         with transaction(factory) as session:
             session.add(Tenant(id=tenant, name="test"))

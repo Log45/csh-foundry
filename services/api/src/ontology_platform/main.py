@@ -11,10 +11,13 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session, sessionmaker
 from starlette.exceptions import HTTPException
 
+from ontology_platform.api.v1.routes import router
 from ontology_platform.config import Settings, get_settings
+from ontology_platform.db.governance import SCHEMA_REVISION
 from ontology_platform.db.session import make_engine
 from ontology_platform.dependencies import get_session
 from ontology_platform.errors import ApplicationError
+from ontology_platform.security.local import LocalAuthorizer
 
 
 class Health(BaseModel):
@@ -37,6 +40,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         openapi_url="/api/v1/openapi.json",
         docs_url="/docs",
     )
+    app.include_router(router)
+    app.state.authorizer = LocalAuthorizer(configuration)
     app.state.settings = configuration
     app.state.engine = engine
     app.state.sessions = sessionmaker(engine, expire_on_commit=False)
@@ -78,7 +83,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         try:
             session.execute(text("SELECT 1"))
             revision = session.execute(text("SELECT version_num FROM alembic_version")).scalar()
-            if revision != "0001_tenants":
+            if revision != SCHEMA_REVISION:
                 raise ApplicationError("database_not_ready", "Database migration required", 503)
         except SQLAlchemyError as exc:
             raise ApplicationError("database_unavailable", "Database is unavailable", 503) from exc

@@ -125,8 +125,6 @@ def test_negative_shacl(fixtures: Path, mutation: str, component: str):
         graph.set((NS["TASK-001"], NS.scheduledDate, Literal("2026-11-04")))
     elif mutation == "second_employee":
         graph.add((NS["TASK-001"], NS.assignedEmployee, NS["EMP-001"]))
-    conforms, report, text = validate(
-        graph, shacl_graph=str(fixtures / "manufacturing-shapes.ttl"), inference="none"
-    )
+    conforms, report, text = validate(graph, shacl_graph=rdf11_shapes(fixtures), inference="none")
     assert not conforms, text
     assert SH[component] in set(report.objects(None, SH.sourceConstraintComponent))
