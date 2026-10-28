@@ -1,0 +1,29 @@
+@prefix : <https://example.org/ontologies/manufacturing#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+# Operational closed-world constraints complement the OWL open-world model.
+:FactoryShape a sh:NodeShape ; sh:targetClass :Factory ;
+  sh:property [ sh:path :factoryId ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ; sh:minLength 1 ] ;
+  sh:property [ sh:path :factoryName ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ; sh:minLength 1 ] ;
+  sh:property [ sh:path :location ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+:MachineShape a sh:NodeShape ; sh:targetClass :Machine ;
+  sh:property [ sh:path :machineId ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ; sh:minLength 1 ] ;
+  sh:property [ sh:path :machineName ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path :operationalStatus ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ( "RUNNING" "STOPPED" "MAINTENANCE" "CRITICAL" ) ] ;
+  sh:property [ sh:path :temperatureCelsius ; sh:datatype xsd:decimal ; sh:minCount 1 ; sh:maxCount 1 ; sh:minInclusive -273.15 ] ;
+  sh:property [ sh:path :locatedInFactory ; sh:class :Factory ; sh:nodeKind sh:IRI ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+:EmployeeShape a sh:NodeShape ; sh:targetClass :Employee ;
+  sh:property [ sh:path :employeeId ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ; sh:minLength 1 ] ;
+  sh:property [ sh:path :employeeName ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path :department ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+:MaintenanceTaskShape a sh:NodeShape ; sh:targetClass :MaintenanceTask ;
+  sh:property [ sh:path :taskId ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ; sh:minLength 1 ] ;
+  sh:property [ sh:path :scheduledDate ; sh:datatype xsd:date ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path :taskStatus ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ( "OPEN" "IN_PROGRESS" "COMPLETED" "CANCELLED" ) ] ;
+  sh:property [ sh:path :taskForMachine ; sh:class :Machine ; sh:nodeKind sh:IRI ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path :assignedEmployee ; sh:class :Employee ; sh:nodeKind sh:IRI ; sh:minCount 1 ; sh:maxCount 1 ] .

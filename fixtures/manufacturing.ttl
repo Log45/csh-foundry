@@ -1,0 +1,97 @@
+@prefix : <https://example.org/ontologies/manufacturing#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://example.org/ontologies/manufacturing> a owl:Ontology ;
+    rdfs:label "Manufacturing Maintenance Ontology"@en ;
+    rdfs:comment "Sample OWL 2 ontology for testing Protégé import, operational schema compilation, and semantic reasoning. No operational actions or access policies are encoded here."@en ;
+    owl:versionIRI <https://example.org/ontologies/manufacturing/1.0.0> .
+
+# Classes
+:Factory a owl:Class ; rdfs:label "Factory"@en .
+:Machine a owl:Class ; rdfs:label "Machine"@en .
+:Employee a owl:Class ; rdfs:label "Employee"@en .
+:MaintenanceTask a owl:Class ; rdfs:label "Maintenance task"@en .
+
+# Illustrative inference: a Machine with operationalStatus exactly "CRITICAL"
+# can be classified as a CriticalMachine by an OWL 2 reasoner supporting hasValue.
+:CriticalMachine a owl:Class ;
+    rdfs:label "Critical machine"@en ;
+    owl:equivalentClass [
+        a owl:Class ;
+        owl:intersectionOf (
+            :Machine
+            [ a owl:Restriction ;
+              owl:onProperty :operationalStatus ;
+              owl:hasValue "CRITICAL"^^xsd:string ]
+        )
+    ] .
+
+# Object properties (relationships)
+:containsMachine a owl:ObjectProperty ;
+    rdfs:domain :Factory ; rdfs:range :Machine ;
+    owl:inverseOf :locatedInFactory ;
+    rdfs:label "contains machine"@en .
+
+:locatedInFactory a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain :Machine ; rdfs:range :Factory ;
+    rdfs:label "located in factory"@en .
+
+:hasMaintenanceTask a owl:ObjectProperty ;
+    rdfs:domain :Machine ; rdfs:range :MaintenanceTask ;
+    owl:inverseOf :taskForMachine ;
+    rdfs:label "has maintenance task"@en .
+
+:taskForMachine a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain :MaintenanceTask ; rdfs:range :Machine ;
+    rdfs:label "task for machine"@en .
+
+:assignedToTask a owl:ObjectProperty ;
+    rdfs:domain :Employee ; rdfs:range :MaintenanceTask ;
+    owl:inverseOf :assignedEmployee ;
+    rdfs:label "assigned to task"@en .
+
+:assignedEmployee a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain :MaintenanceTask ; rdfs:range :Employee ;
+    rdfs:label "assigned employee"@en .
+
+# Data properties
+:factoryId a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain :Factory ; rdfs:range xsd:string .
+:factoryName a owl:DatatypeProperty ;
+    rdfs:domain :Factory ; rdfs:range xsd:string .
+:location a owl:DatatypeProperty ;
+    rdfs:domain :Factory ; rdfs:range xsd:string .
+
+:machineId a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain :Machine ; rdfs:range xsd:string .
+:machineName a owl:DatatypeProperty ;
+    rdfs:domain :Machine ; rdfs:range xsd:string .
+:operationalStatus a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain :Machine ; rdfs:range xsd:string ;
+    rdfs:comment "Application-level allowed values: RUNNING, STOPPED, MAINTENANCE, CRITICAL. Enforce this enumeration in the operational schema or SHACL."@en .
+:temperatureCelsius a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain :Machine ; rdfs:range xsd:decimal .
+
+:employeeId a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain :Employee ; rdfs:range xsd:string .
+:employeeName a owl:DatatypeProperty ;
+    rdfs:domain :Employee ; rdfs:range xsd:string .
+:department a owl:DatatypeProperty ;
+    rdfs:domain :Employee ; rdfs:range xsd:string .
+
+:taskId a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain :MaintenanceTask ; rdfs:range xsd:string .
+:scheduledDate a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain :MaintenanceTask ; rdfs:range xsd:date .
+:taskStatus a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain :MaintenanceTask ; rdfs:range xsd:string ;
+    rdfs:comment "Application-level allowed values: OPEN, IN_PROGRESS, COMPLETED, CANCELLED."@en .
+
+# OWL key declarations express semantic identity, not SQL uniqueness constraints.
+:Factory owl:hasKey ( :factoryId ) .
+:Machine owl:hasKey ( :machineId ) .
+:Employee owl:hasKey ( :employeeId ) .
+:MaintenanceTask owl:hasKey ( :taskId ) .

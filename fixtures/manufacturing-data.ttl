@@ -1,0 +1,478 @@
+@prefix : <https://example.org/ontologies/manufacturing#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:EMP-001 a :Employee ;
+    :assignedToTask :TASK-005,
+        :TASK-017 ;
+    :department "Maintenance"^^xsd:string ;
+    :employeeId "EMP-001"^^xsd:string ;
+    :employeeName "Avery Chen"^^xsd:string .
+
+:EMP-002 a :Employee ;
+    :assignedToTask :TASK-010,
+        :TASK-022 ;
+    :department "Operations"^^xsd:string ;
+    :employeeId "EMP-002"^^xsd:string ;
+    :employeeName "Jordan Lee"^^xsd:string .
+
+:EMP-003 a :Employee ;
+    :assignedToTask :TASK-003,
+        :TASK-015 ;
+    :department "Maintenance"^^xsd:string ;
+    :employeeId "EMP-003"^^xsd:string ;
+    :employeeName "Morgan Patel"^^xsd:string .
+
+:EMP-004 a :Employee ;
+    :assignedToTask :TASK-008,
+        :TASK-020 ;
+    :department "Engineering"^^xsd:string ;
+    :employeeId "EMP-004"^^xsd:string ;
+    :employeeName "Taylor Brooks"^^xsd:string .
+
+:EMP-006 a :Employee ;
+    :assignedToTask :TASK-006,
+        :TASK-018 ;
+    :department "Operations"^^xsd:string ;
+    :employeeId "EMP-006"^^xsd:string ;
+    :employeeName "Riley Morgan"^^xsd:string .
+
+:EMP-007 a :Employee ;
+    :assignedToTask :TASK-011,
+        :TASK-023 ;
+    :department "Engineering"^^xsd:string ;
+    :employeeId "EMP-007"^^xsd:string ;
+    :employeeName "Alex Kim"^^xsd:string .
+
+:EMP-008 a :Employee ;
+    :assignedToTask :TASK-004,
+        :TASK-016 ;
+    :department "Maintenance"^^xsd:string ;
+    :employeeId "EMP-008"^^xsd:string ;
+    :employeeName "Jamie Ortiz"^^xsd:string .
+
+:EMP-009 a :Employee ;
+    :assignedToTask :TASK-009,
+        :TASK-021 ;
+    :department "Operations"^^xsd:string ;
+    :employeeId "EMP-009"^^xsd:string ;
+    :employeeName "Samir Shah"^^xsd:string .
+
+:EMP-010 a :Employee ;
+    :assignedToTask :TASK-002,
+        :TASK-014 ;
+    :department "Maintenance"^^xsd:string ;
+    :employeeId "EMP-010"^^xsd:string ;
+    :employeeName "Drew Parker"^^xsd:string .
+
+:EMP-011 a :Employee ;
+    :assignedToTask :TASK-007,
+        :TASK-019 ;
+    :department "Engineering"^^xsd:string ;
+    :employeeId "EMP-011"^^xsd:string ;
+    :employeeName "Quinn Davis"^^xsd:string .
+
+:EMP-012 a :Employee ;
+    :assignedToTask :TASK-012,
+        :TASK-024 ;
+    :department "Maintenance"^^xsd:string ;
+    :employeeId "EMP-012"^^xsd:string ;
+    :employeeName "Skyler Nguyen"^^xsd:string .
+
+:MCH-002 a :Machine ;
+    :hasMaintenanceTask :TASK-006 ;
+    :locatedInFactory :FAC-002 ;
+    :machineId "MCH-002"^^xsd:string ;
+    :machineName "Hydraulic Press 02"^^xsd:string ;
+    :operationalStatus "RUNNING"^^xsd:string ;
+    :temperatureCelsius 26.0 .
+
+:MCH-003 a :Machine ;
+    :hasMaintenanceTask :TASK-009 ;
+    :locatedInFactory :FAC-003 ;
+    :machineId "MCH-003"^^xsd:string ;
+    :machineName "Conveyor 03"^^xsd:string ;
+    :operationalStatus "STOPPED"^^xsd:string ;
+    :temperatureCelsius 45.5 .
+
+:MCH-004 a :Machine ;
+    :hasMaintenanceTask :TASK-012 ;
+    :locatedInFactory :FAC-004 ;
+    :machineId "MCH-004"^^xsd:string ;
+    :machineName "Packaging Robot 04"^^xsd:string ;
+    :operationalStatus "MAINTENANCE"^^xsd:string ;
+    :temperatureCelsius 41.4 .
+
+:MCH-005 a :Machine ;
+    :hasMaintenanceTask :TASK-015 ;
+    :locatedInFactory :FAC-005 ;
+    :machineId "MCH-005"^^xsd:string ;
+    :machineName "Industrial Oven 05"^^xsd:string ;
+    :operationalStatus "CRITICAL"^^xsd:string ;
+    :temperatureCelsius 81.4 .
+
+:MCH-006 a :Machine ;
+    :hasMaintenanceTask :TASK-018 ;
+    :locatedInFactory :FAC-006 ;
+    :machineId "MCH-006"^^xsd:string ;
+    :machineName "CNC Mill 06"^^xsd:string ;
+    :operationalStatus "RUNNING"^^xsd:string ;
+    :temperatureCelsius 76.8 .
+
+:MCH-009 a :Machine ;
+    :hasMaintenanceTask :TASK-007 ;
+    :locatedInFactory :FAC-003 ;
+    :machineId "MCH-009"^^xsd:string ;
+    :machineName "Packaging Robot 09"^^xsd:string ;
+    :operationalStatus "STOPPED"^^xsd:string ;
+    :temperatureCelsius 56.9 .
+
+:MCH-010 a :Machine ;
+    :hasMaintenanceTask :TASK-010 ;
+    :locatedInFactory :FAC-004 ;
+    :machineId "MCH-010"^^xsd:string ;
+    :machineName "Industrial Oven 10"^^xsd:string ;
+    :operationalStatus "MAINTENANCE"^^xsd:string ;
+    :temperatureCelsius 26.3 .
+
+:MCH-011 a :Machine ;
+    :hasMaintenanceTask :TASK-013 ;
+    :locatedInFactory :FAC-005 ;
+    :machineId "MCH-011"^^xsd:string ;
+    :machineName "CNC Mill 11"^^xsd:string ;
+    :operationalStatus "CRITICAL"^^xsd:string ;
+    :temperatureCelsius 41.1 .
+
+:MCH-012 a :Machine ;
+    :hasMaintenanceTask :TASK-016 ;
+    :locatedInFactory :FAC-006 ;
+    :machineId "MCH-012"^^xsd:string ;
+    :machineName "Hydraulic Press 12"^^xsd:string ;
+    :operationalStatus "RUNNING"^^xsd:string ;
+    :temperatureCelsius 63.4 .
+
+:MCH-013 a :Machine ;
+    :hasMaintenanceTask :TASK-019 ;
+    :locatedInFactory :FAC-001 ;
+    :machineId "MCH-013"^^xsd:string ;
+    :machineName "Conveyor 13"^^xsd:string ;
+    :operationalStatus "RUNNING"^^xsd:string ;
+    :temperatureCelsius 26.1 .
+
+:MCH-016 a :Machine ;
+    :hasMaintenanceTask :TASK-008 ;
+    :locatedInFactory :FAC-004 ;
+    :machineId "MCH-016"^^xsd:string ;
+    :machineName "CNC Mill 16"^^xsd:string ;
+    :operationalStatus "MAINTENANCE"^^xsd:string ;
+    :temperatureCelsius 66.5 .
+
+:MCH-017 a :Machine ;
+    :hasMaintenanceTask :TASK-011 ;
+    :locatedInFactory :FAC-005 ;
+    :machineId "MCH-017"^^xsd:string ;
+    :machineName "Hydraulic Press 17"^^xsd:string ;
+    :operationalStatus "CRITICAL"^^xsd:string ;
+    :temperatureCelsius 41.2 .
+
+:MCH-018 a :Machine ;
+    :hasMaintenanceTask :TASK-014 ;
+    :locatedInFactory :FAC-006 ;
+    :machineId "MCH-018"^^xsd:string ;
+    :machineName "Conveyor 18"^^xsd:string ;
+    :operationalStatus "RUNNING"^^xsd:string ;
+    :temperatureCelsius 70.0 .
+
+:MCH-019 a :Machine ;
+    :hasMaintenanceTask :TASK-017 ;
+    :locatedInFactory :FAC-001 ;
+    :machineId "MCH-019"^^xsd:string ;
+    :machineName "Packaging Robot 19"^^xsd:string ;
+    :operationalStatus "RUNNING"^^xsd:string ;
+    :temperatureCelsius 87.1 .
+
+:MCH-020 a :Machine ;
+    :hasMaintenanceTask :TASK-020 ;
+    :locatedInFactory :FAC-002 ;
+    :machineId "MCH-020"^^xsd:string ;
+    :machineName "Industrial Oven 20"^^xsd:string ;
+    :operationalStatus "RUNNING"^^xsd:string ;
+    :temperatureCelsius 24.5 .
+
+:TASK-001 a :MaintenanceTask ;
+    :assignedEmployee :EMP-005 ;
+    :scheduledDate "2026-11-04"^^xsd:date ;
+    :taskForMachine :MCH-007 ;
+    :taskId "TASK-001"^^xsd:string ;
+    :taskStatus "OPEN"^^xsd:string .
+
+:TASK-002 a :MaintenanceTask ;
+    :assignedEmployee :EMP-010 ;
+    :scheduledDate "2026-11-07"^^xsd:date ;
+    :taskForMachine :MCH-014 ;
+    :taskId "TASK-002"^^xsd:string ;
+    :taskStatus "IN_PROGRESS"^^xsd:string .
+
+:TASK-003 a :MaintenanceTask ;
+    :assignedEmployee :EMP-003 ;
+    :scheduledDate "2026-11-10"^^xsd:date ;
+    :taskForMachine :MCH-001 ;
+    :taskId "TASK-003"^^xsd:string ;
+    :taskStatus "COMPLETED"^^xsd:string .
+
+:TASK-004 a :MaintenanceTask ;
+    :assignedEmployee :EMP-008 ;
+    :scheduledDate "2026-11-13"^^xsd:date ;
+    :taskForMachine :MCH-008 ;
+    :taskId "TASK-004"^^xsd:string ;
+    :taskStatus "CANCELLED"^^xsd:string .
+
+:TASK-005 a :MaintenanceTask ;
+    :assignedEmployee :EMP-001 ;
+    :scheduledDate "2026-11-16"^^xsd:date ;
+    :taskForMachine :MCH-015 ;
+    :taskId "TASK-005"^^xsd:string ;
+    :taskStatus "OPEN"^^xsd:string .
+
+:TASK-006 a :MaintenanceTask ;
+    :assignedEmployee :EMP-006 ;
+    :scheduledDate "2026-11-19"^^xsd:date ;
+    :taskForMachine :MCH-002 ;
+    :taskId "TASK-006"^^xsd:string ;
+    :taskStatus "IN_PROGRESS"^^xsd:string .
+
+:TASK-007 a :MaintenanceTask ;
+    :assignedEmployee :EMP-011 ;
+    :scheduledDate "2026-11-22"^^xsd:date ;
+    :taskForMachine :MCH-009 ;
+    :taskId "TASK-007"^^xsd:string ;
+    :taskStatus "COMPLETED"^^xsd:string .
+
+:TASK-008 a :MaintenanceTask ;
+    :assignedEmployee :EMP-004 ;
+    :scheduledDate "2026-11-25"^^xsd:date ;
+    :taskForMachine :MCH-016 ;
+    :taskId "TASK-008"^^xsd:string ;
+    :taskStatus "CANCELLED"^^xsd:string .
+
+:TASK-009 a :MaintenanceTask ;
+    :assignedEmployee :EMP-009 ;
+    :scheduledDate "2026-11-28"^^xsd:date ;
+    :taskForMachine :MCH-003 ;
+    :taskId "TASK-009"^^xsd:string ;
+    :taskStatus "OPEN"^^xsd:string .
+
+:TASK-010 a :MaintenanceTask ;
+    :assignedEmployee :EMP-002 ;
+    :scheduledDate "2026-12-01"^^xsd:date ;
+    :taskForMachine :MCH-010 ;
+    :taskId "TASK-010"^^xsd:string ;
+    :taskStatus "IN_PROGRESS"^^xsd:string .
+
+:TASK-011 a :MaintenanceTask ;
+    :assignedEmployee :EMP-007 ;
+    :scheduledDate "2026-12-04"^^xsd:date ;
+    :taskForMachine :MCH-017 ;
+    :taskId "TASK-011"^^xsd:string ;
+    :taskStatus "COMPLETED"^^xsd:string .
+
+:TASK-012 a :MaintenanceTask ;
+    :assignedEmployee :EMP-012 ;
+    :scheduledDate "2026-12-07"^^xsd:date ;
+    :taskForMachine :MCH-004 ;
+    :taskId "TASK-012"^^xsd:string ;
+    :taskStatus "CANCELLED"^^xsd:string .
+
+:TASK-013 a :MaintenanceTask ;
+    :assignedEmployee :EMP-005 ;
+    :scheduledDate "2026-12-10"^^xsd:date ;
+    :taskForMachine :MCH-011 ;
+    :taskId "TASK-013"^^xsd:string ;
+    :taskStatus "OPEN"^^xsd:string .
+
+:TASK-014 a :MaintenanceTask ;
+    :assignedEmployee :EMP-010 ;
+    :scheduledDate "2026-12-13"^^xsd:date ;
+    :taskForMachine :MCH-018 ;
+    :taskId "TASK-014"^^xsd:string ;
+    :taskStatus "IN_PROGRESS"^^xsd:string .
+
+:TASK-015 a :MaintenanceTask ;
+    :assignedEmployee :EMP-003 ;
+    :scheduledDate "2026-12-16"^^xsd:date ;
+    :taskForMachine :MCH-005 ;
+    :taskId "TASK-015"^^xsd:string ;
+    :taskStatus "COMPLETED"^^xsd:string .
+
+:TASK-016 a :MaintenanceTask ;
+    :assignedEmployee :EMP-008 ;
+    :scheduledDate "2026-12-19"^^xsd:date ;
+    :taskForMachine :MCH-012 ;
+    :taskId "TASK-016"^^xsd:string ;
+    :taskStatus "CANCELLED"^^xsd:string .
+
+:TASK-017 a :MaintenanceTask ;
+    :assignedEmployee :EMP-001 ;
+    :scheduledDate "2026-11-02"^^xsd:date ;
+    :taskForMachine :MCH-019 ;
+    :taskId "TASK-017"^^xsd:string ;
+    :taskStatus "OPEN"^^xsd:string .
+
+:TASK-018 a :MaintenanceTask ;
+    :assignedEmployee :EMP-006 ;
+    :scheduledDate "2026-11-05"^^xsd:date ;
+    :taskForMachine :MCH-006 ;
+    :taskId "TASK-018"^^xsd:string ;
+    :taskStatus "IN_PROGRESS"^^xsd:string .
+
+:TASK-019 a :MaintenanceTask ;
+    :assignedEmployee :EMP-011 ;
+    :scheduledDate "2026-11-08"^^xsd:date ;
+    :taskForMachine :MCH-013 ;
+    :taskId "TASK-019"^^xsd:string ;
+    :taskStatus "COMPLETED"^^xsd:string .
+
+:TASK-020 a :MaintenanceTask ;
+    :assignedEmployee :EMP-004 ;
+    :scheduledDate "2026-11-11"^^xsd:date ;
+    :taskForMachine :MCH-020 ;
+    :taskId "TASK-020"^^xsd:string ;
+    :taskStatus "CANCELLED"^^xsd:string .
+
+:TASK-021 a :MaintenanceTask ;
+    :assignedEmployee :EMP-009 ;
+    :scheduledDate "2026-11-14"^^xsd:date ;
+    :taskForMachine :MCH-007 ;
+    :taskId "TASK-021"^^xsd:string ;
+    :taskStatus "OPEN"^^xsd:string .
+
+:TASK-022 a :MaintenanceTask ;
+    :assignedEmployee :EMP-002 ;
+    :scheduledDate "2026-11-17"^^xsd:date ;
+    :taskForMachine :MCH-014 ;
+    :taskId "TASK-022"^^xsd:string ;
+    :taskStatus "IN_PROGRESS"^^xsd:string .
+
+:TASK-023 a :MaintenanceTask ;
+    :assignedEmployee :EMP-007 ;
+    :scheduledDate "2026-11-20"^^xsd:date ;
+    :taskForMachine :MCH-001 ;
+    :taskId "TASK-023"^^xsd:string ;
+    :taskStatus "COMPLETED"^^xsd:string .
+
+:TASK-024 a :MaintenanceTask ;
+    :assignedEmployee :EMP-012 ;
+    :scheduledDate "2026-11-23"^^xsd:date ;
+    :taskForMachine :MCH-008 ;
+    :taskId "TASK-024"^^xsd:string ;
+    :taskStatus "CANCELLED"^^xsd:string .
+
+:TASK-025 a :MaintenanceTask ;
+    :assignedEmployee :EMP-005 ;
+    :scheduledDate "2026-11-26"^^xsd:date ;
+    :taskForMachine :MCH-015 ;
+    :taskId "TASK-025"^^xsd:string ;
+    :taskStatus "OPEN"^^xsd:string .
+
+:EMP-005 a :Employee ;
+    :assignedToTask :TASK-001,
+        :TASK-013,
+        :TASK-025 ;
+    :department "Maintenance"^^xsd:string ;
+    :employeeId "EMP-005"^^xsd:string ;
+    :employeeName "Casey Rivera"^^xsd:string .
+
+:FAC-003 a :Factory ;
+    :containsMachine :MCH-003,
+        :MCH-009,
+        :MCH-015 ;
+    :factoryId "FAC-003"^^xsd:string ;
+    :factoryName "Central Components"^^xsd:string ;
+    :location "Columbus, OH"^^xsd:string .
+
+:FAC-004 a :Factory ;
+    :containsMachine :MCH-004,
+        :MCH-010,
+        :MCH-016 ;
+    :factoryId "FAC-004"^^xsd:string ;
+    :factoryName "South Packaging"^^xsd:string ;
+    :location "Atlanta, GA"^^xsd:string .
+
+:FAC-005 a :Factory ;
+    :containsMachine :MCH-005,
+        :MCH-011,
+        :MCH-017 ;
+    :factoryId "FAC-005"^^xsd:string ;
+    :factoryName "West Machining"^^xsd:string ;
+    :location "Phoenix, AZ"^^xsd:string .
+
+:FAC-006 a :Factory ;
+    :containsMachine :MCH-006,
+        :MCH-012,
+        :MCH-018 ;
+    :factoryId "FAC-006"^^xsd:string ;
+    :factoryName "Lakeside Plant"^^xsd:string ;
+    :location "Cleveland, OH"^^xsd:string .
+
+:MCH-001 a :Machine ;
+    :hasMaintenanceTask :TASK-003,
+        :TASK-023 ;
+    :locatedInFactory :FAC-001 ;
+    :machineId "MCH-001"^^xsd:string ;
+    :machineName "CNC Mill 01"^^xsd:string ;
+    :operationalStatus "RUNNING"^^xsd:string ;
+    :temperatureCelsius 73.9 .
+
+:MCH-007 a :Machine ;
+    :hasMaintenanceTask :TASK-001,
+        :TASK-021 ;
+    :locatedInFactory :FAC-001 ;
+    :machineId "MCH-007"^^xsd:string ;
+    :machineName "Hydraulic Press 07"^^xsd:string ;
+    :operationalStatus "RUNNING"^^xsd:string ;
+    :temperatureCelsius 93.6 .
+
+:MCH-008 a :Machine ;
+    :hasMaintenanceTask :TASK-004,
+        :TASK-024 ;
+    :locatedInFactory :FAC-002 ;
+    :machineId "MCH-008"^^xsd:string ;
+    :machineName "Conveyor 08"^^xsd:string ;
+    :operationalStatus "RUNNING"^^xsd:string ;
+    :temperatureCelsius 30.8 .
+
+:MCH-014 a :Machine ;
+    :hasMaintenanceTask :TASK-002,
+        :TASK-022 ;
+    :locatedInFactory :FAC-002 ;
+    :machineId "MCH-014"^^xsd:string ;
+    :machineName "Packaging Robot 14"^^xsd:string ;
+    :operationalStatus "RUNNING"^^xsd:string ;
+    :temperatureCelsius 39.5 .
+
+:MCH-015 a :Machine ;
+    :hasMaintenanceTask :TASK-005,
+        :TASK-025 ;
+    :locatedInFactory :FAC-003 ;
+    :machineId "MCH-015"^^xsd:string ;
+    :machineName "Industrial Oven 15"^^xsd:string ;
+    :operationalStatus "STOPPED"^^xsd:string ;
+    :temperatureCelsius 74.7 .
+
+:FAC-001 a :Factory ;
+    :containsMachine :MCH-001,
+        :MCH-007,
+        :MCH-013,
+        :MCH-019 ;
+    :factoryId "FAC-001"^^xsd:string ;
+    :factoryName "North Assembly"^^xsd:string ;
+    :location "Rochester, NY"^^xsd:string .
+
+:FAC-002 a :Factory ;
+    :containsMachine :MCH-002,
+        :MCH-008,
+        :MCH-014,
+        :MCH-020 ;
+    :factoryId "FAC-002"^^xsd:string ;
+    :factoryName "East Fabrication"^^xsd:string ;
+    :location "Philadelphia, PA"^^xsd:string .
+
