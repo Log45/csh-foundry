@@ -1,0 +1,325 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="https://example.org/ontologies/manufacturing#"
+     xml:base="https://example.org/ontologies/manufacturing"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="https://example.org/ontologies/manufacturing">
+        <owl:versionIRI rdf:resource="https://example.org/ontologies/manufacturing/1.0.0"/>
+        <rdfs:comment xml:lang="en">Sample OWL 2 ontology for testing Protégé import, operational schema compilation, and semantic reasoning. No operational actions or access policies are encoded here.</rdfs:comment>
+        <rdfs:label xml:lang="en">Manufacturing Maintenance Ontology</rdfs:label>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.w3.org/2001/XMLSchema#date -->
+
+    <rdfs:Datatype rdf:about="http://www.w3.org/2001/XMLSchema#date"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#assignedEmployee -->
+
+    <owl:ObjectProperty rdf:about="https://example.org/ontologies/manufacturing#assignedEmployee">
+        <owl:inverseOf rdf:resource="https://example.org/ontologies/manufacturing#assignedToTask"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#MaintenanceTask"/>
+        <rdfs:range rdf:resource="https://example.org/ontologies/manufacturing#Employee"/>
+        <rdfs:label xml:lang="en">assigned employee</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#assignedToTask -->
+
+    <owl:ObjectProperty rdf:about="https://example.org/ontologies/manufacturing#assignedToTask">
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Employee"/>
+        <rdfs:range rdf:resource="https://example.org/ontologies/manufacturing#MaintenanceTask"/>
+        <rdfs:label xml:lang="en">assigned to task</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#containsMachine -->
+
+    <owl:ObjectProperty rdf:about="https://example.org/ontologies/manufacturing#containsMachine">
+        <owl:inverseOf rdf:resource="https://example.org/ontologies/manufacturing#locatedInFactory"/>
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Factory"/>
+        <rdfs:range rdf:resource="https://example.org/ontologies/manufacturing#Machine"/>
+        <rdfs:label xml:lang="en">contains machine</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#hasMaintenanceTask -->
+
+    <owl:ObjectProperty rdf:about="https://example.org/ontologies/manufacturing#hasMaintenanceTask">
+        <owl:inverseOf rdf:resource="https://example.org/ontologies/manufacturing#taskForMachine"/>
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Machine"/>
+        <rdfs:range rdf:resource="https://example.org/ontologies/manufacturing#MaintenanceTask"/>
+        <rdfs:label xml:lang="en">has maintenance task</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#locatedInFactory -->
+
+    <owl:ObjectProperty rdf:about="https://example.org/ontologies/manufacturing#locatedInFactory">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Machine"/>
+        <rdfs:range rdf:resource="https://example.org/ontologies/manufacturing#Factory"/>
+        <rdfs:label xml:lang="en">located in factory</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#taskForMachine -->
+
+    <owl:ObjectProperty rdf:about="https://example.org/ontologies/manufacturing#taskForMachine">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#MaintenanceTask"/>
+        <rdfs:range rdf:resource="https://example.org/ontologies/manufacturing#Machine"/>
+        <rdfs:label xml:lang="en">task for machine</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#department -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontologies/manufacturing#department">
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Employee"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#employeeId -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontologies/manufacturing#employeeId">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Employee"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#employeeName -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontologies/manufacturing#employeeName">
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Employee"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#factoryId -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontologies/manufacturing#factoryId">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Factory"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#factoryName -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontologies/manufacturing#factoryName">
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Factory"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#location -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontologies/manufacturing#location">
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Factory"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#machineId -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontologies/manufacturing#machineId">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Machine"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#machineName -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontologies/manufacturing#machineName">
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Machine"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#operationalStatus -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontologies/manufacturing#operationalStatus">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Machine"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment xml:lang="en">Application-level allowed values: RUNNING, STOPPED, MAINTENANCE, CRITICAL. Enforce this enumeration in the operational schema or SHACL.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#scheduledDate -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontologies/manufacturing#scheduledDate">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#MaintenanceTask"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#taskId -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontologies/manufacturing#taskId">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#MaintenanceTask"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#taskStatus -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontologies/manufacturing#taskStatus">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#MaintenanceTask"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment xml:lang="en">Application-level allowed values: OPEN, IN_PROGRESS, COMPLETED, CANCELLED.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#temperatureCelsius -->
+
+    <owl:DatatypeProperty rdf:about="https://example.org/ontologies/manufacturing#temperatureCelsius">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://example.org/ontologies/manufacturing#Machine"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#CriticalMachine -->
+
+    <owl:Class rdf:about="https://example.org/ontologies/manufacturing#CriticalMachine">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://example.org/ontologies/manufacturing#Machine"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://example.org/ontologies/manufacturing#operationalStatus"/>
+                        <owl:hasValue>CRITICAL</owl:hasValue>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:label xml:lang="en">Critical machine</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#Employee -->
+
+    <owl:Class rdf:about="https://example.org/ontologies/manufacturing#Employee">
+        <owl:hasKey rdf:parseType="Collection">
+            <rdf:Description rdf:about="https://example.org/ontologies/manufacturing#employeeId"/>
+        </owl:hasKey>
+        <rdfs:label xml:lang="en">Employee</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#Factory -->
+
+    <owl:Class rdf:about="https://example.org/ontologies/manufacturing#Factory">
+        <owl:hasKey rdf:parseType="Collection">
+            <rdf:Description rdf:about="https://example.org/ontologies/manufacturing#factoryId"/>
+        </owl:hasKey>
+        <rdfs:label xml:lang="en">Factory</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#Machine -->
+
+    <owl:Class rdf:about="https://example.org/ontologies/manufacturing#Machine">
+        <owl:hasKey rdf:parseType="Collection">
+            <rdf:Description rdf:about="https://example.org/ontologies/manufacturing#machineId"/>
+        </owl:hasKey>
+        <rdfs:label xml:lang="en">Machine</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://example.org/ontologies/manufacturing#MaintenanceTask -->
+
+    <owl:Class rdf:about="https://example.org/ontologies/manufacturing#MaintenanceTask">
+        <owl:hasKey rdf:parseType="Collection">
+            <rdf:Description rdf:about="https://example.org/ontologies/manufacturing#taskId"/>
+        </owl:hasKey>
+        <rdfs:label xml:lang="en">Maintenance task</rdfs:label>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi -->
+

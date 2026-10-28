@@ -1,0 +1,478 @@
+{
+  "$defs": {
+    "ActionOperation": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "CREATE_OBJECT",
+            "UPDATE_OBJECT",
+            "DELETE_OBJECT",
+            "CREATE_LINK",
+            "DELETE_LINK"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "target": {
+          "minLength": 1,
+          "title": "Target",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "target"
+      ],
+      "title": "ActionOperation",
+      "type": "object"
+    },
+    "ActionTypeDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "parameters": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ParameterDefinition"
+          },
+          "title": "Parameters",
+          "type": "array"
+        },
+        "operations": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ActionOperation"
+          },
+          "title": "Operations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "ActionTypeDefinition",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "LinkTypeDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "source_type": {
+          "minLength": 1,
+          "title": "Source Type",
+          "type": "string"
+        },
+        "target_type": {
+          "minLength": 1,
+          "title": "Target Type",
+          "type": "string"
+        },
+        "cardinality": {
+          "enum": [
+            "one_to_one",
+            "one_to_many",
+            "many_to_one",
+            "many_to_many"
+          ],
+          "title": "Cardinality",
+          "type": "string"
+        },
+        "inverse_name": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Inverse Name"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "source_type",
+        "target_type",
+        "cardinality"
+      ],
+      "title": "LinkTypeDefinition",
+      "type": "object"
+    },
+    "ObjectTypeDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "properties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PropertyDefinition"
+          },
+          "title": "Properties"
+        },
+        "primary_key": {
+          "minLength": 1,
+          "title": "Primary Key",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "properties",
+        "primary_key"
+      ],
+      "title": "ObjectTypeDefinition",
+      "type": "object"
+    },
+    "ParameterDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "data_type": {
+          "enum": [
+            "string",
+            "integer",
+            "float",
+            "boolean",
+            "date",
+            "timestamp",
+            "uuid",
+            "decimal",
+            "json"
+          ],
+          "title": "Data Type",
+          "type": "string"
+        },
+        "array": {
+          "default": false,
+          "title": "Array",
+          "type": "boolean"
+        },
+        "required": {
+          "default": false,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "nullable": {
+          "default": false,
+          "title": "Nullable",
+          "type": "boolean"
+        },
+        "indexed": {
+          "default": false,
+          "title": "Indexed",
+          "type": "boolean"
+        },
+        "unique": {
+          "default": false,
+          "title": "Unique",
+          "type": "boolean"
+        },
+        "default": {
+          "$ref": "#/$defs/JsonValue",
+          "default": null
+        },
+        "has_default": {
+          "default": false,
+          "title": "Has Default",
+          "type": "boolean"
+        },
+        "enum": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Enum",
+          "type": "array"
+        },
+        "max_length": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Length"
+        },
+        "precision": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Precision"
+        },
+        "scale": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scale"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "data_type"
+      ],
+      "title": "ParameterDefinition",
+      "type": "object"
+    },
+    "PropertyDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "data_type": {
+          "enum": [
+            "string",
+            "integer",
+            "float",
+            "boolean",
+            "date",
+            "timestamp",
+            "uuid",
+            "decimal",
+            "json"
+          ],
+          "title": "Data Type",
+          "type": "string"
+        },
+        "array": {
+          "default": false,
+          "title": "Array",
+          "type": "boolean"
+        },
+        "required": {
+          "default": false,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "nullable": {
+          "default": false,
+          "title": "Nullable",
+          "type": "boolean"
+        },
+        "indexed": {
+          "default": false,
+          "title": "Indexed",
+          "type": "boolean"
+        },
+        "unique": {
+          "default": false,
+          "title": "Unique",
+          "type": "boolean"
+        },
+        "default": {
+          "$ref": "#/$defs/JsonValue",
+          "default": null
+        },
+        "has_default": {
+          "default": false,
+          "title": "Has Default",
+          "type": "boolean"
+        },
+        "enum": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Enum",
+          "type": "array"
+        },
+        "max_length": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Length"
+        },
+        "precision": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Precision"
+        },
+        "scale": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scale"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "data_type"
+      ],
+      "title": "PropertyDefinition",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "format_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Format Version",
+      "type": "integer"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "id": {
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "name": {
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "namespace": {
+      "minLength": 1,
+      "title": "Namespace",
+      "type": "string"
+    },
+    "version": {
+      "minLength": 1,
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "title": "Version",
+      "type": "string"
+    },
+    "object_types": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ObjectTypeDefinition"
+      },
+      "title": "Object Types",
+      "type": "array"
+    },
+    "link_types": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/LinkTypeDefinition"
+      },
+      "title": "Link Types",
+      "type": "array"
+    },
+    "action_types": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ActionTypeDefinition"
+      },
+      "title": "Action Types",
+      "type": "array"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "id",
+    "name",
+    "namespace",
+    "version"
+  ],
+  "title": "OntologyDefinition",
+  "type": "object"
+}

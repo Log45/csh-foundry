@@ -1,0 +1,24 @@
+{
+  "open-ontologies": {
+    "version": "2.1.0",
+    "tag": "v2.1.0",
+    "commit": "ef6e781c71aaccaa35c2a1cd06169f0c862d5769",
+    "license": "MIT",
+    "source": "https://github.com/fabio-rovai/open-ontologies"
+  },
+  "protege": {
+    "version": "5.6.9",
+    "commit": "d2a5b4f3346b3c22b6dea26dc77547bbbe51b5ec",
+    "license": "BSD-2-Clause",
+    "source": "https://github.com/protegeproject/protege",
+    "owlapi": "4.5.29"
+  },
+  "webprotege": {
+    "version": "4.0.2",
+    "commit": "e4a5d156b867b3e614a0ac0fa5ea051b10d8e3ea",
+    "license": "BSD-2-Clause",
+    "source": "https://github.com/protegeproject/webprotege",
+    "owlapi": "4.5.13",
+    "deployment": "deferred"
+  }
+}

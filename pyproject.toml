@@ -1,0 +1,33 @@
+[project]
+name = "csh-foundry"
+version = "0.0.1"
+requires-python = ">=3.12,<3.13"
+dependencies = ["ontology-platform-api", "ontology-schema"]
+
+[tool.uv.workspace]
+members = ["services/api", "packages/ontology-schema"]
+
+[tool.uv.sources]
+ontology-platform-api = { workspace = true }
+ontology-schema = { workspace = true }
+
+[dependency-groups]
+dev = ["pytest>=8,<9", "httpx>=0.28,<1", "ruff>=0.12,<1", "mypy>=1.15,<2", "rdflib==7.1.4", "pyshacl==0.30.1"]
+
+[tool.pytest.ini_options]
+testpaths = ["services/api/tests", "packages/ontology-schema/tests"]
+markers = ["integration: requires a real PostgreSQL database", "semantic: requires pinned Open Ontologies binary"]
+
+[tool.ruff]
+extend-exclude = ["*.md"]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+files = ["services/api/src", "packages/ontology-schema/src"]

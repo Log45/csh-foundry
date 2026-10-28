@@ -1,0 +1,6 @@
+.git
+.venv
+.env
+.external
+artifacts
+**/__pycache__

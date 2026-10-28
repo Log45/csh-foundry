@@ -1,0 +1,18 @@
+$ uv run pytest services/api/tests/test_fixtures.py -ra -s --tb=short
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 13 items
+
+services/api/tests/test_fixtures.py manufacturing.ttl 115 triples
+manufacturing-shapes.ttl 115 triples
+manufacturing-data.ttl 412 triples
+..x..........
+
+=========================== short test summary info ============================
+XFAIL services/api/tests/test_fixtures.py::test_raw_pyshacl_compatibility - Raw pySHACL/RDFLib simple/xsd:string mismatch; see semantic-compatibility.md
+======================== 12 passed, 1 xfailed in 0.50s =========================
+
+Exit: 0

@@ -1,0 +1,31 @@
+name: csh-foundry
+services:
+  postgres:
+    image: postgres:17.6-bookworm
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-foundry}
+      POSTGRES_DB: ${POSTGRES_DB:-foundry}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+  api:
+    build:
+      context: ..
+      dockerfile: infrastructure/docker/api.Dockerfile
+    profiles: ["api"]
+    environment:
+      FOUNDRY_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-foundry}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-foundry}
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  postgres-data:
