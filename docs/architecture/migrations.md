@@ -77,3 +77,9 @@ and source provenance; earlier operational objects remain. Reverting 0009 folds 
 REJECTED before restoring the older state check. Tests perform destructive reversals only in private
 schemas and verify objects survive Phase 3 → head and head → Phase 3 → head. Development is at
 0009_ingestion_diagnostics; no sample data is loaded by migrations.
+
+
+Phase 5 adds principal-private semantic artifacts, compiled RDF/OWL/SHACL, governed exports,
+fenced jobs and separately approved derived facts. See [semantic API](../api/semantic.md) and ADRs 0024–0026.
+Migrations `0010_semantic` and `0011_semantic_history` add four semantic tables and bounded
+claim/error history; downgrade removes semantic history while preserving operational objects.

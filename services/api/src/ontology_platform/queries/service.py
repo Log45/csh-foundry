@@ -47,8 +47,10 @@ class QueryService(GovernedService):
         sessions: sessionmaker[Session],
         authorizer: Authorizer,
         cursors: CursorCodec | None = None,
+        *,
+        session: Session | None = None,
     ):
-        super().__init__(sessions, authorizer)
+        super().__init__(sessions, authorizer, session=session)
         self.cursors = cursors or CursorCodec()
 
     def query(self, principal: Principal, ontology_id: str, request: QueryRequest) -> QueryPage:
@@ -316,3 +318,66 @@ class QueryService(GovernedService):
                 "Aggregate could not be executed within database limits",
                 422,
             ) from exc
+
+    def export_edges(
+        self,
+        principal: Principal,
+        ontology_id: str,
+        link_ids: tuple[str, ...],
+        selected: dict[str, list[str]],
+    ) -> list[tuple[str, str, str, str, str, str]]:
+        """Authorized forward edges with BOTH endpoints in a caller's bounded query result."""
+        from ontology_platform.db.models import Link
+        from ontology_platform.objects.relationships import link_type
+
+        with self.operation(principal, "link:read", f"{ontology_id}/links") as session:
+            schema = active_definition(session, self.ontology(session, principal, ontology_id))
+            compiler = QueryCompiler(schema, principal, self.authorizer)
+            result = []
+            for key in sorted(set(link_ids)):
+                typed = link_type(schema, key)
+                self.authorizer.require(
+                    principal, "link:read", f"{principal.tenant_id}/{ontology_id}/links/{key}"
+                )
+                source_ids = selected.get(typed.source_type, [])
+                target_ids = selected.get(typed.target_type, [])
+                if not source_ids or not target_ids:
+                    continue
+                # The query result has already applied SQL row grants. Recheck grants here too.
+                source = select(Object.object_id).where(
+                    compiler.authorized(Object, typed.source_type)
+                )
+                target = select(Object.object_id).where(
+                    compiler.authorized(Object, typed.target_type)
+                )
+                rows = session.scalars(
+                    select(Link)
+                    .where(
+                        Link.tenant_id == principal.tenant_id,
+                        Link.ontology_id == ontology_id,
+                        Link.schema_version == schema.version,
+                        Link.link_type_id == key,
+                        Link.source_object_id.in_(source_ids),
+                        Link.target_object_id.in_(target_ids),
+                        Link.source_object_id.in_(source),
+                        Link.target_object_id.in_(target),
+                    )
+                    .order_by(Link.source_object_id, Link.target_object_id)
+                    .limit(5001)
+                )
+                for row in rows:
+                    result.append(
+                        (
+                            key,
+                            typed.source_type,
+                            row.source_object_id,
+                            typed.target_type,
+                            row.target_object_id,
+                            row.created_at.isoformat(),
+                        )
+                    )
+                    if len(result) > 5000:
+                        raise ApplicationError(
+                            "semantic_resource_limit", "Export exceeds 5000 edges", 422
+                        )
+            return result

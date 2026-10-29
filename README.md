@@ -1,13 +1,14 @@
 # CSH Foundry — operational ontology platform
 
-Phase 4 governed ingestion foundation for the modular platform specified in [PLANS.md](PLANS.md).
+Phase 5 semantic integration foundation for the modular platform specified in [PLANS.md](PLANS.md).
 PostgreSQL owns operational state; canonical metadata is independent of RDF/OWL.
 Open Ontologies supplies external semantic checks. Protégé is optional authoring tooling.
-Phases 0–4 provide governed schema publication/activation, tenant-scoped objects/links and a
+Phases 0–5 provide governed schema publication/activation, tenant-scoped objects/links and a
 schema-aware SQL query engine with projection, keyset pagination, traversal, aggregates and internal
 Object Sets, transactional actions, previews, durable idempotency/history/audit/outbox, bounded
 webhook delivery, property edit reconciliation and durable governed CSV/Parquet/NDJSON/PostgreSQL
-ingestion. Subsequent roadmap phases are not implemented.
+ingestion, deterministic RDF/OWL/SHACL compilation, governed RDF exports, durable semantic jobs
+and separately approved derived facts. Subsequent roadmap phases are not implemented.
 
 ## Local setup
 
@@ -94,7 +95,7 @@ A bounded outbox delivery runner is included; production scheduling is deferred.
   and [query API](docs/api/queries.md).
 - [Phase 3 report](docs/development/phase-3-report.md), [action API](docs/api/actions.md),
   [Phase 4 report](docs/development/phase-4-report.md), [ingestion API](docs/api/ingestion.md),
-  and [Phase 5 checklist](docs/development/phase-5.md); Phase 5 requires separate approval.
+  and [Phase 5 report](docs/development/phase-5-report.md); Phase 6 requires separate approval.
 
 Canonical fixtures are preserved. Section 24 of PLANS.md uses conceptual shorthand;
 examples/tests use actual `machineId`, `machineName`, `operationalStatus`,
@@ -147,3 +148,20 @@ Use `scripts/smoke_ingestion.py`, `scripts/benchmark_ingestion.py` and
 `scripts/smoke_ingestion_container.py` for reproducible HTTP, private-schema workload and final-image
 checks. The canonical fixture workflow produces 63 objects and 70 forward links; unchanged repeats
 do not increment revisions. Full production orchestration/security is not claimed.
+
+
+## Semantic compilation and jobs
+
+See [the semantic API](docs/api/semantic.md) and [Phase 5 report](docs/development/phase-5-report.md).
+Compile published metadata, export authorized bounded query selections, then submit validation,
+reasoning or native graph-diff jobs. Run a separate worker under the initiating configured principal:
+
+```bash
+uv run python -m ontology_platform.semantic --ontology manufacturing
+```
+
+Artifacts, reports, proofs and derived facts remain separate from operational state. Reading results
+rechecks input permissions and freshness. Set-level approval appends audit history and never updates
+objects/relationships or triggers actions. Open Ontologies remains pinned at 2.1.0; certificates are
+generated but independent Lean proof checking is NOT RUN on this host. The raw pySHACL mismatch and
+base owl-rl fixture limitation remain. Phase 6 OWL-to-operational draft import has not begun.

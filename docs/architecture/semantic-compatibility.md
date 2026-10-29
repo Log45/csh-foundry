@@ -108,3 +108,11 @@ already-used xsd:date datatype during serialization; no source axiom is removed.
 Java harness checks that exact delta and fails on any other change. Later platform import
 must preserve originals, diagnose unsupported axioms and create an unpublished reviewed
 draft. No access policy or action is inferred from OWL and no live synchronization is planned.
+
+## Phase 5 integration update
+
+The unchanged 2.1.0 pin is now used by durable jobs. See the
+[Phase 5 capability matrix](semantic-phase-5-capabilities.md) for reinspection and executed evidence.
+Native full certificate derivations, N-Triples save and graph diff were exercised. Canonical compilation,
+SQL-authorized operational export, immutable manifests, separate derived sets/approval and freshness
+are platform capabilities. Independent Lean verification remains NOT RUN on this host.

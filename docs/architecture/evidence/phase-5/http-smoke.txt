@@ -1,0 +1,27 @@
+PASS HTTP compiled schema and authorized 63-object/70-forward-edge RDF export
+PASS HTTP validation submit/status/result; separate durable worker
+PASS HTTP reasoning submit/status/result; separate durable worker
+PASS HTTP derived-set approval, audit history and fact projection
+INFO:     Started server process [63063]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:60479 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60487 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60490 - "POST /api/v1/ontologies/manufacturing/semantic/compile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60491 - "POST /api/v1/ontologies/manufacturing/semantic/exports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60492 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/2eb0198b-115c-48cc-8994-240e47d499da HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60493 - "POST /api/v1/ontologies/manufacturing/semantic/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60494 - "GET /api/v1/ontologies/manufacturing/semantic/jobs/2813cba6-4870-4aef-b926-8e62d20c450c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60495 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/7a1445f5-29ca-42ab-9cd9-62acd78cc3de HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60496 - "POST /api/v1/ontologies/manufacturing/semantic/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60497 - "GET /api/v1/ontologies/manufacturing/semantic/jobs/e2b84dfd-6374-4b28-a87b-879c4f3da4a0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60498 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/89810c0e-454e-4461-aee4-8354316352d6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60499 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/cf536ffe-d90b-49bb-afd5-a132f4ada086 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60500 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/a74f3f7a-f382-4d3e-8c66-540ed2e208e9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60501 - "POST /api/v1/ontologies/manufacturing/semantic/artifacts/89810c0e-454e-4461-aee4-8354316352d6/approval HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60502 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/89810c0e-454e-4461-aee4-8354316352d6/approval HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60503 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/89810c0e-454e-4461-aee4-8354316352d6/facts HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [63063]

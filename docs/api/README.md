@@ -117,3 +117,9 @@ transactional outbox delivery and edit reconciliation contracts.
 Phase 4 adds immutable source/mapping publication, durable run submission/history/diagnostics and
 cooperative cancellation. See [ingestion](ingestion.md) for registered connector security, staging,
 worker claims, source/edit policies and bounded atomicity. Existing routes remain available.
+
+
+Phase 5 adds principal-private semantic artifacts, compiled RDF/OWL/SHACL, governed exports,
+fenced jobs and separately approved derived facts. See [semantic API](semantic.md) and ADRs 0024–0026.
+Migrations `0010_semantic` and `0011_semantic_history` add four semantic tables and bounded
+claim/error history; downgrade removes semantic history while preserving operational objects.

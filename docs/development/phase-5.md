@@ -1,6 +1,7 @@
-# Phase 5 checklist — requires separate approval
+# Phase 5 checklist — implemented within documented bounds
 
-Phase 5 is not implemented. Begin only after Phase 4 review and explicit approval.
+Phase 5 was explicitly approved and implemented. See [the completion report](phase-5-report.md)
+for executed evidence, scope and limitations. The original checklist is retained below.
 
 1. Read AGENTS.md, PLANS.md, fixtures/VALIDATION.md, Phase 4 report/API/ADRs and the semantic
    compatibility report. Run the complete configured Phase 0–4 baseline, preserving the raw pySHACL

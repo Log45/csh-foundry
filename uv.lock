@@ -315,6 +315,7 @@ dependencies = [
     { name = "polars" },
     { name = "psycopg", extra = ["binary"] },
     { name = "pydantic-settings" },
+    { name = "rdflib" },
     { name = "sqlalchemy" },
     { name = "uvicorn" },
 ]
@@ -327,6 +328,7 @@ requires-dist = [
     { name = "polars", specifier = ">=1.25,<2" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.2,<4" },
     { name = "pydantic-settings", specifier = ">=2.8,<3" },
+    { name = "rdflib", specifier = "==7.1.4" },
     { name = "sqlalchemy", specifier = ">=2.0,<2.1" },
     { name = "uvicorn", specifier = ">=0.34,<1" },
 ]

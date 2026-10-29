@@ -777,3 +777,150 @@ class SourceLink(Base):
             ],
         ),
     )
+
+
+class SemanticArtifact(Base):
+    __tablename__ = "semantic_artifacts"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    schema_version: Mapped[str] = mapped_column(Text)
+    principal_id: Mapped[str] = mapped_column(Text)
+    kind: Mapped[str] = mapped_column(Text)
+    manifest_json: Mapped[str] = mapped_column(Text)
+    content: Mapped[str] = mapped_column(Text)
+    output_hash: Mapped[str] = mapped_column(String(64))
+    fingerprint: Mapped[str] = mapped_column(String(64))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "schema_version"],
+            [
+                "ontology_versions.tenant_id",
+                "ontology_versions.ontology_id",
+                "ontology_versions.version",
+            ],
+        ),
+        UniqueConstraint(
+            "tenant_id", "ontology_id", "principal_id", "fingerprint", name="uq_semantic_artifact"
+        ),
+        CheckConstraint("octet_length(content) <= 4194304", name="ck_semantic_artifact_size"),
+        CheckConstraint(
+            "kind IN"
+            " ('ontology','shapes','asserted','validation','reasoning','derived','change','proof')",
+            name="ck_semantic_artifact_kind",
+        ),
+    )
+
+
+class SemanticJob(Base):
+    __tablename__ = "semantic_jobs"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    schema_version: Mapped[str] = mapped_column(Text)
+    principal_id: Mapped[str] = mapped_column(Text)
+    primary_artifact: Mapped[UUID] = mapped_column()
+    secondary_artifact: Mapped[UUID] = mapped_column()
+    request_json: Mapped[str] = mapped_column(Text)
+    fingerprint: Mapped[str] = mapped_column(String(64))
+    status: Mapped[str] = mapped_column(String(20), default="PENDING")
+    attempts: Mapped[int] = mapped_column(default=0)
+    token: Mapped[UUID | None] = mapped_column()
+    lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    last_error: Mapped[str | None] = mapped_column(String(100))
+    outputs: Mapped[list[str]] = mapped_column(JSONB, default=list)
+    history: Mapped[list[dict[str, JsonValue]]] = mapped_column(JSONB, default=list)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "schema_version"],
+            [
+                "ontology_versions.tenant_id",
+                "ontology_versions.ontology_id",
+                "ontology_versions.version",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "primary_artifact"],
+            [
+                "semantic_artifacts.tenant_id",
+                "semantic_artifacts.ontology_id",
+                "semantic_artifacts.id",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "secondary_artifact"],
+            [
+                "semantic_artifacts.tenant_id",
+                "semantic_artifacts.ontology_id",
+                "semantic_artifacts.id",
+            ],
+        ),
+        UniqueConstraint(
+            "tenant_id", "ontology_id", "principal_id", "fingerprint", name="uq_semantic_job"
+        ),
+        CheckConstraint(
+            "status IN ('PENDING','RUNNING','COMPLETED','FAILED','CANCELLED')",
+            name="ck_semantic_job_status",
+        ),
+        CheckConstraint("attempts BETWEEN 0 AND 3", name="ck_semantic_attempts"),
+        CheckConstraint(
+            "status != 'RUNNING' OR (token IS NOT NULL AND lease_until IS NOT NULL)",
+            name="ck_semantic_lease",
+        ),
+        Index(
+            "ix_semantic_claim", "tenant_id", "ontology_id", "principal_id", "status", "created_at"
+        ),
+    )
+
+
+class DerivedFact(Base):
+    __tablename__ = "semantic_derived_facts"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    set_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    subject: Mapped[str] = mapped_column(Text)
+    predicate: Mapped[str] = mapped_column(Text)
+    object: Mapped[str] = mapped_column(Text)
+    job_id: Mapped[UUID] = mapped_column()
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "set_id"],
+            [
+                "semantic_artifacts.tenant_id",
+                "semantic_artifacts.ontology_id",
+                "semantic_artifacts.id",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "job_id"],
+            ["semantic_jobs.tenant_id", "semantic_jobs.ontology_id", "semantic_jobs.id"],
+        ),
+    )
+
+
+class SemanticApproval(Base):
+    __tablename__ = "semantic_approvals"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    set_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    principal_id: Mapped[str] = mapped_column(Text)
+    state: Mapped[str] = mapped_column(String(20))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.clock_timestamp()
+    )
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "set_id"],
+            [
+                "semantic_artifacts.tenant_id",
+                "semantic_artifacts.ontology_id",
+                "semantic_artifacts.id",
+            ],
+        ),
+        CheckConstraint("state IN ('APPROVED','REJECTED')", name="ck_semantic_approval_state"),
+    )

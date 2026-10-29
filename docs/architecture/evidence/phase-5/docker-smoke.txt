@@ -1,0 +1,12 @@
+PASS container liveness
+PASS container readiness with PostgreSQL at current Alembic head
+PASS container OpenAPI exposes typed semantic endpoints
+PASS container semantic endpoint denies absent identity with 401
+INFO:     Started server process [10]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     172.17.0.1:62090 - "GET /health/live HTTP/1.1" 200 OK
+INFO:     172.17.0.1:62104 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     172.17.0.1:62106 - "GET /api/v1/openapi.json HTTP/1.1" 200 OK
+INFO:     172.17.0.1:62108 - "POST /api/v1/ontologies/manufacturing/semantic/jobs HTTP/1.1" 401 Unauthorized

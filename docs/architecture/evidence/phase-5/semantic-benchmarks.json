@@ -1,0 +1,18 @@
+{
+  "compile_ms": 42.878,
+  "export_63_ms": 198.093,
+  "repeat_export_ms": 197.66,
+  "asserted_bytes_63": 148765,
+  "validation_job_ms": 670.818,
+  "reasoning_job_ms": 523.598,
+  "export_257_ms": 404.015,
+  "asserted_bytes_257": 390703,
+  "concurrent_query_ms": 42.241,
+  "concurrent_export_query_ms": 367.914,
+  "concurrent_export_action_ms": 323.281,
+  "concurrent_action_ms": 397.288,
+  "concurrent_export_ingestion_ms": 319.18,
+  "concurrent_ingestion_ms": 6205.516,
+  "python_peak_bytes": 26888154,
+  "process_peak_rss_platform_units": 161415168
+}

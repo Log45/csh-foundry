@@ -1,0 +1,4 @@
+PASS container liveness
+PASS container readiness with PostgreSQL at current Alembic head
+PASS container OpenAPI exposes typed semantic endpoints
+PASS container semantic endpoint denies absent identity with 401

@@ -24,6 +24,7 @@ from ontology_platform.ingestion.routes import router as ingestion_router
 from ontology_platform.queries.cursor import CursorCodec
 from ontology_platform.queries.routes import router as query_router
 from ontology_platform.security.local import LocalAuthorizer
+from ontology_platform.semantic.routes import router as semantic_router
 
 
 class Health(BaseModel):
@@ -57,6 +58,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(query_router)
     app.include_router(action_router)
     app.include_router(ingestion_router)
+    app.include_router(semantic_router)
+    app.add_middleware(
+        ActionPayloadLimit,
+        paths=("/semantic",),
+        code="semantic_payload_too_large",
+        message="Semantic request exceeds 64 KiB",
+    )
     app.state.ingestion_catalog = SourceCatalog.from_json(configuration.ingestion_catalog_json)
     app.state.query_cursors = CursorCodec(
         configuration.query_cursor_secret.get_secret_value().encode()

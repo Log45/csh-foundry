@@ -112,3 +112,9 @@ link and reconciliation services under retained ontology locks. Operational batc
 checkpoints commit together; schema changes fail stale runs. Explicit reject/quarantine policies
 distinguish whole-run and batch atomicity. No request-selected path/SQL/credentials or parallel
 mutation/reconciliation implementation exists. See ADRs 0021–0023 and the ingestion API/report.
+
+
+Phase 5 adds principal-private semantic artifacts, compiled RDF/OWL/SHACL, governed exports,
+fenced jobs and separately approved derived facts. See [semantic API](../api/semantic.md) and ADRs 0024–0026.
+Migrations `0010_semantic` and `0011_semantic_history` add four semantic tables and bounded
+claim/error history; downgrade removes semantic history while preserving operational objects.
