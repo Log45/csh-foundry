@@ -1,0 +1,12 @@
+PASS container liveness
+PASS container readiness with PostgreSQL at current Alembic head
+PASS container OpenAPI exposes typed action endpoints
+PASS container action endpoint denies absent identity with 401
+INFO:     Started server process [9]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     172.17.0.1:64924 - "GET /health/live HTTP/1.1" 200 OK
+INFO:     172.17.0.1:64938 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     172.17.0.1:64950 - "GET /api/v1/openapi.json HTTP/1.1" 200 OK
+INFO:     172.17.0.1:64954 - "POST /api/v1/ontologies/manufacturing/actions/UpdateMachineStatus/execute HTTP/1.1" 401 Unauthorized

@@ -1,9 +1,10 @@
-# Operational architecture — Phases 0–2
+# Operational architecture — Phases 0–3
 
 PostgreSQL remains the authoritative operational store. The backend is a modular Python
 monolith. Canonical JSON/Pydantic metadata is independent of RDF/OWL. Open Ontologies is
 an external semantic process; Protégé is optional file-based authoring tooling. Semantic
-code and fixtures are unchanged through Phase 2. Workers, actions, ingestion, Studio and SDKs remain later roadmap work.
+adapter code and fixtures are unchanged through Phase 3. Production ingestion workers, Studio and
+SDKs remain later roadmap work. Governed actions and a bounded outbox runner are implemented.
 Phase 2 operational queries share the existing governed transactions and active registry.
 
 Public application contracts live in `ontology_platform/contracts.py`. HTTP routes depend
@@ -93,3 +94,12 @@ without query grants fail closed. No production policy engine is introduced.
 Measured fixed-width status equality and C-collation identity ordering indexes complement the existing identity/link indexes.
 Other property index jobs remain deferred. Per-ontology shared/exclusive locks are unchanged.
 See ADRs 0013–0017, the query API reference and the Phase 2 report for exact semantics/evidence.
+
+## Phase 3 actions
+
+Governed actions compose existing object/link services in one caller-owned PostgreSQL transaction.
+History/idempotency, redacted immutable audits, outbox and action overlays commit together. Preview
+rolls back a savepoint. A bounded leased runner delivers notifications outside action transactions.
+Property ownership/reconciliation services protect edits without introducing ingestion. See
+[the action contract](../api/actions.md) and ADRs 0018–0020. PostgreSQL and ontology locks remain
+authoritative; no semantic, UI, SDK or production identity expansion is included.

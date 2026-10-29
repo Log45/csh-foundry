@@ -1,0 +1,29 @@
+PASS host Uvicorn liveness/readiness/OpenAPI and trusted tenant
+PASS POST query / signed cursor continuation
+PASS POST object-set and inverse traversal
+PASS POST aggregate count
+PASS HTTP action preview/execute/retry/history/audit and maintenance scheduling
+INFO:     Started server process [43067]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:55687 (Press CTRL+C to quit)
+INFO:     127.0.0.1:55702 - "GET /api/v1/tenant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55705 - "GET /health/live HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55706 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55707 - "GET /api/v1/openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55712 - "POST /api/v1/ontologies/manufacturing/objects/Machine/query HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55713 - "POST /api/v1/ontologies/manufacturing/objects/Machine/query HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55714 - "POST /api/v1/ontologies/manufacturing/object-sets/query HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55717 - "POST /api/v1/ontologies/manufacturing/traverse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55720 - "POST /api/v1/ontologies/manufacturing/aggregate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55721 - "POST /api/v1/ontologies/manufacturing/actions/UpdateMachineStatus/preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55722 - "POST /api/v1/ontologies/manufacturing/actions/UpdateMachineStatus/execute HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55723 - "POST /api/v1/ontologies/manufacturing/actions/UpdateMachineStatus/execute HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55724 - "GET /api/v1/ontologies/manufacturing/actions/executions/a1502597-5d99-4b25-9d22-7765dc3502b6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55725 - "GET /api/v1/ontologies/manufacturing/actions/executions/a1502597-5d99-4b25-9d22-7765dc3502b6/audit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55726 - "GET /api/v1/ontologies/manufacturing/actions/executions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55727 - "POST /api/v1/ontologies/manufacturing/actions/ScheduleMaintenance/execute HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [43067]

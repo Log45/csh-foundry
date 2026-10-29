@@ -105,3 +105,9 @@ No database details or credentials are exposed. Phase 1 activation is capped at 
 are not implemented by this API.
 
 Phase 2 query/traversal/aggregation endpoints and internal Object Sets are documented in [queries.md](queries.md).
+
+## Governed actions
+
+Phase 3 adds active-schema action preview/execute/history/audit endpoints. See
+[the action API](actions.md) for strict definition references, idempotency, authorization,
+transactional outbox delivery and edit reconciliation contracts.

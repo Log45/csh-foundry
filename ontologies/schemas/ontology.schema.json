@@ -1,5 +1,49 @@
 {
   "$defs": {
+    "ActionBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "object_type": {
+          "minLength": 1,
+          "title": "Object Type",
+          "type": "string"
+        },
+        "object_id": {
+          "discriminator": {
+            "mapping": {
+              "literal": "#/$defs/LiteralValue",
+              "object": "#/$defs/ObjectValue",
+              "parameter": "#/$defs/ParameterValue"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/LiteralValue"
+            },
+            {
+              "$ref": "#/$defs/ParameterValue"
+            },
+            {
+              "$ref": "#/$defs/ObjectValue"
+            }
+          ],
+          "title": "Object Id"
+        }
+      },
+      "required": [
+        "id",
+        "object_type",
+        "object_id"
+      ],
+      "title": "ActionBinding",
+      "type": "object"
+    },
     "ActionOperation": {
       "additionalProperties": false,
       "properties": {
@@ -18,6 +62,134 @@
           "minLength": 1,
           "title": "Target",
           "type": "string"
+        },
+        "binding": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Binding"
+        },
+        "object_id": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "literal": "#/$defs/LiteralValue",
+                  "object": "#/$defs/ObjectValue",
+                  "parameter": "#/$defs/ParameterValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/LiteralValue"
+                },
+                {
+                  "$ref": "#/$defs/ParameterValue"
+                },
+                {
+                  "$ref": "#/$defs/ObjectValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Object Id"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": {
+            "discriminator": {
+              "mapping": {
+                "literal": "#/$defs/LiteralValue",
+                "object": "#/$defs/ObjectValue",
+                "parameter": "#/$defs/ParameterValue"
+              },
+              "propertyName": "kind"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/LiteralValue"
+              },
+              {
+                "$ref": "#/$defs/ParameterValue"
+              },
+              {
+                "$ref": "#/$defs/ObjectValue"
+              }
+            ]
+          },
+          "propertyNames": {
+            "minLength": 1
+          },
+          "maxProperties": 64,
+          "title": "Properties"
+        },
+        "expected_version": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "literal": "#/$defs/LiteralValue",
+                  "object": "#/$defs/ObjectValue",
+                  "parameter": "#/$defs/ParameterValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/LiteralValue"
+                },
+                {
+                  "$ref": "#/$defs/ParameterValue"
+                },
+                {
+                  "$ref": "#/$defs/ObjectValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Version"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "destination": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Destination"
         }
       },
       "required": [
@@ -25,6 +197,137 @@
         "target"
       ],
       "title": "ActionOperation",
+      "type": "object"
+    },
+    "ActionPrecondition": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "EXISTS",
+            "NOT_EXISTS",
+            "PROPERTY_EQUALS",
+            "REVISION_EQUALS",
+            "LINK_EXISTS",
+            "LINK_NOT_EXISTS",
+            "PARAMETER_PRESENT"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "binding": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Binding"
+        },
+        "property": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Property"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "literal": "#/$defs/LiteralValue",
+                  "object": "#/$defs/ObjectValue",
+                  "parameter": "#/$defs/ParameterValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/LiteralValue"
+                },
+                {
+                  "$ref": "#/$defs/ParameterValue"
+                },
+                {
+                  "$ref": "#/$defs/ObjectValue"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "link": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Link"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target"
+        },
+        "parameter": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parameter"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "ActionPrecondition",
       "type": "object"
     },
     "ActionTypeDefinition": {
@@ -45,6 +348,7 @@
           "items": {
             "$ref": "#/$defs/ParameterDefinition"
           },
+          "maxItems": 32,
           "title": "Parameters",
           "type": "array"
         },
@@ -53,7 +357,26 @@
           "items": {
             "$ref": "#/$defs/ActionOperation"
           },
+          "maxItems": 64,
           "title": "Operations",
+          "type": "array"
+        },
+        "bindings": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ActionBinding"
+          },
+          "maxItems": 64,
+          "title": "Bindings",
+          "type": "array"
+        },
+        "preconditions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ActionPrecondition"
+          },
+          "maxItems": 64,
+          "title": "Preconditions",
           "type": "array"
         }
       },
@@ -122,6 +445,25 @@
       "title": "LinkTypeDefinition",
       "type": "object"
     },
+    "LiteralValue": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "literal",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/JsonValue"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "title": "LiteralValue",
+      "type": "object"
+    },
     "ObjectTypeDefinition": {
       "additionalProperties": false,
       "properties": {
@@ -168,6 +510,40 @@
         "primary_key"
       ],
       "title": "ObjectTypeDefinition",
+      "type": "object"
+    },
+    "ObjectValue": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "object",
+          "title": "Kind",
+          "type": "string"
+        },
+        "binding": {
+          "minLength": 1,
+          "title": "Binding",
+          "type": "string"
+        },
+        "property": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Property"
+        }
+      },
+      "required": [
+        "kind",
+        "binding"
+      ],
+      "title": "ObjectValue",
       "type": "object"
     },
     "ParameterDefinition": {
@@ -278,6 +654,19 @@
           ],
           "default": null,
           "title": "Scale"
+        },
+        "object_type_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Object Type Id"
         }
       },
       "required": [
@@ -286,6 +675,27 @@
         "data_type"
       ],
       "title": "ParameterDefinition",
+      "type": "object"
+    },
+    "ParameterValue": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "parameter",
+          "title": "Kind",
+          "type": "string"
+        },
+        "parameter": {
+          "minLength": 1,
+          "title": "Parameter",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "parameter"
+      ],
+      "title": "ParameterValue",
       "type": "object"
     },
     "PropertyDefinition": {

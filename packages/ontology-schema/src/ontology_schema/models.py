@@ -3,7 +3,7 @@ import json
 import math
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
-from typing import Literal, Self
+from typing import Annotated, Literal, Self
 from urllib.parse import urlsplit
 from uuid import UUID
 
@@ -263,25 +263,231 @@ class LinkTypeDefinition(Contract):
 
 
 class ParameterDefinition(PropertyDefinition):
-    pass
+    # Existing identity inside the server-derived tenant and requested ontology.
+    object_type_id: str | None = None
+
+    @model_validator(mode="after")
+    def identity_parameter(self) -> Self:
+        if self.object_type_id is not None and (
+            self.array or self.data_type not in {"string", "uuid"}
+        ):
+            raise ValueError("Object identities require scalar string/UUID parameters")
+        return self
+
+
+class LiteralValue(Contract):
+    kind: Literal["literal"]
+    value: JsonValue
+
+
+class ParameterValue(Contract):
+    kind: Literal["parameter"]
+    parameter: str
+
+
+class ObjectValue(Contract):
+    kind: Literal["object"]
+    binding: str
+    # Omitting property returns the stable object ID, never the entire document.
+    property: str | None = None
+
+
+ActionValue = Annotated[LiteralValue | ParameterValue | ObjectValue, Field(discriminator="kind")]
+
+
+class ActionBinding(Contract):
+    id: str
+    object_type: str
+    object_id: ActionValue
+
+
+class ActionPrecondition(Contract):
+    type: Literal[
+        "EXISTS",
+        "NOT_EXISTS",
+        "PROPERTY_EQUALS",
+        "REVISION_EQUALS",
+        "LINK_EXISTS",
+        "LINK_NOT_EXISTS",
+        "PARAMETER_PRESENT",
+    ]
+    binding: str | None = None
+    property: str | None = None
+    value: ActionValue | None = None
+    link: str | None = None
+    source: str | None = None
+    target: str | None = None
+    parameter: str | None = None
+
+    @model_validator(mode="after")
+    def shape(self) -> Self:
+        expected = {
+            "EXISTS": {"binding"},
+            "NOT_EXISTS": {"binding"},
+            "PROPERTY_EQUALS": {"binding", "property", "value"},
+            "REVISION_EQUALS": {"binding", "value"},
+            "LINK_EXISTS": {"link", "source", "target"},
+            "LINK_NOT_EXISTS": {"link", "source", "target"},
+            "PARAMETER_PRESENT": {"parameter"},
+        }[self.type]
+        present = {k for k, v in self.model_dump().items() if v is not None and k != "type"}
+        if present != expected:
+            raise ValueError("Invalid precondition fields")
+        return self
 
 
 class ActionOperation(Contract):
     type: Literal["CREATE_OBJECT", "UPDATE_OBJECT", "DELETE_OBJECT", "CREATE_LINK", "DELETE_LINK"]
     target: Identifier
-    # Deliberately no executable expressions or parameter binding language in Phase 0.
+    # Legacy Phase 0 target-only declarations remain readable but are inert at runtime.
+    binding: str | None = None
+    object_id: ActionValue | None = None
+    properties: dict[str, ActionValue] = Field(default_factory=dict, max_length=64)
+    expected_version: ActionValue | None = None
+    source: str | None = None
+    destination: str | None = None
+
+    @model_validator(mode="after")
+    def shape(self) -> Self:
+        if (
+            self.binding is None
+            and self.object_id is None
+            and not self.properties
+            and (self.expected_version is None and self.source is None and self.destination is None)
+        ):
+            return self
+        if self.type.endswith("LINK"):
+            valid = bool(self.source and self.destination) and not (
+                self.binding or self.object_id or self.properties or self.expected_version
+            )
+        elif self.type == "CREATE_OBJECT":
+            valid = bool(self.binding and self.object_id) and not (
+                self.source or self.destination or self.expected_version
+            )
+        else:
+            valid = bool(self.binding and self.expected_version) and not (
+                self.object_id
+                or self.source
+                or self.destination
+                or (self.type == "DELETE_OBJECT" and self.properties)
+            )
+        if not valid:
+            raise ValueError("Invalid operation fields")
+        return self
 
 
 class ActionTypeDefinition(Contract):
     id: Identifier
     name: str
-    parameters: tuple[ParameterDefinition, ...] = ()
-    operations: tuple[ActionOperation, ...] = ()
+    parameters: tuple[ParameterDefinition, ...] = Field(default=(), max_length=32)
+    operations: tuple[ActionOperation, ...] = Field(default=(), max_length=64)
+    bindings: tuple[ActionBinding, ...] = Field(default=(), max_length=64)
+    preconditions: tuple[ActionPrecondition, ...] = Field(default=(), max_length=64)
 
     @model_validator(mode="after")
     def parameters_unique(self) -> Self:
         unique([p.id for p in self.parameters])
+        unique(
+            [b.id for b in self.bindings]
+            + [o.binding for o in self.operations if o.type == "CREATE_OBJECT" and o.binding]
+        )
+        if len(self.canonical_json().encode()) > 65536:
+            raise ValueError("Action definition exceeds 64 KiB")
         return self
+
+    def validate_schema(self, schema: "OntologyDefinition") -> None:
+        parameters = {p.id: p for p in self.parameters}
+        types = {o.id: o for o in schema.object_types}
+        links = {o.id: o for o in schema.link_types}
+        resolved: dict[str, str] = {}
+        for parameter in self.parameters:
+            if parameter.object_type_id is not None and parameter.object_type_id not in types:
+                raise ValueError("Unknown parameter object type")
+
+        def value(ref: ActionValue | None) -> None:
+            if isinstance(ref, ParameterValue) and ref.parameter not in parameters:
+                raise ValueError("Unknown parameter reference")
+            if isinstance(ref, ObjectValue):
+                if ref.binding not in resolved:
+                    raise ValueError("Unknown, forward or circular object reference")
+                if ref.property and ref.property not in {
+                    p.id for p in types[resolved[ref.binding]].properties
+                }:
+                    raise ValueError("Unknown referenced property")
+
+        def compatible(ref: ActionValue | None, expected: PropertyDefinition) -> None:
+            value(ref)
+            if isinstance(ref, LiteralValue):
+                expected.validate_value(ref.value)
+            elif isinstance(ref, ParameterValue):
+                parameter = parameters[ref.parameter]
+                if (parameter.data_type, parameter.array) != (expected.data_type, expected.array):
+                    raise ValueError("Parameter and target property types differ")
+            elif isinstance(ref, ObjectValue) and ref.property is not None:
+                source = next(
+                    p for p in types[resolved[ref.binding]].properties if p.id == ref.property
+                )
+                if (source.data_type, source.array) != (expected.data_type, expected.array):
+                    raise ValueError("Referenced property and target types differ")
+
+        def binding(name: str | None) -> str:
+            if name not in resolved:
+                raise ValueError("Unknown object binding")
+            assert name is not None
+            return resolved[name]
+
+        def link(name: str | None, source: str | None, target: str | None) -> None:
+            if name not in links:
+                raise ValueError("Unknown link")
+            assert name is not None
+            typed = links[name]
+            if (binding(source), binding(target)) != (typed.source_type, typed.target_type):
+                raise ValueError("Link endpoint types differ")
+
+        for item in self.bindings:
+            if item.object_type not in types:
+                raise ValueError("Unknown binding type")
+            value(item.object_id)
+            if isinstance(item.object_id, ParameterValue):
+                target_type = parameters[item.object_id.parameter].object_type_id
+                if target_type is not None and target_type != item.object_type:
+                    raise ValueError("Identity parameter type differs from binding")
+            resolved[item.id] = item.object_type
+        for condition in self.preconditions:
+            value(condition.value)
+            if condition.binding:
+                typed = types[binding(condition.binding)]
+                if condition.property and condition.property not in {
+                    p.id for p in typed.properties
+                }:
+                    raise ValueError("Unknown precondition property")
+            if condition.parameter and condition.parameter not in parameters:
+                raise ValueError("Unknown precondition parameter")
+            if condition.link:
+                link(condition.link, condition.source, condition.target)
+        for operation in self.operations:
+            if operation.type.endswith("LINK"):
+                if operation.target not in links:
+                    raise ValueError("Unknown operation link")
+                if operation.source is not None:
+                    link(operation.target, operation.source, operation.destination)
+            else:
+                if operation.target not in types:
+                    raise ValueError("Unknown operation type")
+                value(operation.object_id)
+                value(operation.expected_version)
+                for key, ref in operation.properties.items():
+                    if key not in {p.id for p in types[operation.target].properties}:
+                        raise ValueError("Unknown operation property")
+                    compatible(
+                        ref, next(p for p in types[operation.target].properties if p.id == key)
+                    )
+                if operation.type == "CREATE_OBJECT" and operation.binding:
+                    resolved[operation.binding] = operation.target
+                elif operation.binding and binding(operation.binding) != operation.target:
+                    raise ValueError("Binding type differs from operation target")
+        if len(resolved) + sum(p.object_type_id is not None for p in self.parameters) > 64:
+            raise ValueError("At most 64 referenced objects")
 
 
 class OntologyDefinition(Contract):
@@ -301,15 +507,11 @@ class OntologyDefinition(Contract):
         for definitions in (self.object_types, self.link_types, self.action_types):
             unique([d.id for d in definitions])
         objects = {o.id for o in self.object_types}
-        links = {link.id for link in self.link_types}
         for link in self.link_types:
             if link.source_type not in objects or link.target_type not in objects:
                 raise ValueError("Link references unknown object type")
         for action in self.action_types:
-            for operation in action.operations:
-                allowed = links if operation.type.endswith("LINK") else objects
-                if operation.target not in allowed:
-                    raise ValueError("Action operation references unknown target")
+            action.validate_schema(self)
         return self
 
 

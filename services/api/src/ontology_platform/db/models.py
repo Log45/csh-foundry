@@ -314,3 +314,196 @@ Index(
     Object.object_type_id,
     Object.object_id.collate("C"),
 )
+
+
+class ActionExecution(Base):
+    __tablename__ = "action_executions"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    action_id: Mapped[str] = mapped_column(Text)
+    action_version: Mapped[str] = mapped_column(String(64))
+    schema_version: Mapped[str] = mapped_column(Text)
+    principal_id: Mapped[str] = mapped_column(Text)
+    key_hash: Mapped[str] = mapped_column(String(64))
+    request_hash: Mapped[str] = mapped_column(String(64))
+    fingerprint: Mapped[str] = mapped_column(String(64))
+    status: Mapped[str] = mapped_column(String(20), default="COMMITTED")
+    result: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "schema_version"],
+            [
+                "ontology_versions.tenant_id",
+                "ontology_versions.ontology_id",
+                "ontology_versions.version",
+            ],
+        ),
+        UniqueConstraint(
+            "tenant_id", "ontology_id", "principal_id", "key_hash", name="uq_action_key"
+        ),
+        CheckConstraint("status = 'COMMITTED'", name="ck_execution_status"),
+        Index("ix_action_history", "tenant_id", "ontology_id", "created_at", "id"),
+    )
+
+
+class AuditEvent(Base):
+    __tablename__ = "action_audit_events"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    execution_id: Mapped[UUID] = mapped_column()
+    actor: Mapped[str] = mapped_column(Text)
+    object_type_id: Mapped[str] = mapped_column(Text)
+    object_id: Mapped[str] = mapped_column(Text)
+    operation: Mapped[str] = mapped_column(String(30))
+    details: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "execution_id"],
+            [
+                "action_executions.tenant_id",
+                "action_executions.ontology_id",
+                "action_executions.id",
+            ],
+        ),
+        Index("ix_action_audit_object", "tenant_id", "ontology_id", "object_type_id", "object_id"),
+    )
+
+
+class OutboxEvent(Base):
+    __tablename__ = "outbox_events"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    execution_id: Mapped[UUID] = mapped_column()
+    category: Mapped[str] = mapped_column(String(30), default="action.committed")
+    payload: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    destination: Mapped[str | None] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(String(20), default="PENDING")
+    attempts: Mapped[int] = mapped_column(default=0)
+    next_attempt_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    claim_token: Mapped[UUID | None]
+    last_error: Mapped[str | None] = mapped_column(String(100))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "execution_id"],
+            [
+                "action_executions.tenant_id",
+                "action_executions.ontology_id",
+                "action_executions.id",
+            ],
+        ),
+        UniqueConstraint(
+            "tenant_id", "ontology_id", "execution_id", "category", name="uq_action_event"
+        ),
+        CheckConstraint("category = 'action.committed'", name="ck_event_category"),
+        CheckConstraint(
+            "status IN ('PENDING','CLAIMED','DELIVERED','DEAD')", name="ck_event_status"
+        ),
+        CheckConstraint("attempts >= 0 AND attempts <= 5", name="ck_event_attempts"),
+        Index("ix_outbox_pending", "status", "next_attempt_at"),
+    )
+
+
+class WebhookAttempt(Base):
+    __tablename__ = "webhook_attempts"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    event_id: Mapped[UUID] = mapped_column()
+    attempt: Mapped[int] = mapped_column()
+    outcome: Mapped[str] = mapped_column(String(100))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "event_id"],
+            ["outbox_events.tenant_id", "outbox_events.ontology_id", "outbox_events.id"],
+        ),
+        UniqueConstraint(
+            "tenant_id", "ontology_id", "event_id", "attempt", name="uq_delivery_attempt"
+        ),
+    )
+
+
+class EditOverlay(Base):
+    __tablename__ = "edit_overlays"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    object_type_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    object_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    property_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    owner: Mapped[str] = mapped_column(String(20))
+    source: Mapped[str | None] = mapped_column(Text)
+    value: Mapped[JsonValue] = mapped_column(JSONB(none_as_null=False), nullable=False)
+    source_value: Mapped[JsonValue] = mapped_column(JSONB(none_as_null=False), nullable=False)
+    updated_by: Mapped[str] = mapped_column(Text, server_default="legacy-unknown")
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+    revision: Mapped[int] = mapped_column(BigInteger)
+    schema_version: Mapped[str] = mapped_column(Text)
+    execution_id: Mapped[UUID | None]
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "schema_version"],
+            [
+                "ontology_versions.tenant_id",
+                "ontology_versions.ontology_id",
+                "ontology_versions.version",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "execution_id"],
+            [
+                "action_executions.tenant_id",
+                "action_executions.ontology_id",
+                "action_executions.id",
+            ],
+        ),
+        CheckConstraint("owner IN ('source','pipeline','user','action')", name="ck_overlay_owner"),
+    )
+
+
+class ReconciliationConflict(Base):
+    __tablename__ = "reconciliation_conflicts"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    object_type_id: Mapped[str] = mapped_column(Text)
+    object_id: Mapped[str] = mapped_column(Text)
+    property_id: Mapped[str] = mapped_column(Text)
+    incoming: Mapped[JsonValue] = mapped_column(JSONB(none_as_null=False), nullable=False)
+    source: Mapped[str] = mapped_column(Text)
+    observed_revision: Mapped[int] = mapped_column(BigInteger)
+    schema_version: Mapped[str] = mapped_column(Text)
+    resolved_by: Mapped[str | None] = mapped_column(Text)
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    status: Mapped[str] = mapped_column(String(20), default="OPEN")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "schema_version"],
+            [
+                "ontology_versions.tenant_id",
+                "ontology_versions.ontology_id",
+                "ontology_versions.version",
+            ],
+        ),
+        CheckConstraint(
+            "status IN ('OPEN','PRESERVED','ACCEPTED')", name="ck_reconciliation_status"
+        ),
+        Index(
+            "ix_reconciliation_object",
+            "tenant_id",
+            "ontology_id",
+            "object_type_id",
+            "object_id",
+            "status",
+        ),
+    )

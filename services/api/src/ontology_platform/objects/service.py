@@ -3,7 +3,7 @@ from typing import Literal
 
 from ontology_schema.models import OntologyDefinition
 from sqlalchemy import and_, delete, func, select, update
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 
 from ontology_platform.contracts import (
     CreateObject,
@@ -13,13 +13,13 @@ from ontology_platform.contracts import (
     ObjectView,
 )
 from ontology_platform.db.governance import GovernedService, missing
-from ontology_platform.db.models import Link, Object
+from ontology_platform.db.models import EditOverlay, Link, Object
 from ontology_platform.errors import ApplicationError
 from ontology_platform.metadata.storage import active_definition
 from ontology_platform.objects.relationships import link_type
 from ontology_platform.objects.storage import check_unique
 from ontology_platform.objects.validation import object_type, validate_properties
-from ontology_platform.security.interfaces import Principal
+from ontology_platform.security.interfaces import Authorizer, Principal
 
 
 def resource(principal: Principal, ontology_id: str, type_id: str, object_id: str) -> str:
@@ -27,6 +27,38 @@ def resource(principal: Principal, ontology_id: str, type_id: str, object_id: st
 
 
 class ObjectService(GovernedService):
+    def __init__(
+        self,
+        sessions: sessionmaker[Session],
+        authorizer: Authorizer,
+        *,
+        session: Session | None = None,
+        record_edits: bool = True,
+    ):
+        super().__init__(sessions, authorizer, session=session)
+        self.record_edits = record_edits
+
+    def _user_edits(self, session: Session, row: Object, properties: list[str], actor: str) -> None:
+        if not self.record_edits:
+            return
+        for prop in properties:
+            key = (row.tenant_id, row.ontology_id, row.object_type_id, row.object_id, prop)
+            overlay = session.get(EditOverlay, key)
+            if overlay is None:
+                overlay = EditOverlay(
+                    tenant_id=row.tenant_id,
+                    ontology_id=row.ontology_id,
+                    object_type_id=row.object_type_id,
+                    object_id=row.object_id,
+                    property_id=prop,
+                    source_value=None,
+                )
+                session.add(overlay)
+            overlay.updated_by = actor
+            overlay.owner, overlay.value = "user", row.properties[prop]
+            overlay.schema_version, overlay.revision = row.schema_version, row.version
+            overlay.execution_id = None
+
     def _schema(
         self, session: Session, principal: Principal, ontology_id: str, *, write: bool = False
     ) -> OntologyDefinition:
@@ -84,6 +116,7 @@ class ObjectService(GovernedService):
                 )
                 session.add(row)
                 session.flush()
+                self._user_edits(session, row, list(properties), principal.principal_id)
                 result.append(ObjectView.model_validate(row))
             return result
 
@@ -155,6 +188,7 @@ class ObjectService(GovernedService):
             if not changed:
                 raise ApplicationError("revision_conflict", "Object revision changed", 409)
             session.refresh(row)
+            self._user_edits(session, row, list(request.properties), principal.principal_id)
             return ObjectView.model_validate(row)
 
     def delete(
@@ -179,6 +213,14 @@ class ObjectService(GovernedService):
                     Object.object_type_id == type_id,
                     Object.object_id == object_id,
                     Object.version == expected_version,
+                )
+            )
+            session.execute(
+                delete(EditOverlay).where(
+                    EditOverlay.tenant_id == principal.tenant_id,
+                    EditOverlay.ontology_id == ontology_id,
+                    EditOverlay.object_type_id == type_id,
+                    EditOverlay.object_id == object_id,
                 )
             )
             # FK RESTRICT deliberately requires explicit link removal first.

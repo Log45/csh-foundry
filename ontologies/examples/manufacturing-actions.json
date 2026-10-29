@@ -1,0 +1,281 @@
+[
+  {
+    "id": "UpdateMachineStatus",
+    "name": "UpdateMachineStatus",
+    "parameters": [
+      {
+        "id": "machineId",
+        "name": "machineId",
+        "data_type": "string",
+        "required": true,
+        "object_type_id": "Machine"
+      },
+      {
+        "id": "newStatus",
+        "name": "newStatus",
+        "data_type": "string",
+        "required": true,
+        "enum": [
+          "RUNNING",
+          "STOPPED",
+          "MAINTENANCE",
+          "CRITICAL"
+        ]
+      },
+      {
+        "id": "expectedRevision",
+        "name": "expectedRevision",
+        "data_type": "integer",
+        "required": true
+      }
+    ],
+    "bindings": [
+      {
+        "id": "machine",
+        "object_type": "Machine",
+        "object_id": {
+          "kind": "parameter",
+          "parameter": "machineId"
+        }
+      }
+    ],
+    "operations": [
+      {
+        "type": "UPDATE_OBJECT",
+        "target": "Machine",
+        "binding": "machine",
+        "properties": {
+          "operationalStatus": {
+            "kind": "parameter",
+            "parameter": "newStatus"
+          }
+        },
+        "expected_version": {
+          "kind": "parameter",
+          "parameter": "expectedRevision"
+        }
+      }
+    ],
+    "preconditions": []
+  },
+  {
+    "id": "ScheduleMaintenance",
+    "name": "ScheduleMaintenance",
+    "parameters": [
+      {
+        "id": "machineId",
+        "name": "machineId",
+        "data_type": "string",
+        "required": true,
+        "object_type_id": "Machine"
+      },
+      {
+        "id": "employeeId",
+        "name": "employeeId",
+        "data_type": "string",
+        "required": true,
+        "object_type_id": "Employee"
+      },
+      {
+        "id": "taskId",
+        "name": "taskId",
+        "data_type": "string",
+        "required": true
+      },
+      {
+        "id": "scheduledDate",
+        "name": "scheduledDate",
+        "data_type": "date",
+        "required": true
+      }
+    ],
+    "bindings": [
+      {
+        "id": "machine",
+        "object_type": "Machine",
+        "object_id": {
+          "kind": "parameter",
+          "parameter": "machineId"
+        }
+      },
+      {
+        "id": "employee",
+        "object_type": "Employee",
+        "object_id": {
+          "kind": "parameter",
+          "parameter": "employeeId"
+        }
+      }
+    ],
+    "operations": [
+      {
+        "type": "CREATE_OBJECT",
+        "target": "MaintenanceTask",
+        "binding": "task",
+        "object_id": {
+          "kind": "parameter",
+          "parameter": "taskId"
+        },
+        "properties": {
+          "taskId": {
+            "kind": "parameter",
+            "parameter": "taskId"
+          },
+          "scheduledDate": {
+            "kind": "parameter",
+            "parameter": "scheduledDate"
+          },
+          "taskStatus": {
+            "kind": "literal",
+            "value": "OPEN"
+          }
+        }
+      },
+      {
+        "type": "CREATE_LINK",
+        "target": "taskForMachine",
+        "source": "task",
+        "destination": "machine"
+      },
+      {
+        "type": "CREATE_LINK",
+        "target": "assignedEmployee",
+        "source": "task",
+        "destination": "employee"
+      }
+    ],
+    "preconditions": [
+      {
+        "type": "EXISTS",
+        "binding": "machine"
+      },
+      {
+        "type": "EXISTS",
+        "binding": "employee"
+      }
+    ]
+  },
+  {
+    "id": "CompleteMaintenance",
+    "name": "CompleteMaintenance",
+    "parameters": [
+      {
+        "id": "taskId",
+        "name": "taskId",
+        "data_type": "string",
+        "required": true,
+        "object_type_id": "MaintenanceTask"
+      },
+      {
+        "id": "expectedRevision",
+        "name": "expectedRevision",
+        "data_type": "integer",
+        "required": true
+      }
+    ],
+    "bindings": [
+      {
+        "id": "task",
+        "object_type": "MaintenanceTask",
+        "object_id": {
+          "kind": "parameter",
+          "parameter": "taskId"
+        }
+      }
+    ],
+    "operations": [
+      {
+        "type": "UPDATE_OBJECT",
+        "target": "MaintenanceTask",
+        "binding": "task",
+        "properties": {
+          "taskStatus": {
+            "kind": "literal",
+            "value": "COMPLETED"
+          }
+        },
+        "expected_version": {
+          "kind": "parameter",
+          "parameter": "expectedRevision"
+        }
+      }
+    ],
+    "preconditions": [
+      {
+        "type": "PROPERTY_EQUALS",
+        "binding": "task",
+        "property": "taskStatus",
+        "value": {
+          "kind": "literal",
+          "value": "IN_PROGRESS"
+        }
+      }
+    ]
+  },
+  {
+    "id": "AssignTask",
+    "name": "AssignTask",
+    "parameters": [
+      {
+        "id": "taskId",
+        "name": "taskId",
+        "data_type": "string",
+        "required": true,
+        "object_type_id": "MaintenanceTask"
+      },
+      {
+        "id": "employeeId",
+        "name": "employeeId",
+        "data_type": "string",
+        "required": true,
+        "object_type_id": "Employee"
+      },
+      {
+        "id": "expectedRevision",
+        "name": "expectedRevision",
+        "data_type": "integer",
+        "required": true
+      }
+    ],
+    "bindings": [
+      {
+        "id": "task",
+        "object_type": "MaintenanceTask",
+        "object_id": {
+          "kind": "parameter",
+          "parameter": "taskId"
+        }
+      },
+      {
+        "id": "employee",
+        "object_type": "Employee",
+        "object_id": {
+          "kind": "parameter",
+          "parameter": "employeeId"
+        }
+      }
+    ],
+    "operations": [
+      {
+        "type": "CREATE_LINK",
+        "target": "assignedEmployee",
+        "source": "task",
+        "destination": "employee"
+      }
+    ],
+    "preconditions": [
+      {
+        "type": "REVISION_EQUALS",
+        "binding": "task",
+        "value": {
+          "kind": "parameter",
+          "parameter": "expectedRevision"
+        }
+      },
+      {
+        "type": "EXISTS",
+        "binding": "employee"
+      }
+    ]
+  }
+]

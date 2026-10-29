@@ -11,6 +11,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session, sessionmaker
 from starlette.exceptions import HTTPException
 
+from ontology_platform.actions.limits import ActionPayloadLimit
+from ontology_platform.actions.routes import router as action_router
 from ontology_platform.api.v1.routes import router
 from ontology_platform.config import Settings, get_settings
 from ontology_platform.db.governance import SCHEMA_REVISION
@@ -42,8 +44,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         openapi_url="/api/v1/openapi.json",
         docs_url="/docs",
     )
+    app.add_middleware(ActionPayloadLimit)
     app.include_router(router)
     app.include_router(query_router)
+    app.include_router(action_router)
     app.state.query_cursors = CursorCodec(
         configuration.query_cursor_secret.get_secret_value().encode()
         if configuration.query_cursor_secret

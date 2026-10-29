@@ -1,0 +1,357 @@
+{
+  "environment": "macOS-15.6.1-arm64-arm-64bit",
+  "postgresql": "PostgreSQL 17.6 (Debian 17.6-2.pgdg12+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+  "workloads": {
+    "single_object_including_revision_read": {
+      "samples_ms": [
+        62.15820802026428,
+        57.17341598938219,
+        37.53487500944175,
+        32.64783398481086,
+        35.80391700961627,
+        48.41458302689716,
+        43.83658402366564,
+        37.66016598092392,
+        33.087584015447646,
+        35.84287501871586
+      ],
+      "median_ms": 37.597520495182835,
+      "max_ms": 62.15820802026428,
+      "outcomes": [
+        "a9f8b869-4b16-46aa-b3a8-86841579ef7f",
+        "ed006fae-707d-4f79-94f2-52de8503653a",
+        "44c56959-c33a-479c-9d5f-808be8ca7807",
+        "372c97ef-64f6-4d54-9cbd-9c4bf277e5c9",
+        "155b6eb0-9525-4152-9a41-693fcdb1636e",
+        "51138078-85c8-492f-873d-ed8abad72cad",
+        "98110d6d-3331-49ba-b0ec-007b0148ccfd",
+        "3a8c7a83-6f67-416e-a2d7-b918db599c80",
+        "25e1d735-3c41-477d-a80a-ca46a123b0b3",
+        "5be9541d-478d-47d6-9327-4d5b02ce547d"
+      ]
+    },
+    "create_task_two_relationships": {
+      "samples_ms": [
+        106.63833300350234,
+        109.9345000111498,
+        132.28279200848192,
+        104.65245798695832,
+        110.6192079896573,
+        96.94570800638758,
+        120.7388750044629,
+        153.13012499245815,
+        152.67216600477695,
+        137.94837502064183
+      ],
+      "median_ms": 115.6790414970601,
+      "max_ms": 153.13012499245815,
+      "outcomes": [
+        "a7d358ad-75eb-48ee-8e12-056320338bec",
+        "ff535d00-60d4-42b8-8650-9452423bebc2",
+        "df1254f7-6c5f-4b48-9e00-2db1d0856b83",
+        "38931857-6b8b-4131-b415-17183fbe67d8",
+        "63bc0bb4-4d89-4cb7-a9c2-40e0f84b0a04",
+        "1a013f1b-25c0-47d5-813a-5e9504ea20be",
+        "7e1682e5-d22e-4f47-a95d-cf32c8add7c8",
+        "b2b23e8e-bd7a-43d4-b444-2a5eef37970b",
+        "0dc02a2f-b241-4390-a0bc-00d5816d6ac6",
+        "2409f02d-1026-4ad9-ba1f-c6211148bf5e"
+      ]
+    },
+    "concurrent_updates": {
+      "two_request_wall_ms": 67.85608298378065,
+      "outcomes": [
+        "4fbfdc2d-4e6f-492d-827d-e99e351ce6f5",
+        "revision_conflict"
+      ]
+    },
+    "concurrent_identical_retries": {
+      "two_request_wall_ms": 44.44962501293048,
+      "outcomes": [
+        "1016e578-3e49-4776-9e63-701fc54d1b9b",
+        "1016e578-3e49-4776-9e63-701fc54d1b9b"
+      ]
+    },
+    "relationship_assignment": {
+      "samples_ms": [
+        78.68574999156408
+      ],
+      "median_ms": 78.68574999156408,
+      "max_ms": 78.68574999156408,
+      "outcomes": [
+        "7e855f69-92ad-4101-ab12-4f99f49fb759"
+      ]
+    },
+    "query_alongside_actions": {
+      "samples_ms": [
+        12.589541001943871,
+        5.749542004195973,
+        5.612042004941031,
+        4.846208001254126,
+        8.896833984181285
+      ],
+      "median_ms": 5.749542004195973,
+      "max_ms": 12.589541001943871,
+      "outcomes": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "actual_concurrent_query_action": {
+      "results": [
+        {
+          "operation": "action",
+          "wall_ms": 52.60583298513666,
+          "outcome": "11f57bff-1d32-4e7c-8b23-170f4373ef1d"
+        },
+        {
+          "operation": "query",
+          "wall_ms": 7.3412090132478625,
+          "outcome": "1"
+        }
+      ]
+    },
+    "single_object_action_only": {
+      "samples_ms": [
+        56.499832979170606,
+        50.5887079925742,
+        32.56862499983981,
+        29.077916988171637,
+        30.96400000504218,
+        43.92658401047811,
+        39.70250001293607,
+        33.231374982278794,
+        29.31558300042525,
+        30.98083400982432
+      ],
+      "median_ms": 32.8999999910593,
+      "transaction_samples_ms": [
+        56.24762497609481,
+        50.38429200067185,
+        32.36995902261697,
+        28.90270799980499,
+        30.79112499835901,
+        43.71079200063832,
+        39.5194580196403,
+        32.99762500682846,
+        29.15187500184402,
+        30.804125010035932
+      ],
+      "transaction_median_ms": 32.68379201472271
+    },
+    "query_shared_lock_action_overlap": {
+      "writer_wall_ms": 188.04395900224335,
+      "controlled_hold_ms": 100,
+      "lock_acquisition_including_query_ms": 129.35999999172054,
+      "observed_lock_waits": [
+        {
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "blockers": 1
+        }
+      ]
+    },
+    "outbox_claim_no_network_completion": {
+      "samples_ms": [
+        42.32337500434369,
+        20.0867080129683,
+        20.185707980999723,
+        25.251624989323318,
+        17.979374999413267
+      ],
+      "median_ms": 20.185707980999723,
+      "max_ms": 42.32337500434369,
+      "outcomes": [
+        "a4782b24-5e9d-4ba5-802c-3f1b6007ce26",
+        "7e113929-5566-46d6-929a-ab2863754c13",
+        "2295e7cd-7e59-4df2-a2d8-1d62127ad5a3",
+        "89815809-6671-4df9-887b-39a1ddc81679",
+        "5e5da59f-c64b-4f1e-8ec1-78e594ef26b6"
+      ]
+    }
+  },
+  "transaction_samples_ms": [
+    5.4561249853577465,
+    56.24762497609481,
+    6.364750006468967,
+    50.38429200067185,
+    4.757832997711375,
+    32.36995902261697,
+    3.403790993615985,
+    28.90270799980499,
+    4.6544590150006115,
+    30.79112499835901,
+    4.301249980926514,
+    43.71079200063832,
+    3.9454999787267298,
+    39.5194580196403,
+    4.202374984743074,
+    32.99762500682846,
+    3.6002080014441162,
+    29.15187500184402,
+    4.6808339830022305,
+    30.804125010035932,
+    106.35712501243688,
+    109.61212500114925,
+    131.86491699889302,
+    104.2094579897821,
+    110.34687500796281,
+    96.67304198956117,
+    120.26295901159756,
+    152.18804200412706,
+    151.2018750072457,
+    137.21799998893403,
+    4.69016600982286,
+    5.372416984755546,
+    41.98554198956117,
+    57.58129199966788,
+    4.100749996723607,
+    40.69037499721162,
+    43.856749980477616,
+    14.244334015529603,
+    78.12374999048188,
+    11.964333010837436,
+    5.499042017618194,
+    5.3855840233154595,
+    4.63895799475722,
+    8.672791998833418,
+    3.803250001510605,
+    6.9496250071097165,
+    52.30033298721537,
+    5.75675000436604,
+    138.53262501652353,
+    187.32062500203028,
+    22.188041999470443,
+    18.886166013544425,
+    11.323457991238683,
+    7.68183299805969,
+    7.29570901603438,
+    11.963041994022205,
+    14.075374987442046,
+    9.79816701146774,
+    10.734208015492186,
+    6.691208021948114
+  ],
+  "transaction_median_ms": 16.565250014537014,
+  "history_plan": [
+    {
+      "Plan": {
+        "Node Type": "Limit",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 8.17,
+        "Total Cost": 8.22,
+        "Plan Rows": 2,
+        "Plan Width": 842,
+        "Actual Startup Time": 0.087,
+        "Actual Total Time": 0.09,
+        "Actual Rows": 25,
+        "Actual Loops": 1,
+        "Shared Hit Blocks": 10,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0,
+        "Plans": [
+          {
+            "Node Type": "Incremental Sort",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 8.17,
+            "Total Cost": 8.22,
+            "Plan Rows": 2,
+            "Plan Width": 842,
+            "Actual Startup Time": 0.086,
+            "Actual Total Time": 0.087,
+            "Actual Rows": 25,
+            "Actual Loops": 1,
+            "Sort Key": [
+              "created_at DESC",
+              "id"
+            ],
+            "Presorted Key": [
+              "created_at"
+            ],
+            "Full-sort Groups": {
+              "Group Count": 1,
+              "Sort Methods Used": [
+                "quicksort"
+              ],
+              "Sort Space Memory": {
+                "Average Sort Space Used": 60,
+                "Peak Sort Space Used": 60
+              }
+            },
+            "Shared Hit Blocks": 10,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Index Scan",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Scan Direction": "Backward",
+                "Index Name": "ix_action_history",
+                "Relation Name": "action_executions",
+                "Alias": "action_executions",
+                "Startup Cost": 0.14,
+                "Total Cost": 8.16,
+                "Plan Rows": 1,
+                "Plan Width": 842,
+                "Actual Startup Time": 0.018,
+                "Actual Total Time": 0.032,
+                "Actual Rows": 25,
+                "Actual Loops": 1,
+                "Index Cond": "((tenant_id = '363ac2f3-c30c-48a4-a3a9-171b372eaa13'::uuid) AND (ontology_id = 'manufacturing'::text))",
+                "Rows Removed by Index Recheck": 0,
+                "Shared Hit Blocks": 7,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              }
+            ]
+          }
+        ]
+      },
+      "Planning": {
+        "Shared Hit Blocks": 5,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning Time": 0.111,
+      "Triggers": [],
+      "Execution Time": 0.102
+    }
+  ],
+  "limits": "Local small warm-cache samples, 3 initial objects plus 11 tasks. No production percentiles. Mock transport excludes network latency. Transactions include measured reads and setup as well as actions."
+}

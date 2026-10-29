@@ -52,3 +52,15 @@ Alembic's index filter handles this specific false difference only after checkin
 `pg_get_indexdef` against the expected complete nonunique B-tree definition. Missing, reordered,
 unique or wrong-collation indexes still report drift; a PostgreSQL regression test checks both
 the correct index and a deliberately incorrect collation definition.
+
+## Phase 3
+
+`0006_actions` adds committed action execution/idempotency, audit, outbox, delivery attempt, overlay
+and reconciliation-conflict tables with tenant-safe schema/execution FKs and lookup indexes.
+Execution/audit UPDATE/DELETE protection uses PostgreSQL triggers. `0007_edit_provenance` adds
+edit updater/time and conflict resolver/time; existing Phase 3 rows receive an explicit
+legacy-unknown updater until changed. Neither migration rewrites Phase 0–2 objects or schemas.
+Both use 2-second lock/30-second statement DDL limits. Downgrade removes Phase 3 structures/provenance
+and is destructive to Phase 3 history; test it only in disposable schemas. It preserves earlier
+operational objects. Local development is upgraded to 0007_edit_provenance; drift checks and
+upgrade/downgrade/data-preservation tests are included.

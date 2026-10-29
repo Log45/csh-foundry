@@ -1,11 +1,12 @@
 # CSH Foundry — operational ontology platform
 
-Phase 2 operational query foundation for the modular platform specified in [PLANS.md](PLANS.md).
+Phase 3 governed action and edit foundation for the modular platform specified in [PLANS.md](PLANS.md).
 PostgreSQL owns operational state; canonical metadata is independent of RDF/OWL.
 Open Ontologies supplies external semantic checks. Protégé is optional authoring tooling.
-Phases 0–2 provide governed schema publication/activation, tenant-scoped objects/links and a
+Phases 0–3 provide governed schema publication/activation, tenant-scoped objects/links and a
 schema-aware SQL query engine with projection, keyset pagination, traversal, aggregates and internal
-Object Sets. Subsequent roadmap phases are not implemented.
+Object Sets, transactional actions, previews, durable idempotency/history/audit/outbox, bounded
+webhook delivery and property edit reconciliation. Subsequent roadmap phases are not implemented.
 
 ## Local setup
 
@@ -66,7 +67,7 @@ and Linux x86_64 downloads are supported. For other hosts build the pinned sourc
 exercised RDF/SHACL/reasoning commands: none). This builds an upstream dependency, not a
 platform Rust accelerator. Source pins and licenses are in `integrations/dependencies.json`.
 
-The existing `validate_phase0.py` command now runs the entire current suite, including Phase 2.
+The existing `validate_phase0.py` command now runs the entire current suite, including Phase 3.
 The validation script requires a migrated disposable PostgreSQL database and the pinned
 engine; it uses `.env` by default or `TEST_DATABASE_URL`. Never point migration downgrade
 checks manually at a database with valuable data. Phase 1 integration tests create and drop
@@ -78,7 +79,8 @@ negative cases test RDF 1.1 string-term normalization in memory. See the compati
 
 `make lint`, `make typecheck`, and `make test` are shortcuts. Application source has strict
 mypy checks. API and schema packages are separate uv workspace members. Reserved directories
-record later phase boundaries; no Next.js app, worker or native extension is implemented.
+record later phase boundaries; no Next.js app, ingestion worker or native extension is implemented.
+A bounded outbox delivery runner is included; production scheduling is deferred.
 
 ## Architecture and next work
 
@@ -88,7 +90,8 @@ record later phase boundaries; no Next.js app, worker or native extension is imp
 - [Architecture decisions](docs/decisions/) and [API contract](docs/api/README.md).
 - [Phase 1 report](docs/development/phase-1-report.md), [Phase 2 report](docs/development/phase-2-report.md),
   and [query API](docs/api/queries.md).
-- [Phase 3 checklist](docs/development/phase-3.md); Phase 3 requires separate approval.
+- [Phase 3 report](docs/development/phase-3-report.md), [action API](docs/api/actions.md),
+  and [Phase 4 checklist](docs/development/phase-4.md); Phase 4 requires separate approval.
 
 Canonical fixtures are preserved. Section 24 of PLANS.md uses conceptual shorthand;
 examples/tests use actual `machineId`, `machineName`, `operationalStatus`,
@@ -109,3 +112,16 @@ Run `uv run python scripts/benchmark_queries.py` for isolated PostgreSQL measure
 creates/drops a random test schema and synthetic data through governed services, records plans
 under `docs/architecture/evidence/phase-2/`, and never modifies operational tenant data. It is
 a developer benchmark, not an ingestion implementation or production performance guarantee.
+
+## Governed actions and edit ownership
+
+Include the definitions in `ontologies/examples/manufacturing-actions.json` in an approved ontology
+draft, then use the registry's publish/activate workflow. The action API supports preview, execute
+with required idempotency keys, history and redacted audit. See [actions](docs/api/actions.md) for
+contracts, permissions, three-second/64 KiB limits, retry semantics and webhook configuration.
+Direct CRUD and action edits record property ownership; future source updates preserve governed
+edits by default through ReconciliationService. No production ingestion is included.
+
+`uv run python scripts/benchmark_actions.py` and `uv run python scripts/smoke_actions.py` use
+disposable PostgreSQL schemas. `uv run python scripts/smoke_action_container.py` checks the built
+`csh-foundry-phase3` image with identity disabled and does not mutate operational data.

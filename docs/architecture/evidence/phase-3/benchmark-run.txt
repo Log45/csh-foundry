@@ -1,0 +1,25 @@
+/Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+{
+  "single_object_including_revision_read": 37.597520495182835,
+  "create_task_two_relationships": 115.6790414970601,
+  "concurrent_updates": 67.85608298378065,
+  "concurrent_identical_retries": 44.44962501293048,
+  "relationship_assignment": 78.68574999156408,
+  "query_alongside_actions": 5.749542004195973,
+  "actual_concurrent_query_action": [
+    {
+      "operation": "action",
+      "wall_ms": 52.60583298513666,
+      "outcome": "11f57bff-1d32-4e7c-8b23-170f4373ef1d"
+    },
+    {
+      "operation": "query",
+      "wall_ms": 7.3412090132478625,
+      "outcome": "1"
+    }
+  ],
+  "single_object_action_only": 32.8999999910593,
+  "query_shared_lock_action_overlap": 188.04395900224335,
+  "outbox_claim_no_network_completion": 20.185707980999723
+}
