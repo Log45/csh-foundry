@@ -2,9 +2,10 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Depends, Query, Request, Security
+from fastapi.security import HTTPAuthorizationCredentials
 
-from ontology_platform.dependencies import get_principal
+from ontology_platform.dependencies import bearer, get_principal, verified_identity
 from ontology_platform.security.admin import SecurityAdministration
 from ontology_platform.security.contracts import (
     AssignmentInput,
@@ -108,3 +109,17 @@ def memberships(
     p: Actor, admin: Admin, limit: Limit = 100, offset: Offset = 0
 ) -> list[dict[str, object]]:
     return admin.memberships(p, limit, offset)
+
+
+@router.get("/tenants", response_model=list[dict[str, str]])
+def own_tenants(
+    request: Request,
+    limit: Limit = 100,
+    offset: Offset = 0,
+    credential: Annotated[HTTPAuthorizationCredentials | None, Security(bearer)] = None,
+) -> list[dict[str, str]]:
+    """List only enabled memberships of a verified identity, before tenant selection."""
+    from ontology_platform.security.identity import own_tenants as discover
+
+    issuer, subject, _, _ = verified_identity(request)
+    return discover(request.app.state.sessions, issuer, subject, limit, offset)

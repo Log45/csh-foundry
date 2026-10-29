@@ -105,11 +105,16 @@ def get_version(ontology_id: str, version: str, actor: Actor, service: Registry)
     "/ontologies/{ontology_id}/versions/{version}", response_model=VersionView, tags=["registry"]
 )
 def replace_draft(
-    ontology_id: str, version: str, body: OntologyDefinition, actor: Actor, service: Registry
+    ontology_id: str,
+    version: str,
+    body: OntologyDefinition,
+    actor: Actor,
+    service: Registry,
+    expected_hash: Annotated[str | None, Query(pattern=r"^[a-f0-9]{64}$")] = None,
 ) -> VersionView:
     if body.version != version:
         raise ApplicationError("version_mismatch", "Path and definition versions differ", 422)
-    return service.draft(actor, ontology_id, body, replace=True)
+    return service.draft(actor, ontology_id, body, replace=True, expected_hash=expected_hash)
 
 
 @router.post(

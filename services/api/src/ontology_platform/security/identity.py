@@ -51,3 +51,35 @@ def resolve(
             principal_type=row.principal_type,
             expires_at=expires_at,
         )
+
+
+def own_tenants(
+    sessions: sessionmaker[Session], issuer: str, subject: str, limit: int = 100, offset: int = 0
+) -> list[dict[str, str]]:
+    """Identity-scoped membership discovery; never grants tenant authority."""
+    from ontology_platform.db.models import Tenant
+
+    with sessions.begin() as session:
+        binding = session.get(ExternalIdentity, (issuer, subject))
+        row = (
+            session.scalar(
+                select(PlatformPrincipal)
+                .where(PlatformPrincipal.id == binding.principal_id)
+                .with_for_update(read=True)
+            )
+            if binding
+            else None
+        )
+        if row is None or not row.enabled:
+            raise ApplicationError("forbidden", "Identity is unavailable", 403)
+        return [
+            {"id": str(tenant.id), "name": tenant.name}
+            for tenant in session.scalars(
+                select(Tenant)
+                .join(Membership, Membership.tenant_id == Tenant.id)
+                .where(Membership.principal_id == row.id, Membership.enabled.is_(True))
+                .order_by(Tenant.id)
+                .limit(limit)
+                .offset(offset)
+            )
+        ]

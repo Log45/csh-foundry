@@ -1,0 +1,15 @@
+PASS final image liveness
+PASS final image PostgreSQL readiness at 0013_security
+PASS final image security OpenAPI and Bearer scheme
+PASS disabled mode denies forged identity/tenant/token headers
+PASS OIDC image startup fails closed without required trusted provider configuration
+INFO:     Started server process [10]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     172.17.0.1:55964 - "GET /health/live HTTP/1.1" 200 OK
+INFO:     172.17.0.1:55980 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     172.17.0.1:55982 - "GET /api/v1/openapi.json HTTP/1.1" 200 OK
+INFO:     172.17.0.1:55990 - "GET /api/v1/security/me HTTP/1.1" 401 Unauthorized
+INFO:     172.17.0.1:56000 - "GET /api/v1/ontologies HTTP/1.1" 401 Unauthorized
+INFO:     172.17.0.1:56004 - "GET /api/v1/tenant HTTP/1.1" 401 Unauthorized

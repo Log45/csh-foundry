@@ -135,3 +135,11 @@ Phase 7 adds [production identity and authorization](../api/security.md), tenant
 RBAC, restrictive ABAC, policy versioning/revocation, administration and delegated service workers.
 See ADR 0028 and the Phase 7 report. Earlier phase identity descriptions document the original
 local-development workflow; OIDC mode now supplies verified platform principal context.
+
+## Phase 8 editor concurrency
+
+`PUT /api/v1/ontologies/{ontology_id}/versions/{version}?expected_hash=SHA256` optionally requires
+that the current draft matches the supplied lowercase 64-character canonical hash. The comparison
+runs under the existing ontology write lock before replacement. A stale editor receives HTTP 412
+`draft_changed` and must reload/reconcile its local changes. Omitting the parameter preserves the
+previous API contract. Published versions remain immutable. Studio sends this parameter on saves.

@@ -159,10 +159,19 @@ class RegistryService(GovernedService):
         definition: OntologyDefinition,
         *,
         replace: bool = False,
+        expected_hash: str | None = None,
     ) -> VersionView:
         with self.operation(principal, "schema:write", ontology_id) as session:
             ontology = self.ontology(session, principal, ontology_id, write=True)
             self._identity(principal, ontology, definition)
+            if expected_hash is not None:
+                current = session.get(
+                    Version, (principal.tenant_id, ontology_id, definition.version)
+                )
+                if current is None or current.content_hash != expected_hash:
+                    raise ApplicationError(
+                        "draft_changed", "Draft changed; reload before saving", 412
+                    )
             return version_view(self._write_draft(session, ontology, definition, replace=replace))
 
     def versions(

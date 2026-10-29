@@ -19,7 +19,7 @@ services:
     build:
       context: ..
       dockerfile: infrastructure/docker/api.Dockerfile
-    profiles: ["api"]
+    profiles: ["api", "studio"]
     environment:
       FOUNDRY_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-foundry}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-foundry}
       FOUNDRY_AUTH_MODE: ${FOUNDRY_AUTH_MODE:-disabled}
@@ -33,5 +33,22 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+  studio:
+    build:
+      context: ..
+      dockerfile: infrastructure/docker/studio.Dockerfile
+    profiles: ["studio"]
+    environment:
+      STUDIO_ORIGIN: ${STUDIO_ORIGIN:-http://127.0.0.1:3000}
+      STUDIO_API_ORIGIN: http://api:8000
+      STUDIO_INTERNAL_HTTP: "true"
+      STUDIO_OIDC_ISSUER: ${STUDIO_OIDC_ISSUER:-}
+      STUDIO_OIDC_CLIENT_ID: ${STUDIO_OIDC_CLIENT_ID:-studio}
+      STUDIO_API_AUDIENCE: ${STUDIO_API_AUDIENCE:-foundry-api}
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      api:
+        condition: service_started
 volumes:
   postgres-data:

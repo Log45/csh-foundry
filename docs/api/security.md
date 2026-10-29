@@ -212,3 +212,16 @@ References: [OIDC Discovery](https://openid.net/specs/openid-connect-discovery-1
 [RFC 9068](https://www.rfc-editor.org/rfc/rfc9068.html),
 [PyJWT API](https://pyjwt.readthedocs.io/en/stable/api.html),
 [PyJWT license](https://github.com/jpadilla/pyjwt/blob/2.15.0/LICENSE).
+
+## Phase 8 browser integration
+
+`GET /api/v1/security/tenants?limit=100&offset=0` is the identity-scoped membership discovery
+operation. It requires the same verified API access-token credentials, but no selected tenant.
+It returns only enabled memberships of that enabled issuer/subject binding as `{id,name}` entries;
+limit 1–100 and offset 0–10000. Caller tenant headers cannot select another identity. It grants no
+permissions; `/me` and every subsequent domain operation recheck the chosen membership.
+
+Studio performs Code + PKCE on the Next server and retains API access tokens in opaque server-side
+sessions. Browser requests carry an HttpOnly cookie, exact Origin and synchronizer CSRF for BFF
+operations. See [ADR 0029](../decisions/0029-browser-session-and-studio.md) for cookie/session bounds,
+single-process deployment, logout, issuer contracts and future identity-broker integration.

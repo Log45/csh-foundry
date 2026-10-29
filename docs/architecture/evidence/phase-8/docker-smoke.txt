@@ -1,0 +1,1 @@
+PASS production Studio image: root renders; security headers; no unsafe-eval; unauthenticated requests denied; unconfigured login fails closed; non-root runtime

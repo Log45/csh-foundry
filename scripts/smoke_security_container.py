@@ -27,7 +27,7 @@ container = subprocess.check_output(
         "FOUNDRY_AUTH_MODE=disabled",
         "-e",
         "FOUNDRY_TRUSTED_LOCAL_IDENTITY=false",
-        "csh-foundry-phase7",
+        os.environ.get("FOUNDRY_SMOKE_IMAGE", "csh-foundry-phase7"),
     ],
     env=environment,
     text=True,
@@ -82,9 +82,11 @@ finally:
         ["docker", "logs", container], stderr=subprocess.STDOUT, text=True
     )
     subprocess.run(["docker", "stop", container], check=True, capture_output=True)
-    Path("docs/architecture/evidence/phase-7/docker-smoke.txt").write_text(
-        "\n".join(checks) + "\n" + logs
-    )
+    Path(
+        os.environ.get(
+            "FOUNDRY_SMOKE_EVIDENCE", "docs/architecture/evidence/phase-7/docker-smoke.txt"
+        )
+    ).write_text("\n".join(checks) + "\n" + logs)
 invalid = subprocess.run(
     [
         "docker",
@@ -94,7 +96,7 @@ invalid = subprocess.run(
         "FOUNDRY_DATABASE_URL=postgresql+psycopg://localhost/unused",
         "-e",
         "FOUNDRY_AUTH_MODE=oidc",
-        "csh-foundry-phase7",
+        os.environ.get("FOUNDRY_SMOKE_IMAGE", "csh-foundry-phase7"),
     ],
     capture_output=True,
     text=True,
@@ -104,7 +106,7 @@ assert "OIDC mode requires trusted providers" in invalid.stderr
 checks.append(
     "PASS OIDC image startup fails closed without required trusted provider configuration"
 )
-Path("docs/architecture/evidence/phase-7/docker-smoke.txt").write_text(
-    "\n".join(checks) + "\n" + logs
-)
+Path(
+    os.environ.get("FOUNDRY_SMOKE_EVIDENCE", "docs/architecture/evidence/phase-7/docker-smoke.txt")
+).write_text("\n".join(checks) + "\n" + logs)
 print("\n".join(checks))

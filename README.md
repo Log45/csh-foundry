@@ -1,6 +1,6 @@
 # CSH Foundry — operational ontology platform
 
-Phase 7 production authentication and authorization foundation for the modular platform specified in [PLANS.md](PLANS.md).
+Phase 8 native Ontology Manager and Ontology Studio for the modular platform specified in [PLANS.md](PLANS.md).
 PostgreSQL owns operational state; canonical metadata is independent of RDF/OWL.
 Open Ontologies supplies external semantic checks. Protégé is optional authoring tooling.
 Phases 0–5 provide governed schema publication/activation, tenant-scoped objects/links and a
@@ -84,7 +84,7 @@ negative cases test RDF 1.1 string-term normalization in memory. See the compati
 
 `make lint`, `make typecheck`, and `make test` are shortcuts. Application source has strict
 mypy checks. API and schema packages are separate uv workspace members. Reserved directories
-record later phase boundaries; no Next.js app or native extension is implemented.
+record later phase boundaries; the Next.js app is in `apps/studio`; no native extension is implemented.
 A bounded PostgreSQL ingestion worker is available through the API package CLI.
 A bounded outbox delivery runner is included; production scheduling is deferred.
 
@@ -177,7 +177,7 @@ private and downloadable; publication and activation use separate existing regis
 application or WebProtégé deployment is required. Turtle and RDF/XML are supported; OWL/XML is not.
 Run `uv run python scripts/smoke_semantic.py --interchange` for the actual local HTTP import plus
 semantic workflow, and `scripts/smoke_semantic_container.py --interchange` for the Phase 6 image smoke.
-Phase 7 security is documented in [security.md](docs/api/security.md); Phase 8 requires separate approval.
+Phase 7 security is documented in [security.md](docs/api/security.md); Phase 8 browser integration is documented below.
 
 
 ## Production authentication and authorization
@@ -192,5 +192,29 @@ Bearer tokens and, for multi-tenant users, an authorized X-Tenant-ID selection.
 RBAC and restrictive ABAC extend the existing governed service and SQL grant interfaces. Security
 administration, policy versions, revocation, audit and worker delegation use PostgreSQL. Workers need
 service credentials plus current explicit delegation and both identities' permissions. See the
-[Phase 7 report](docs/development/phase-7-report.md) for validation and limitations. No Phase 8 UI or
+[Phase 7 report](docs/development/phase-7-report.md) for validation and limitations. Phase 8 adds the Studio UI; no
 production deployment is included; Phase 10 operational hardening remains separate work.
+
+## Native Ontology Manager and Ontology Studio (Phase 8)
+
+`apps/studio` now contains a single Next.js/React/TypeScript application. Use Node >=22 and follow
+[Studio setup](apps/studio/README.md) for the server-side OIDC client, API audience and local runtime.
+Configure Phase 7 OIDC and explicit platform memberships first. The browser stores an opaque session
+cookie; FastAPI still verifies the API access token and applies current RBAC/ABAC on every operation.
+Live Microsoft/Google sign-in remains deferred. Local deterministic OIDC exists only in test tooling.
+
+Manager edits the canonical registry through a native graph, type/property/relationship editors,
+action declarations, drafts, compatibility, version history, separate publication/activation and OWL
+mapping diagnostics. Studio explores authorized objects and queries, traverses relationships,
+previews/executes governed actions and manages ingestion and semantic jobs/results. Workers remain
+separate. Complex developer contracts use labeled JSON editors. No Phase 9 SDK or branching is added.
+
+```
+cd apps/studio
+npm ci
+npm run dev
+```
+
+For container development use `docker compose --env-file .env -f infrastructure/compose.yaml
+--profile studio up --build` (one command). See [the Phase 8 API checklist](docs/development/phase-8.md),
+[browser architecture](docs/decisions/0029-browser-session-and-studio.md) and completion report.

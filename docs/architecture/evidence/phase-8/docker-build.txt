@@ -1,0 +1,88 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from studio.Dockerfile
+#1 transferring dockerfile: 566B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:24-bookworm-slim
+#2 DONE 0.3s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 173B done
+#3 DONE 0.0s
+
+#4 [build 1/6] FROM docker.io/library/node:24-bookworm-slim@sha256:c86ecead9e55a5210ac1727de38a4ca840bf03dcaf34dc9749addbf383b1920c
+#4 resolve docker.io/library/node:24-bookworm-slim@sha256:c86ecead9e55a5210ac1727de38a4ca840bf03dcaf34dc9749addbf383b1920c done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 16.88kB done
+#5 DONE 0.0s
+
+#6 [build 2/6] WORKDIR /app
+#6 CACHED
+
+#7 [build 3/6] COPY apps/studio/package.json apps/studio/package-lock.json ./
+#7 DONE 0.0s
+
+#8 [build 4/6] RUN npm ci --no-audit --no-fund
+#8 10.47 
+#8 10.47 added 154 packages in 10s
+#8 10.47 npm notice
+#8 10.47 npm notice New major version of npm available! 11.19.1 -> 12.2.1
+#8 10.47 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+#8 10.47 npm notice To update run: npm install -g npm@12.2.1
+#8 10.47 npm notice
+#8 DONE 11.4s
+
+#9 [build 5/6] COPY apps/studio/ ./
+#9 DONE 0.1s
+
+#10 [build 6/6] RUN npm run build
+#10 0.223 
+#10 0.223 > @foundry/studio@0.8.0 build
+#10 0.223 > next build --webpack
+#10 0.223 
+#10 0.489 ▲ Next.js 16.4.3 (webpack)
+#10 0.521 ✓ Running next.config.ts took 31ms
+#10 0.531 
+#10 0.551   Creating an optimized production build ...
+#10 5.728 ✓ Compiled successfully in 3.8s
+#10 5.731   Running TypeScript ...
+#10 8.183   Finished TypeScript in 2.5s ...
+#10 8.185   Collecting page data using 6 workers ...
+#10 8.859   Generating static pages using 6 workers (0/3) ...
+#10 9.206 ✓ Generating static pages using 6 workers (3/3) in 346ms
+#10 9.303   Finalizing page optimization ...
+#10 9.303   Collecting build traces ...
+#10 22.23 
+#10 22.23 Route (app)
+#10 22.23 ┌ ○ /
+#10 22.23 ├ ○ /_not-found
+#10 22.23 ├ ƒ /auth/[operation]
+#10 22.23 └ ƒ /bff
+#10 22.23 
+#10 22.23 
+#10 22.23 ○  (Static)   prerendered as static content
+#10 22.23 ƒ  (Dynamic)  server-rendered on demand
+#10 22.24 
+#10 DONE 22.5s
+
+#11 [runtime 3/4] COPY --from=build --chown=node:node /app/.next/standalone ./
+#11 DONE 0.3s
+
+#12 [runtime 4/4] COPY --from=build --chown=node:node /app/.next/static ./.next/static
+#12 DONE 0.1s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 1.7s done
+#13 exporting manifest sha256:7b3daf02a4d2f0e2ef49014ad3225fc1e1c32b44763c9a317cf663feb80afb4e
+#13 exporting manifest sha256:7b3daf02a4d2f0e2ef49014ad3225fc1e1c32b44763c9a317cf663feb80afb4e done
+#13 exporting config sha256:59ffd7257181ffaaeef99002b24774d1406a39f9e99af4f9ff26756530186373 done
+#13 exporting attestation manifest sha256:a6685a52fd6cbb8b05dda37a19c33241cd58b739c35969aed94c25e446347aad done
+#13 exporting manifest list sha256:39cb7bb0388a9b5247472a8670a32074c36d4fef7316d61b12c7bf507309e74b done
+#13 naming to docker.io/library/csh-foundry-studio:phase8 done
+#13 unpacking to docker.io/library/csh-foundry-studio:phase8
+#13 unpacking to docker.io/library/csh-foundry-studio:phase8 0.4s done
+#13 DONE 2.2s

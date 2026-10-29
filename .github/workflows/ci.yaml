@@ -1,4 +1,4 @@
-name: Phase 2 validation
+name: Platform and Studio validation
 on: [push, pull_request]
 jobs:
   foundation:
@@ -32,3 +32,19 @@ jobs:
           distribution: temurin
           java-version: "17"
       - run: mvn -q -f integrations/protege/pom.xml compile exec:java '-Dexec.args=fixtures/manufacturing.ttl artifacts/manufacturing.owl'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: apps/studio/package-lock.json
+      - run: npm ci
+        working-directory: apps/studio
+      - run: uv run python scripts/export_openapi.py
+      - run: npm run generate:api
+        working-directory: apps/studio
+      - run: git diff --exit-code -- apps/studio/lib/openapi.json apps/studio/lib/api-schema.ts
+      - run: npm run format:check && npm run typecheck && npm test && npm run build
+        working-directory: apps/studio
+      - run: npx playwright install --with-deps chromium
+        working-directory: apps/studio
+      - run: uv run python scripts/test_studio.py

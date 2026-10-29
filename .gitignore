@@ -15,3 +15,8 @@ target/
 artifacts/
 *.egg-info/
 external/
+
+# Studio build and browser test artifacts
+*.tsbuildinfo
+apps/studio/test-results/
+apps/studio/playwright-report/

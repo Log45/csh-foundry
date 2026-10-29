@@ -27,6 +27,24 @@ def get_principal(
     from ontology_platform.security.identity import resolve
 
     settings = request.app.state.settings
+    if settings.trusted_local_identity and settings.auth_mode in {"disabled", "local"}:
+        return Principal(
+            tenant_id=settings.local_tenant_id, principal_id=settings.local_principal_id
+        )
+    issuer, subject, method, expiry = verified_identity(request)
+    selected = request.headers.get("x-tenant-id")
+    try:
+        tenant = UUID(selected) if selected else None
+    except ValueError as exc:
+        raise ApplicationError("forbidden", "Invalid tenant selection", 403) from exc
+    return resolve(
+        request.app.state.sessions, issuer, subject, tenant, method=method, expires_at=expiry
+    )
+
+
+def verified_identity(request: Request) -> tuple[str, str, str, datetime]:
+    """Verify credentials without requiring a selected tenant (membership discovery only)."""
+    settings = request.app.state.settings
     if settings.auth_mode == "oidc":
         raw_credential = request.headers.get("authorization", "")
         scheme, _, token = raw_credential.partition(" ")
@@ -41,16 +59,9 @@ def get_principal(
         issuer, subject, method = settings.test_issuer, settings.test_subject, "test"
         expiry = datetime.now(UTC) + timedelta(minutes=5)
     elif settings.trusted_local_identity and settings.auth_mode in {"disabled", "local"}:
-        return Principal(
-            tenant_id=settings.local_tenant_id, principal_id=settings.local_principal_id
-        )
+        raise ApplicationError("authentication_required", "Verified identity is required", 401)
     else:
         raise ApplicationError("authentication_required", "Authentication is required", 401)
-    selected = request.headers.get("x-tenant-id")
-    try:
-        tenant = UUID(selected) if selected else None
-    except ValueError as exc:
-        raise ApplicationError("forbidden", "Invalid tenant selection", 403) from exc
-    return resolve(
-        request.app.state.sessions, issuer, subject, tenant, method=method, expires_at=expiry
-    )
+    if expiry <= datetime.now(UTC):
+        raise ApplicationError("invalid_token", "Access token expired", 401)
+    return issuer, subject, method, expiry
