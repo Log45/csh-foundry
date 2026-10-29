@@ -1,0 +1,104 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 398B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from api.Dockerfile
+#2 transferring dockerfile: 315B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.12.12-slim-bookworm
+#3 ...
+
+#4 [internal] load metadata for ghcr.io/astral-sh/uv:0.9.5
+#4 DONE 0.4s
+
+#3 [internal] load metadata for docker.io/library/python:3.12.12-slim-bookworm
+#3 DONE 0.4s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 91B done
+#5 DONE 0.0s
+
+#6 [stage-0 1/5] FROM docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#6 resolve docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c 0.0s done
+#6 DONE 0.0s
+
+#7 FROM ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7
+#7 resolve ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7 0.0s done
+#7 DONE 0.0s
+
+#8 [internal] load build context
+#8 transferring context: 17.35MB 0.2s done
+#8 DONE 0.2s
+
+#9 [stage-0 2/5] COPY --from=ghcr.io/astral-sh/uv:0.9.5 /uv /usr/local/bin/uv
+#9 CACHED
+
+#10 [stage-0 3/5] WORKDIR /app
+#10 CACHED
+
+#11 [stage-0 4/5] COPY . .
+#11 DONE 0.2s
+
+#12 [stage-0 5/5] RUN uv sync --frozen --no-dev
+#12 0.338 Using CPython 3.12.12 interpreter at: /usr/local/bin/python3.12
+#12 0.338 Creating virtual environment at: .venv
+#12 0.417    Building ontology-platform-api @ file:///app/services/api
+#12 0.417    Building ontology-schema @ file:///app/packages/ontology-schema
+#12 0.558 Downloading pydantic-core (2.0MiB)
+#12 0.559 Downloading psycopg-binary (6.5MiB)
+#12 0.559 Downloading sqlalchemy (3.3MiB)
+#12 0.559 Downloading polars-runtime-32 (44.4MiB)
+#12 0.895  Downloading pydantic-core
+#12 0.986  Downloading sqlalchemy
+#12 1.134  Downloading psycopg-binary
+#12 1.881       Built ontology-platform-api @ file:///app/services/api
+#12 1.881       Built ontology-schema @ file:///app/packages/ontology-schema
+#12 2.098  Downloading polars-runtime-32
+#12 2.098 Prepared 27 packages in 1.74s
+#12 2.126 Installed 27 packages in 28ms
+#12 2.126  + alembic==1.20.1
+#12 2.126  + annotated-doc==0.0.5
+#12 2.126  + annotated-types==0.8.0
+#12 2.126  + anyio==4.15.1
+#12 2.126  + click==8.5.0
+#12 2.126  + fastapi==0.162.0
+#12 2.126  + greenlet==3.5.6
+#12 2.127  + h11==0.16.0
+#12 2.127  + idna==3.20
+#12 2.127  + mako==1.4.3
+#12 2.127  + markupsafe==3.0.4
+#12 2.127  + ontology-platform-api==0.0.1 (from file:///app/services/api)
+#12 2.127  + ontology-schema==0.0.1 (from file:///app/packages/ontology-schema)
+#12 2.127  + opentelemetry-api==1.45.1
+#12 2.127  + polars==1.44.2
+#12 2.127  + polars-runtime-32==1.44.2
+#12 2.127  + psycopg==3.3.6
+#12 2.127  + psycopg-binary==3.3.6
+#12 2.127  + pydantic==2.14.1
+#12 2.127  + pydantic-core==2.50.1
+#12 2.127  + pydantic-settings==2.16.2
+#12 2.127  + python-dotenv==1.2.4
+#12 2.127  + sqlalchemy==2.0.55
+#12 2.127  + starlette==1.10.0
+#12 2.127  + typing-extensions==4.16.0
+#12 2.127  + typing-inspection==0.4.4
+#12 2.127  + uvicorn==0.54.0
+#12 DONE 2.4s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 4.7s done
+#13 exporting manifest sha256:f0fb435f175ff96fe40bad32cb361c745b0b6db8af0df1b73d559938170f5536
+#13 exporting manifest sha256:f0fb435f175ff96fe40bad32cb361c745b0b6db8af0df1b73d559938170f5536 done
+#13 exporting config sha256:358c6f2c68ee5f77dd6f7029d93e88f40bcb6be336593471c6bc2b56d1258229 done
+#13 exporting attestation manifest sha256:a110876f389705220f2a5abf8b3ae733a79688bf967c4c41aa212848feb2501d done
+#13 exporting manifest list sha256:295d80dd354520e90ae057008722a1468f30fc8a3abdf9d32559d39de6a8298a done
+#13 naming to docker.io/library/csh-foundry-api:latest done
+#13 unpacking to docker.io/library/csh-foundry-api:latest
+#13 unpacking to docker.io/library/csh-foundry-api:latest 1.1s done
+#13 DONE 5.8s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+ api  Built

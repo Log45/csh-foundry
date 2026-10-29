@@ -294,3 +294,23 @@ class Activation(Base):
         ),
         UniqueConstraint("tenant_id", "ontology_id", "plan_id", name="uq_activation_plan"),
     )
+
+
+# Fixed-width keys avoid introducing B-tree key-size failures for valid long identities
+# or future schemas with large values. Compiler equality always rechecks the exact values.
+Index(
+    "ix_objects_status_lookup",
+    Object.tenant_id,
+    func.md5(Object.ontology_id),
+    func.md5(Object.object_type_id),
+    func.md5(Object.properties.op("->>", return_type=Text())("operationalStatus")),
+)
+
+# The primary key uses the database collation; query cursors require bytewise ordering.
+Index(
+    "ix_objects_query_order",
+    Object.tenant_id,
+    Object.ontology_id,
+    Object.object_type_id,
+    Object.object_id.collate("C"),
+)

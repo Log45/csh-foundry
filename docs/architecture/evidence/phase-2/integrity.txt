@@ -1,0 +1,11 @@
+PASS unchanged fixture VALIDATION.md
+PASS unchanged fixture employees.csv
+PASS unchanged fixture factories.csv
+PASS unchanged fixture machines.csv
+PASS unchanged fixture maintenance_tasks.csv
+PASS unchanged fixture manufacturing-data.ttl
+PASS unchanged fixture manufacturing-shapes.ttl
+PASS unchanged fixture manufacturing.ttl
+PASS canonical schema, semantic integration, specifications and fixtures unchanged
+NOT RUN unavailable gh
+NOT RUN unavailable act

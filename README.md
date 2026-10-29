@@ -1,10 +1,11 @@
 # CSH Foundry — operational ontology platform
 
-Phase 1 persistence foundation for the modular platform specified in [PLANS.md](PLANS.md).
+Phase 2 operational query foundation for the modular platform specified in [PLANS.md](PLANS.md).
 PostgreSQL owns operational state; canonical metadata is independent of RDF/OWL.
 Open Ontologies supplies external semantic checks. Protégé is optional authoring tooling.
-Phases 0–1 provide schema registration/publication, controlled activation, tenant-scoped objects
-and forward relationships. Advanced queries and subsequent roadmap phases are not implemented.
+Phases 0–2 provide governed schema publication/activation, tenant-scoped objects/links and a
+schema-aware SQL query engine with projection, keyset pagination, traversal, aggregates and internal
+Object Sets. Subsequent roadmap phases are not implemented.
 
 ## Local setup
 
@@ -46,7 +47,7 @@ Bootstrap runs once and provisions only that configured tenant. Repeating provis
 an explicit conflict. Every operational request uses the server-configured principal; client
 headers cannot select a tenant. Compose forwards the same variables to the API container.
 This is a trusted local administration mechanism; OIDC and production policy enforcement remain
-later work. Keep this instance on loopback. See [the Phase 1 API](docs/api/README.md) for the
+later work. Keep this instance on loopback. See [the persistence API](docs/api/README.md) for the
 create → draft → publish → activate → CRUD workflow and approved migration plans.
 
 ## Validation
@@ -65,7 +66,7 @@ and Linux x86_64 downloads are supported. For other hosts build the pinned sourc
 exercised RDF/SHACL/reasoning commands: none). This builds an upstream dependency, not a
 platform Rust accelerator. Source pins and licenses are in `integrations/dependencies.json`.
 
-The existing `validate_phase0.py` command now runs the entire current suite, including Phase 1.
+The existing `validate_phase0.py` command now runs the entire current suite, including Phase 2.
 The validation script requires a migrated disposable PostgreSQL database and the pinned
 engine; it uses `.env` by default or `TEST_DATABASE_URL`. Never point migration downgrade
 checks manually at a database with valuable data. Phase 1 integration tests create and drop
@@ -85,11 +86,26 @@ record later phase boundaries; no Next.js app, worker or native extension is imp
 - [Dependency/semantic compatibility](docs/architecture/semantic-compatibility.md).
 - [Phase 0 report](docs/development/phase-0-report.md).
 - [Architecture decisions](docs/decisions/) and [API contract](docs/api/README.md).
-- [Phase 1 report](docs/development/phase-1-report.md) and [Phase 2 checklist](docs/development/phase-2.md).
-  Phase 2 requires separate approval.
+- [Phase 1 report](docs/development/phase-1-report.md), [Phase 2 report](docs/development/phase-2-report.md),
+  and [query API](docs/api/queries.md).
+- [Phase 3 checklist](docs/development/phase-3.md); Phase 3 requires separate approval.
 
 Canonical fixtures are preserved. Section 24 of PLANS.md uses conceptual shorthand;
 examples/tests use actual `machineId`, `machineName`, `operationalStatus`,
 `temperatureCelsius`, `locatedInFactory` and the other supplied vocabulary.
 Stop development services with `docker compose --env-file .env -f infrastructure/compose.yaml down`.
 This preserves the PostgreSQL named volume.
+
+## Query development
+
+Query documentation and manufacturing examples are in [docs/api/queries.md](docs/api/queries.md).
+New endpoints live under `/api/v1/ontologies/{ontology}`: `/objects/{type}/query`,
+`/object-sets/query`, `/traverse`, `/aggregate`. Existing CRUD routes remain available.
+Set optional `FOUNDRY_QUERY_CURSOR_SECRET` to a random secret of at least 32 UTF-8 bytes for
+cursor validity across API restarts/processes; otherwise a process-local key is generated.
+Never commit a real key. Cursor pagination is not a historical snapshot.
+
+Run `uv run python scripts/benchmark_queries.py` for isolated PostgreSQL measurements. This
+creates/drops a random test schema and synthetic data through governed services, records plans
+under `docs/architecture/evidence/phase-2/`, and never modifies operational tenant data. It is
+a developer benchmark, not an ingestion implementation or production performance guarantee.

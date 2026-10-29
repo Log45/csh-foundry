@@ -17,6 +17,8 @@ from ontology_platform.db.governance import SCHEMA_REVISION
 from ontology_platform.db.session import make_engine
 from ontology_platform.dependencies import get_session
 from ontology_platform.errors import ApplicationError
+from ontology_platform.queries.cursor import CursorCodec
+from ontology_platform.queries.routes import router as query_router
 from ontology_platform.security.local import LocalAuthorizer
 
 
@@ -41,6 +43,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         docs_url="/docs",
     )
     app.include_router(router)
+    app.include_router(query_router)
+    app.state.query_cursors = CursorCodec(
+        configuration.query_cursor_secret.get_secret_value().encode()
+        if configuration.query_cursor_secret
+        else None
+    )
     app.state.authorizer = LocalAuthorizer(configuration)
     app.state.settings = configuration
     app.state.engine = engine

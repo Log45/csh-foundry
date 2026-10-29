@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     local_tenant_id: UUID | None = None
     local_principal_id: str | None = None
     trusted_local_identity: bool = False
+    query_cursor_secret: SecretStr | None = None
 
     @model_validator(mode="after")
     def local_context(self) -> "Settings":
@@ -20,6 +21,11 @@ class Settings(BaseSettings):
             self.local_tenant_id and self.local_principal_id and self.local_principal_id.strip()
         ):
             raise ValueError("Trusted local identity requires explicit tenant and principal")
+        if (
+            self.query_cursor_secret is not None
+            and len(self.query_cursor_secret.get_secret_value().encode()) < 32
+        ):
+            raise ValueError("Cursor signing secret requires at least 32 UTF-8 bytes")
         if not self.database_url.get_secret_value().startswith("postgresql+psycopg://"):
             raise ValueError("Use a PostgreSQL psycopg SQLAlchemy URL")
         return self

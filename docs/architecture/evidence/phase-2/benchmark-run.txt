@@ -1,0 +1,4 @@
+/Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+Written /Users/log/Documents/code/csh-foundry/docs/architecture/evidence/phase-2/query-plans.json
+Status equality SQL ms before/after: 2.355 0.495

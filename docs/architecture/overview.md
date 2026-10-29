@@ -1,10 +1,10 @@
-# Operational architecture — Phases 0–1
+# Operational architecture — Phases 0–2
 
 PostgreSQL remains the authoritative operational store. The backend is a modular Python
 monolith. Canonical JSON/Pydantic metadata is independent of RDF/OWL. Open Ontologies is
 an external semantic process; Protégé is optional file-based authoring tooling. Semantic
-code and fixtures are unchanged in Phase 1. Workers, advanced queries, actions, ingestion,
-compiler, Studio and SDKs remain later roadmap work.
+code and fixtures are unchanged through Phase 2. Workers, actions, ingestion, Studio and SDKs remain later roadmap work.
+Phase 2 operational queries share the existing governed transactions and active registry.
 
 Public application contracts live in `ontology_platform/contracts.py`. HTTP routes depend
 on application services; services use the shared public governed unit-of-work and database
@@ -79,3 +79,17 @@ at most 1,000 full property replacements with expected object revisions. Larger 
 explicitly and requires a later durable worker path. No arbitrary SQL or Python can execute
 from ontology/plan metadata. Per-ontology locking plus these bounds keep this initial path
 transactional; a production migration/job orchestrator is not claimed.
+
+
+## Phase 2 query boundary
+
+`queries/ast.py` defines bounded public contracts; `compiler.py` resolves schema/policies and
+produces parameterized SQL; `service.py` handles bounded results, projections, aggregates and
+signed keyset pagination; `object_set.py` composes the same requests lazily. Each traversal step
+uses an authorized materialized identity CTE over existing forward links. JSONB property casts
+are type/scope guarded. QueryGrant expresses SQL-visible rows and properties; legacy providers
+without query grants fail closed. No production policy engine is introduced.
+
+Measured fixed-width status equality and C-collation identity ordering indexes complement the existing identity/link indexes.
+Other property index jobs remain deferred. Per-ontology shared/exclusive locks are unchanged.
+See ADRs 0013–0017, the query API reference and the Phase 2 report for exact semantics/evidence.

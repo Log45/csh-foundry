@@ -1,9 +1,9 @@
-# Phase 1 API
+# Persistence API — Phases 1–2
 
 Run `uv run uvicorn ontology_platform.main:create_app --factory --host 127.0.0.1`.
 OpenAPI: `/api/v1/openapi.json`; interactive documentation: `/docs`.
 Public `/health/live` returns `{"status":"ok"}`; `/health/ready` returns
-`{"status":"ready"}` after PostgreSQL connectivity and revision `0003_snapshot_locks` checks.
+`{"status":"ready"}` after PostgreSQL connectivity and revision `0005_query_order` checks.
 
 All endpoints below are under `/api/v1` and require the explicit server-configured local
 principal. Missing context returns 401; unauthorized/unprovisioned context returns 403.
@@ -103,3 +103,5 @@ Errors use `{"error":{"code":"...","message":"..."}}`. In particular: `invalid_p
 No database details or credentials are exposed. Phase 1 activation is capped at 1,000 objects and
 5,000 links; larger jobs are deferred. Full authorization, advanced queries, actions and ingestion
 are not implemented by this API.
+
+Phase 2 query/traversal/aggregation endpoints and internal Object Sets are documented in [queries.md](queries.md).

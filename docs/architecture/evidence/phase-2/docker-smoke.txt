@@ -1,0 +1,17 @@
+ Container csh-foundry-postgres-1  Running
+ Container csh-foundry-api-1  Recreate
+ Container csh-foundry-api-1  Recreated
+ Container csh-foundry-postgres-1  Waiting
+ Container csh-foundry-postgres-1  Healthy
+ Container csh-foundry-api-1  Starting
+ Container csh-foundry-api-1  Started
+ Container csh-foundry-api-1  Waiting
+ Container csh-foundry-postgres-1  Waiting
+ Container csh-foundry-api-1  Healthy
+ Container csh-foundry-postgres-1  Healthy
+PASS Docker GET /health/live 200
+PASS Docker GET /health/ready 200
+PASS Docker GET /api/v1/openapi.json 200
+PASS Docker query denies absent trusted principal 401
+ Container csh-foundry-api-1  Stopping
+ Container csh-foundry-api-1  Stopped

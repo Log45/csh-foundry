@@ -3,6 +3,7 @@
 from ontology_platform.config import Settings
 from ontology_platform.errors import ApplicationError
 from ontology_platform.security.interfaces import Principal
+from ontology_platform.security.query import QueryGrant
 
 
 class LocalAuthorizer:
@@ -21,3 +22,9 @@ class LocalAuthorizer:
             or not resource.startswith(f"{principal.tenant_id}/")
         ):
             raise ApplicationError("forbidden", "Principal cannot access this tenant", 403)
+
+    def query_grant(self, principal: Principal, ontology_id: str, object_type: str) -> "QueryGrant":
+        self.require(
+            principal, "object:query", f"{principal.tenant_id}/{ontology_id}/objects/{object_type}"
+        )
+        return QueryGrant(revision="trusted-local-v1")

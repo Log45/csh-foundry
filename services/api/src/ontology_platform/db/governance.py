@@ -11,7 +11,7 @@ from ontology_platform.db.models import Ontology, Tenant
 from ontology_platform.errors import ApplicationError
 from ontology_platform.security.interfaces import Authorizer, Principal
 
-SCHEMA_REVISION = "0003_snapshot_locks"
+SCHEMA_REVISION = "0005_query_order"
 
 
 def missing(resource: str) -> ApplicationError:
