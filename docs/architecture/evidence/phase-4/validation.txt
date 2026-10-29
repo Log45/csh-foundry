@@ -1,0 +1,41 @@
+All checks passed!
+100 files already formatted
+Success: no issues found in 62 source files
+No new upgrade operations detected.
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+testpaths: services/api/tests, packages/ontology-schema/tests
+plugins: anyio-4.15.1
+collected 321 items
+
+services/api/tests/test_action_models.py ............................    [  8%]
+services/api/tests/test_actions.py ..................................... [ 20%]
+...................                                                      [ 26%]
+services/api/tests/test_api.py ...                                       [ 27%]
+services/api/tests/test_compatibility.py ..............                  [ 31%]
+services/api/tests/test_contracts.py ...                                 [ 32%]
+services/api/tests/test_database.py .                                    [ 32%]
+services/api/tests/test_fixtures.py ..x..........                        [ 36%]
+services/api/tests/test_ingestion.py ................................... [ 47%]
+............                                                             [ 51%]
+services/api/tests/test_ingestion_connectors.py .......................  [ 58%]
+services/api/tests/test_ingestion_postgres.py ....                       [ 59%]
+services/api/tests/test_ingestion_recovery.py ........                   [ 62%]
+services/api/tests/test_phase1.py .............................          [ 71%]
+services/api/tests/test_queries.py ..................................... [ 82%]
+.......                                                                  [ 85%]
+services/api/tests/test_query_ast.py ..........................          [ 93%]
+services/api/tests/test_semantic.py ....                                 [ 94%]
+packages/ontology-schema/tests/test_models.py ..................         [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+XFAIL services/api/tests/test_fixtures.py::test_raw_pyshacl_compatibility - Raw pySHACL/RDFLib simple/xsd:string mismatch; see semantic-compatibility.md
+============ 320 passed, 1 xfailed, 1 warning in 165.60s (0:02:45) =============

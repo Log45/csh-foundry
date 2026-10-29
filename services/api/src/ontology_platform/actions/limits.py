@@ -5,14 +5,22 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 
 class ActionPayloadLimit:
-    def __init__(self, app: ASGIApp):
+    def __init__(
+        self,
+        app: ASGIApp,
+        *,
+        paths: tuple[str, ...] = ("/actions/",),
+        code: str = "action_payload_too_large",
+        message: str = "Action payload exceeds 64 KiB",
+    ):
         self.app = app
+        self.paths, self.code, self.message = paths, code, message
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if (
             scope["type"] != "http"
             or scope.get("method") != "POST"
-            or "/actions/" not in scope.get("path", "")
+            or not any(path in scope.get("path", "") for path in self.paths)
         ):
             await self.app(scope, receive, send)
             return
@@ -29,8 +37,8 @@ class ActionPayloadLimit:
                     status_code=413,
                     content={
                         "error": {
-                            "code": "action_payload_too_large",
-                            "message": "Action payload exceeds 64 KiB",
+                            "code": self.code,
+                            "message": self.message,
                         }
                     },
                 )(scope, receive, send)

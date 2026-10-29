@@ -1,0 +1,43 @@
+PASS host startup/readiness/OpenAPI/trusted tenant
+PASS HTTP immutable source and mapping publication
+PASS HTTP async ingestion: 63 objects/70 links, aggregate counts and traversal
+PASS repeat idempotency and source refresh preserves HTTP action edit
+INFO:     Started server process [50446]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:58028 (Press CTRL+C to quit)
+INFO:     127.0.0.1:58035 - "GET /api/v1/tenant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58038 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58039 - "GET /api/v1/openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58040 - "GET /api/v1/ontologies/manufacturing/sources/Factory HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58041 - "POST /api/v1/ontologies/manufacturing/sources HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /api/v1/ontologies/manufacturing/mappings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58043 - "GET /api/v1/ontologies/manufacturing/sources/Machine HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58044 - "POST /api/v1/ontologies/manufacturing/sources HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58045 - "POST /api/v1/ontologies/manufacturing/mappings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58046 - "GET /api/v1/ontologies/manufacturing/sources/Employee HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58047 - "POST /api/v1/ontologies/manufacturing/sources HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58048 - "POST /api/v1/ontologies/manufacturing/mappings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58049 - "GET /api/v1/ontologies/manufacturing/sources/MaintenanceTask HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58050 - "POST /api/v1/ontologies/manufacturing/sources HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58051 - "POST /api/v1/ontologies/manufacturing/mappings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58052 - "POST /api/v1/ontologies/manufacturing/ingestion/runs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58053 - "GET /api/v1/ontologies/manufacturing/ingestion/runs/68c1eace-c0f8-4bad-ab6f-8e068d3b2260 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58054 - "GET /api/v1/ontologies/manufacturing/ingestion/runs/68c1eace-c0f8-4bad-ab6f-8e068d3b2260/diagnostics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58055 - "POST /api/v1/ontologies/manufacturing/aggregate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58056 - "POST /api/v1/ontologies/manufacturing/aggregate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58057 - "POST /api/v1/ontologies/manufacturing/aggregate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58058 - "POST /api/v1/ontologies/manufacturing/aggregate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58059 - "POST /api/v1/ontologies/manufacturing/traverse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58060 - "POST /api/v1/ontologies/manufacturing/ingestion/runs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58061 - "GET /api/v1/ontologies/manufacturing/ingestion/runs/642d754b-1d18-4372-afce-6ffe2351914a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58062 - "GET /api/v1/ontologies/manufacturing/ingestion/runs/642d754b-1d18-4372-afce-6ffe2351914a/diagnostics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58063 - "POST /api/v1/ontologies/manufacturing/actions/UpdateMachineStatus/execute HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58064 - "POST /api/v1/ontologies/manufacturing/ingestion/runs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58069 - "GET /api/v1/ontologies/manufacturing/ingestion/runs/da91ebf0-72f2-4835-928b-8d6e46f6acd6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58070 - "GET /api/v1/ontologies/manufacturing/ingestion/runs/da91ebf0-72f2-4835-928b-8d6e46f6acd6/diagnostics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58071 - "POST /api/v1/ontologies/manufacturing/objects/Machine/query HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [50446]

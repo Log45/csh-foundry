@@ -64,3 +64,16 @@ Both use 2-second lock/30-second statement DDL limits. Downgrade removes Phase 3
 and is destructive to Phase 3 history; test it only in disposable schemas. It preserves earlier
 operational objects. Local development is upgraded to 0007_edit_provenance; drift checks and
 upgrade/downgrade/data-preservation tests are included.
+
+## Phase 4
+
+`0008_ingestion` creates seven tenant-owned structures: immutable source and mapping versions,
+ingestion run/jobs, stage records, redacted diagnostics, source-object identities and managed link
+state. Composite FKs, uniqueness, check constraints, lookup indexes and configuration/plan triggers
+protect ownership and reproducibility. `0009_ingestion_diagnostics` adds mapping locations, staging
+purge time, a diagnostic mapping FK, lease/counter/policy checks and explicit LINK_REJECTED state.
+Both use bounded DDL lock/statement budgets. Downgrades remove Phase 4 history/configuration/staging
+and source provenance; earlier operational objects remain. Reverting 0009 folds LINK_REJECTED into
+REJECTED before restoring the older state check. Tests perform destructive reversals only in private
+schemas and verify objects survive Phase 3 → head and head → Phase 3 → head. Development is at
+0009_ingestion_diagnostics; no sample data is loaded by migrations.

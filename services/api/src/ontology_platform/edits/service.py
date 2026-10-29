@@ -11,7 +11,7 @@ from pydantic import Field, JsonValue
 from sqlalchemy import literal, select
 from sqlalchemy.dialects.postgresql import JSONB
 
-from ontology_platform.contracts import APIModel, ObjectPatch, ObjectView
+from ontology_platform.contracts import APIModel, CreateObject, ObjectPatch, ObjectView
 from ontology_platform.db.governance import GovernedService, missing
 from ontology_platform.db.models import EditOverlay, ReconciliationConflict, Version
 from ontology_platform.errors import ApplicationError
@@ -246,3 +246,49 @@ class ReconciliationService(GovernedService):
             conflict.status = "ACCEPTED" if accept_source else "PRESERVED"
             conflict.resolved_by, conflict.resolved_at = principal.principal_id, datetime.now(UTC)
             return result
+
+    def create_from_source(
+        self,
+        principal: Principal,
+        ontology_id: str,
+        request: "CreateObject",
+        source: str,
+        *,
+        owner: Literal["source", "pipeline"] = "source",
+    ) -> ObjectView:
+        """Create with source ownership; existing identities cannot be adopted."""
+        with self.operation(
+            principal,
+            "edit:initialize_source",
+            f"{ontology_id}/objects/{request.object_type_id}/{request.object_id}",
+        ) as session:
+            objects = ObjectService(
+                self.sessions, self.authorizer, session=session, record_edits=False
+            )
+            created = objects.create(principal, ontology_id, request)
+            for prop, value in created.properties.items():
+                self.authorizer.require(
+                    principal,
+                    "property:update",
+                    resource(principal, ontology_id, request.object_type_id, request.object_id)
+                    + f"/properties/{prop}",
+                )
+                session.add(
+                    EditOverlay(
+                        tenant_id=principal.tenant_id,
+                        ontology_id=ontology_id,
+                        object_type_id=request.object_type_id,
+                        object_id=request.object_id,
+                        property_id=prop,
+                        owner=owner,
+                        source=source,
+                        value=value,
+                        source_value=value,
+                        revision=created.version,
+                        schema_version=created.schema_version,
+                        updated_by=principal.principal_id,
+                        execution_id=None,
+                    )
+                )
+            session.flush()
+            return created

@@ -19,6 +19,8 @@ from ontology_platform.db.governance import SCHEMA_REVISION
 from ontology_platform.db.session import make_engine
 from ontology_platform.dependencies import get_session
 from ontology_platform.errors import ApplicationError
+from ontology_platform.ingestion.catalog import SourceCatalog
+from ontology_platform.ingestion.routes import router as ingestion_router
 from ontology_platform.queries.cursor import CursorCodec
 from ontology_platform.queries.routes import router as query_router
 from ontology_platform.security.local import LocalAuthorizer
@@ -45,9 +47,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         docs_url="/docs",
     )
     app.add_middleware(ActionPayloadLimit)
+    app.add_middleware(
+        ActionPayloadLimit,
+        paths=("/sources", "/mappings", "/ingestion/runs"),
+        code="ingestion_payload_too_large",
+        message="Ingestion payload exceeds 64 KiB",
+    )
     app.include_router(router)
     app.include_router(query_router)
     app.include_router(action_router)
+    app.include_router(ingestion_router)
+    app.state.ingestion_catalog = SourceCatalog.from_json(configuration.ingestion_catalog_json)
     app.state.query_cursors = CursorCodec(
         configuration.query_cursor_secret.get_secret_value().encode()
         if configuration.query_cursor_secret

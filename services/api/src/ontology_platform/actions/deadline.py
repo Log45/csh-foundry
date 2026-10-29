@@ -13,7 +13,13 @@ from ontology_platform.errors import ApplicationError
 
 
 @contextmanager
-def action_deadline(session: Session, expires: float) -> Iterator[None]:
+def action_deadline(
+    session: Session,
+    expires: float,
+    *,
+    code: str = "action_timeout",
+    message: str = "Action exceeded its 3 second budget",
+) -> Iterator[None]:
     connection = session.connection()
 
     def before_statement(
@@ -29,7 +35,7 @@ def action_deadline(session: Session, expires: float) -> Iterator[None]:
             return
         remaining = expires - time.monotonic()
         if remaining <= 0:
-            raise ApplicationError("action_timeout", "Action exceeded its 3 second budget", 503)
+            raise ApplicationError(code, message, 503)
         # A raw cursor avoids recursively invoking SQLAlchemy's statement event.
         cursor.execute(
             "SELECT set_config('statement_timeout', %s, true)",

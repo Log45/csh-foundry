@@ -1,0 +1,46 @@
+"""Run one durable ingestion job using the server's trusted local identity/catalog."""
+
+import argparse
+
+from sqlalchemy.orm import sessionmaker
+
+from ontology_platform.config import get_settings
+from ontology_platform.db.session import make_engine
+from ontology_platform.ingestion.catalog import SourceCatalog
+from ontology_platform.ingestion.worker import IngestionWorker
+from ontology_platform.security.interfaces import Principal
+from ontology_platform.security.local import LocalAuthorizer
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Process one bounded ingestion run")
+    parser.add_argument("--ontology", required=True)
+    parser.add_argument("--cleanup-days", type=int)
+    args = parser.parse_args()
+    settings = get_settings()
+    if (
+        not settings.trusted_local_identity
+        or settings.local_tenant_id is None
+        or settings.local_principal_id is None
+    ):
+        parser.error("Explicit trusted local identity is required")
+    actor = Principal(tenant_id=settings.local_tenant_id, principal_id=settings.local_principal_id)
+    engine = make_engine(settings)
+    try:
+        worker = IngestionWorker(
+            sessionmaker(engine),
+            LocalAuthorizer(settings),
+            SourceCatalog.from_json(settings.ingestion_catalog_json),
+        )
+        key = (
+            worker.cleanup(actor, args.ontology, args.cleanup_days)
+            if args.cleanup_days is not None
+            else worker.run_one(actor, args.ontology)
+        )
+        print(str(key) if key else "No eligible ingestion run")
+    finally:
+        engine.dispose()
+
+
+if __name__ == "__main__":
+    main()

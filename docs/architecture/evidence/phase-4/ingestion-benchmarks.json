@@ -1,0 +1,986 @@
+{
+  "platform": "macOS-15.6.1-arm64-arm-64bit",
+  "results": {
+    "manufacturing_batch_10": {
+      "rows": 63,
+      "accepted": 63,
+      "created": 63,
+      "updated": 0,
+      "links_created": 70,
+      "rejected": 0,
+      "attempts": 1,
+      "duration_s": 11.334271624975372,
+      "rows_per_second": 5.558363350069872,
+      "extraction_ms": 13.267959031509236,
+      "transformation_ms": 37.144166039070114,
+      "write_transactions": [
+        {
+          "phase": "setup",
+          "ms": 33.686624985421076
+        },
+        {
+          "phase": "setup",
+          "ms": 12.243332981597632
+        },
+        {
+          "phase": "STAGING",
+          "ms": 43.03687499486841
+        },
+        {
+          "phase": "STAGING",
+          "ms": 33.384667010977864
+        },
+        {
+          "phase": "STAGING",
+          "ms": 39.40124998916872
+        },
+        {
+          "phase": "STAGING",
+          "ms": 35.39483298663981
+        },
+        {
+          "phase": "STAGING",
+          "ms": 34.22791699995287
+        },
+        {
+          "phase": "STAGING",
+          "ms": 44.870125013403594
+        },
+        {
+          "phase": "STAGING",
+          "ms": 46.52504200930707
+        },
+        {
+          "phase": "STAGING",
+          "ms": 43.97841700119898
+        },
+        {
+          "phase": "VALIDATING",
+          "ms": 41.36004199972376
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 620.6350419961382
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 530.2385420072824
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 719.8975830106065
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 596.3591249892488
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 661.0833749873564
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 780.4346659977455
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 247.17537499964237
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 31.364374997792765
+        },
+        {
+          "phase": "LINKS",
+          "ms": 184.99337500543334
+        },
+        {
+          "phase": "LINKS",
+          "ms": 294.9203750176821
+        },
+        {
+          "phase": "LINKS",
+          "ms": 954.9254580051638
+        },
+        {
+          "phase": "LINKS",
+          "ms": 986.9077909970656
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1698.5852500074543
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1490.2301669935696
+        },
+        {
+          "phase": "LINKS",
+          "ms": 573.7711669935379
+        },
+        {
+          "phase": "LINKS",
+          "ms": 21.50629201787524
+        }
+      ],
+      "write_transaction_total_ms": 10801.137083995854,
+      "write_transaction_median_ms": 184.99337500543334,
+      "python_peak_bytes": 19297676
+    },
+    "manufacturing_batch_25": {
+      "rows": 63,
+      "accepted": 63,
+      "created": 63,
+      "updated": 0,
+      "links_created": 70,
+      "rejected": 0,
+      "attempts": 1,
+      "duration_s": 10.374968749994878,
+      "rows_per_second": 6.072307446712175,
+      "extraction_ms": 7.376957946689799,
+      "transformation_ms": 12.409710034262389,
+      "write_transactions": [
+        {
+          "phase": "LINKS",
+          "ms": 27.389625000068918
+        },
+        {
+          "phase": "LINKS",
+          "ms": 9.36787499813363
+        },
+        {
+          "phase": "STAGING",
+          "ms": 30.631000001449138
+        },
+        {
+          "phase": "STAGING",
+          "ms": 86.51620900491253
+        },
+        {
+          "phase": "STAGING",
+          "ms": 29.107208974892274
+        },
+        {
+          "phase": "STAGING",
+          "ms": 31.88220798620023
+        },
+        {
+          "phase": "VALIDATING",
+          "ms": 22.522040992043912
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 1665.3804999950808
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 1514.8943749954924
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 778.4374589973595
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 19.984915998065844
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1214.573792007286
+        },
+        {
+          "phase": "LINKS",
+          "ms": 2755.366375000449
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1964.842958986992
+        },
+        {
+          "phase": "LINKS",
+          "ms": 21.192874992266297
+        }
+      ],
+      "write_transaction_total_ms": 10172.089417930692,
+      "write_transaction_median_ms": 31.88220798620023,
+      "python_peak_bytes": 20287026
+    },
+    "manufacturing_batch_100": {
+      "rows": 63,
+      "accepted": 63,
+      "created": 63,
+      "updated": 0,
+      "links_created": 70,
+      "rejected": 0,
+      "attempts": 1,
+      "duration_s": 10.151504374982323,
+      "rows_per_second": 6.205976737325663,
+      "extraction_ms": 7.135374005883932,
+      "transformation_ms": 12.245126039488241,
+      "write_transactions": [
+        {
+          "phase": "LINKS",
+          "ms": 27.122666011564434
+        },
+        {
+          "phase": "LINKS",
+          "ms": 8.320291002746671
+        },
+        {
+          "phase": "STAGING",
+          "ms": 28.682875010417774
+        },
+        {
+          "phase": "STAGING",
+          "ms": 23.37937499396503
+        },
+        {
+          "phase": "STAGING",
+          "ms": 31.718125013867393
+        },
+        {
+          "phase": "STAGING",
+          "ms": 46.985458000563085
+        },
+        {
+          "phase": "VALIDATING",
+          "ms": 28.60541600966826
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 4005.800500017358
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 27.6387500052806
+        },
+        {
+          "phase": "LINKS",
+          "ms": 5734.131625009468
+        },
+        {
+          "phase": "LINKS",
+          "ms": 18.32745800493285
+        }
+      ],
+      "write_transaction_total_ms": 9980.712539079832,
+      "write_transaction_median_ms": 28.60541600966826,
+      "python_peak_bytes": 20483052
+    },
+    "unchanged_repeat": {
+      "rows": 63,
+      "accepted": 63,
+      "created": 0,
+      "updated": 0,
+      "links_created": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "duration_s": 8.618891791003989,
+      "rows_per_second": 7.3095244177165055,
+      "extraction_ms": 8.560457994462922,
+      "transformation_ms": 13.560041988966987,
+      "write_transactions": [
+        {
+          "phase": "LINKS",
+          "ms": 30.051000008825213
+        },
+        {
+          "phase": "LINKS",
+          "ms": 8.25254200026393
+        },
+        {
+          "phase": "STAGING",
+          "ms": 29.907791002187878
+        },
+        {
+          "phase": "STAGING",
+          "ms": 27.25295801064931
+        },
+        {
+          "phase": "STAGING",
+          "ms": 32.585500011919066
+        },
+        {
+          "phase": "STAGING",
+          "ms": 32.069417007733136
+        },
+        {
+          "phase": "VALIDATING",
+          "ms": 25.812042003963143
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 1777.8022080019582
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 1823.5382910061162
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 759.9662079883274
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 29.617541003972292
+        },
+        {
+          "phase": "LINKS",
+          "ms": 806.4940419862978
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1826.6353750077542
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1179.0160840027966
+        },
+        {
+          "phase": "LINKS",
+          "ms": 17.065249994629994
+        }
+      ],
+      "write_transaction_total_ms": 8406.066249037394,
+      "write_transaction_median_ms": 32.069417007733136,
+      "python_peak_bytes": 20511358
+    },
+    "changed_source": {
+      "rows": 63,
+      "accepted": 63,
+      "created": 0,
+      "updated": 1,
+      "links_created": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "duration_s": 9.034092332993168,
+      "rows_per_second": 6.973583806523581,
+      "extraction_ms": 8.56129199382849,
+      "transformation_ms": 13.81770899752155,
+      "write_transactions": [
+        {
+          "phase": "LINKS",
+          "ms": 28.596957999980077
+        },
+        {
+          "phase": "LINKS",
+          "ms": 16.480958001920953
+        },
+        {
+          "phase": "STAGING",
+          "ms": 44.81237501022406
+        },
+        {
+          "phase": "STAGING",
+          "ms": 36.73304198309779
+        },
+        {
+          "phase": "STAGING",
+          "ms": 42.827083001611754
+        },
+        {
+          "phase": "STAGING",
+          "ms": 55.73100000037812
+        },
+        {
+          "phase": "VALIDATING",
+          "ms": 28.510000003734604
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 1875.272709003184
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 1887.9302089917473
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 1084.3942499777768
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 27.027708012610674
+        },
+        {
+          "phase": "LINKS",
+          "ms": 703.2196249929257
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1781.6177500062622
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1123.9517499925569
+        },
+        {
+          "phase": "LINKS",
+          "ms": 29.887624987168238
+        }
+      ],
+      "write_transaction_total_ms": 8766.99304196518,
+      "write_transaction_median_ms": 44.81237501022406,
+      "python_peak_bytes": 20615401
+    },
+    "reconciliation_heavy": {
+      "rows": 63,
+      "accepted": 63,
+      "created": 0,
+      "updated": 6,
+      "links_created": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "duration_s": 9.545515375008108,
+      "rows_per_second": 6.599957940976705,
+      "extraction_ms": 7.453207013895735,
+      "transformation_ms": 12.19237400800921,
+      "write_transactions": [
+        {
+          "phase": "LINKS",
+          "ms": 28.098125010728836
+        },
+        {
+          "phase": "LINKS",
+          "ms": 7.941291987663135
+        },
+        {
+          "phase": "STAGING",
+          "ms": 24.10687500378117
+        },
+        {
+          "phase": "STAGING",
+          "ms": 20.528916997136548
+        },
+        {
+          "phase": "STAGING",
+          "ms": 28.313707996858284
+        },
+        {
+          "phase": "STAGING",
+          "ms": 31.269499973859638
+        },
+        {
+          "phase": "VALIDATING",
+          "ms": 23.009291995549574
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 1851.7559590109158
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 2131.317291990854
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 1176.0142919956706
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 46.03879200294614
+        },
+        {
+          "phase": "LINKS",
+          "ms": 696.2855420133565
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1933.4045829891693
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1293.0129170126747
+        },
+        {
+          "phase": "LINKS",
+          "ms": 31.75337499123998
+        }
+      ],
+      "write_transaction_total_ms": 9322.850460972404,
+      "write_transaction_median_ms": 31.75337499123998,
+      "python_peak_bytes": 20977707
+    },
+    "quarantine": {
+      "rows": 63,
+      "accepted": 62,
+      "created": 0,
+      "updated": 0,
+      "links_created": 0,
+      "rejected": 1,
+      "attempts": 1,
+      "duration_s": 9.106382083002245,
+      "rows_per_second": 6.918224979555195,
+      "extraction_ms": 10.843542026123032,
+      "transformation_ms": 21.50050099589862,
+      "write_transactions": [
+        {
+          "phase": "LINKS",
+          "ms": 53.20441699586809
+        },
+        {
+          "phase": "LINKS",
+          "ms": 18.873541994253173
+        },
+        {
+          "phase": "STAGING",
+          "ms": 63.116791017819196
+        },
+        {
+          "phase": "STAGING",
+          "ms": 68.7979579961393
+        },
+        {
+          "phase": "STAGING",
+          "ms": 38.07041700929403
+        },
+        {
+          "phase": "STAGING",
+          "ms": 48.1578329927288
+        },
+        {
+          "phase": "VALIDATING",
+          "ms": 25.144000013824552
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 1955.6900830066297
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 1842.9113339807373
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 845.4249170026742
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 26.391958992462605
+        },
+        {
+          "phase": "LINKS",
+          "ms": 882.6822089904454
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1784.9151249974966
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1146.4967919746414
+        },
+        {
+          "phase": "LINKS",
+          "ms": 19.694916991284117
+        }
+      ],
+      "write_transaction_total_ms": 8819.572293956298,
+      "write_transaction_median_ms": 63.116791017819196,
+      "python_peak_bytes": 21056497
+    },
+    "checkpoint_retry": {
+      "rows": 63,
+      "accepted": 63,
+      "created": 0,
+      "updated": 0,
+      "links_created": 0,
+      "rejected": 0,
+      "attempts": 2,
+      "duration_s": 8.794725458021276,
+      "rows_per_second": 7.163384496845268,
+      "extraction_ms": 8.388501009903848,
+      "transformation_ms": 13.056125026196241,
+      "write_transactions": [
+        {
+          "phase": "LINKS",
+          "ms": 25.60291698318906
+        },
+        {
+          "phase": "LINKS",
+          "ms": 6.702916027279571
+        },
+        {
+          "phase": "LINKS",
+          "ms": 31.511250010225922
+        },
+        {
+          "phase": "LINKS",
+          "ms": 10.852832987438887
+        },
+        {
+          "phase": "LINKS",
+          "ms": 14.576833986211568
+        },
+        {
+          "phase": "STAGING",
+          "ms": 37.512707989662886
+        },
+        {
+          "phase": "STAGING",
+          "ms": 41.23775000334717
+        },
+        {
+          "phase": "STAGING",
+          "ms": 41.2603750010021
+        },
+        {
+          "phase": "VALIDATING",
+          "ms": 34.30775000015274
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 1772.8534170018975
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 1833.804166992195
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 911.1654580046888
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 20.607875019777566
+        },
+        {
+          "phase": "LINKS",
+          "ms": 802.7557079913095
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1848.1985419930425
+        },
+        {
+          "phase": "LINKS",
+          "ms": 1078.8969169952907
+        },
+        {
+          "phase": "LINKS",
+          "ms": 31.036917003802955
+        }
+      ],
+      "write_transaction_total_ms": 8542.884333990514,
+      "write_transaction_median_ms": 37.512707989662886,
+      "python_peak_bytes": 21094350
+    },
+    "concurrent_query": [
+      {
+        "operation": "ingestion",
+        "wall_ms": 1684.9684999906458,
+        "outcome": true
+      },
+      {
+        "operation": "query",
+        "wall_ms": 28.251957992324606,
+        "outcome": 20
+      }
+    ],
+    "concurrent_action": [
+      {
+        "operation": "ingestion",
+        "wall_ms": 2034.1004160000011,
+        "outcome": true
+      },
+      {
+        "operation": "action",
+        "wall_ms": 114.46345801232383,
+        "outcome": "f66a06e9-9223-406a-9ace-262ea76e9492"
+      }
+    ],
+    "controlled_lock_wait": {
+      "shared_hold_ms": 100,
+      "step_wall_ms": 1177.6662089978345,
+      "observed": [
+        {
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "blockers": 1
+        }
+      ]
+    },
+    "synthetic_506_objects": {
+      "rows": 506,
+      "accepted": 506,
+      "created": 506,
+      "updated": 0,
+      "links_created": 500,
+      "rejected": 0,
+      "attempts": 1,
+      "duration_s": 70.05982120800763,
+      "rows_per_second": 7.222399247889683,
+      "extraction_ms": 50.09237601188943,
+      "transformation_ms": 94.18733199709095,
+      "write_transactions": [
+        {
+          "phase": "LINKS",
+          "ms": 27.073125005699694
+        },
+        {
+          "phase": "LINKS",
+          "ms": 9.597499971278012
+        },
+        {
+          "phase": "STAGING",
+          "ms": 40.401000005658716
+        },
+        {
+          "phase": "STAGING",
+          "ms": 57.033500022953376
+        },
+        {
+          "phase": "STAGING",
+          "ms": 52.687874995172024
+        },
+        {
+          "phase": "STAGING",
+          "ms": 42.41645897855051
+        },
+        {
+          "phase": "STAGING",
+          "ms": 48.194415983743966
+        },
+        {
+          "phase": "STAGING",
+          "ms": 46.67604100541212
+        },
+        {
+          "phase": "VALIDATING",
+          "ms": 39.71308300970122
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 6405.782709014602
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 6392.1412079944275
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 6459.7510829917155
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 6185.383417003322
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 6482.424624991836
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 555.0730410031974
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 30.59125001891516
+        },
+        {
+          "phase": "LINKS",
+          "ms": 7968.189583014464
+        },
+        {
+          "phase": "LINKS",
+          "ms": 8052.268083003582
+        },
+        {
+          "phase": "LINKS",
+          "ms": 5704.964791977545
+        },
+        {
+          "phase": "LINKS",
+          "ms": 5864.028416981455
+        },
+        {
+          "phase": "LINKS",
+          "ms": 8347.019083012128
+        },
+        {
+          "phase": "LINKS",
+          "ms": 693.1294999958482
+        },
+        {
+          "phase": "LINKS",
+          "ms": 33.168209018185735
+        }
+      ],
+      "write_transaction_total_ms": 69537.7079989994,
+      "write_transaction_median_ms": 555.0730410031974,
+      "python_peak_bytes": 21447301
+    },
+    "synthetic_unchanged": {
+      "rows": 506,
+      "accepted": 506,
+      "created": 0,
+      "updated": 0,
+      "links_created": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "duration_s": 66.51476637498126,
+      "rows_per_second": 7.6073333423046625,
+      "extraction_ms": 72.26345798699185,
+      "transformation_ms": 103.59000001335517,
+      "write_transactions": [
+        {
+          "phase": "LINKS",
+          "ms": 35.39150001597591
+        },
+        {
+          "phase": "LINKS",
+          "ms": 12.457208009436727
+        },
+        {
+          "phase": "STAGING",
+          "ms": 59.56562497885898
+        },
+        {
+          "phase": "STAGING",
+          "ms": 64.8477089998778
+        },
+        {
+          "phase": "STAGING",
+          "ms": 71.48954100557603
+        },
+        {
+          "phase": "STAGING",
+          "ms": 57.31624999316409
+        },
+        {
+          "phase": "STAGING",
+          "ms": 55.475000001024455
+        },
+        {
+          "phase": "STAGING",
+          "ms": 31.93116601323709
+        },
+        {
+          "phase": "STAGING",
+          "ms": 35.427625000011176
+        },
+        {
+          "phase": "STAGING",
+          "ms": 30.92920800554566
+        },
+        {
+          "phase": "STAGING",
+          "ms": 32.5320000119973
+        },
+        {
+          "phase": "STAGING",
+          "ms": 37.616292014718056
+        },
+        {
+          "phase": "STAGING",
+          "ms": 35.36999999778345
+        },
+        {
+          "phase": "VALIDATING",
+          "ms": 52.6514999801293
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 3721.0378340096213
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 3761.6524579934776
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 3572.3597499891184
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 3285.684875008883
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 3657.264542009216
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 3658.341417001793
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 3628.9191669784486
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 3794.755124981748
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 3943.889791989932
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 3505.4533749935217
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 394.41958401585
+        },
+        {
+          "phase": "OBJECTS",
+          "ms": 20.81662497948855
+        },
+        {
+          "phase": "LINKS",
+          "ms": 2402.118708996568
+        },
+        {
+          "phase": "LINKS",
+          "ms": 2817.0322079968173
+        },
+        {
+          "phase": "LINKS",
+          "ms": 2757.4459159804974
+        },
+        {
+          "phase": "LINKS",
+          "ms": 2717.998667008942
+        },
+        {
+          "phase": "LINKS",
+          "ms": 2868.9655420021154
+        },
+        {
+          "phase": "LINKS",
+          "ms": 3023.3808339980897
+        },
+        {
+          "phase": "LINKS",
+          "ms": 2845.8451670012437
+        },
+        {
+          "phase": "LINKS",
+          "ms": 2855.5212499923073
+        },
+        {
+          "phase": "LINKS",
+          "ms": 2664.161458989838
+        },
+        {
+          "phase": "LINKS",
+          "ms": 2807.789083017269
+        },
+        {
+          "phase": "LINKS",
+          "ms": 370.3713750001043
+        },
+        {
+          "phase": "LINKS",
+          "ms": 28.771250013960525
+        }
+      ],
+      "write_transaction_total_ms": 65716.99662797619,
+      "write_transaction_median_ms": 2533.140083993203,
+      "python_peak_bytes": 21812874
+    }
+  },
+  "process_peak_rss_bytes": 142966784,
+  "limits": "Local instrumented samples, not production guarantees. RSS is whole-process high water including libraries; tracemalloc excludes native Polars allocations. Transaction times include governed Python work inside transactions. Retry uses simulated failure; real process crashes are separate integration tests."
+}

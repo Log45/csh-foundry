@@ -1,0 +1,109 @@
+/Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+{
+  "manufacturing_batch_10": {
+    "duration_s": 11.334271624975372,
+    "rows_per_second": 5.558363350069872,
+    "created": 63,
+    "updated": 0,
+    "links_created": 70,
+    "rejected": 0
+  },
+  "manufacturing_batch_25": {
+    "duration_s": 10.374968749994878,
+    "rows_per_second": 6.072307446712175,
+    "created": 63,
+    "updated": 0,
+    "links_created": 70,
+    "rejected": 0
+  },
+  "manufacturing_batch_100": {
+    "duration_s": 10.151504374982323,
+    "rows_per_second": 6.205976737325663,
+    "created": 63,
+    "updated": 0,
+    "links_created": 70,
+    "rejected": 0
+  },
+  "unchanged_repeat": {
+    "duration_s": 8.618891791003989,
+    "rows_per_second": 7.3095244177165055,
+    "created": 0,
+    "updated": 0,
+    "links_created": 0,
+    "rejected": 0
+  },
+  "changed_source": {
+    "duration_s": 9.034092332993168,
+    "rows_per_second": 6.973583806523581,
+    "created": 0,
+    "updated": 1,
+    "links_created": 0,
+    "rejected": 0
+  },
+  "reconciliation_heavy": {
+    "duration_s": 9.545515375008108,
+    "rows_per_second": 6.599957940976705,
+    "created": 0,
+    "updated": 6,
+    "links_created": 0,
+    "rejected": 0
+  },
+  "quarantine": {
+    "duration_s": 9.106382083002245,
+    "rows_per_second": 6.918224979555195,
+    "created": 0,
+    "updated": 0,
+    "links_created": 0,
+    "rejected": 1
+  },
+  "checkpoint_retry": {
+    "duration_s": 8.794725458021276,
+    "rows_per_second": 7.163384496845268,
+    "created": 0,
+    "updated": 0,
+    "links_created": 0,
+    "rejected": 0
+  },
+  "concurrent_query": [
+    {
+      "operation": "ingestion",
+      "wall_ms": 1684.9684999906458,
+      "outcome": true
+    },
+    {
+      "operation": "query",
+      "wall_ms": 28.251957992324606,
+      "outcome": 20
+    }
+  ],
+  "concurrent_action": [
+    {
+      "operation": "ingestion",
+      "wall_ms": 2034.1004160000011,
+      "outcome": true
+    },
+    {
+      "operation": "action",
+      "wall_ms": 114.46345801232383,
+      "outcome": "f66a06e9-9223-406a-9ace-262ea76e9492"
+    }
+  ],
+  "controlled_lock_wait": {},
+  "synthetic_506_objects": {
+    "duration_s": 70.05982120800763,
+    "rows_per_second": 7.222399247889683,
+    "created": 506,
+    "updated": 0,
+    "links_created": 500,
+    "rejected": 0
+  },
+  "synthetic_unchanged": {
+    "duration_s": 66.51476637498126,
+    "rows_per_second": 7.6073333423046625,
+    "created": 0,
+    "updated": 0,
+    "links_created": 0,
+    "rejected": 0
+  }
+}

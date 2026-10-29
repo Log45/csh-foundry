@@ -111,3 +111,9 @@ Phase 2 query/traversal/aggregation endpoints and internal Object Sets are docum
 Phase 3 adds active-schema action preview/execute/history/audit endpoints. See
 [the action API](actions.md) for strict definition references, idempotency, authorization,
 transactional outbox delivery and edit reconciliation contracts.
+
+## Governed ingestion
+
+Phase 4 adds immutable source/mapping publication, durable run submission/history/diagnostics and
+cooperative cancellation. See [ingestion](ingestion.md) for registered connector security, staging,
+worker claims, source/edit policies and bounded atomicity. Existing routes remain available.

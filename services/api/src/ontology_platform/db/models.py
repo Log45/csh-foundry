@@ -507,3 +507,273 @@ class ReconciliationConflict(Base):
             "status",
         ),
     )
+
+
+class IngestionSource(Base):
+    __tablename__ = "ingestion_sources"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[str] = mapped_column(String(100), primary_key=True)
+    version: Mapped[int] = mapped_column(primary_key=True)
+    kind: Mapped[str] = mapped_column(String(20))
+    definition_json: Mapped[str] = mapped_column(Text)
+    binding_revision: Mapped[str] = mapped_column(Text)
+    created_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id"], ["ontologies.tenant_id", "ontologies.id"]
+        ),
+        CheckConstraint("version >= 1", name="ck_ingestion_source_version"),
+    )
+
+
+class IngestionMapping(Base):
+    __tablename__ = "ingestion_mappings"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[str] = mapped_column(String(100), primary_key=True)
+    version: Mapped[int] = mapped_column(primary_key=True)
+    source_id: Mapped[str] = mapped_column(String(100))
+    source_version: Mapped[int] = mapped_column()
+    schema_version: Mapped[str] = mapped_column(Text)
+    definition_json: Mapped[str] = mapped_column(Text)
+    created_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "source_id", "source_version"],
+            [
+                "ingestion_sources.tenant_id",
+                "ingestion_sources.ontology_id",
+                "ingestion_sources.id",
+                "ingestion_sources.version",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "schema_version"],
+            [
+                "ontology_versions.tenant_id",
+                "ontology_versions.ontology_id",
+                "ontology_versions.version",
+            ],
+        ),
+        CheckConstraint("version >= 1", name="ck_ingestion_mapping_version"),
+    )
+
+
+class IngestionRun(Base):
+    __tablename__ = "ingestion_runs"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    schema_version: Mapped[str] = mapped_column(Text)
+    principal_id: Mapped[str] = mapped_column(Text)
+    plan: Mapped[list[JsonValue]] = mapped_column(JSONB)
+    policy: Mapped[str] = mapped_column(String(20))
+    batch_size: Mapped[int] = mapped_column()
+    key_hash: Mapped[str] = mapped_column(String(64))
+    request_hash: Mapped[str] = mapped_column(String(64))
+    status: Mapped[str] = mapped_column(String(20), default="PENDING")
+    phase: Mapped[str] = mapped_column(String(20), default="STAGING")
+    attempts: Mapped[int] = mapped_column(default=0)
+    token: Mapped[UUID | None]
+    lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    cancel_requested: Mapped[bool] = mapped_column(default=False)
+    mapping_cursor: Mapped[int] = mapped_column(default=0)
+    row_cursor: Mapped[int] = mapped_column(default=0)
+    checkpoint: Mapped[int] = mapped_column(default=0)
+    staged: Mapped[int] = mapped_column(default=0)
+    staged_bytes: Mapped[int] = mapped_column(default=0)
+    processed: Mapped[int] = mapped_column(default=0)
+    created: Mapped[int] = mapped_column(default=0)
+    updated: Mapped[int] = mapped_column(default=0)
+    links_created: Mapped[int] = mapped_column(default=0)
+    rejected: Mapped[int] = mapped_column(default=0)
+    observed: Mapped[dict[str, JsonValue]] = mapped_column(JSONB, default=dict)
+    staging_purged_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    last_error: Mapped[str | None] = mapped_column(String(100))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "schema_version"],
+            [
+                "ontology_versions.tenant_id",
+                "ontology_versions.ontology_id",
+                "ontology_versions.version",
+            ],
+        ),
+        CheckConstraint(
+            "policy IN ('reject_run','reject_batch','quarantine')", name="ck_ingestion_policy"
+        ),
+        CheckConstraint(
+            "status != 'RUNNING' OR (token IS NOT NULL AND lease_until IS NOT NULL)",
+            name="ck_ingestion_lease",
+        ),
+        CheckConstraint(
+            "created >= 0 AND updated >= 0 AND rejected >= 0 "
+            "AND processed >= 0 AND links_created >= 0",
+            name="ck_ingestion_counts",
+        ),
+        UniqueConstraint(
+            "tenant_id", "ontology_id", "principal_id", "key_hash", name="uq_ingestion_request"
+        ),
+        CheckConstraint(
+            "status IN ('PENDING','RUNNING','COMPLETED','FAILED','CANCELLED')",
+            name="ck_ingestion_state",
+        ),
+        CheckConstraint(
+            "phase IN ('STAGING','VALIDATING','OBJECTS','LINKS','DONE')", name="ck_ingestion_phase"
+        ),
+        CheckConstraint(
+            "attempts BETWEEN 0 AND 3 AND batch_size BETWEEN 1 AND 100", name="ck_ingestion_budget"
+        ),
+        CheckConstraint(
+            "checkpoint >= 0 AND staged BETWEEN 0 AND 10000 "
+            "AND staged_bytes BETWEEN 0 AND 16777216",
+            name="ck_ingestion_checkpoint",
+        ),
+        Index("ix_ingestion_pending", "tenant_id", "status", "lease_until"),
+        Index("ix_ingestion_history", "tenant_id", "ontology_id", "created_at", "id"),
+    )
+
+
+class IngestionStage(Base):
+    __tablename__ = "ingestion_stage"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    run_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ordinal: Mapped[int] = mapped_column(primary_key=True)
+    mapping_id: Mapped[str] = mapped_column(String(100))
+    mapping_version: Mapped[int] = mapped_column()
+    row_number: Mapped[int] = mapped_column()
+    source_key: Mapped[str | None] = mapped_column(Text)
+    object_type: Mapped[str] = mapped_column(Text)
+    object_id: Mapped[str | None] = mapped_column(Text)
+    properties: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    relationships: Mapped[list[JsonValue]] = mapped_column(JSONB)
+    state: Mapped[str] = mapped_column(String(20))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "run_id"],
+            ["ingestion_runs.tenant_id", "ingestion_runs.ontology_id", "ingestion_runs.id"],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "mapping_id", "mapping_version"],
+            [
+                "ingestion_mappings.tenant_id",
+                "ingestion_mappings.ontology_id",
+                "ingestion_mappings.id",
+                "ingestion_mappings.version",
+            ],
+        ),
+        CheckConstraint(
+            "state IN ('STAGED','INVALID','OBJECT_DONE','DONE','REJECTED','LINK_REJECTED')",
+            name="ck_ingestion_stage_state",
+        ),
+        UniqueConstraint(
+            "tenant_id",
+            "ontology_id",
+            "run_id",
+            "mapping_id",
+            "mapping_version",
+            "row_number",
+            name="uq_stage_location",
+        ),
+        Index(
+            "ix_ingestion_stage_identity",
+            "tenant_id",
+            "ontology_id",
+            "run_id",
+            "object_type",
+            "object_id",
+        ),
+    )
+
+
+class IngestionDiagnostic(Base):
+    __tablename__ = "ingestion_diagnostics"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    run_id: Mapped[UUID] = mapped_column()
+    mapping_id: Mapped[str | None] = mapped_column(String(100))
+    mapping_version: Mapped[int | None]
+    row_number: Mapped[int | None]
+    code: Mapped[str] = mapped_column(String(100))
+    category: Mapped[str] = mapped_column(String(20))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "mapping_id", "mapping_version"],
+            [
+                "ingestion_mappings.tenant_id",
+                "ingestion_mappings.ontology_id",
+                "ingestion_mappings.id",
+                "ingestion_mappings.version",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "run_id"],
+            ["ingestion_runs.tenant_id", "ingestion_runs.ontology_id", "ingestion_runs.id"],
+        ),
+        Index("ix_ingestion_diagnostics_run", "tenant_id", "ontology_id", "run_id"),
+    )
+
+
+class SourceObject(Base):
+    __tablename__ = "source_object_identities"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    object_type: Mapped[str] = mapped_column(Text, primary_key=True)
+    object_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    source_id: Mapped[str] = mapped_column(String(100))
+    source_version: Mapped[int] = mapped_column()
+    namespace: Mapped[str] = mapped_column(Text)
+    source_key: Mapped[str] = mapped_column(Text)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "source_id", "source_version"],
+            [
+                "ingestion_sources.tenant_id",
+                "ingestion_sources.ontology_id",
+                "ingestion_sources.id",
+                "ingestion_sources.version",
+            ],
+        ),
+        UniqueConstraint(
+            "tenant_id",
+            "ontology_id",
+            "source_id",
+            "namespace",
+            "source_key",
+            "object_type",
+            name="uq_source_identity",
+        ),
+    )
+
+
+class SourceLink(Base):
+    __tablename__ = "source_link_state"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    object_type: Mapped[str] = mapped_column(Text, primary_key=True)
+    object_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    link_type: Mapped[str] = mapped_column(Text, primary_key=True)
+    target_type: Mapped[str] = mapped_column(Text)
+    target_id: Mapped[str] = mapped_column(Text)
+    managed: Mapped[bool] = mapped_column()
+    edge_created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "object_type", "object_id"],
+            [
+                "source_object_identities.tenant_id",
+                "source_object_identities.ontology_id",
+                "source_object_identities.object_type",
+                "source_object_identities.object_id",
+            ],
+        ),
+    )

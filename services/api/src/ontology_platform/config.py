@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     local_principal_id: str | None = None
     trusted_local_identity: bool = False
     query_cursor_secret: SecretStr | None = None
+    ingestion_catalog_json: SecretStr | None = None
 
     @model_validator(mode="after")
     def local_context(self) -> "Settings":
