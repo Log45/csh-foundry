@@ -1,4 +1,5 @@
 from functools import lru_cache
+from pathlib import Path
 from typing import Literal
 from uuid import UUID
 
@@ -15,6 +16,7 @@ class Settings(BaseSettings):
     database_url: SecretStr
     auth_mode: Literal["disabled", "local", "test", "oidc"] = "disabled"
     oidc_providers: tuple[Provider, ...] = ()
+    oidc_ca_bundle: Path | None = None
     test_issuer: str | None = None
     test_subject: str | None = None
     worker_access_token: SecretStr | None = None

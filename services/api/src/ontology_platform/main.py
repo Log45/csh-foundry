@@ -101,7 +101,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         else LocalAuthorizer(configuration)
     )
     if configuration.auth_mode == "oidc":
-        app.state.oidc = OIDCVerifier(configuration.oidc_providers)
+        app.state.oidc = OIDCVerifier(
+            configuration.oidc_providers, ca_bundle=configuration.oidc_ca_bundle
+        )
     app.add_middleware(
         ActionPayloadLimit,
         paths=("/security",),

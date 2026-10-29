@@ -37,7 +37,7 @@ def worker_context(
         raise ApplicationError(
             "worker_identity_required", "Verified service credentials and tenant required", 401
         )
-    verifier = OIDCVerifier(settings.oidc_providers)
+    verifier = OIDCVerifier(settings.oidc_providers, ca_bundle=settings.oidc_ca_bundle)
     try:
         provider, claims = verifier.verify(settings.worker_access_token.get_secret_value())
     finally:

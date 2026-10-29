@@ -251,9 +251,13 @@ def test_verified_worker_factory_and_revoked_delegation(database, monkeypatch):
         worker_access_token=token(private, claims={"sub": "worker-ingestion"}),
         _env_file=None,
     )
-    monkeypatch.setattr(
-        "ontology_platform.security.workers.OIDCVerifier", lambda providers: verifier
-    )
+
+    def verifier_factory(providers, *, ca_bundle=None):
+        assert providers == verifier.providers
+        assert ca_bundle is None
+        return verifier
+
+    monkeypatch.setattr("ontology_platform.security.workers.OIDCVerifier", verifier_factory)
     try:
         actor, actual = worker_context(settings, w.sessions, "ingestion", w.definition.id)
         assert actor.actor_id == delegated.actor_id

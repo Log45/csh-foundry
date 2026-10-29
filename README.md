@@ -218,3 +218,7 @@ npm run dev
 For container development use `docker compose --env-file .env -f infrastructure/compose.yaml
 --profile studio up --build` (one command). See [the Phase 8 API checklist](docs/development/phase-8.md),
 [browser architecture](docs/decisions/0029-browser-session-and-studio.md) and completion report.
+
+The existing local Keycloak connection and certificate configuration are documented in
+[local Keycloak setup](docs/development/keycloak-local.md). Its public CA is mounted read-only into
+API/Studio through the normal Compose configuration; private keys remain in ignored local artifacts.

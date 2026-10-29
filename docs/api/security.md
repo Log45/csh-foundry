@@ -225,3 +225,12 @@ Studio performs Code + PKCE on the Next server and retains API access tokens in 
 sessions. Browser requests carry an HttpOnly cookie, exact Origin and synchronizer CSRF for BFF
 operations. See [ADR 0029](../decisions/0029-browser-session-and-studio.md) for cookie/session bounds,
 single-process deployment, logout, issuer contracts and future identity-broker integration.
+
+### Operator-configured additional OIDC CA
+
+`FOUNDRY_OIDC_CA_BUNDLE` optionally names a PEM CA bundle readable by the API or worker process.
+Its roots are added to HTTPX's normal trusted roots. Hostname verification and certificate-chain
+verification remain mandatory, as do trusted HTTPS issuer/endpoint rules. Missing/invalid bundles
+fail startup rather than disabling verification. This allows explicitly trusted local/private
+issuers without `verify=False` or implicit proxy/environment trust. See
+[local Keycloak setup](../development/keycloak-local.md).

@@ -24,10 +24,13 @@ services:
       FOUNDRY_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-foundry}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-foundry}
       FOUNDRY_AUTH_MODE: ${FOUNDRY_AUTH_MODE:-disabled}
       FOUNDRY_OIDC_PROVIDERS: ${FOUNDRY_OIDC_PROVIDERS:-[]}
+      FOUNDRY_OIDC_CA_BUNDLE: ${FOUNDRY_DOCKER_OIDC_CA_BUNDLE:-}
       FOUNDRY_TRUSTED_LOCAL_IDENTITY: ${FOUNDRY_TRUSTED_LOCAL_IDENTITY:-false}
       FOUNDRY_LOCAL_TENANT_ID: ${FOUNDRY_LOCAL_TENANT_ID:-}
       FOUNDRY_LOCAL_PRINCIPAL_ID: ${FOUNDRY_LOCAL_PRINCIPAL_ID:-}
       FOUNDRY_QUERY_CURSOR_SECRET: ${FOUNDRY_QUERY_CURSOR_SECRET:-}
+    volumes:
+      - ${FOUNDRY_OIDC_CA_DIRECTORY:-./docker/certs}:/etc/foundry/certs:ro
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:
@@ -45,6 +48,9 @@ services:
       STUDIO_OIDC_ISSUER: ${STUDIO_OIDC_ISSUER:-}
       STUDIO_OIDC_CLIENT_ID: ${STUDIO_OIDC_CLIENT_ID:-studio}
       STUDIO_API_AUDIENCE: ${STUDIO_API_AUDIENCE:-foundry-api}
+      NODE_EXTRA_CA_CERTS: ${STUDIO_NODE_EXTRA_CA_CERTS:-}
+    volumes:
+      - ${FOUNDRY_OIDC_CA_DIRECTORY:-./docker/certs}:/etc/foundry/certs:ro
     ports:
       - "127.0.0.1:3000:3000"
     depends_on:

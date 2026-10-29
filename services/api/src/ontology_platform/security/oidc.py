@@ -3,6 +3,7 @@
 import json
 import threading
 import time
+from pathlib import Path
 from typing import Any, Literal
 from urllib.parse import urlsplit
 
@@ -50,9 +51,25 @@ class Provider(QueryModel):
 
 
 class OIDCVerifier:
-    def __init__(self, providers: tuple[Provider, ...], *, client: httpx.Client | None = None):
+    def __init__(
+        self,
+        providers: tuple[Provider, ...],
+        *,
+        client: httpx.Client | None = None,
+        ca_bundle: Path | None = None,
+    ):
         self.providers = providers
-        self.client = client or httpx.Client(timeout=3, follow_redirects=False, trust_env=False)
+        if client is not None and ca_bundle is not None:
+            raise ValueError("Custom transport and CA bundle must be configured separately")
+        if client is None:
+            context = httpx.create_ssl_context(trust_env=False)
+            if ca_bundle is not None:
+                # Add only operator-configured roots; certificate and hostname checks stay enabled.
+                context.load_verify_locations(cafile=str(ca_bundle))
+            client = httpx.Client(
+                timeout=3, follow_redirects=False, trust_env=False, verify=context
+            )
+        self.client = client
         self.cache: dict[str, tuple[float, dict[str, dict[str, Any]]]] = {}
         self.attempts: dict[str, float] = {}
         self.lock = threading.Lock()
