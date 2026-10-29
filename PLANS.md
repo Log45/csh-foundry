@@ -2,9 +2,9 @@
 
 ## Architecture, Implementation Roadmap, and Coding Agent Specification
 
-**Project status:** Greenfield
+**Project status:** Phases 0–7 implemented; Phase 8 planned (verify completion reports before relying on status)
 
-**Document version:** 1.1 (Codex-ready)
+**Document version:** 1.2 (Codex-ready; provider-independent SSO roadmap)
 
 **Primary language:** Python
 
@@ -14,7 +14,7 @@
 
 **Semantic engine:** Open Ontologies
 
-**Ontology authoring:** Protégé / WebProtégé
+**Ontology authoring:** Native Ontology Manager; optional Protégé / WebProtégé interoperability
 
 **API framework:** FastAPI
 
@@ -75,6 +75,10 @@ The project must prioritize correctness, maintainability, extensibility, and dev
 - External side effects must use durable, retryable workflows.
 
 - Authorization must be enforced in the backend, never only in the frontend.
+
+- Authentication must be provider-independent: external OIDC sign-in establishes identity; PostgreSQL-backed tenant membership, RBAC, and ABAC remain authoritative for platform access.
+
+- Browser sessions and external identity-provider tokens must never weaken FastAPI access-token verification. Microsoft/Google SSO is a planned integration, not a prerequisite for Phase 8.
 
 - Expensive ingestion and reasoning tasks must run outside request handlers.
 
@@ -161,7 +165,7 @@ The plan's conceptual diagrams may use shortened names, but executable fixtures,
 
 \| Background jobs | PostgreSQL-backed jobs initially | Ingestion, validation, reconciliation |
 
-\| Authentication | OpenID Connect | User identity |
+\| Authentication | OpenID Connect; provider-independent browser sessions | Verified user identity, future Microsoft/Google SSO |
 
 \| Testing | pytest, pytest-asyncio | Python automated testing |
 
@@ -181,7 +185,7 @@ These are recommendations, not mandatory dependencies for the first milestone.
 
 \|---|---|---|
 
-\| Keycloak | Self-hosted OIDC identity provider | Security milestone |
+\| Keycloak or equivalent OIDC broker | Optional replaceable identity broker for Microsoft, Google, and enterprise SSO | Phase 10 integration; evaluate in Phase 8 |
 
 \| OPA | Centralized authorization policy evaluation | Security milestone |
 
@@ -1762,7 +1766,7 @@ Implement secure access to ontology metadata, objects, relationships, and action
 
 Use OIDC-compatible authentication.
 
-Recommended initial provider: Keycloak.
+Use a replaceable, standards-based OIDC issuer; Keycloak is an optional self-hosted identity broker, not a mandatory provider. Phase 7 establishes verified backend identities and authorization. Phase 8 establishes browser login/session contracts with a local deterministic OIDC provider. Phase 10 integrates and tests live Microsoft Entra ID and Google sign-in through a selected broker or explicitly reviewed direct-provider architecture.
 
 FastAPI must validate:
 
@@ -1777,6 +1781,16 @@ FastAPI must validate:
 - Required claims.
 
 Do not trust arbitrary client-supplied user identifiers.
+
+### 14.2.1 External SSO and API-token boundaries
+
+- Support future Microsoft Entra ID organizational SSO, Google account sign-in, and Google Workspace; consider consumer Microsoft accounts separately during provider configuration. Additional organization-specific OIDC providers should be pluggable.
+- Prefer a replaceable OIDC identity broker that federates external providers and issues platform-audience access tokens conforming to the backend's documented supported profile (currently RFC 9068). A direct-provider design requires explicit token-profile and audience review.
+- Never send Google or Microsoft ID tokens directly to FastAPI as bearer API access tokens; never accept Microsoft Graph or Google API access tokens as platform API credentials. Do not relax issuer, audience, token-type, signature, or algorithm checks for compatibility.
+- Bind external identities by trusted issuer and immutable subject, not email address alone. Account linking, organization onboarding, tenant selection, and just-in-time provisioning must be explicitly governed; email domains or token roles do not automatically grant tenant access.
+- Keep PostgreSQL-managed principals, tenant memberships, RBAC, ABAC, policy versions, and revocation authoritative regardless of identity provider.
+- Use Authorization Code Flow with PKCE for interactive sign-in. Prefer server-managed sessions and a backend-for-frontend boundary with Secure, HttpOnly, appropriately scoped SameSite cookies, CSRF defenses, validated state/nonce, session rotation/expiry, and logout. Keep long-lived tokens out of browser JavaScript.
+- Treat external IdP integration, organizational SSO enforcement, provider outage handling, key rotation, logout semantics, and identity lifecycle as Phase 10 acceptance items; optional SCIM/group sync belongs to Phase 11.
 
 ## 14.3 Authorization levels
 
@@ -2823,7 +2837,7 @@ Do not publicly deploy the system before this phase is complete.
 
 ---
 
-## Phase 8 — Ontology Studio
+## Phase 8 — Native Ontology Manager and Ontology Studio
 
 **Priority: High**
 
@@ -2843,11 +2857,19 @@ Tasks:
 
 7. Implement semantic validation dashboard.
 
-8. Implement authentication-aware frontend navigation.
+8. Implement a **single Next.js application with two workspaces**: native Ontology Manager (schema graph, object/property/link/action types, drafts, publication/activation, version history, OWL import/export and mapping diagnostics) and Ontology Studio (objects, Object Sets, queries, links, governed actions, ingestion, semantic results).
+
+9. Implement provider-independent frontend authentication/session contracts, using OIDC Authorization Code + PKCE, a server-managed session / backend-for-frontend approach where appropriate, secure cookies, CSRF/state/nonce protection, expiry and logout. Use a deterministic local OIDC provider for tests.
+
+10. Integrate Phase 7 verified identity, tenant selection, RBAC/ABAC, and permission-aware navigation. FastAPI remains the enforcement boundary; never forward external ID tokens or unrelated-provider API tokens as platform bearer credentials.
+
+11. Document an interchangeable identity-broker contract for future Microsoft Entra ID and Google sign-in, including issuer/audience/token profile and principal mapping. Do **not** implement live provider integration or weaken RFC 9068 verification in Phase 8.
 
 Deliverables:
 
-- Next.js developer UI.
+- One Next.js application with native Ontology Manager and Ontology Studio workspaces.
+
+- Secure, provider-independent browser login/session foundation validated against a local OIDC test provider.
 
 - Object explorer.
 
@@ -2855,7 +2877,7 @@ Deliverables:
 
 - Action execution interface.
 
-**Exit criteria:** A developer can complete the reference workflow without directly invoking REST endpoints.
+**Exit criteria:** A developer can complete the reference workflow without directly invoking REST endpoints, using verified frontend sessions and authorization-aware workflows; live Microsoft/Google sign-in is deferred to Phase 10.
 
 ---
 
@@ -2917,7 +2939,15 @@ Tasks:
 
 10. Add operational runbooks.
 
-**Exit criteria:** The platform can be deployed, monitored, backed up, restored, and upgraded reliably.
+11. Select and deploy a replaceable OIDC broker (or document and approve a direct-provider alternative) and integrate **Microsoft Entra ID organizational SSO** and **Google account / Google Workspace sign-in** with the Phase 8 browser session layer. Do not assume external tokens match the platform API token profile.
+
+12. Validate provider-specific issuer, audience, authorized client, JWKS rotation, logout, session renewal/expiry, IdP outage behavior, secret handling, and platform-audience access-token issuance. Do not use ID tokens or third-party API tokens as platform API credentials.
+
+13. Test stable issuer+subject identity binding, account-linking safety, tenant selection, role/membership revocation, optional organization-level allowed providers, and organization onboarding. Never grant membership from email domain alone.
+
+14. Run actual integration tests against configured Microsoft and Google environments and clearly distinguish PASS, FAIL, NOT RUN, and NOT SUPPORTED; mock-provider tests alone are insufficient to claim live SSO support.
+
+**Exit criteria:** The platform can be deployed, monitored, backed up, restored, and upgraded reliably; Microsoft Entra ID and Google sign-in have been validated in configured integration environments, or are explicitly marked NOT RUN and remain an open release gate for the intended SSO-enabled product.
 
 ---
 
@@ -2952,6 +2982,8 @@ Potential additions:
 - Distributed materialization.
 
 - Cross-ontology federation.
+
+- Enterprise identity lifecycle: SCIM provisioning/deprovisioning, governed group synchronization, organization-specific mandatory SSO and advanced login policies.
 
 - Fine-grained schema branching environments.
 
@@ -3237,6 +3269,8 @@ The MVP is complete when the following capabilities work together:
 - [ ] Protégé OWL files can be imported.
 
 - [ ] Authentication and authorization are enforced.
+
+- [ ] Provider-independent frontend login/session foundation is validated; live Microsoft/Google SSO is a Phase 10 product milestone rather than a prerequisite for the initial Phase 8 UI.
 
 - [ ] A basic Next.js Ontology Studio is functional.
 
