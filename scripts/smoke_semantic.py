@@ -22,6 +22,7 @@ from test_phase1 import database  # noqa: E402
 os.environ.setdefault("TEST_DATABASE_URL", get_settings().database_url.get_secret_value())
 fixture = database.__wrapped__()
 engine, sessions, url = next(fixture)
+interchange = "--interchange" in sys.argv
 checks = []
 try:
     with tempfile.TemporaryDirectory(prefix="semantic-http-") as directory:
@@ -107,6 +108,38 @@ def create():
             else:
                 raise RuntimeError("HTTP server never ready")
             prefix = f"/api/v1/ontologies/{world.definition.id}/semantic"
+            if interchange:
+                from test_ontology_import import request as import_request
+
+                exchange = f"/api/v1/ontologies/{world.definition.id}/interchange"
+                result = call(
+                    exchange + "/imports",
+                    import_request(world, mode="CREATE_DRAFT").model_dump(mode="json"),
+                )
+                assert result["status"] == "DRAFT_CREATED", result
+                assert result["draft_version"] == "2.0.0"
+                assert result["conflict_count"] == 0
+                key = result["id"]
+                assert call(exchange + f"/imports/{key}")["input_hash"] == result["input_hash"]
+                assert call(exchange + f"/imports/{key}/vocabulary")
+                assert call(exchange + f"/imports/{key}/diagnostics")
+                # Original is deliberately text/plain, not interpreted as JSON or active HTML.
+                with urllib.request.urlopen(
+                    f"http://127.0.0.1:{port}" + result["artifact_reference"]
+                ) as response:
+                    assert (
+                        response.read().decode()
+                        == (ROOT / "fixtures/manufacturing.ttl").read_text()
+                    )
+                assert call(exchange + "/exports/1.0.0")["output_hash"]
+                assert (
+                    call(f"/api/v1/ontologies/{world.definition.id}")["active_version"] == "1.0.0"
+                )
+                checks.append(
+                    "PASS HTTP governed OWL import, unpublished draft, "
+                    "original/diagnostics/vocabulary "
+                    "and deterministic export; active schema unchanged"
+                )
             compiled = call(prefix + "/compile", {"schema_version": world.definition.version})
             exported = call(
                 prefix + "/exports",
@@ -161,6 +194,11 @@ finally:
         next(fixture)
     except StopIteration:
         pass
-output = ROOT / "docs/architecture/evidence/phase-5/http-smoke.txt"
+output = (
+    ROOT
+    / "docs/architecture/evidence"
+    / ("phase-6" if interchange else "phase-5")
+    / "http-smoke.txt"
+)
 output.write_text("\n".join(checks) + "\n" + logs)
 print("\n".join(checks))

@@ -1,5 +1,11 @@
 # Phase 5 semantic API
 
+Phase 7 now supplies verified OIDC/platform membership context and current RBAC/ABAC through
+these same governed services. See [security](security.md) for configuration, permissions, tenant
+selection, SQL restrictions and worker delegation. Earlier local-only descriptions below describe
+the preserved isolated-development workflow, not an OIDC authentication bypass.
+
+
 Routes below are under `/api/v1/ontologies/{ontology_id}/semantic`. All use the server-configured
 principal/tenant, existing service authorization and structured error envelope. There is no engine
 invocation in an API handler. Run `uv run python -m ontology_platform.semantic --ontology manufacturing`

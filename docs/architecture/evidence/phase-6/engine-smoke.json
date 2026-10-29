@@ -1,0 +1,208 @@
+{
+  "generated_at": "2026-10-29T14:28:53.903090+00:00",
+  "inputs": {
+    "manufacturing.ttl": "1907037cc90eb6a0977fec2752e5e53e1cf6b2fa74807044befd3ac5a742dff5",
+    "manufacturing-data.ttl": "b4246508225435bac465626af975e53626acb35b646f2fd00d72056dfe4f75cd",
+    "manufacturing-shapes.ttl": "8c3e5bce738e8f0ddb8fa184151bf157862f49eeaf72a1b06b3342377bd9ad53"
+  },
+  "parse": {
+    "engine_version": "2.1.0",
+    "engine_commit": "ef6e781c71aaccaa35c2a1cd06169f0c862d5769",
+    "operation": "parse",
+    "records": [
+      {
+        "command": "load",
+        "result": {
+          "ok": true,
+          "path": "/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/foundry-semantic-wvqbji71/ontology.ttl",
+          "triples_loaded": 115
+        },
+        "seq": 0
+      },
+      {
+        "command": "stats",
+        "result": {
+          "classes": 8,
+          "data_properties": 13,
+          "individuals": 12,
+          "object_properties": 6,
+          "properties": 19,
+          "triples": 115
+        },
+        "seq": 1
+      }
+    ],
+    "files": {}
+  },
+  "shacl": {
+    "engine_version": "2.1.0",
+    "engine_commit": "ef6e781c71aaccaa35c2a1cd06169f0c862d5769",
+    "operation": "shacl",
+    "records": [
+      {
+        "command": "load",
+        "result": {
+          "ok": true,
+          "path": "/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/foundry-semantic-0vzz_6hz/data.ttl",
+          "triples_loaded": 412
+        },
+        "seq": 0
+      },
+      {
+        "command": "shacl",
+        "result": {
+          "conforms": true,
+          "focus_nodes": 63,
+          "focus_nodes_by_target": [
+            {
+              "focus_nodes": 25,
+              "shape": "https://example.org/ontologies/manufacturing#MaintenanceTaskShape",
+              "target": "https://example.org/ontologies/manufacturing#MaintenanceTask",
+              "target_form": "class"
+            },
+            {
+              "focus_nodes": 12,
+              "shape": "https://example.org/ontologies/manufacturing#EmployeeShape",
+              "target": "https://example.org/ontologies/manufacturing#Employee",
+              "target_form": "class"
+            },
+            {
+              "focus_nodes": 20,
+              "shape": "https://example.org/ontologies/manufacturing#MachineShape",
+              "target": "https://example.org/ontologies/manufacturing#Machine",
+              "target_form": "class"
+            },
+            {
+              "focus_nodes": 6,
+              "shape": "https://example.org/ontologies/manufacturing#FactoryShape",
+              "target": "https://example.org/ontologies/manufacturing#Factory",
+              "target_form": "class"
+            }
+          ],
+          "scope": {
+            "complete": true,
+            "default_graph": true,
+            "note": "every graph in the store, the default graph included. On a store that keeps several versions of an entity in several named graphs this union is a state that held at no instant.",
+            "selector": "whole-store",
+            "semantics_version": "temporal/2"
+          },
+          "unmatched_shapes": [],
+          "violation_count": 0,
+          "violations": []
+        },
+        "seq": 1
+      }
+    ],
+    "files": {}
+  },
+  "reasoning": {
+    "owl-rl": {
+      "engine_version": "2.1.0",
+      "engine_commit": "ef6e781c71aaccaa35c2a1cd06169f0c862d5769",
+      "operation": "reason",
+      "records": [
+        {
+          "command": "load",
+          "result": {
+            "ok": true,
+            "path": "/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/foundry-semantic-ozugrrzs/ontology.ttl",
+            "triples_loaded": 115
+          },
+          "seq": 0
+        },
+        {
+          "command": "load",
+          "result": {
+            "ok": true,
+            "path": "/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/foundry-semantic-ozugrrzs/data.ttl",
+            "triples_loaded": 412
+          },
+          "seq": 1
+        },
+        {
+          "command": "reason",
+          "result": {
+            "final_triples": 529,
+            "fixpoint_reached": true,
+            "inferred_count": 2,
+            "initial_triples": 527,
+            "iterations": 2,
+            "profile_used": "owl-rl",
+            "sample_inferences": [],
+            "scope": {
+              "complete": true,
+              "default_graph": true,
+              "note": "every graph in the store, the default graph included. On a store that keeps several versions of an entity in several named graphs this union is a state that held at no instant.",
+              "selector": "whole-store",
+              "semantics_version": "temporal/2"
+            }
+          },
+          "seq": 2
+        }
+      ],
+      "files": {},
+      "critical_individuals": []
+    },
+    "owl-rl-ext": {
+      "engine_version": "2.1.0",
+      "engine_commit": "ef6e781c71aaccaa35c2a1cd06169f0c862d5769",
+      "operation": "reason",
+      "records": [
+        {
+          "command": "load",
+          "result": {
+            "ok": true,
+            "path": "/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/foundry-semantic-86x60zgi/ontology.ttl",
+            "triples_loaded": 115
+          },
+          "seq": 0
+        },
+        {
+          "command": "load",
+          "result": {
+            "ok": true,
+            "path": "/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/foundry-semantic-86x60zgi/data.ttl",
+            "triples_loaded": 412
+          },
+          "seq": 1
+        },
+        {
+          "command": "reason",
+          "result": {
+            "final_triples": 538,
+            "fixpoint_reached": true,
+            "inferred_count": 11,
+            "initial_triples": 527,
+            "iterations": 4,
+            "profile_used": "owl-rl-ext",
+            "sample_inferences": [
+              "<https://example.org/ontologies/manufacturing#MCH-011> a <https://example.org/ontologies/manufacturing#CriticalMachine>",
+              "<https://example.org/ontologies/manufacturing#MCH-005> a _:f39c0c320f04f68616c185bd815e370d",
+              "<https://example.org/ontologies/manufacturing#MCH-017> a _:c6d7bb6f1e628506ca4bd1f08337b940",
+              "<https://example.org/ontologies/manufacturing#MCH-011> a _:f39c0c320f04f68616c185bd815e370d",
+              "<https://example.org/ontologies/manufacturing#MCH-011> a _:c6d7bb6f1e628506ca4bd1f08337b940",
+              "<https://example.org/ontologies/manufacturing#MCH-005> a <https://example.org/ontologies/manufacturing#CriticalMachine>",
+              "<https://example.org/ontologies/manufacturing#MCH-017> a <https://example.org/ontologies/manufacturing#CriticalMachine>",
+              "<https://example.org/ontologies/manufacturing#MCH-017> a _:f39c0c320f04f68616c185bd815e370d",
+              "<https://example.org/ontologies/manufacturing#MCH-005> a _:c6d7bb6f1e628506ca4bd1f08337b940"
+            ],
+            "scope": {
+              "complete": true,
+              "default_graph": true,
+              "note": "every graph in the store, the default graph included. On a store that keeps several versions of an entity in several named graphs this union is a state that held at no instant.",
+              "selector": "whole-store",
+              "semantics_version": "temporal/2"
+            }
+          },
+          "seq": 2
+        }
+      ],
+      "files": {},
+      "critical_individuals": [
+        "https://example.org/ontologies/manufacturing#MCH-005",
+        "https://example.org/ontologies/manufacturing#MCH-011",
+        "https://example.org/ontologies/manufacturing#MCH-017"
+      ]
+    }
+  }
+}

@@ -42,7 +42,7 @@ from ontology_platform.queries.ast import (
     TraversalStep,
 )
 from ontology_platform.security.interfaces import Authorizer, Principal
-from ontology_platform.security.query import QueryAuthorizer, QueryGrant
+from ontology_platform.security.query import PolicyAudit, QueryAuthorizer, QueryGrant
 
 Entity = type[Object] | AliasedClass[Object]
 Expression = ColumnElement[Any]
@@ -102,6 +102,12 @@ class QueryCompiler:
             raise invalid(f"Unknown property: {name}")
         visible = self.grant(type_id).visible_properties
         if not trusted and visible is not None and name not in visible:
+            if isinstance(self.authorizer, PolicyAudit):
+                self.authorizer.policy_denial(
+                    self.principal,
+                    "property:read",
+                    f"{self.principal.tenant_id}/{self.schema.id}/objects/{type_id}/properties/{name}",
+                )
             raise ApplicationError("property_forbidden", "Property is not query-visible", 403)
         return result
 

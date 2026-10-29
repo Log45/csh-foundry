@@ -34,6 +34,7 @@ from ontology_platform.metadata.storage import (
     version_view,
 )
 from ontology_platform.security.interfaces import Principal
+from ontology_platform.security.query import ObjectAuthorizer
 
 
 class RegistryService(GovernedService):
@@ -132,16 +133,20 @@ class RegistryService(GovernedService):
         if not 1 <= limit <= 100 or offset < 0:
             raise ApplicationError("invalid_page", "Invalid page bounds", 422)
         with self.operation(principal, "ontology:read", "ontologies") as session:
-            return [
-                OntologyView.model_validate(o)
-                for o in session.scalars(
+            rows = list(
+                session.scalars(
                     select(Ontology)
                     .where(Ontology.tenant_id == principal.tenant_id)
                     .order_by(Ontology.id)
                     .limit(limit)
                     .offset(offset)
                 )
-            ]
+            )
+            for row in rows:
+                self.authorizer.require(
+                    principal, "ontology:read", f"{principal.tenant_id}/{row.id}"
+                )
+            return [OntologyView.model_validate(row) for row in rows]
 
     def get(self, principal: Principal, ontology_id: str) -> OntologyView:
         with self.operation(principal, "ontology:read", ontology_id) as session:
@@ -322,10 +327,32 @@ class RegistryService(GovernedService):
                         raise ApplicationError(
                             "revision_conflict", "Migration object revision changed", 409
                         )
+                    if isinstance(self.authorizer, ObjectAuthorizer):
+                        self.authorizer.object_check(
+                            principal,
+                            "object:update",
+                            ontology_id,
+                            update.object_type_id,
+                            update.object_id,
+                            properties=update.properties,
+                            changed=tuple(update.properties),
+                        )
                     row.properties = validate_properties(
                         object_type(proposed, row.object_type_id), row.object_id, update.properties
                     )
                 session.flush()
+            if isinstance(self.authorizer, ObjectAuthorizer):
+                from ontology_platform.objects.storage import bounded_objects
+
+                for current in bounded_objects(session, principal.tenant_id, ontology_id):
+                    self.authorizer.object_check(
+                        principal,
+                        "object:update",
+                        ontology_id,
+                        current.object_type_id,
+                        current.object_id,
+                        changed=tuple(current.properties),
+                    )
             rows = validate_live_objects(session, principal.tenant_id, ontology_id, proposed)
             links = validate_live_links(session, principal.tenant_id, ontology_id, proposed)
             for row in rows:
@@ -334,6 +361,10 @@ class RegistryService(GovernedService):
                     "object:update",
                     f"{principal.tenant_id}/{ontology_id}/objects/{row.object_type_id}/{row.object_id}",
                 )
+                if isinstance(self.authorizer, ObjectAuthorizer):
+                    self.authorizer.object_check(
+                        principal, "object:update", ontology_id, row.object_type_id, row.object_id
+                    )
                 row.schema_version = version
                 row.version += 1
                 row.updated_at = datetime.now(UTC)

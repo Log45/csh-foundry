@@ -1,0 +1,26 @@
+{
+  "python": "3.12.0 (v3.12.0:0fb18b02c8, Oct  2 2023, 09:45:56) [Clang 13.0.0 (clang-1300.0.29.30)]",
+  "host": "macOS-15.6.1-arm64-arm-64bit",
+  "postgresql": "17.6 (Debian 17.6-2.pgdg12+1)",
+  "alembic": "0013_security",
+  "packages": {
+    "pyjwt": "2.15.0",
+    "cryptography": "50.0.2",
+    "httpx": "0.28.1",
+    "rdflib": "7.1.4",
+    "pyshacl": "0.30.1",
+    "polars": "1.44.2"
+  },
+  "sha256": {
+    "AGENTS.md": "cd188bc6c54d11c427c2c23e60f037fa7d6e0f7702c134d4e9453439d26fd22e",
+    "PLANS.md": "e77ea0888d0a3591d5ee4013dcbe324a7f1583948932654010d22794d9d9e395",
+    "fixtures/VALIDATION.md": "c3d314b8b39b5bbb52dc1958554f050e2cdc47dc0d950abb66d93ab2cea83d70",
+    "fixtures/employees.csv": "1a3c06e14a5a64db94be55b1ea3eb82d5b1104dbd19efd5e1ba78425a93cd82c",
+    "fixtures/factories.csv": "4069af428ec5c14e263246148ae6cd25a2c8e1898b2f32f69ec479e38e586e1d",
+    "fixtures/machines.csv": "48e52b07115e9b033cac927a126907d91e4fc9f14fc14c993d13a2b71523d499",
+    "fixtures/maintenance_tasks.csv": "1d493fe0a1d9a23d06ceed907ff963297fb24ba82cc6684a203dd0099e39ca93",
+    "fixtures/manufacturing-data.ttl": "b4246508225435bac465626af975e53626acb35b646f2fd00d72056dfe4f75cd",
+    "fixtures/manufacturing-shapes.ttl": "8c3e5bce738e8f0ddb8fa184151bf157862f49eeaf72a1b06b3342377bd9ad53",
+    "fixtures/manufacturing.ttl": "1907037cc90eb6a0977fec2752e5e53e1cf6b2fa74807044befd3ac5a742dff5"
+  }
+}

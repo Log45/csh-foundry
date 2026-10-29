@@ -2,7 +2,8 @@ from datetime import UTC, datetime
 from typing import Literal
 
 from ontology_schema.models import OntologyDefinition
-from sqlalchemy import and_, delete, func, select, update
+from pydantic import JsonValue
+from sqlalchemy import and_, delete, func, select, true, update
 from sqlalchemy.orm import Session, sessionmaker
 
 from ontology_platform.contracts import (
@@ -19,7 +20,9 @@ from ontology_platform.metadata.storage import active_definition
 from ontology_platform.objects.relationships import link_type
 from ontology_platform.objects.storage import check_unique
 from ontology_platform.objects.validation import object_type, validate_properties
+from ontology_platform.queries.compiler import QueryCompiler
 from ontology_platform.security.interfaces import Authorizer, Principal
+from ontology_platform.security.query import ObjectAuthorizer, QueryAuthorizer
 
 
 def resource(principal: Principal, ontology_id: str, type_id: str, object_id: str) -> str:
@@ -37,6 +40,52 @@ class ObjectService(GovernedService):
     ):
         super().__init__(sessions, authorizer, session=session)
         self.record_edits = record_edits
+
+    def _check(
+        self,
+        principal: Principal,
+        operation: str,
+        ontology: str,
+        type_id: str,
+        object_id: str,
+        *,
+        properties: dict[str, JsonValue] | None = None,
+        changed: tuple[str, ...] = (),
+    ) -> None:
+        if isinstance(self.authorizer, ObjectAuthorizer):
+            self.authorizer.object_check(
+                principal,
+                operation,
+                ontology,
+                type_id,
+                object_id,
+                properties=properties,
+                changed=changed,
+            )
+
+    def _view(
+        self,
+        session: Session,
+        principal: Principal,
+        ontology: str,
+        schema: OntologyDefinition,
+        row: Object,
+    ) -> ObjectView:
+        if not isinstance(self.authorizer, ObjectAuthorizer):
+            return ObjectView.model_validate(row)
+        assert isinstance(self.authorizer, QueryAuthorizer)
+        grant = self.authorizer.query_grant(principal, ontology, row.object_type_id)
+        visible = grant.visible_properties
+        result = ObjectView.model_validate(row)
+        return result.model_copy(
+            update={
+                "properties": {
+                    key: value
+                    for key, value in row.properties.items()
+                    if visible is None or key in visible
+                }
+            }
+        )
 
     def _user_edits(self, session: Session, row: Object, properties: list[str], actor: str) -> None:
         if not self.record_edits:
@@ -96,6 +145,15 @@ class ObjectService(GovernedService):
                 properties = validate_properties(
                     typed, request.object_id, request.properties, defaults=True
                 )
+                self._check(
+                    principal,
+                    "object:create",
+                    ontology_id,
+                    typed.id,
+                    request.object_id,
+                    properties=properties,
+                    changed=tuple(properties),
+                )
                 check_unique(
                     session, principal.tenant_id, ontology_id, typed, request.object_id, properties
                 )
@@ -117,7 +175,7 @@ class ObjectService(GovernedService):
                 session.add(row)
                 session.flush()
                 self._user_edits(session, row, list(properties), principal.principal_id)
-                result.append(ObjectView.model_validate(row))
+                result.append(self._view(session, principal, ontology_id, schema, row))
             return result
 
     def get(
@@ -128,8 +186,13 @@ class ObjectService(GovernedService):
         ) as session:
             schema = self._schema(session, principal, ontology_id)
             object_type(schema, type_id)
-            return ObjectView.model_validate(
-                self._get(session, principal, ontology_id, type_id, object_id)
+            self._check(principal, "object:read", ontology_id, type_id, object_id)
+            return self._view(
+                session,
+                principal,
+                ontology_id,
+                schema,
+                self._get(session, principal, ontology_id, type_id, object_id),
             )
 
     def count(self, principal: Principal, ontology_id: str, type_id: str) -> int:
@@ -138,6 +201,11 @@ class ObjectService(GovernedService):
         ) as session:
             schema = self._schema(session, principal, ontology_id)
             object_type(schema, type_id)
+            restriction = (
+                QueryCompiler(schema, principal, self.authorizer).authorized(Object, type_id)
+                if isinstance(self.authorizer, ObjectAuthorizer)
+                else true()
+            )
             return (
                 session.scalar(
                     select(func.count())
@@ -146,6 +214,7 @@ class ObjectService(GovernedService):
                         Object.tenant_id == principal.tenant_id,
                         Object.ontology_id == ontology_id,
                         Object.object_type_id == type_id,
+                        restriction,
                     )
                 )
                 or 0
@@ -163,11 +232,21 @@ class ObjectService(GovernedService):
             principal, "object:update", f"{ontology_id}/objects/{type_id}/{object_id}"
         ) as session:
             schema = self._schema(session, principal, ontology_id, write=True)
+            self._check(principal, "object:update", ontology_id, type_id, object_id)
             row = self._get(session, principal, ontology_id, type_id, object_id)
             if row.version != request.expected_version:
                 raise ApplicationError("revision_conflict", "Object revision changed", 409)
             typed = object_type(schema, type_id)
             properties = validate_properties(typed, object_id, row.properties | request.properties)
+            self._check(
+                principal,
+                "object:update",
+                ontology_id,
+                type_id,
+                object_id,
+                properties=properties,
+                changed=tuple(request.properties),
+            )
             check_unique(session, principal.tenant_id, ontology_id, typed, object_id, properties)
             changed = session.scalar(
                 update(Object)
@@ -189,7 +268,7 @@ class ObjectService(GovernedService):
                 raise ApplicationError("revision_conflict", "Object revision changed", 409)
             session.refresh(row)
             self._user_edits(session, row, list(request.properties), principal.principal_id)
-            return ObjectView.model_validate(row)
+            return self._view(session, principal, ontology_id, schema, row)
 
     def delete(
         self,
@@ -203,7 +282,16 @@ class ObjectService(GovernedService):
             principal, "object:delete", f"{ontology_id}/objects/{type_id}/{object_id}"
         ) as session:
             self._schema(session, principal, ontology_id, write=True)
+            self._check(principal, "object:delete", ontology_id, type_id, object_id)
             row = self._get(session, principal, ontology_id, type_id, object_id)
+            self._check(
+                principal,
+                "object:delete",
+                ontology_id,
+                type_id,
+                object_id,
+                changed=tuple(row.properties),
+            )
             if row.version != expected_version:
                 raise ApplicationError("revision_conflict", "Object revision changed", 409)
             session.execute(
@@ -245,6 +333,7 @@ class ObjectService(GovernedService):
                 self.authorizer.require(
                     principal, "object:link", resource(principal, ontology_id, type_id, object_id)
                 )
+                self._check(principal, "object:link", ontology_id, type_id, object_id)
                 self._get(session, principal, ontology_id, type_id, object_id)
             source_single = typed.cardinality in {"one_to_one", "many_to_one"}
             target_single = typed.cardinality in {"one_to_one", "one_to_many"}
@@ -302,6 +391,7 @@ class ObjectService(GovernedService):
                 self.authorizer.require(
                     principal, "object:link", resource(principal, ontology_id, type_id, object_id)
                 )
+                self._check(principal, "object:link", ontology_id, type_id, object_id)
             row = session.get(
                 Link,
                 (
@@ -338,6 +428,7 @@ class ObjectService(GovernedService):
             self.authorizer.require(
                 principal, "object:read", resource(principal, ontology_id, type_id, object_id)
             )
+            self._check(principal, "object:read", ontology_id, type_id, object_id)
             self._get(session, principal, ontology_id, type_id, object_id)
             candidates = [
                 t for t in schema.link_types if t.id == link_id or t.inverse_name == link_id
@@ -352,6 +443,12 @@ class ObjectService(GovernedService):
             start_id = Link.target_object_id if inverse else Link.source_object_id
             end_type = Link.source_object_type_id if inverse else Link.target_object_type_id
             end_id = Link.source_object_id if inverse else Link.target_object_id
+            target_type = typed.source_type if inverse else typed.target_type
+            restriction = (
+                QueryCompiler(schema, principal, self.authorizer).authorized(Object, target_type)
+                if isinstance(self.authorizer, ObjectAuthorizer)
+                else true()
+            )
             rows = session.scalars(
                 select(Object)
                 .join(
@@ -370,6 +467,7 @@ class ObjectService(GovernedService):
                     Link.link_type_id == typed.id,
                     start_type == type_id,
                     start_id == object_id,
+                    restriction,
                 )
                 .order_by(Object.object_type_id, Object.object_id)
                 .limit(limit)
@@ -382,5 +480,5 @@ class ObjectService(GovernedService):
                     "object:read",
                     resource(principal, ontology_id, row.object_type_id, row.object_id),
                 )
-                result.append(ObjectView.model_validate(row))
+                result.append(self._view(session, principal, ontology_id, schema, row))
             return result

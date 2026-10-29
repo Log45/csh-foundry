@@ -21,9 +21,13 @@ from ontology_platform.dependencies import get_session
 from ontology_platform.errors import ApplicationError
 from ontology_platform.ingestion.catalog import SourceCatalog
 from ontology_platform.ingestion.routes import router as ingestion_router
+from ontology_platform.interoperability.routes import router as interchange_router
 from ontology_platform.queries.cursor import CursorCodec
 from ontology_platform.queries.routes import router as query_router
 from ontology_platform.security.local import LocalAuthorizer
+from ontology_platform.security.oidc import OIDCVerifier
+from ontology_platform.security.routes import router as security_router
+from ontology_platform.security.service import PlatformAuthorizer
 from ontology_platform.semantic.routes import router as semantic_router
 
 
@@ -37,8 +41,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-        yield
-        engine.dispose()
+        try:
+            if configuration.auth_mode == "oidc":
+                # Startup must fail rather than fall back to development identity.
+                import asyncio
+
+                await asyncio.to_thread(app.state.oidc.warm)
+            yield
+        finally:
+            if hasattr(app.state, "oidc"):
+                app.state.oidc.client.close()
+            engine.dispose()
 
     app = FastAPI(
         title="Operational Ontology Platform",
@@ -59,6 +72,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(action_router)
     app.include_router(ingestion_router)
     app.include_router(semantic_router)
+    app.include_router(interchange_router)
+    app.include_router(security_router)
+    app.add_middleware(
+        ActionPayloadLimit,
+        paths=("/interchange/",),
+        code="import_payload_too_large",
+        message="Import request exceeds 64 KiB",
+    )
     app.add_middleware(
         ActionPayloadLimit,
         paths=("/semantic",),
@@ -71,16 +92,29 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if configuration.query_cursor_secret
         else None
     )
-    app.state.authorizer = LocalAuthorizer(configuration)
     app.state.settings = configuration
     app.state.engine = engine
     app.state.sessions = sessionmaker(engine, expire_on_commit=False)
+    app.state.authorizer = (
+        PlatformAuthorizer(app.state.sessions, test_mode=configuration.auth_mode == "test")
+        if configuration.auth_mode in {"oidc", "test"}
+        else LocalAuthorizer(configuration)
+    )
+    if configuration.auth_mode == "oidc":
+        app.state.oidc = OIDCVerifier(configuration.oidc_providers)
+    app.add_middleware(
+        ActionPayloadLimit,
+        paths=("/security",),
+        code="security_payload_too_large",
+        message="Security request exceeds 64 KiB",
+    )
 
     @app.exception_handler(ApplicationError)
     async def application_error(request: Request, exc: ApplicationError) -> JSONResponse:
         return JSONResponse(
             status_code=exc.status_code,
             content={"error": {"code": exc.code, "message": exc.message}},
+            headers={"WWW-Authenticate": "Bearer"} if exc.status_code == 401 else None,
         )
 
     @app.exception_handler(RequestValidationError)

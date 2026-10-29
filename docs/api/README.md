@@ -3,7 +3,7 @@
 Run `uv run uvicorn ontology_platform.main:create_app --factory --host 127.0.0.1`.
 OpenAPI: `/api/v1/openapi.json`; interactive documentation: `/docs`.
 Public `/health/live` returns `{"status":"ok"}`; `/health/ready` returns
-`{"status":"ready"}` after PostgreSQL connectivity and revision `0005_query_order` checks.
+`{"status":"ready"}` after PostgreSQL connectivity and revision `0013_security` checks.
 
 All endpoints below are under `/api/v1` and require the explicit server-configured local
 principal. Missing context returns 401; unauthorized/unprovisioned context returns 403.
@@ -123,3 +123,15 @@ Phase 5 adds principal-private semantic artifacts, compiled RDF/OWL/SHACL, gover
 fenced jobs and separately approved derived facts. See [semantic API](semantic.md) and ADRs 0024–0026.
 Migrations `0010_semantic` and `0011_semantic_history` add four semantic tables and bounded
 claim/error history; downgrade removes semantic history while preserving operational objects.
+
+
+Phase 6 adds [governed ontology file interchange](interchange.md).
+Explicit mappings reuse canonical definitions and registry drafts. PostgreSQL remains authoritative;
+Protégé/WebProtégé are optional. Original semantic axioms remain archived separately from operational
+definitions. See ADR 0027 for bounds, preservation and publication/activation boundaries.
+
+
+Phase 7 adds [production identity and authorization](../api/security.md), tenant memberships,
+RBAC, restrictive ABAC, policy versioning/revocation, administration and delegated service workers.
+See ADR 0028 and the Phase 7 report. Earlier phase identity descriptions document the original
+local-development workflow; OIDC mode now supplies verified platform principal context.

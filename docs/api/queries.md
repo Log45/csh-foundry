@@ -1,5 +1,11 @@
 # Phase 2 operational queries
 
+Phase 7 now supplies verified OIDC/platform membership context and current RBAC/ABAC through
+these same governed services. See [security](security.md) for configuration, permissions, tenant
+selection, SQL restrictions and worker delegation. Earlier local-only descriptions below describe
+the preserved isolated-development workflow, not an OIDC authentication bypass.
+
+
 All routes use the same server-configured trusted principal and tenant as Phase 1. No request
 can select tenant identity. Queries resolve the active published schema inside a governed,
 shared-ontology-lock transaction. Existing CRUD endpoints and contracts are retained.

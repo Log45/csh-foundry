@@ -1,0 +1,5 @@
+PASS final image liveness
+PASS final image PostgreSQL readiness at 0013_security
+PASS final image security OpenAPI and Bearer scheme
+PASS disabled mode denies forged identity/tenant/token headers
+PASS OIDC image startup fails closed without required trusted provider configuration

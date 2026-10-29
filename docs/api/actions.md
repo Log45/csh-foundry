@@ -1,5 +1,11 @@
 # Phase 3 governed actions
 
+Phase 7 now supplies verified OIDC/platform membership context and current RBAC/ABAC through
+these same governed services. See [security](security.md) for configuration, permissions, tenant
+selection, SQL restrictions and worker delegation. Earlier local-only descriptions below describe
+the preserved isolated-development workflow, not an OIDC authentication bypass.
+
+
 Actions execute only from the active published ontology snapshot. REST does not accept action
 code or definitions. Draft/publish/activate metadata through the existing registry APIs first.
 `ontologies/examples/manufacturing-actions.json` supplies four definitions to include in a draft's
@@ -242,3 +248,7 @@ assignedEmployee edges; CompleteMaintenance permits IN_PROGRESS → COMPLETED on
 assigns an unassigned task and rejects an existing assignment by cardinality. Reassignment requires
 an explicitly authored delete/create-link action. No completed timestamp or invented fixture field
 is added.
+
+Phase 7 persists redacted authorization decisions for previews too. Preview still creates no
+committed operational mutation, action execution/audit or outbox record; security decision history
+is separate from committed business mutation history.

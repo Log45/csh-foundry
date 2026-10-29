@@ -924,3 +924,183 @@ class SemanticApproval(Base):
         ),
         CheckConstraint("state IN ('APPROVED','REJECTED')", name="ck_semantic_approval_state"),
     )
+
+
+class OntologyImport(Base):
+    __tablename__ = "ontology_imports"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    draft_version: Mapped[str | None] = mapped_column(Text)
+    canonical_hash: Mapped[str | None] = mapped_column(String(64))
+    bindings_json: Mapped[str] = mapped_column(Text)
+    principal_id: Mapped[str] = mapped_column(Text)
+    format: Mapped[str] = mapped_column(String(20))
+    original: Mapped[str] = mapped_column(Text)
+    input_hash: Mapped[str] = mapped_column(String(64))
+    graph: Mapped[str] = mapped_column(Text)
+    request_json: Mapped[str] = mapped_column(Text)
+    result_json: Mapped[str] = mapped_column(Text)
+    diagnostics_json: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id"], ["ontologies.tenant_id", "ontologies.id"]
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "draft_version"],
+            [
+                "ontology_versions.tenant_id",
+                "ontology_versions.ontology_id",
+                "ontology_versions.version",
+            ],
+        ),
+        UniqueConstraint("tenant_id", "ontology_id", "draft_version", name="uq_import_draft"),
+        CheckConstraint("octet_length(bindings_json) <= 262144", name="ck_import_bindings"),
+        CheckConstraint("format IN ('turtle', 'rdfxml')", name="ck_import_format"),
+        CheckConstraint("octet_length(original) <= 262144", name="ck_import_bytes"),
+        CheckConstraint("octet_length(graph) <= 4194304", name="ck_import_graph"),
+        CheckConstraint("octet_length(result_json) <= 262144", name="ck_import_result"),
+        CheckConstraint("octet_length(request_json) <= 524288", name="ck_import_request"),
+        CheckConstraint("octet_length(diagnostics_json) <= 4194304", name="ck_import_diagnostics"),
+    )
+
+
+class VocabularyBinding(Base):
+    __tablename__ = "ontology_vocabulary_bindings"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    iri_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    iri: Mapped[str] = mapped_column(Text)
+    target: Mapped[str] = mapped_column(Text)
+    target_hash: Mapped[str] = mapped_column(String(64))
+    import_id: Mapped[UUID] = mapped_column()
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "import_id"],
+            ["ontology_imports.tenant_id", "ontology_imports.ontology_id", "ontology_imports.id"],
+        ),
+        UniqueConstraint("tenant_id", "ontology_id", "target_hash", name="uq_vocabulary_target"),
+    )
+
+
+class SecurityState(Base):
+    __tablename__ = "security_state"
+    tenant_id: Mapped[UUID] = mapped_column(ForeignKey("tenants.id"), primary_key=True)
+    revision: Mapped[int] = mapped_column(BigInteger, server_default="1")
+
+
+class PlatformPrincipal(Base):
+    __tablename__ = "principals"
+    id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    principal_type: Mapped[str] = mapped_column(String(20))
+    enabled: Mapped[bool] = mapped_column(default=True)
+    __table_args__ = (
+        CheckConstraint("principal_type IN ('user', 'service')", name="ck_principal_type"),
+    )
+
+
+class ExternalIdentity(Base):
+    __tablename__ = "external_identities"
+    issuer: Mapped[str] = mapped_column(String(2048), primary_key=True)
+    subject: Mapped[str] = mapped_column(String(512), primary_key=True)
+    principal_id: Mapped[str] = mapped_column(ForeignKey("principals.id"))
+
+
+class Membership(Base):
+    __tablename__ = "tenant_memberships"
+    tenant_id: Mapped[UUID] = mapped_column(
+        ForeignKey("security_state.tenant_id"), primary_key=True
+    )
+    principal_id: Mapped[str] = mapped_column(ForeignKey("principals.id"), primary_key=True)
+    enabled: Mapped[bool] = mapped_column(default=True)
+    attributes: Mapped[dict[str, JsonValue]] = mapped_column(JSONB, default=dict)
+
+
+class Role(Base):
+    __tablename__ = "security_roles"
+    tenant_id: Mapped[UUID] = mapped_column(
+        ForeignKey("security_state.tenant_id"), primary_key=True
+    )
+    id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    permissions: Mapped[list[str]] = mapped_column(JSONB)
+
+
+class RoleAssignment(Base):
+    __tablename__ = "role_assignments"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    principal_id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    role_id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "principal_id"],
+            ["tenant_memberships.tenant_id", "tenant_memberships.principal_id"],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "role_id"], ["security_roles.tenant_id", "security_roles.id"]
+        ),
+    )
+
+
+class SecurityPolicy(Base):
+    __tablename__ = "security_policy_versions"
+    tenant_id: Mapped[UUID] = mapped_column(
+        ForeignKey("security_state.tenant_id"), primary_key=True
+    )
+    id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    version: Mapped[int] = mapped_column(primary_key=True)
+    definition: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    __table_args__ = (CheckConstraint("version > 0", name="ck_security_policy_version"),)
+
+
+class PolicyBinding(Base):
+    __tablename__ = "security_policy_bindings"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    version: Mapped[int]
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "id", "version"],
+            [
+                "security_policy_versions.tenant_id",
+                "security_policy_versions.id",
+                "security_policy_versions.version",
+            ],
+        ),
+    )
+
+
+class WorkerDelegation(Base):
+    __tablename__ = "worker_delegations"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    worker_id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    principal_id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    kind: Mapped[str] = mapped_column(String(20), primary_key=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    enabled: Mapped[bool] = mapped_column(default=True)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "principal_id"],
+            ["tenant_memberships.tenant_id", "tenant_memberships.principal_id"],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "worker_id"],
+            ["tenant_memberships.tenant_id", "tenant_memberships.principal_id"],
+        ),
+        CheckConstraint("kind IN ('ingestion', 'semantic')", name="ck_delegation_kind"),
+    )
+
+
+class AuthorizationAudit(Base):
+    __tablename__ = "authorization_audit"
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    tenant_id: Mapped[UUID] = mapped_column(index=True)
+    principal_id: Mapped[str] = mapped_column(Text)
+    actor_id: Mapped[str | None] = mapped_column(Text)
+    operation: Mapped[str] = mapped_column(String(200))
+    resource_hash: Mapped[str] = mapped_column(String(64))
+    allowed: Mapped[bool]
+    category: Mapped[str] = mapped_column(String(30))
+    policy_version: Mapped[int] = mapped_column(BigInteger)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

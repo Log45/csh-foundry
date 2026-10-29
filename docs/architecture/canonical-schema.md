@@ -49,3 +49,9 @@ provenance and review status. Persistent registry uniqueness and conflict detect
 Phase 6 work: reject ambiguous duplicate IRIs/business keys/classes or require review;
 never silently merge. `owl:sameAs` is a semantic assertion and cannot authorize a merge.
 No external-IRI preservation service or cross-tenant export is implemented yet.
+
+
+Phase 6 adds [governed ontology file interchange](../api/interchange.md).
+Explicit mappings reuse canonical definitions and registry drafts. PostgreSQL remains authoritative;
+Protégé/WebProtégé are optional. Original semantic axioms remain archived separately from operational
+definitions. See ADR 0027 for bounds, preservation and publication/activation boundaries.

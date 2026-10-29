@@ -184,7 +184,7 @@ def main() -> None:
 
     from ontology_platform.config import get_settings
     from ontology_platform.db.session import make_engine
-    from ontology_platform.security.local import LocalAuthorizer
+    from ontology_platform.security.workers import worker_context
 
     parser = argparse.ArgumentParser(
         description="Deliver up to 100 currently due action notifications"
@@ -198,12 +198,11 @@ def main() -> None:
     if not 1 <= args.max_events <= 100:
         parser.error("--max-events must be 1–100")
     configuration = get_settings()
-    principal = Principal(
-        tenant_id=configuration.local_tenant_id, principal_id=configuration.local_principal_id
-    )
     engine = make_engine(configuration)
     try:
-        runner = WebhookRunner(sessionmaker(engine), LocalAuthorizer(configuration))
+        sessions = sessionmaker(engine)
+        principal, authorizer = worker_context(configuration, sessions, "outbox", args.ontology)
+        runner = WebhookRunner(sessions, authorizer)
         for _ in range(args.max_events):
             if runner.run_one(principal, args.ontology, args.destination) is None:
                 break

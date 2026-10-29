@@ -1,0 +1,35 @@
+PASS HTTP governed OWL import, unpublished draft, original/diagnostics/vocabulary and deterministic export; active schema unchanged
+PASS HTTP compiled schema and authorized 63-object/70-forward-edge RDF export
+PASS HTTP validation submit/status/result; separate durable worker
+PASS HTTP reasoning submit/status/result; separate durable worker
+PASS HTTP derived-set approval, audit history and fact projection
+INFO:     Started server process [76522]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:49375 (Press CTRL+C to quit)
+INFO:     127.0.0.1:49397 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49400 - "POST /api/v1/ontologies/manufacturing/interchange/imports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49401 - "GET /api/v1/ontologies/manufacturing/interchange/imports/63634077-eeb9-41f6-8cf5-fe0e3f9cae1e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49402 - "GET /api/v1/ontologies/manufacturing/interchange/imports/63634077-eeb9-41f6-8cf5-fe0e3f9cae1e/vocabulary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49405 - "GET /api/v1/ontologies/manufacturing/interchange/imports/63634077-eeb9-41f6-8cf5-fe0e3f9cae1e/diagnostics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49406 - "GET /api/v1/ontologies/manufacturing/interchange/imports/63634077-eeb9-41f6-8cf5-fe0e3f9cae1e/original HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49407 - "GET /api/v1/ontologies/manufacturing/interchange/exports/1.0.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49410 - "GET /api/v1/ontologies/manufacturing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49411 - "POST /api/v1/ontologies/manufacturing/semantic/compile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49412 - "POST /api/v1/ontologies/manufacturing/semantic/exports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49413 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/44bb6d17-0e72-4540-80c7-fe688e3d92f0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49414 - "POST /api/v1/ontologies/manufacturing/semantic/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49419 - "GET /api/v1/ontologies/manufacturing/semantic/jobs/e43d5752-e64d-46da-afa1-95f97b0e4ebc HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49420 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/dd02aa6f-faac-4938-91bc-163ea7da77f3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49421 - "POST /api/v1/ontologies/manufacturing/semantic/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49426 - "GET /api/v1/ontologies/manufacturing/semantic/jobs/1e3c5c6b-4966-41b1-ad4e-fe1421cbf448 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49427 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/552e2e18-aa54-4a47-8499-7e963fba3406 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49428 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/69ab3b7a-b68d-4244-9d8a-7eedea93a398 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49433 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/ff0358d3-321a-4647-8224-1c453322357a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49434 - "POST /api/v1/ontologies/manufacturing/semantic/artifacts/552e2e18-aa54-4a47-8499-7e963fba3406/approval HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49435 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/552e2e18-aa54-4a47-8499-7e963fba3406/approval HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49436 - "GET /api/v1/ontologies/manufacturing/semantic/artifacts/552e2e18-aa54-4a47-8499-7e963fba3406/facts HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [76522]

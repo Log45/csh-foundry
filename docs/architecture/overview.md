@@ -118,3 +118,22 @@ Phase 5 adds principal-private semantic artifacts, compiled RDF/OWL/SHACL, gover
 fenced jobs and separately approved derived facts. See [semantic API](../api/semantic.md) and ADRs 0024–0026.
 Migrations `0010_semantic` and `0011_semantic_history` add four semantic tables and bounded
 claim/error history; downgrade removes semantic history while preserving operational objects.
+
+
+Phase 6 adds [governed ontology file interchange](../api/interchange.md).
+Explicit mappings reuse canonical definitions and registry drafts. PostgreSQL remains authoritative;
+Protégé/WebProtégé are optional. Original semantic axioms remain archived separately from operational
+definitions. See ADR 0027 for bounds, preservation and publication/activation boundaries.
+
+
+## Phase 7 security
+
+[Production identity and authorization](../api/security.md) replaces trusted local assumptions in
+OIDC mode. Explicit provider JWT verification resolves immutable issuer/subject identities and
+platform-controlled memberships; tenant-owned roles and restrictive ABAC extend Authorizer and
+QueryGrant. Policies stay SQL-enforced through query compilation. CRUD, actions, schema activation,
+ingestion/reconciliation, semantic artifacts and OWL imports reuse governed checks. Tenant security
+locks hold authorization state through commit; version/revocation changes invalidate cursor contexts.
+Transaction-local snapshots only reuse lock-protected security state. Independent redacted decision
+audit survives request rollback. Workers intersect current service/initiator authority through explicit
+expiring delegation. See ADR 0028. No frontend, RLS or production deployment is claimed.

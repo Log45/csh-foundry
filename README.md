@@ -1,6 +1,6 @@
 # CSH Foundry — operational ontology platform
 
-Phase 5 semantic integration foundation for the modular platform specified in [PLANS.md](PLANS.md).
+Phase 7 production authentication and authorization foundation for the modular platform specified in [PLANS.md](PLANS.md).
 PostgreSQL owns operational state; canonical metadata is independent of RDF/OWL.
 Open Ontologies supplies external semantic checks. Protégé is optional authoring tooling.
 Phases 0–5 provide governed schema publication/activation, tenant-scoped objects/links and a
@@ -8,7 +8,10 @@ schema-aware SQL query engine with projection, keyset pagination, traversal, agg
 Object Sets, transactional actions, previews, durable idempotency/history/audit/outbox, bounded
 webhook delivery, property edit reconciliation and durable governed CSV/Parquet/NDJSON/PostgreSQL
 ingestion, deterministic RDF/OWL/SHACL compilation, governed RDF exports, durable semantic jobs
-and separately approved derived facts. Subsequent roadmap phases are not implemented.
+and separately approved derived facts. Phase 6 adds explicit Turtle/RDF/XML authoring imports into
+unpublished canonical drafts, source preservation, diagnostics, IRI conflicts and deterministic exports.
+Phase 7 adds verified OIDC access tokens, platform tenant membership, RBAC, restrictive SQL ABAC,
+security administration/audit and delegated service workers. Subsequent roadmap phases are not implemented.
 
 ## Local setup
 
@@ -49,8 +52,8 @@ uv run uvicorn ontology_platform.main:create_app --factory --host 127.0.0.1
 Bootstrap runs once and provisions only that configured tenant. Repeating provisioning returns
 an explicit conflict. Every operational request uses the server-configured principal; client
 headers cannot select a tenant. Compose forwards the same variables to the API container.
-This is a trusted local administration mechanism; OIDC and production policy enforcement remain
-later work. Keep this instance on loopback. See [the persistence API](docs/api/README.md) for the
+This is a trusted local administration mechanism. For verified production identities use
+[the Phase 7 security configuration and API](docs/api/security.md). Keep this instance on loopback. See [the persistence API](docs/api/README.md) for the
 create → draft → publish → activate → CRUD workflow and approved migration plans.
 
 ## Validation
@@ -95,7 +98,7 @@ A bounded outbox delivery runner is included; production scheduling is deferred.
   and [query API](docs/api/queries.md).
 - [Phase 3 report](docs/development/phase-3-report.md), [action API](docs/api/actions.md),
   [Phase 4 report](docs/development/phase-4-report.md), [ingestion API](docs/api/ingestion.md),
-  and [Phase 5 report](docs/development/phase-5-report.md); Phase 6 requires separate approval.
+  and [Phase 5 report](docs/development/phase-5-report.md); [Phase 6 report](docs/development/phase-6-report.md) and [interchange API](docs/api/interchange.md).
 
 Canonical fixtures are preserved. Section 24 of PLANS.md uses conceptual shorthand;
 examples/tests use actual `machineId`, `machineName`, `operationalStatus`,
@@ -164,4 +167,30 @@ Artifacts, reports, proofs and derived facts remain separate from operational st
 rechecks input permissions and freshness. Set-level approval appends audit history and never updates
 objects/relationships or triggers actions. Open Ontologies remains pinned at 2.1.0; certificates are
 generated but independent Lean proof checking is NOT RUN on this host. The raw pySHACL mismatch and
-base owl-rl fixture limitation remain. Phase 6 OWL-to-operational draft import has not begun.
+base owl-rl fixture limitation remain.
+
+## Optional Protégé file authoring
+
+See [interchange API](docs/api/interchange.md). Select explicit class/property/link IRIs and canonical
+constraint definitions, preview the import, then request CREATE_DRAFT. Original semantic axioms stay
+private and downloadable; publication and activation use separate existing registry APIs. No Protégé
+application or WebProtégé deployment is required. Turtle and RDF/XML are supported; OWL/XML is not.
+Run `uv run python scripts/smoke_semantic.py --interchange` for the actual local HTTP import plus
+semantic workflow, and `scripts/smoke_semantic_container.py --interchange` for the Phase 6 image smoke.
+Phase 7 security is documented in [security.md](docs/api/security.md); Phase 8 requires separate approval.
+
+
+## Production authentication and authorization
+
+Read [the security API and configuration](docs/api/security.md) before exposing domain endpoints.
+Set `FOUNDRY_AUTH_MODE=oidc`, configure trusted providers/audience/client allowlists, disable local
+identity, migrate to `0013_security`, and explicitly provision the first administrator through
+`python -m ontology_platform.security.bootstrap`. Only the documented JWT API access-token profile
+is supported. Unknown identities receive no membership or administrator role. Use Authorization
+Bearer tokens and, for multi-tenant users, an authorized X-Tenant-ID selection.
+
+RBAC and restrictive ABAC extend the existing governed service and SQL grant interfaces. Security
+administration, policy versions, revocation, audit and worker delegation use PostgreSQL. Workers need
+service credentials plus current explicit delegation and both identities' permissions. See the
+[Phase 7 report](docs/development/phase-7-report.md) for validation and limitations. No Phase 8 UI or
+production deployment is included; Phase 10 operational hardening remains separate work.

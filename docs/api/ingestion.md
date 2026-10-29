@@ -1,5 +1,11 @@
 # Phase 4 governed ingestion
 
+Phase 7 now supplies verified OIDC/platform membership context and current RBAC/ABAC through
+these same governed services. See [security](security.md) for configuration, permissions, tenant
+selection, SQL restrictions and worker delegation. Earlier local-only descriptions below describe
+the preserved isolated-development workflow, not an OIDC authentication bypass.
+
+
 Ingestion uses the existing operational services and PostgreSQL. REST publishes immutable source
 and mapping versions, submits durable jobs and reads their status/diagnostics. A separate bounded
 worker performs I/O, Polars transformations and governed materialization. No request accepts file

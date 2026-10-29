@@ -8,8 +8,7 @@ from sqlalchemy.orm import sessionmaker
 
 from ontology_platform.config import get_settings
 from ontology_platform.db.session import make_engine
-from ontology_platform.security.interfaces import Principal
-from ontology_platform.security.local import LocalAuthorizer
+from ontology_platform.security.workers import worker_context
 from ontology_platform.semantic.engine import OpenOntologiesAdapter
 from ontology_platform.semantic.worker import SemanticWorker
 
@@ -19,18 +18,13 @@ def main() -> None:
     parser.add_argument("--ontology", required=True)
     args = parser.parse_args()
     settings = get_settings()
-    if (
-        not settings.trusted_local_identity
-        or settings.local_tenant_id is None
-        or not settings.local_principal_id
-    ):
-        parser.error("Explicit trusted local identity required")
-    p = Principal(tenant_id=settings.local_tenant_id, principal_id=settings.local_principal_id)
     engine = make_engine(settings)
     try:
+        sessions = sessionmaker(engine)
+        p, authorizer = worker_context(settings, sessions, "semantic", args.ontology)
         worker = SemanticWorker(
-            sessionmaker(engine),
-            LocalAuthorizer(settings),
+            sessions,
+            authorizer,
             engine=OpenOntologiesAdapter(
                 Path(os.environ.get("OPEN_ONTOLOGIES_BIN", ".external/open-ontologies"))
             ),

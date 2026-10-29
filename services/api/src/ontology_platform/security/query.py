@@ -1,8 +1,10 @@
 """SQL-expressible query grants; no Python post-filtering of result sets."""
 
+from contextlib import AbstractContextManager
 from typing import Protocol, runtime_checkable
 
-from pydantic import Field
+from pydantic import Field, JsonValue
+from sqlalchemy.orm import Session
 
 from ontology_platform.queries.ast import Filter, Name, QueryModel, complexity
 from ontology_platform.security.interfaces import Principal
@@ -24,3 +26,28 @@ class QueryAuthorizer(Protocol):
     def query_grant(
         self, principal: Principal, ontology_id: str, object_type: str
     ) -> QueryGrant: ...
+
+
+@runtime_checkable
+class TransactionAuthorizer(Protocol):
+    def security_context(self, session: Session, p: Principal) -> AbstractContextManager[None]: ...
+
+
+@runtime_checkable
+class ObjectAuthorizer(Protocol):
+    def object_check(
+        self,
+        p: Principal,
+        operation: str,
+        ontology: str,
+        type_id: str,
+        object_id: str,
+        *,
+        properties: dict[str, JsonValue] | None = None,
+        changed: tuple[str, ...] = (),
+    ) -> None: ...
+
+
+@runtime_checkable
+class PolicyAudit(Protocol):
+    def policy_denial(self, p: Principal, operation: str, resource: str) -> None: ...

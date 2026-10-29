@@ -8,8 +8,7 @@ from ontology_platform.config import get_settings
 from ontology_platform.db.session import make_engine
 from ontology_platform.ingestion.catalog import SourceCatalog
 from ontology_platform.ingestion.worker import IngestionWorker
-from ontology_platform.security.interfaces import Principal
-from ontology_platform.security.local import LocalAuthorizer
+from ontology_platform.security.workers import worker_context
 
 
 def main() -> None:
@@ -18,18 +17,13 @@ def main() -> None:
     parser.add_argument("--cleanup-days", type=int)
     args = parser.parse_args()
     settings = get_settings()
-    if (
-        not settings.trusted_local_identity
-        or settings.local_tenant_id is None
-        or settings.local_principal_id is None
-    ):
-        parser.error("Explicit trusted local identity is required")
-    actor = Principal(tenant_id=settings.local_tenant_id, principal_id=settings.local_principal_id)
     engine = make_engine(settings)
     try:
+        sessions = sessionmaker(engine)
+        actor, authorizer = worker_context(settings, sessions, "ingestion", args.ontology)
         worker = IngestionWorker(
-            sessionmaker(engine),
-            LocalAuthorizer(settings),
+            sessions,
+            authorizer,
             SourceCatalog.from_json(settings.ingestion_catalog_json),
         )
         key = (

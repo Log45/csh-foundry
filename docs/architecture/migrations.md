@@ -1,7 +1,7 @@
 # Database migrations
 
 Apply with `uv run alembic upgrade head`; inspect with `uv run alembic current` and
-`uv run alembic check`. Readiness expects `0005_query_order`.
+`uv run alembic check`. Readiness expects `0013_security`.
 
 | Revision | Objects |
 |---|---|
@@ -83,3 +83,34 @@ Phase 5 adds principal-private semantic artifacts, compiled RDF/OWL/SHACL, gover
 fenced jobs and separately approved derived facts. See [semantic API](../api/semantic.md) and ADRs 0024–0026.
 Migrations `0010_semantic` and `0011_semantic_history` add four semantic tables and bounded
 claim/error history; downgrade removes semantic history while preserving operational objects.
+
+## Phase 6
+
+`0012_ontology_imports` adds immutable principal-private ontology_imports and tenant/ontology-scoped
+ontology_vocabulary_bindings with fixed-width IRI/target hashes, composite FKs, target uniqueness,
+format/byte checks and UPDATE/DELETE guards. Original/request/result/diagnostics and accepted bindings
+commit in the same transaction as RegistryService draft creation. Preview/conflict records create
+no canonical versions/bindings. No published metadata or operational rows are rewritten.
+DDL retains 2-second lock/30-second statement budgets. Downgrade removes Phase 6 provenance/bindings
+only; canonical drafts and operational objects remain. Tests reverse only disposable schemas.
+
+
+Phase 7 adds [production identity and authorization](../api/security.md), tenant memberships,
+RBAC, restrictive ABAC, policy versioning/revocation, administration and delegated service workers.
+See ADR 0028 and the Phase 7 report. Earlier phase identity descriptions document the original
+local-development workflow; OIDC mode now supplies verified platform principal context.
+
+## Phase 7 migration
+
+`0013_security` adds principals, immutable external_identities, security_state, tenant_memberships,
+immutable security_roles, role_assignments, immutable security_policy_versions,
+security_policy_bindings, worker_delegations and immutable authorization_audit. It initializes only
+empty security-state rows for existing tenants; no external identity or privileged assignment is
+automatically created. Composite membership/role/policy/delegation FKs enforce tenant ownership.
+Mutation triggers coordinate the tenant security lock and bump cursor/policy revisions, including
+on direct SQL changes. Global principal disable coordinates through principal-row locks.
+
+DDL retains two-second lock and 30-second statement limits. Downgrade removes only Phase 7 security
+state/history; operational objects, ontology imports and earlier history remain. This is destructive
+to security identities and must be planned with configuration/backup; an OIDC API cannot serve
+protected operations against the downgraded database. Tests reverse disposable schemas only.

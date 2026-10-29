@@ -76,6 +76,7 @@ class QueryService(GovernedService):
                 binding = {
                     "tenant": str(principal.tenant_id),
                     "principal": principal.principal_id,
+                    "actor": principal.actor_id,
                     "ontology": ontology_id,
                     "object_type": request.object_type,
                     "schema": schema.version,
