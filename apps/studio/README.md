@@ -65,3 +65,11 @@ for any future external deployment. This phase does not deploy or configure an e
 
 See [Phase 8 checklist](../../docs/development/phase-8.md) and
 [browser session architecture](../../docs/decisions/0029-browser-session-and-studio.md).
+
+## Phase 9 development workflows
+
+Manager includes Schema branches and SDKs through the existing authenticated BFF. Branches have
+explicit published bases, revision guards, canonical JSON editing, saved schema graphs, comparisons,
+resolved merge previews/confirmation, history and draft handoff. Published-only SDK generation displays
+private manifests and downloads deterministic Python/TypeScript ZIPs without browser bearer tokens.
+See [contracts and documented UI limits](../../docs/api/branching-sdk.md).

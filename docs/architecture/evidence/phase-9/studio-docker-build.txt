@@ -1,0 +1,83 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from studio.Dockerfile
+#1 transferring dockerfile: 566B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:24-bookworm-slim
+#2 DONE 0.4s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 173B done
+#3 DONE 0.0s
+
+#4 [build 1/6] FROM docker.io/library/node:24-bookworm-slim@sha256:c86ecead9e55a5210ac1727de38a4ca840bf03dcaf34dc9749addbf383b1920c
+#4 resolve docker.io/library/node:24-bookworm-slim@sha256:c86ecead9e55a5210ac1727de38a4ca840bf03dcaf34dc9749addbf383b1920c done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 6.66kB done
+#5 DONE 0.0s
+
+#6 [build 2/6] WORKDIR /app
+#6 CACHED
+
+#7 [build 3/6] COPY apps/studio/package.json apps/studio/package-lock.json ./
+#7 CACHED
+
+#8 [build 4/6] RUN npm ci --no-audit --no-fund
+#8 CACHED
+
+#9 [build 5/6] COPY apps/studio/ ./
+#9 DONE 0.0s
+
+#10 [build 6/6] RUN npm run build
+#10 0.421 
+#10 0.421 > @foundry/studio@0.8.0 build
+#10 0.421 > next build --webpack
+#10 0.421 
+#10 0.978 ▲ Next.js 16.4.3 (webpack)
+#10 1.045 ✓ Running next.config.ts took 66ms
+#10 1.073 
+#10 1.107   Creating an optimized production build ...
+#10 7.171 ✓ Compiled successfully in 4.5s
+#10 7.174   Running TypeScript ...
+#10 10.74   Finished TypeScript in 3.6s ...
+#10 10.74   Collecting page data using 6 workers ...
+#10 11.55   Generating static pages using 6 workers (0/3) ...
+#10 11.82 ✓ Generating static pages using 6 workers (3/3) in 270ms
+#10 11.90   Finalizing page optimization ...
+#10 11.90   Collecting build traces ...
+#10 25.20 
+#10 25.20 Route (app)
+#10 25.20 ┌ ○ /
+#10 25.20 ├ ○ /_not-found
+#10 25.20 ├ ƒ /auth/[operation]
+#10 25.20 └ ƒ /bff
+#10 25.20 
+#10 25.20 
+#10 25.20 ○  (Static)   prerendered as static content
+#10 25.20 ƒ  (Dynamic)  server-rendered on demand
+#10 25.20 
+#10 DONE 25.5s
+
+#6 [build 2/6] WORKDIR /app
+#6 CACHED
+
+#11 [runtime 3/4] COPY --from=build --chown=node:node /app/.next/standalone ./
+#11 DONE 0.4s
+
+#12 [runtime 4/4] COPY --from=build --chown=node:node /app/.next/static ./.next/static
+#12 DONE 0.1s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 1.8s done
+#13 exporting manifest sha256:1ea9b70aba15d7ef79a30c25e066304c1742411ae6343d513115296b9dc104e5 done
+#13 exporting config sha256:32de74db13fdfcb25d7b4b9f9ba3cf396d8dcf2bc2e95dafb7cf917b30d43386 done
+#13 exporting attestation manifest sha256:023c209e43f61d2b64a512a37e1693596bb13b6430ffd92c15e9c067986d1dc3 done
+#13 exporting manifest list sha256:6406312c69257cc758957e004770c705d45cd87af5d5d7d8a498c7724995a288 done
+#13 naming to docker.io/library/csh-foundry-studio:phase9 done
+#13 unpacking to docker.io/library/csh-foundry-studio:phase9
+#13 unpacking to docker.io/library/csh-foundry-studio:phase9 0.5s done
+#13 DONE 2.4s

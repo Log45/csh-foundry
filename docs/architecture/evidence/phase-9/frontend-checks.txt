@@ -1,0 +1,53 @@
+
+> @foundry/studio@0.8.0 format:check
+> prettier --check "app/**/*.{ts,tsx,css}" "components/**/*.tsx" "features/**/*.tsx" lib/api.ts lib/server.ts "tests/**/*.{ts,tsx,mjs}" next.config.ts playwright.config.ts vitest.config.ts
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> @foundry/studio@0.8.0 typecheck
+> tsc --noEmit
+
+
+> @foundry/studio@0.8.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /Users/log/Documents/code/csh-foundry/apps/studio
+
+
+ Test Files  3 passed (3)
+      Tests  24 passed (24)
+   Start at  10:31:06
+   Duration  754ms (environment 46%, tests 34%, import 17%, transform 2%, worker 1%)
+
+
+> @foundry/studio@0.8.0 build
+> next build --webpack
+
+▲ Next.js 16.4.3 (webpack)
+⚠ Warning: Next.js ignored package-lock.json in /Users/log because it is outside the current Git repository (/Users/log/Documents/code/csh-foundry).
+ To use this directory, set `outputFileTracingRoot` in your Next.js config.
+
+✓ Running next.config.ts took 53ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1131ms
+  Running TypeScript ...
+  Finished TypeScript in 1734ms ...
+  Collecting page data using 6 workers ...
+  Generating static pages using 6 workers (0/3) ...
+✓ Generating static pages using 6 workers (3/3) in 263ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /auth/[operation]
+└ ƒ /bff
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

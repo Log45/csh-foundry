@@ -14,6 +14,7 @@ from starlette.exceptions import HTTPException
 from ontology_platform.actions.limits import ActionPayloadLimit
 from ontology_platform.actions.routes import router as action_router
 from ontology_platform.api.v1.routes import router
+from ontology_platform.branching.routes import router as branch_router
 from ontology_platform.config import Settings, get_settings
 from ontology_platform.db.governance import SCHEMA_REVISION
 from ontology_platform.db.session import make_engine
@@ -24,6 +25,7 @@ from ontology_platform.ingestion.routes import router as ingestion_router
 from ontology_platform.interoperability.routes import router as interchange_router
 from ontology_platform.queries.cursor import CursorCodec
 from ontology_platform.queries.routes import router as query_router
+from ontology_platform.sdk.routes import router as sdk_router
 from ontology_platform.security.local import LocalAuthorizer
 from ontology_platform.security.oidc import OIDCVerifier
 from ontology_platform.security.routes import router as security_router
@@ -68,6 +70,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         message="Ingestion payload exceeds 64 KiB",
     )
     app.include_router(router)
+    app.include_router(branch_router)
+    app.include_router(sdk_router)
+    app.add_middleware(
+        ActionPayloadLimit,
+        paths=("/sdk",),
+        code="sdk_payload_too_large",
+        message="SDK request exceeds 64 KiB",
+    )
+    app.add_middleware(
+        ActionPayloadLimit,
+        paths=("/branches",),
+        code="branch_payload_too_large",
+        message="Branch request exceeds 64 KiB",
+    )
     app.include_router(query_router)
     app.include_router(action_router)
     app.include_router(ingestion_router)

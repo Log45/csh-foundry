@@ -2,7 +2,7 @@
 
 ## Architecture, Implementation Roadmap, and Coding Agent Specification
 
-**Project status:** Phases 0–7 implemented; Phase 8 planned (verify completion reports before relying on status)
+**Project status:** Phases 0–9 implemented within documented completion-report boundaries; Phase 10 requires separate approval
 
 **Document version:** 1.2 (Codex-ready; provider-independent SSO roadmap)
 

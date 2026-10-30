@@ -299,3 +299,103 @@ test("native authoring, OWL diagnostics, tenant isolation and session loss", asy
     page.getByText("Your session expired. Sign in to continue."),
   ).toBeVisible();
 });
+
+test("schema branching, resolved merge and private SDK download", async ({
+  page,
+}) => {
+  page.on("dialog", (d) => d.accept());
+  await login(page);
+  const development = page
+    .getByRole("heading", { name: "Schema branches and SDKs" })
+    .locator("..");
+  await expect(
+    development.getByLabel("Published SDK / branch base version"),
+  ).not.toHaveValue("");
+  for (const name of ["browser-source", "browser-target"]) {
+    await development.getByLabel("New branch name").fill(name);
+    await development
+      .getByRole("button", { name: "Create schema branch", exact: true })
+      .click();
+    await expect(
+      development.getByText(
+        new RegExp(
+          "Branch draft · " + name + " · ACTIVE · base .* · revision 1",
+        ),
+      ),
+    ).toBeVisible();
+    await expect(
+      development.getByLabel("Branch canonical schema (JSON)"),
+    ).toBeVisible();
+    const editor = development.getByLabel("Branch canonical schema (JSON)");
+    const data = JSON.parse(await editor.inputValue());
+    data.name = name;
+    await editor.fill(JSON.stringify(data));
+    await development
+      .getByRole("button", { name: "Save branch revision", exact: true })
+      .click();
+    await expect(
+      development.getByText(
+        new RegExp(
+          "Branch draft · " + name + " · ACTIVE · base .* · revision 2",
+        ),
+      ),
+    ).toBeVisible();
+  }
+  const source = development.getByLabel("Source branch for merge");
+  await source.selectOption({ label: "browser-source · revision 2" });
+  await development
+    .getByRole("button", { name: "Preview resolved merge" })
+    .click();
+  await expect(
+    development.getByRole("button", { name: "Use source /name", exact: true }),
+  ).toBeVisible();
+  await development
+    .getByRole("button", { name: "Use source /name", exact: true })
+    .click();
+  await development
+    .getByRole("button", { name: "Preview resolved merge" })
+    .click();
+  await expect(
+    development.getByRole("button", {
+      name: "Confirm branch merge",
+      exact: true,
+    }),
+  ).toBeEnabled();
+  await development
+    .getByRole("button", { name: "Confirm branch merge", exact: true })
+    .click();
+  await expect(
+    development.getByText(
+      /Branch draft · browser-target · ACTIVE · base .* · revision 3/,
+    ),
+  ).toBeVisible();
+  await development
+    .getByRole("button", { name: "Inspect merge provenance" })
+    .click();
+  await expect(development.locator(".result").last()).toContainText(
+    '"outcome": "MERGED"',
+  );
+  await development.getByLabel("SDK language").selectOption("python");
+  await development
+    .getByRole("button", { name: "Generate published SDK" })
+    .click();
+  const downloadButton = development
+    .getByRole("button", { name: /Download python SDK/ })
+    .first();
+  await expect(downloadButton).toBeVisible();
+  const [download] = await Promise.all([
+    page.waitForEvent("download"),
+    downloadButton.click(),
+  ]);
+  expect(download.suggestedFilename()).toMatch(/ontology-python-.*\.zip/);
+  const path = await download.path();
+  expect(path && fs.statSync(path).size).toBeGreaterThan(1000);
+  await development.getByLabel("SDK language").selectOption("typescript");
+  await development
+    .getByRole("button", { name: "Generate published SDK" })
+    .click();
+  await expect(
+    development.getByRole("button", { name: /Download typescript SDK/ }),
+  ).toBeVisible();
+  await expect(development.getByRole("alert")).toHaveCount(0);
+});

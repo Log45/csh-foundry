@@ -1,0 +1,67 @@
+{
+  "removed_task_test_schemas": [
+    "test_phase1_1e9f7498689742d4a7fea5e1b4dee137",
+    "test_phase1_9aa9144630cb4409ba2de51547012b6e",
+    "test_phase1_a7a690513a4a46de8fcaaf190310f643",
+    "test_phase1_d24ac55a0f034245828a0dfbde3ad1b4",
+    "test_phase1_d3c686d952a34ff680f995bb718ab4fc",
+    "test_phase1_e858b243c1794cc2bed1f512fe9f7ab8"
+  ],
+  "preserved_prior_or_unattributed_schemas": [
+    {
+      "schema": "test_phase1_1022f26a30fe4db29b5ccc8b4f9b8ae2",
+      "revision": "0013_security",
+      "earliest_tenant": "2026-10-29 16:30:05.462278+00:00"
+    },
+    {
+      "schema": "test_phase1_24ea5558f1264c5b81a53d7e37af4550",
+      "revision": "0013_security",
+      "earliest_tenant": "2026-10-29 16:35:48.590663+00:00"
+    },
+    {
+      "schema": "test_phase1_4a864c45aaf94ff786d0f63a6427ca2b",
+      "revision": "0013_security",
+      "earliest_tenant": "2026-10-29 16:29:20.398942+00:00"
+    },
+    {
+      "schema": "test_phase1_6056f1ae43e2435f878c9882891082b8",
+      "revision": "0013_security",
+      "earliest_tenant": "2026-10-29 16:41:13.195197+00:00"
+    },
+    {
+      "schema": "test_phase1_a71747328d7c4feb948602cf9730b81a",
+      "revision": "0013_security",
+      "earliest_tenant": "2026-10-29 16:31:58.952600+00:00"
+    },
+    {
+      "schema": "test_phase1_c78a45641252415c871429cf900d5614",
+      "revision": "0013_security",
+      "earliest_tenant": "2026-10-29 16:33:06.752353+00:00"
+    },
+    {
+      "schema": "test_phase1_c7cbeb5a68c04593bf299d2c4f482de4",
+      "revision": "0013_security",
+      "earliest_tenant": "2026-10-29 16:34:16.219702+00:00"
+    },
+    {
+      "schema": "test_phase1_dc4bf9ae2d994cb6a55a904bcbf966c8",
+      "revision": "0013_security",
+      "earliest_tenant": "2026-10-29 17:35:15.074037+00:00"
+    },
+    {
+      "schema": "test_phase1_ddb2ca2546ca459993a87b228dc371f1",
+      "revision": null,
+      "earliest_tenant": "None"
+    },
+    {
+      "schema": "test_phase1_e0e87fa095944b8eaed3eeced335ed67",
+      "revision": "0013_security",
+      "earliest_tenant": "2026-10-29 16:28:32.930296+00:00"
+    },
+    {
+      "schema": "test_phase1_fc3bb887b3c5494db35c3a40099122dd",
+      "revision": "0013_security",
+      "earliest_tenant": "2026-10-29 16:38:49.516685+00:00"
+    }
+  ]
+}

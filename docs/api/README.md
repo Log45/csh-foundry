@@ -143,3 +143,6 @@ that the current draft matches the supplied lowercase 64-character canonical has
 runs under the existing ontology write lock before replacement. A stale editor receives HTTP 412
 `draft_changed` and must reload/reconcile its local changes. Omitting the parameter preserves the
 previous API contract. Published versions remain immutable. Studio sends this parameter on saves.
+
+Phase 9 adds [governed branches, three-way merges and published-schema SDK generation](branching-sdk.md).
+The current readiness migration is `0015_sdk`; publication and activation remain separate.

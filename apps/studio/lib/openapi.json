@@ -1667,6 +1667,1099 @@
         }
       }
     },
+    "/api/v1/ontologies/{ontology_id}/branches": {
+      "post": {
+        "tags": [
+          "branches"
+        ],
+        "summary": "Create",
+        "operationId": "create_api_v1_ontologies__ontology_id__branches_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BranchCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BranchView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "branches"
+        ],
+        "summary": "Listing",
+        "operationId": "listing_api_v1_ontologies__ontology_id__branches_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BranchView"
+                  },
+                  "title": "Response Listing Api V1 Ontologies  Ontology Id  Branches Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}": {
+      "get": {
+        "tags": [
+          "branches"
+        ],
+        "summary": "Get",
+        "operationId": "get_api_v1_ontologies__ontology_id__branches__branch_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "branch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Branch Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BranchView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/head": {
+      "get": {
+        "tags": [
+          "branches"
+        ],
+        "summary": "Head",
+        "operationId": "head_api_v1_ontologies__ontology_id__branches__branch_id__head_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "branch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Branch Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevisionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/revisions": {
+      "get": {
+        "tags": [
+          "branches"
+        ],
+        "summary": "History",
+        "operationId": "history_api_v1_ontologies__ontology_id__branches__branch_id__revisions_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "branch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Branch Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RevisionView"
+                  },
+                  "title": "Response History Api V1 Ontologies  Ontology Id  Branches  Branch Id  Revisions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/edit": {
+      "post": {
+        "tags": [
+          "branches"
+        ],
+        "summary": "Edit",
+        "operationId": "edit_api_v1_ontologies__ontology_id__branches__branch_id__edit_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "branch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Branch Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BranchEdit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BranchView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/abandon": {
+      "post": {
+        "tags": [
+          "branches"
+        ],
+        "summary": "Abandon",
+        "operationId": "abandon_api_v1_ontologies__ontology_id__branches__branch_id__abandon_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "branch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Branch Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpectedRevision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BranchView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/compare": {
+      "post": {
+        "tags": [
+          "branches"
+        ],
+        "summary": "Comparison",
+        "operationId": "comparison_api_v1_ontologies__ontology_id__branches__branch_id__compare_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "branch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Branch Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComparisonInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComparisonView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/merge-preview": {
+      "post": {
+        "tags": [
+          "branches"
+        ],
+        "summary": "Preview",
+        "operationId": "preview_api_v1_ontologies__ontology_id__branches__branch_id__merge_preview_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "branch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Branch Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MergeInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergePreview"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/merge": {
+      "post": {
+        "tags": [
+          "branches"
+        ],
+        "summary": "Merge",
+        "operationId": "merge_api_v1_ontologies__ontology_id__branches__branch_id__merge_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "branch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Branch Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MergeInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergeView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/draft": {
+      "post": {
+        "tags": [
+          "branches"
+        ],
+        "summary": "Draft",
+        "operationId": "draft_api_v1_ontologies__ontology_id__branches__branch_id__draft_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "branch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Branch Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftHandoff"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/merges": {
+      "get": {
+        "tags": [
+          "branches"
+        ],
+        "summary": "Merges",
+        "operationId": "merges_api_v1_ontologies__ontology_id__merges_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MergeView"
+                  },
+                  "title": "Response Merges Api V1 Ontologies  Ontology Id  Merges Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/sdk/generate": {
+      "post": {
+        "tags": [
+          "sdk"
+        ],
+        "summary": "Generation",
+        "operationId": "generation_api_v1_ontologies__ontology_id__sdk_generate_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ontology_platform__sdk__service__ArtifactView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/sdk/artifacts": {
+      "get": {
+        "tags": [
+          "sdk"
+        ],
+        "summary": "Listing",
+        "operationId": "listing_api_v1_ontologies__ontology_id__sdk_artifacts_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ontology_platform__sdk__service__ArtifactView"
+                  },
+                  "title": "Response Listing Api V1 Ontologies  Ontology Id  Sdk Artifacts Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/sdk/artifacts/{artifact_id}": {
+      "get": {
+        "tags": [
+          "sdk"
+        ],
+        "summary": "Artifact",
+        "operationId": "artifact_api_v1_ontologies__ontology_id__sdk_artifacts__artifact_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "artifact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Artifact Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ontology_platform__sdk__service__ArtifactView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/sdk/artifacts/{artifact_id}/download": {
+      "get": {
+        "tags": [
+          "sdk"
+        ],
+        "summary": "Download",
+        "operationId": "download_api_v1_ontologies__ontology_id__sdk_artifacts__artifact_id__download_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "artifact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Artifact Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Download"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/sdk/compatibility": {
+      "post": {
+        "tags": [
+          "sdk"
+        ],
+        "summary": "Compatibility",
+        "operationId": "compatibility_api_v1_ontologies__ontology_id__sdk_compatibility_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompatibilityInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SDKCompatibility"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/ontologies/{ontology_id}/objects/{type_id}/query": {
       "post": {
         "tags": [
@@ -3010,7 +4103,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ArtifactView"
+                  "$ref": "#/components/schemas/ontology_platform__semantic__contracts__ArtifactView"
                 }
               }
             }
@@ -5533,37 +6626,6 @@
         ],
         "title": "ArtifactManifest"
       },
-      "ArtifactView": {
-        "properties": {
-          "manifest": {
-            "$ref": "#/components/schemas/ArtifactManifest"
-          },
-          "content": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Content"
-          },
-          "freshness": {
-            "type": "string",
-            "enum": [
-              "SCHEMA_ONLY",
-              "SNAPSHOT",
-              "CURRENT",
-              "STALE",
-              "UNKNOWN"
-            ],
-            "title": "Freshness"
-          }
-        },
-        "additionalProperties": false,
-        "type": "object",
-        "required": [
-          "manifest",
-          "content",
-          "freshness"
-        ],
-        "title": "ArtifactView"
-      },
       "AssignmentInput": {
         "properties": {
           "principal_id": {
@@ -5586,6 +6648,176 @@
           "role_id"
         ],
         "title": "AssignmentInput"
+      },
+      "BranchCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]{0,99}$",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "base_version": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Version"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "BranchCreate"
+      },
+      "BranchEdit": {
+        "properties": {
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Revision"
+          },
+          "definition": {
+            "$ref": "#/components/schemas/OntologyDefinition"
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Summary"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_revision",
+          "definition",
+          "summary"
+        ],
+        "title": "BranchEdit"
+      },
+      "BranchView": {
+        "properties": {
+          "tenant_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Tenant Id"
+          },
+          "ontology_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Ontology Id"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "base_version": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Base Version"
+          },
+          "base_hash": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Base Hash"
+          },
+          "head_revision": {
+            "type": "integer",
+            "title": "Head Revision"
+          },
+          "head_hash": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Head Hash"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "MERGED",
+              "ABANDONED"
+            ],
+            "title": "State"
+          },
+          "created_by": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Created By"
+          },
+          "updated_by": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Updated By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tenant_id",
+          "ontology_id",
+          "id",
+          "name",
+          "description",
+          "base_version",
+          "base_hash",
+          "head_revision",
+          "head_hash",
+          "state",
+          "created_by",
+          "updated_by",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "BranchView"
       },
       "Change": {
         "properties": {
@@ -5713,6 +6945,111 @@
         ],
         "title": "ClassMapping"
       },
+      "ComparisonInput": {
+        "properties": {
+          "source_revision": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Revision"
+          },
+          "target_branch": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Branch"
+          },
+          "target_revision": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Revision"
+          },
+          "target_version": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Version"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ComparisonInput"
+      },
+      "ComparisonView": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Source"
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Target"
+          },
+          "source_hash": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Source Hash"
+          },
+          "target_hash": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Target Hash"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/SchemaChange"
+            },
+            "type": "array",
+            "title": "Changes"
+          },
+          "compatibility": {
+            "$ref": "#/components/schemas/Compatibility"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source",
+          "target",
+          "source_hash",
+          "target_hash",
+          "changes",
+          "compatibility"
+        ],
+        "title": "ComparisonView"
+      },
       "Compatibility": {
         "properties": {
           "classification": {
@@ -5739,6 +7076,27 @@
           "reasons"
         ],
         "title": "Compatibility"
+      },
+      "CompatibilityInput": {
+        "properties": {
+          "previous_version": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Previous Version"
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Version"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "previous_version",
+          "version"
+        ],
+        "title": "CompatibilityInput"
       },
       "CompileInput": {
         "properties": {
@@ -5947,6 +7305,61 @@
         ],
         "title": "DiagnosticView"
       },
+      "Download": {
+        "properties": {
+          "filename": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Filename"
+          },
+          "media_type": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Media Type",
+            "default": "application/zip"
+          },
+          "archive_base64": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Archive Base64"
+          },
+          "sha256": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Sha256"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "filename",
+          "archive_base64",
+          "sha256"
+        ],
+        "title": "Download"
+      },
+      "DraftHandoff": {
+        "properties": {
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Revision"
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+            "title": "Version"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_revision",
+          "version"
+        ],
+        "title": "DraftHandoff"
+      },
       "ExecuteRequest": {
         "properties": {
           "parameters": {
@@ -6038,6 +7451,21 @@
           "result"
         ],
         "title": "ExecutionView"
+      },
+      "ExpectedRevision": {
+        "properties": {
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_revision"
+        ],
+        "title": "ExpectedRevision"
       },
       "ExportInput": {
         "properties": {
@@ -6210,6 +7638,30 @@
           "freshness"
         ],
         "title": "FactView"
+      },
+      "GenerateInput": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Version"
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "python",
+              "typescript"
+            ],
+            "title": "Language"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "version",
+          "language"
+        ],
+        "title": "GenerateInput"
       },
       "HTTPValidationError": {
         "properties": {
@@ -7030,6 +8482,299 @@
           "enabled"
         ],
         "title": "MembershipInput"
+      },
+      "MergeConflict": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Id"
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Category"
+          },
+          "base": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "target": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "source": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "base_present": {
+            "type": "boolean",
+            "title": "Base Present"
+          },
+          "target_present": {
+            "type": "boolean",
+            "title": "Target Present"
+          },
+          "source_present": {
+            "type": "boolean",
+            "title": "Source Present"
+          },
+          "resolved": {
+            "type": "boolean",
+            "title": "Resolved"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "category",
+          "base",
+          "target",
+          "source",
+          "base_present",
+          "target_present",
+          "source_present",
+          "resolved"
+        ],
+        "title": "MergeConflict"
+      },
+      "MergeInput": {
+        "properties": {
+          "source_branch": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source Branch"
+          },
+          "source_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Source Revision"
+          },
+          "target_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Target Revision"
+          },
+          "resolutions": {
+            "items": {
+              "$ref": "#/components/schemas/Resolution"
+            },
+            "type": "array",
+            "maxItems": 128,
+            "title": "Resolutions"
+          },
+          "preview_hash": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preview Hash"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source_branch",
+          "source_revision",
+          "target_revision"
+        ],
+        "title": "MergeInput"
+      },
+      "MergePreview": {
+        "properties": {
+          "source_branch": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source Branch"
+          },
+          "target_branch": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Target Branch"
+          },
+          "source_revision": {
+            "type": "integer",
+            "title": "Source Revision"
+          },
+          "target_revision": {
+            "type": "integer",
+            "title": "Target Revision"
+          },
+          "source_hash": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Source Hash"
+          },
+          "target_hash": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Target Hash"
+          },
+          "base_version": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Base Version"
+          },
+          "base_hash": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Base Hash"
+          },
+          "preview_hash": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Preview Hash"
+          },
+          "conflicts": {
+            "items": {
+              "$ref": "#/components/schemas/MergeConflict"
+            },
+            "type": "array",
+            "title": "Conflicts"
+          },
+          "resolutions": {
+            "items": {
+              "$ref": "#/components/schemas/Resolution"
+            },
+            "type": "array",
+            "title": "Resolutions"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/SchemaChange"
+            },
+            "type": "array",
+            "title": "Changes"
+          },
+          "definition": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OntologyDefinition"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "diagnostics": {
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "type": "array",
+            "title": "Diagnostics"
+          },
+          "compatibility": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Compatibility"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "migration_required": {
+            "type": "boolean",
+            "title": "Migration Required"
+          },
+          "publication": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Publication",
+            "default": "Explicit draft handoff, publication and separate activation required"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source_branch",
+          "target_branch",
+          "source_revision",
+          "target_revision",
+          "source_hash",
+          "target_hash",
+          "base_version",
+          "base_hash",
+          "preview_hash",
+          "conflicts",
+          "resolutions",
+          "changes",
+          "definition",
+          "diagnostics",
+          "compatibility",
+          "migration_required"
+        ],
+        "title": "MergePreview"
+      },
+      "MergeView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "source_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source Id"
+          },
+          "source_revision": {
+            "type": "integer",
+            "title": "Source Revision"
+          },
+          "target_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Target Id"
+          },
+          "target_revision": {
+            "type": "integer",
+            "title": "Target Revision"
+          },
+          "result_revision": {
+            "type": "integer",
+            "title": "Result Revision"
+          },
+          "provenance": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "propertyNames": {
+              "minLength": 1
+            },
+            "type": "object",
+            "title": "Provenance"
+          },
+          "author": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Author"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "source_id",
+          "source_revision",
+          "target_id",
+          "target_revision",
+          "result_revision",
+          "provenance",
+          "author",
+          "created_at"
+        ],
+        "title": "MergeView"
       },
       "Metric": {
         "properties": {
@@ -8305,6 +10050,111 @@
         ],
         "title": "RelationshipMapping"
       },
+      "Resolution": {
+        "properties": {
+          "conflict": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Conflict"
+          },
+          "strategy": {
+            "type": "string",
+            "enum": [
+              "target",
+              "source",
+              "manual"
+            ],
+            "title": "Strategy"
+          },
+          "value": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "delete": {
+            "type": "boolean",
+            "title": "Delete",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "conflict",
+          "strategy"
+        ],
+        "title": "Resolution"
+      },
+      "RevisionView": {
+        "properties": {
+          "branch_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Branch Id"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "parent_revision": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Revision"
+          },
+          "content_hash": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Content Hash"
+          },
+          "definition": {
+            "$ref": "#/components/schemas/OntologyDefinition"
+          },
+          "author": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Author"
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Summary"
+          },
+          "provenance": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "propertyNames": {
+              "minLength": 1
+            },
+            "type": "object",
+            "title": "Provenance"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "branch_id",
+          "revision",
+          "parent_revision",
+          "content_hash",
+          "definition",
+          "author",
+          "summary",
+          "provenance",
+          "created_at"
+        ],
+        "title": "RevisionView"
+      },
       "RoleInput": {
         "properties": {
           "id": {
@@ -8557,6 +10407,98 @@
           "completed_at"
         ],
         "title": "RunView"
+      },
+      "SDKCompatibility": {
+        "properties": {
+          "compatibility": {
+            "$ref": "#/components/schemas/Compatibility"
+          },
+          "affected_symbols": {
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "propertyNames": {
+              "minLength": 1
+            },
+            "type": "object",
+            "title": "Affected Symbols"
+          },
+          "recommendation": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Recommendation"
+          },
+          "migration_required": {
+            "type": "boolean",
+            "title": "Migration Required"
+          },
+          "diagnostics": {
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "type": "array",
+            "title": "Diagnostics"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "compatibility",
+          "affected_symbols",
+          "recommendation",
+          "migration_required"
+        ],
+        "title": "SDKCompatibility"
+      },
+      "SchemaChange": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Path"
+          },
+          "stable_definition_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Stable Definition Id",
+            "default": "schema"
+          },
+          "compatibility": {
+            "type": "string",
+            "enum": [
+              "additive",
+              "breaking"
+            ],
+            "title": "Compatibility",
+            "default": "additive"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "added",
+              "removed",
+              "modified"
+            ],
+            "title": "Category"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "proposed": {
+            "$ref": "#/components/schemas/JsonValue"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path",
+          "category",
+          "previous",
+          "proposed"
+        ],
+        "title": "SchemaChange"
       },
       "SnapshotView": {
         "properties": {
@@ -9054,6 +10996,99 @@
         "additionalProperties": false,
         "type": "object",
         "title": "MappingInput"
+      },
+      "ontology_platform__sdk__service__ArtifactView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "schema_version": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Schema Version"
+          },
+          "language": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Language"
+          },
+          "content_hash": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Content Hash"
+          },
+          "manifest": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "propertyNames": {
+              "minLength": 1
+            },
+            "type": "object",
+            "title": "Manifest"
+          },
+          "created_by": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Status",
+            "default": "COMPLETED"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "schema_version",
+          "language",
+          "content_hash",
+          "manifest",
+          "created_by",
+          "created_at"
+        ],
+        "title": "ArtifactView"
+      },
+      "ontology_platform__semantic__contracts__ArtifactView": {
+        "properties": {
+          "manifest": {
+            "$ref": "#/components/schemas/ArtifactManifest"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Content"
+          },
+          "freshness": {
+            "type": "string",
+            "enum": [
+              "SCHEMA_ONLY",
+              "SNAPSHOT",
+              "CURRENT",
+              "STALE",
+              "UNKNOWN"
+            ],
+            "title": "Freshness"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "manifest",
+          "content",
+          "freshness"
+        ],
+        "title": "ArtifactView"
       }
     },
     "securitySchemes": {

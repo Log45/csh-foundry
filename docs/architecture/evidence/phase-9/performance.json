@@ -1,0 +1,23 @@
+{
+  "branch_creation_ms": 12.537,
+  "comparison_ms": 9.124,
+  "conflict_detection_ms": 11.3,
+  "large_schema_bytes": 36192,
+  "large_schema_merge_ms": 2.68,
+  "large_schema_python_generation_ms": 33.61,
+  "merge_execution_ms": 24.187,
+  "merge_preview_ms": 11.709,
+  "python_archive_bytes": 9433,
+  "python_deterministic": true,
+  "python_generation_ms": 18.785,
+  "python_package_build_ms": 298.538,
+  "python_source_bytes": 49442,
+  "python_tracemalloc_peak_bytes": 556963,
+  "revision_persistence_ms": 8.861,
+  "scope": "single local developer samples; local authorizer; no production throughput claim",
+  "typescript_archive_bytes": 7764,
+  "typescript_deterministic": true,
+  "typescript_generation_ms": 18.06,
+  "typescript_package_build_ms": 772.528,
+  "typescript_source_bytes": 28606
+}

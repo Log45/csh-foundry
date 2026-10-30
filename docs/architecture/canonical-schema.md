@@ -55,3 +55,7 @@ Phase 6 adds [governed ontology file interchange](../api/interchange.md).
 Explicit mappings reuse canonical definitions and registry drafts. PostgreSQL remains authoritative;
 Protégé/WebProtégé are optional. Original semantic axioms remain archived separately from operational
 definitions. See ADR 0027 for bounds, preservation and publication/activation boundaries.
+
+Phase 9 uses these same models for immutable branch snapshots and SDK compilation. Branch heads
+are development state, not active schemas; SDK issuance selects only published immutable versions.
+See [branch/SDK contracts](../api/branching-sdk.md) and ADRs 0030–0031.

@@ -1,0 +1,40 @@
+import asyncio, os
+from decimal import Decimal
+from ontology_sdk import OntologyClient, SDKError
+from ontology_sdk.models import UpdateMachineStatusParameters, MachinePatch
+async def token(): return os.environ["SDK_TOKEN"]
+async def main():
+ c=OntologyClient(os.environ["SDK_URL"], token, os.environ["SDK_TENANT"])
+ machine=await c.Machine.get("MCH-005")
+ assert machine.object_id == "MCH-005" and isinstance(machine.properties.temperatureCelsius, Decimal)
+ query=c.Machine.query().where(c.Machine.fields.temperatureCelsius.gt(Decimal("20"))).limit(2)
+ first=await query.execute()
+ assert len(first.items)==2 and first.next_cursor
+ second=await query.after(first.next_cursor).execute()
+ assert not {x.object_id for x in first.items} & {x.object_id for x in second.items}
+ critical=await c.Machine.query().where(c.Machine.fields.operationalStatus.eq("CRITICAL")).execute()
+ assert len(critical.items)==3
+ related=await c.Machine.related_locatedInFactory("MCH-005").execute()
+ assert len(related.items)==1
+ params=UpdateMachineStatusParameters(machineId="MCH-005",newStatus="STOPPED",expectedRevision=machine.version)
+ preview=await c.actions.UpdateMachineStatus.preview(params)
+ assert preview.advisory
+ result=await c.actions.UpdateMachineStatus.execute(params,idempotency_key="python-acceptance")
+ replay=await c.actions.UpdateMachineStatus.execute(params,idempotency_key="python-acceptance")
+ assert result.execution_id==replay.execution_id
+ try: await c.Machine.patch("MCH-005", MachinePatch(machineName="stale"),expected_version=machine.version)
+ except SDKError as e: assert e.status==409 and e.response.content
+ else: raise AssertionError("stale revision accepted")
+ await c.close()
+ async def invalid(): return "invalid"
+ bad=OntologyClient(os.environ["SDK_URL"],invalid,os.environ["SDK_TENANT"])
+ try: await bad.Machine.get("MCH-005")
+ except SDKError as e: assert e.status==401
+ else: raise AssertionError("bad token accepted")
+ await bad.close()
+ foreign=OntologyClient(os.environ["SDK_URL"],token,"00000000-0000-0000-0000-000000000099")
+ try: await foreign.Machine.get("MCH-005")
+ except SDKError as e: assert e.status==403
+ else: raise AssertionError("foreign tenant accepted")
+ await foreign.close()
+asyncio.run(main())

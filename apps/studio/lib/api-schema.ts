@@ -286,6 +286,279 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/ontologies/{ontology_id}/branches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Listing */
+        get: operations["listing_api_v1_ontologies__ontology_id__branches_get"];
+        put?: never;
+        /** Create */
+        post: operations["create_api_v1_ontologies__ontology_id__branches_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get */
+        get: operations["get_api_v1_ontologies__ontology_id__branches__branch_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/head": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Head */
+        get: operations["head_api_v1_ontologies__ontology_id__branches__branch_id__head_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/revisions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** History */
+        get: operations["history_api_v1_ontologies__ontology_id__branches__branch_id__revisions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/edit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Edit */
+        post: operations["edit_api_v1_ontologies__ontology_id__branches__branch_id__edit_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/abandon": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Abandon */
+        post: operations["abandon_api_v1_ontologies__ontology_id__branches__branch_id__abandon_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/compare": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Comparison */
+        post: operations["comparison_api_v1_ontologies__ontology_id__branches__branch_id__compare_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/merge-preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Preview */
+        post: operations["preview_api_v1_ontologies__ontology_id__branches__branch_id__merge_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/merge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Merge */
+        post: operations["merge_api_v1_ontologies__ontology_id__branches__branch_id__merge_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/branches/{branch_id}/draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Draft */
+        post: operations["draft_api_v1_ontologies__ontology_id__branches__branch_id__draft_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/merges": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Merges */
+        get: operations["merges_api_v1_ontologies__ontology_id__merges_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/sdk/generate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Generation */
+        post: operations["generation_api_v1_ontologies__ontology_id__sdk_generate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/sdk/artifacts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Listing */
+        get: operations["listing_api_v1_ontologies__ontology_id__sdk_artifacts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/sdk/artifacts/{artifact_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Artifact */
+        get: operations["artifact_api_v1_ontologies__ontology_id__sdk_artifacts__artifact_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/sdk/artifacts/{artifact_id}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Download */
+        get: operations["download_api_v1_ontologies__ontology_id__sdk_artifacts__artifact_id__download_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ontologies/{ontology_id}/sdk/compatibility": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Compatibility */
+        post: operations["compatibility_api_v1_ontologies__ontology_id__sdk_compatibility_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/ontologies/{ontology_id}/objects/{type_id}/query": {
         parameters: {
             query?: never;
@@ -1297,23 +1570,75 @@ export interface components {
             /** Diagnostics */
             diagnostics?: components["schemas"]["Diagnostic"][];
         };
-        /** ArtifactView */
-        ArtifactView: {
-            manifest: components["schemas"]["ArtifactManifest"];
-            /** Content */
-            content: string;
-            /**
-             * Freshness
-             * @enum {string}
-             */
-            freshness: "SCHEMA_ONLY" | "SNAPSHOT" | "CURRENT" | "STALE" | "UNKNOWN";
-        };
         /** AssignmentInput */
         AssignmentInput: {
             /** Principal Id */
             principal_id: string;
             /** Role Id */
             role_id: string;
+        };
+        /** BranchCreate */
+        BranchCreate: {
+            /** Name */
+            name: string;
+            /** Description */
+            description?: string | null;
+            /** Base Version */
+            base_version?: string | null;
+        };
+        /** BranchEdit */
+        BranchEdit: {
+            /** Expected Revision */
+            expected_revision: number;
+            definition: components["schemas"]["OntologyDefinition"];
+            /** Summary */
+            summary: string;
+        };
+        /** BranchView */
+        BranchView: {
+            /**
+             * Tenant Id
+             * Format: uuid
+             */
+            tenant_id: string;
+            /** Ontology Id */
+            ontology_id: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description: string | null;
+            /** Base Version */
+            base_version: string;
+            /** Base Hash */
+            base_hash: string;
+            /** Head Revision */
+            head_revision: number;
+            /** Head Hash */
+            head_hash: string;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "ACTIVE" | "MERGED" | "ABANDONED";
+            /** Created By */
+            created_by: string;
+            /** Updated By */
+            updated_by: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
         };
         /** Change */
         Change: {
@@ -1346,6 +1671,36 @@ export interface components {
                 [key: string]: string;
             };
         };
+        /** ComparisonInput */
+        ComparisonInput: {
+            /** Source Revision */
+            source_revision?: number | null;
+            /** Target Branch */
+            target_branch?: string | null;
+            /** Target Revision */
+            target_revision?: number | null;
+            /** Target Version */
+            target_version?: string | null;
+            /**
+             * Active
+             * @default false
+             */
+            active?: boolean;
+        };
+        /** ComparisonView */
+        ComparisonView: {
+            /** Source */
+            source: string;
+            /** Target */
+            target: string;
+            /** Source Hash */
+            source_hash: string;
+            /** Target Hash */
+            target_hash: string;
+            /** Changes */
+            changes: components["schemas"]["SchemaChange"][];
+            compatibility: components["schemas"]["Compatibility"];
+        };
         /** Compatibility */
         Compatibility: {
             /**
@@ -1355,6 +1710,13 @@ export interface components {
             classification: "additive" | "breaking";
             /** Reasons */
             reasons: string[];
+        };
+        /** CompatibilityInput */
+        CompatibilityInput: {
+            /** Previous Version */
+            previous_version: string;
+            /** Version */
+            version: string;
         };
         /** CompileInput */
         CompileInput: {
@@ -1436,6 +1798,27 @@ export interface components {
              */
             created_at: string;
         };
+        /** Download */
+        Download: {
+            /** Filename */
+            filename: string;
+            /**
+             * Media Type
+             * @default application/zip
+             */
+            media_type?: string;
+            /** Archive Base64 */
+            archive_base64: string;
+            /** Sha256 */
+            sha256: string;
+        };
+        /** DraftHandoff */
+        DraftHandoff: {
+            /** Expected Revision */
+            expected_revision: number;
+            /** Version */
+            version: string;
+        };
         /**
          * ExecuteRequest
          * @example {
@@ -1478,6 +1861,11 @@ export interface components {
              */
             created_at: string;
             result: components["schemas"]["ActionResult"];
+        };
+        /** ExpectedRevision */
+        ExpectedRevision: {
+            /** Expected Revision */
+            expected_revision: number;
         };
         /** ExportInput */
         ExportInput: {
@@ -1550,6 +1938,16 @@ export interface components {
              * @enum {string}
              */
             freshness: "CURRENT" | "STALE" | "UNKNOWN";
+        };
+        /** GenerateInput */
+        GenerateInput: {
+            /** Version */
+            version: string;
+            /**
+             * Language
+             * @enum {string}
+             */
+            language: "python" | "typescript";
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1842,6 +2240,119 @@ export interface components {
             attributes?: {
                 [key: string]: components["schemas"]["JsonValue"];
             };
+        };
+        /** MergeConflict */
+        MergeConflict: {
+            /** Id */
+            id: string;
+            /** Category */
+            category: string;
+            base: components["schemas"]["JsonValue"];
+            target: components["schemas"]["JsonValue"];
+            source: components["schemas"]["JsonValue"];
+            /** Base Present */
+            base_present: boolean;
+            /** Target Present */
+            target_present: boolean;
+            /** Source Present */
+            source_present: boolean;
+            /** Resolved */
+            resolved: boolean;
+        };
+        /** MergeInput */
+        MergeInput: {
+            /**
+             * Source Branch
+             * Format: uuid
+             */
+            source_branch: string;
+            /** Source Revision */
+            source_revision: number;
+            /** Target Revision */
+            target_revision: number;
+            /** Resolutions */
+            resolutions?: components["schemas"]["Resolution"][];
+            /** Preview Hash */
+            preview_hash?: string | null;
+        };
+        /** MergePreview */
+        MergePreview: {
+            /**
+             * Source Branch
+             * Format: uuid
+             */
+            source_branch: string;
+            /**
+             * Target Branch
+             * Format: uuid
+             */
+            target_branch: string;
+            /** Source Revision */
+            source_revision: number;
+            /** Target Revision */
+            target_revision: number;
+            /** Source Hash */
+            source_hash: string;
+            /** Target Hash */
+            target_hash: string;
+            /** Base Version */
+            base_version: string;
+            /** Base Hash */
+            base_hash: string;
+            /** Preview Hash */
+            preview_hash: string;
+            /** Conflicts */
+            conflicts: components["schemas"]["MergeConflict"][];
+            /** Resolutions */
+            resolutions: components["schemas"]["Resolution"][];
+            /** Changes */
+            changes: components["schemas"]["SchemaChange"][];
+            definition: components["schemas"]["OntologyDefinition"] | null;
+            /** Diagnostics */
+            diagnostics: string[];
+            compatibility: components["schemas"]["Compatibility"] | null;
+            /** Migration Required */
+            migration_required: boolean;
+            /**
+             * Publication
+             * @default Explicit draft handoff, publication and separate activation required
+             */
+            publication?: string;
+        };
+        /** MergeView */
+        MergeView: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Source Id
+             * Format: uuid
+             */
+            source_id: string;
+            /** Source Revision */
+            source_revision: number;
+            /**
+             * Target Id
+             * Format: uuid
+             */
+            target_id: string;
+            /** Target Revision */
+            target_revision: number;
+            /** Result Revision */
+            result_revision: number;
+            /** Provenance */
+            provenance: {
+                [key: string]: components["schemas"]["JsonValue"];
+            };
+            /** Author */
+            author: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
         };
         /** Metric */
         Metric: {
@@ -2348,6 +2859,50 @@ export interface components {
              */
             direction?: "forward";
         };
+        /** Resolution */
+        Resolution: {
+            /** Conflict */
+            conflict: string;
+            /**
+             * Strategy
+             * @enum {string}
+             */
+            strategy: "target" | "source" | "manual";
+            value?: components["schemas"]["JsonValue"];
+            /**
+             * Delete
+             * @default false
+             */
+            delete?: boolean;
+        };
+        /** RevisionView */
+        RevisionView: {
+            /**
+             * Branch Id
+             * Format: uuid
+             */
+            branch_id: string;
+            /** Revision */
+            revision: number;
+            /** Parent Revision */
+            parent_revision: number | null;
+            /** Content Hash */
+            content_hash: string;
+            definition: components["schemas"]["OntologyDefinition"];
+            /** Author */
+            author: string;
+            /** Summary */
+            summary: string;
+            /** Provenance */
+            provenance: {
+                [key: string]: components["schemas"]["JsonValue"];
+            };
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
         /** RoleInput */
         RoleInput: {
             /** Id */
@@ -2452,6 +3007,43 @@ export interface components {
             created_at: string;
             /** Completed At */
             completed_at: string | null;
+        };
+        /** SDKCompatibility */
+        SDKCompatibility: {
+            compatibility: components["schemas"]["Compatibility"];
+            /** Affected Symbols */
+            affected_symbols: {
+                [key: string]: string;
+            };
+            /** Recommendation */
+            recommendation: string;
+            /** Migration Required */
+            migration_required: boolean;
+            /** Diagnostics */
+            diagnostics?: string[];
+        };
+        /** SchemaChange */
+        SchemaChange: {
+            /** Path */
+            path: string;
+            /**
+             * Stable Definition Id
+             * @default schema
+             */
+            stable_definition_id?: string;
+            /**
+             * Compatibility
+             * @default additive
+             * @enum {string}
+             */
+            compatibility?: "additive" | "breaking";
+            /**
+             * Category
+             * @enum {string}
+             */
+            category: "added" | "removed" | "modified";
+            previous: components["schemas"]["JsonValue"];
+            proposed: components["schemas"]["JsonValue"];
         };
         /** SnapshotView */
         SnapshotView: {
@@ -2650,6 +3242,47 @@ export interface components {
              * @default []
              */
             links?: components["schemas"]["LinkMapping"][];
+        };
+        /** ArtifactView */
+        ontology_platform__sdk__service__ArtifactView: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Schema Version */
+            schema_version: string;
+            /** Language */
+            language: string;
+            /** Content Hash */
+            content_hash: string;
+            /** Manifest */
+            manifest: {
+                [key: string]: components["schemas"]["JsonValue"];
+            };
+            /** Created By */
+            created_by: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Status
+             * @default COMPLETED
+             */
+            status?: string;
+        };
+        /** ArtifactView */
+        ontology_platform__semantic__contracts__ArtifactView: {
+            manifest: components["schemas"]["ArtifactManifest"];
+            /** Content */
+            content: string;
+            /**
+             * Freshness
+             * @enum {string}
+             */
+            freshness: "SCHEMA_ONLY" | "SNAPSHOT" | "CURRENT" | "STALE" | "UNKNOWN";
         };
     };
     responses: never;
@@ -3541,6 +4174,592 @@ export interface operations {
             };
         };
     };
+    listing_api_v1_ontologies__ontology_id__branches_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                ontology_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BranchView"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_api_v1_ontologies__ontology_id__branches_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ontology_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BranchCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BranchView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_api_v1_ontologies__ontology_id__branches__branch_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ontology_id: string;
+                branch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BranchView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    head_api_v1_ontologies__ontology_id__branches__branch_id__head_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ontology_id: string;
+                branch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RevisionView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    history_api_v1_ontologies__ontology_id__branches__branch_id__revisions_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                ontology_id: string;
+                branch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RevisionView"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    edit_api_v1_ontologies__ontology_id__branches__branch_id__edit_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ontology_id: string;
+                branch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BranchEdit"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BranchView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    abandon_api_v1_ontologies__ontology_id__branches__branch_id__abandon_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ontology_id: string;
+                branch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExpectedRevision"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BranchView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    comparison_api_v1_ontologies__ontology_id__branches__branch_id__compare_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ontology_id: string;
+                branch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ComparisonInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ComparisonView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_api_v1_ontologies__ontology_id__branches__branch_id__merge_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ontology_id: string;
+                branch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergePreview"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    merge_api_v1_ontologies__ontology_id__branches__branch_id__merge_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ontology_id: string;
+                branch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    draft_api_v1_ontologies__ontology_id__branches__branch_id__draft_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ontology_id: string;
+                branch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftHandoff"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VersionView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    merges_api_v1_ontologies__ontology_id__merges_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                ontology_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeView"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    generation_api_v1_ontologies__ontology_id__sdk_generate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ontology_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerateInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ontology_platform__sdk__service__ArtifactView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    listing_api_v1_ontologies__ontology_id__sdk_artifacts_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                ontology_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ontology_platform__sdk__service__ArtifactView"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    artifact_api_v1_ontologies__ontology_id__sdk_artifacts__artifact_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ontology_id: string;
+                artifact_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ontology_platform__sdk__service__ArtifactView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    download_api_v1_ontologies__ontology_id__sdk_artifacts__artifact_id__download_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ontology_id: string;
+                artifact_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Download"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    compatibility_api_v1_ontologies__ontology_id__sdk_compatibility_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ontology_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CompatibilityInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SDKCompatibility"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     query_objects_api_v1_ontologies__ontology_id__objects__type_id__query_post: {
         parameters: {
             query?: never;
@@ -4281,7 +5500,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ArtifactView"];
+                    "application/json": components["schemas"]["ontology_platform__semantic__contracts__ArtifactView"];
                 };
             };
             /** @description Validation Error */

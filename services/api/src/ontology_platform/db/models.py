@@ -1104,3 +1104,162 @@ class AuthorizationAudit(Base):
     category: Mapped[str] = mapped_column(String(30))
     policy_version: Mapped[int] = mapped_column(BigInteger)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class SchemaBranch(Base):
+    __tablename__ = "ontology_branches"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
+    description: Mapped[str | None] = mapped_column(Text)
+    base_version: Mapped[str] = mapped_column(Text)
+    base_status: Mapped[str] = mapped_column(String(20), default="PUBLISHED")
+    base_hash: Mapped[str] = mapped_column(String(64))
+    head_revision: Mapped[int] = mapped_column(BigInteger)
+    head_hash: Mapped[str] = mapped_column(String(64))
+    state: Mapped[str] = mapped_column(String(20), default="ACTIVE")
+    created_by: Mapped[str] = mapped_column(Text)
+    updated_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "base_version", "base_status"],
+            [
+                "ontology_versions.tenant_id",
+                "ontology_versions.ontology_id",
+                "ontology_versions.version",
+                "ontology_versions.status",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "id", "head_revision", "head_hash"],
+            [
+                "ontology_branch_revisions.tenant_id",
+                "ontology_branch_revisions.ontology_id",
+                "ontology_branch_revisions.branch_id",
+                "ontology_branch_revisions.revision",
+                "ontology_branch_revisions.content_hash",
+            ],
+            name="fk_branch_head",
+            use_alter=True,
+            deferrable=True,
+            initially="DEFERRED",
+        ),
+        UniqueConstraint("tenant_id", "ontology_id", "name", name="uq_branch_name"),
+        CheckConstraint("base_status = 'PUBLISHED'", name="ck_branch_published_base"),
+        CheckConstraint("state IN ('ACTIVE','MERGED','ABANDONED')", name="ck_branch_state"),
+        CheckConstraint("head_revision >= 1", name="ck_branch_revision"),
+    )
+
+
+class BranchRevision(Base):
+    __tablename__ = "ontology_branch_revisions"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    branch_id: Mapped[UUID] = mapped_column(primary_key=True)
+    revision: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    parent_revision: Mapped[int | None] = mapped_column(BigInteger)
+    content_hash: Mapped[str] = mapped_column(String(64))
+    definition_json: Mapped[str] = mapped_column(Text)
+    author: Mapped[str] = mapped_column(Text)
+    summary: Mapped[str] = mapped_column(String(500))
+    provenance: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "branch_id"],
+            [
+                "ontology_branches.tenant_id",
+                "ontology_branches.ontology_id",
+                "ontology_branches.id",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "branch_id", "parent_revision"],
+            [
+                "ontology_branch_revisions.tenant_id",
+                "ontology_branch_revisions.ontology_id",
+                "ontology_branch_revisions.branch_id",
+                "ontology_branch_revisions.revision",
+            ],
+        ),
+        UniqueConstraint(
+            "tenant_id",
+            "ontology_id",
+            "branch_id",
+            "revision",
+            "content_hash",
+            name="uq_branch_revision_hash",
+        ),
+        CheckConstraint(
+            "(revision = 1 AND parent_revision IS NULL) OR "
+            "(revision > 1 AND parent_revision = revision - 1)",
+            name="ck_branch_parent",
+        ),
+        CheckConstraint("octet_length(definition_json) <= 65536", name="ck_branch_snapshot_size"),
+    )
+
+
+class BranchMerge(Base):
+    __tablename__ = "ontology_branch_merges"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    source_id: Mapped[UUID]
+    source_revision: Mapped[int] = mapped_column(BigInteger)
+    target_id: Mapped[UUID]
+    target_revision: Mapped[int] = mapped_column(BigInteger)
+    result_revision: Mapped[int] = mapped_column(BigInteger)
+    provenance: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    author: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = tuple(
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", branch, rev],
+            [
+                "ontology_branch_revisions.tenant_id",
+                "ontology_branch_revisions.ontology_id",
+                "ontology_branch_revisions.branch_id",
+                "ontology_branch_revisions.revision",
+            ],
+        )
+        for branch, rev in (
+            ("source_id", "source_revision"),
+            ("target_id", "target_revision"),
+            ("target_id", "result_revision"),
+        )
+    ) + (
+        CheckConstraint("octet_length(provenance::text) <= 65536", name="ck_merge_provenance_size"),
+    )
+
+
+class SDKArtifact(Base):
+    __tablename__ = "sdk_artifacts"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    schema_version: Mapped[str] = mapped_column(Text)
+    schema_status: Mapped[str] = mapped_column(String(20), default="PUBLISHED")
+    language: Mapped[str] = mapped_column(String(20))
+    content_hash: Mapped[str] = mapped_column(String(64))
+    manifest: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    files_json: Mapped[str] = mapped_column(Text)
+    created_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "schema_version", "schema_status"],
+            [
+                "ontology_versions.tenant_id",
+                "ontology_versions.ontology_id",
+                "ontology_versions.version",
+                "ontology_versions.status",
+            ],
+        ),
+        UniqueConstraint("tenant_id", "ontology_id", "content_hash", name="uq_sdk_content"),
+        CheckConstraint("schema_status = 'PUBLISHED'", name="ck_sdk_published"),
+        CheckConstraint("language IN ('python','typescript')", name="ck_sdk_language"),
+        CheckConstraint("octet_length(files_json) <= 8388608", name="ck_sdk_size"),
+    )

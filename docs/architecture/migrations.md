@@ -114,3 +114,23 @@ DDL retains two-second lock and 30-second statement limits. Downgrade removes on
 state/history; operational objects, ontology imports and earlier history remain. This is destructive
 to security identities and must be planned with configuration/backup; an OIDC API cannot serve
 protected operations against the downgraded database. Tests reverse disposable schemas only.
+
+## Phase 9: 0014_branches and 0015_sdk
+
+Current development head: **0015_sdk**. Both upgrades use the existing two-second lock and
+30-second DDL statement budgets. No operational objects, relationships, published snapshots, active
+pointers, import provenance or security history are rewritten.
+
+- `0014_branches`: ontology_branches, ontology_branch_revisions and ontology_branch_merges.
+  Tenant/ontology/published-base foreign keys, deferred revision/hash-qualified head FK, predecessor
+  FK/check, branch-name uniqueness, lifecycle/base immutability guard, immutable revision/merge
+  triggers, schema/provenance bounds. Lists use scoped composite primary-key/name indexes.
+- `0015_sdk`: immutable sdk_artifacts with published-version ownership FK, scoped archive-hash
+  uniqueness, target language and escaped storage-size checks. No tokens or browser sessions stored.
+
+Downgrade 0015 removes generated SDK artifacts; downgrade 0014 removes branch/revision/merge history.
+These are **destructive to Phase 9 history**, not lossless rollback. Existing operational/registry/
+security/import state remains. Exercise downgrades only on disposable schemas or with an approved
+backup/restore plan. The tests use migrated private PostgreSQL schemas and verify re-upgrade,
+metadata drift, ownership constraints and retention of prior-phase state. During development the
+uncommitted parent-history check was synchronized on the local database without editing snapshots.

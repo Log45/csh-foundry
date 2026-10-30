@@ -1,6 +1,7 @@
 # CSH Foundry — operational ontology platform
 
-Phase 8 native Ontology Manager and Ontology Studio for the modular platform specified in [PLANS.md](PLANS.md).
+Phase 9 governed schema branching and generated SDKs, extending the native Ontology Manager
+and Ontology Studio for the modular platform specified in [PLANS.md](PLANS.md).
 PostgreSQL owns operational state; canonical metadata is independent of RDF/OWL.
 Open Ontologies supplies external semantic checks. Protégé is optional authoring tooling.
 Phases 0–5 provide governed schema publication/activation, tenant-scoped objects/links and a
@@ -11,7 +12,7 @@ ingestion, deterministic RDF/OWL/SHACL compilation, governed RDF exports, durabl
 and separately approved derived facts. Phase 6 adds explicit Turtle/RDF/XML authoring imports into
 unpublished canonical drafts, source preservation, diagnostics, IRI conflicts and deterministic exports.
 Phase 7 adds verified OIDC access tokens, platform tenant membership, RBAC, restrictive SQL ABAC,
-security administration/audit and delegated service workers. Subsequent roadmap phases are not implemented.
+security administration/audit and delegated service workers. Phase 9 adds governed branches and generated SDKs; Phase 10 and later are not implemented.
 
 ## Local setup
 
@@ -207,7 +208,7 @@ Manager edits the canonical registry through a native graph, type/property/relat
 action declarations, drafts, compatibility, version history, separate publication/activation and OWL
 mapping diagnostics. Studio explores authorized objects and queries, traverses relationships,
 previews/executes governed actions and manages ingestion and semantic jobs/results. Workers remain
-separate. Complex developer contracts use labeled JSON editors. No Phase 9 SDK or branching is added.
+separate. Complex developer contracts use labeled JSON editors. Phase 9 branch and SDK integration is described below.
 
 ```
 cd apps/studio
@@ -222,3 +223,30 @@ For container development use `docker compose --env-file .env -f infrastructure/
 The existing local Keycloak connection and certificate configuration are documented in
 [local Keycloak setup](docs/development/keycloak-local.md). Its public CA is mounted read-only into
 API/Studio through the normal Compose configuration; private keys remain in ignored local artifacts.
+
+## Governed schema branches and generated SDKs (Phase 9)
+
+Ontology Manager now includes persistent branch development, immutable revision history, stable-ID
+comparison, deterministic three-way merges with explicit conflict resolution and exact preview/revision
+preconditions. Merge results stay in a development branch; explicit handoff creates an ordinary draft.
+Existing migration approval, publication and separate activation remain authoritative.
+
+Generate independent Python or TypeScript packages from immutable published versions through the
+Manager, authorized API or `uv run python -m ontology_platform.sdk`. Generated SDKs use the actual
+query AST, typed object/action access, traversal, cursor pages, expected revisions and stable
+caller-supplied action idempotency keys. Async token providers accept platform API bearer tokens;
+no browser/worker/connector secrets enter packages. Source/ZIP generation is deterministic.
+
+Read [branch/SDK contracts and usage](docs/api/branching-sdk.md),
+[Phase 9 report](docs/development/phase-9-report.md),
+[branch decision](docs/decisions/0030-governed-schema-branches.md) and
+[SDK decision](docs/decisions/0031-canonical-sdk-compilation.md).
+Migrate local development to `0015_sdk`. CI installs Node/npm dependencies before the Python suite
+because that suite independently builds generated TypeScript packages. Run
+`uv run python scripts/benchmark_phase9.py` with Node >=22 for disposable local samples, and
+`scripts/smoke_phase9_containers.py` after building the `csh-foundry-phase9` and
+`csh-foundry-studio:phase9` images. No external deployment is performed.
+
+Scope limits include same-published-base merges, JSON branch editing, explicit history/query bounds,
+JavaScript safe integer limits and current active-schema SDK alignment. Production hardening and
+live Microsoft/Google sign-in require separate [Phase 10 approval](docs/development/phase-10.md).

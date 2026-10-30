@@ -19,6 +19,7 @@ import {
   json,
   useTask,
 } from "@/components/ui";
+import { Development } from "@/features/development";
 import { SchemaGraph } from "@/components/schema-graph";
 
 function PropertyEditor({
@@ -311,6 +312,13 @@ export function Manager({
   }
   return (
     <>
+      <Development
+        api={api}
+        ontology={id}
+        versions={versions}
+        can={can}
+        refresh={refresh}
+      />
       <Task title="Ontology Manager">
         <div className="row">
           <Field label="Schema version">

@@ -77,8 +77,8 @@ def test_signed_access_token_cache_and_untrusted_claims(idp):
     "changes",
     [
         {"exp": 1},
-        {"nbf": int(time.time()) + 600},
-        {"iat": int(time.time()) + 600},
+        {"nbf": lambda: int(time.time()) + 600},
+        {"iat": lambda: int(time.time()) + 600},
         {"iss": "https://evil.example"},
         {"aud": "other"},
         {"sub": ""},
@@ -95,6 +95,8 @@ def test_signed_access_token_cache_and_untrusted_claims(idp):
     ],
 )
 def test_invalid_claims_reject(idp, changes):
+    # Construct future claims at execution, not at collection before a long suite run.
+    changes = {key: value() if callable(value) else value for key, value in changes.items()}
     private, _, verifier = idp
     with pytest.raises(ApplicationError) as error:
         verifier.verify(token(private, claims=changes))

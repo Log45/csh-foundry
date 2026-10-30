@@ -1,0 +1,118 @@
+/** Generated public runtime; sends the platform's existing query AST without local filtering. */
+export type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
+function safeNumber(_key: string, value: unknown): unknown {
+  if (typeof value === "number" && (!Number.isFinite(value) || (Number.isInteger(value) && !Number.isSafeInteger(value))))
+    throw new RangeError("unsafe_number: TypeScript SDK requires finite numbers and safe integers");
+  return value;
+}
+export type TokenProvider = () => Promise<string>;
+export interface ObjectRecord<P> {
+  tenant_id: string; ontology_id: string; object_type_id: string; object_id: string;
+  schema_version: string; version: number; created_at: string; updated_at: string; properties: P;
+}
+export interface Page<P> { object_type: string; schema_version: string; items: ObjectRecord<P>[]; next_cursor: string | null; has_more: boolean; }
+export interface Change { operation: string; object_type: string; object_id: string; previous_revision: number | null; new_revision: number | null; properties: string[]; link: string | null; target_type: string | null; target_id: string | null; }
+export interface ActionResult { execution_id: string | null; action_id: string; action_version: string; schema_version: string; changes: Change[]; advisory: boolean; }
+export class SDKError extends Error {
+  constructor(public status: number, public code: string, public body: unknown, public response: Response) { super(code); }
+}
+export interface ClientOptions { baseUrl: string; tokenProvider: TokenProvider; tenantId: string; fetch?: typeof fetch; }
+export class Transport {
+  private base: string;
+  constructor(private options: ClientOptions, ontology: string, private version: string) {
+    this.base = options.baseUrl.replace(/\/$/, "") + "/api/v1/ontologies/" + encodeURIComponent(ontology);
+  }
+  async request<T>(method: string, path: string, body?: unknown, params?: Record<string, string>): Promise<T> {
+    const url = this.base + path + (params ? "?" + new URLSearchParams(params).toString() : "");
+    const response = await (this.options.fetch ?? fetch)(url, {
+      method, headers: { Authorization: "Bearer " + await this.options.tokenProvider(), "X-Tenant-ID": this.options.tenantId,
+        ...(body === undefined ? {} : {"Content-Type": "application/json"}) },
+      body: body === undefined ? undefined : JSON.stringify(body, safeNumber), redirect: "error", signal: AbortSignal.timeout(30000),
+    });
+    const reader = response.body?.getReader();
+    const chunks: Uint8Array[] = []; let size = 0;
+    try { if (reader) while (true) {
+      const {done, value} = await reader.read(); if (done) break;
+      size += value.byteLength; if (size > 5 * 1024 * 1024) throw new Error("SDK response exceeds 5 MiB"); chunks.push(value);
+    }} finally { await reader?.cancel(); }
+    const bytes = new Uint8Array(size); let offset = 0;
+    for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
+    const raw = new TextDecoder().decode(bytes);
+    let data: unknown; try { data = raw ? JSON.parse(raw, safeNumber) : null; } catch { data = raw; }
+    if (!response.ok) {
+      const envelope = data as {error?: {code?: string}} | null;
+      throw new SDKError(response.status, envelope?.error?.code ?? "request_failed", data, response);
+    }
+    if (data && typeof data === "object" && "schema_version" in data && data.schema_version !== this.version)
+      throw new Error("schema_mismatch: regenerate for the active published schema");
+    return data as T;
+  }
+}
+export class Expr {
+  constructor(readonly ast: Json) {}
+  and(other: Expr): Expr { return new Expr({and: [this.ast, other.ast]}); }
+  or(other: Expr): Expr { return new Expr({or: [this.ast, other.ast]}); }
+  not(): Expr { return new Expr({not: this.ast}); }
+}
+export class Field<T extends Json> {
+  constructor(readonly id: string) {}
+  protected op(operator: string, value: Json = null): Expr { return new Expr({property: this.id, operator, value}); }
+  eq(value: T): Expr { return this.op("eq", value); }
+  ne(value: T): Expr { return this.op("ne", value); }
+  isNull(): Expr { return this.op("is_null"); }
+  isNotNull(): Expr { return this.op("is_not_null"); }
+}
+export class OrderedField<T extends Json> extends Field<T> {
+  gt(value: T): Expr { return this.op("gt", value); }
+  gte(value: T): Expr { return this.op("gte", value); }
+  lt(value: T): Expr { return this.op("lt", value); }
+  lte(value: T): Expr { return this.op("lte", value); }
+}
+export class TextField extends Field<string> {
+  contains(value: string): Expr { return this.op("contains", value); }
+  startsWith(value: string): Expr { return this.op("starts_with", value); }
+  endsWith(value: string): Expr { return this.op("ends_with", value); }
+}
+type AST = {object_type: string; filter?: Json; traverse?: {link: string; direction: string; filter?: Json}[];
+  select?: string[] | null; order_by?: {property: string; direction: string}[]; limit?: number;
+  offset?: number; cursor?: string | null; pagination?: string; result_filter?: Json; };
+export class ObjectSet<P> {
+  constructor(readonly transport: Transport, readonly ast: AST) {}
+  private with(changes: Partial<AST>): ObjectSet<P> { return new ObjectSet(this.transport, {...structuredClone(this.ast), ...changes}); }
+  where(expression: Expr): ObjectSet<P> {
+    const ast = structuredClone(this.ast);
+    const node = ast.traverse?.length ? ast.traverse[ast.traverse.length - 1]! : ast;
+    node.filter = node.filter ? {and: [node.filter, expression.ast]} : expression.ast;
+    return new ObjectSet<P>(this.transport, ast).with({cursor: null, offset: 0});
+  }
+  orderBy(field: Field<Json>, descending = false): ObjectSet<P> { return this.with({order_by: [...(this.ast.order_by ?? []), {property: field.id, direction: descending ? "desc" : "asc"}], cursor: null}); }
+  select(...fields: Field<Json>[]): ObjectSet<P> { return this.with({select: fields.map(f => f.id), cursor: null}); }
+  limit(count: number): ObjectSet<P> { if (!Number.isInteger(count) || count < 1 || count > 200) throw new Error("Page limit must be 1..200"); return this.with({limit: count, cursor: null}); }
+  after(cursor: string): ObjectSet<P> { return this.with({cursor, offset: 0, pagination: "cursor"}); }
+  offset(count: number): ObjectSet<P> { return this.with({offset: count, cursor: null, pagination: "offset"}); }
+  traverse<T>(link: string, inverse = false): ObjectSet<T> {
+    const traverse = [...(this.ast.traverse ?? []), {link, direction: inverse ? "inverse" : "forward"}];
+    if (traverse.length > 4) throw new Error("At most four traversal steps");
+    return new ObjectSet<T>(this.transport, {...structuredClone(this.ast), traverse, select: null, order_by: [], cursor: null, offset: 0});
+  }
+  execute(): Promise<Page<P>> { return this.transport.request("POST", "/object-sets/query", this.ast); }
+  aggregate(metrics: {name: string; operator: "count"|"sum"|"avg"|"min"|"max"; property?: string}[], groupBy?: Field<Json>): Promise<Json> {
+    const {object_type, filter, traverse, result_filter} = this.ast;
+    return this.transport.request("POST", "/aggregate", {object_type, filter, traverse, result_filter, metrics, group_by: groupBy?.id});
+  }
+}
+export class Repository<P, C, U> {
+  private path: string;
+  constructor(readonly transport: Transport, readonly typeId: string) { this.path = "/objects/" + encodeURIComponent(typeId); }
+  query(): ObjectSet<P> { return new ObjectSet(this.transport, {object_type: this.typeId, limit: 50}); }
+  get(objectId: string): Promise<ObjectRecord<P>> { return this.transport.request("GET", this.path, undefined, {object_id: objectId}); }
+  create(objectId: string, properties: C): Promise<ObjectRecord<P>> { return this.transport.request("POST", this.path, {object_id: objectId, properties}); }
+  patch(objectId: string, properties: U, expectedVersion: number): Promise<ObjectRecord<P>> { return this.transport.request("PATCH", this.path, {expected_version: expectedVersion, properties}, {object_id: objectId}); }
+  delete(objectId: string, expectedVersion: number): Promise<void> { return this.transport.request("DELETE", this.path, undefined, {object_id: objectId, expected_version: String(expectedVersion)}); }
+}
+export class Action<P> {
+  constructor(readonly transport: Transport, readonly id: string) {}
+  history(limit = 50, offset = 0): Promise<Json> { return this.transport.request("GET", "/actions/executions", undefined, {limit: String(limit), offset: String(offset)}); }
+  preview(parameters: P): Promise<ActionResult> { return this.transport.request("POST", "/actions/" + encodeURIComponent(this.id) + "/preview", {parameters}); }
+  execute(parameters: P, idempotencyKey: string): Promise<ActionResult> { return this.transport.request("POST", "/actions/" + encodeURIComponent(this.id) + "/execute", {parameters, idempotency_key: idempotencyKey}); }
+}

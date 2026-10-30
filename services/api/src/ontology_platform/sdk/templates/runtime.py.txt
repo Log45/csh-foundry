@@ -1,0 +1,269 @@
+"""Generated public runtime. No backend imports; all operations use governed HTTP APIs."""
+from __future__ import annotations
+
+from collections.abc import Awaitable, Callable
+from copy import deepcopy
+from dataclasses import dataclass
+from typing import Any, Generic, TypeVar
+from urllib.parse import quote
+
+import httpx
+from pydantic import BaseModel, ConfigDict, Field as ModelField
+
+T = TypeVar("T")
+P = TypeVar("P", bound=BaseModel)
+C = TypeVar("C", bound=BaseModel)
+U = TypeVar("U", bound=BaseModel)
+TokenProvider = Callable[[], Awaitable[str]]
+
+
+class SDKError(Exception):
+    def __init__(self, response: httpx.Response):
+        self.response = response
+        self.status = response.status_code
+        try:
+            self.error = response.json()
+        except ValueError:
+            self.error = {"error": {"code": "invalid_response"}}
+        envelope = self.error.get("error", {}) if isinstance(self.error, dict) else {}
+        self.code = envelope.get("code", "request_failed") if isinstance(envelope, dict) else "request_failed"
+        super().__init__(self.code)
+
+
+class Properties(BaseModel):
+    model_config = ConfigDict(extra="forbid", populate_by_name=True, allow_inf_nan=False)
+
+
+class Object(BaseModel, Generic[P]):
+    tenant_id: str
+    ontology_id: str
+    object_type_id: str
+    object_id: str
+    schema_version: str
+    version: int
+    created_at: str
+    updated_at: str
+    properties: P
+
+
+class Page(BaseModel, Generic[P]):
+    object_type: str
+    schema_version: str
+    items: list[Object[P]]
+    next_cursor: str | None
+    has_more: bool
+
+
+class Change(BaseModel):
+    operation: str
+    object_type: str
+    object_id: str
+    previous_revision: int | None = None
+    new_revision: int | None = None
+    properties: list[str] = ModelField(default_factory=list)
+    link: str | None = None
+    target_type: str | None = None
+    target_id: str | None = None
+
+
+class ActionResult(BaseModel):
+    execution_id: str | None = None
+    action_id: str
+    action_version: str
+    schema_version: str
+    changes: list[Change]
+    advisory: bool
+
+
+@dataclass(frozen=True)
+class Expr:
+    ast: dict[str, Any]
+
+    def __and__(self, other: Expr) -> Expr:
+        return Expr({"and": [self.ast, other.ast]})
+
+    def __or__(self, other: Expr) -> Expr:
+        return Expr({"or": [self.ast, other.ast]})
+
+    def __invert__(self) -> Expr:
+        return Expr({"not": self.ast})
+
+
+@dataclass(frozen=True)
+class Field(Generic[T]):
+    id: str
+
+    def _op(self, op: str, value: Any = None) -> Expr:
+        # Pydantic's JSON conversion preserves decimal/date/UUID wire representations.
+        from pydantic import TypeAdapter
+        return Expr({"property": self.id, "operator": op,
+                     "value": TypeAdapter(Any).dump_python(value, mode="json")})
+
+    def eq(self, value: T) -> Expr:
+        return self._op("eq", value)
+
+    def ne(self, value: T) -> Expr:
+        return self._op("ne", value)
+
+    def is_null(self) -> Expr:
+        return self._op("is_null")
+
+    def is_not_null(self) -> Expr:
+        return self._op("is_not_null")
+
+
+class OrderedField(Field[T]):
+    def gt(self, value: T) -> Expr:
+        return self._op("gt", value)
+
+    def gte(self, value: T) -> Expr:
+        return self._op("gte", value)
+
+    def lt(self, value: T) -> Expr:
+        return self._op("lt", value)
+
+    def lte(self, value: T) -> Expr:
+        return self._op("lte", value)
+
+
+class TextField(Field[str]):
+    def contains(self, value: str) -> Expr:
+        return self._op("contains", value)
+
+    def starts_with(self, value: str) -> Expr:
+        return self._op("starts_with", value)
+
+    def ends_with(self, value: str) -> Expr:
+        return self._op("ends_with", value)
+
+
+class Transport:
+    def __init__(self, base_url: str, token_provider: TokenProvider, tenant_id: str,
+                 ontology_id: str, schema_version: str, http: httpx.AsyncClient | None = None):
+        self.http = http or httpx.AsyncClient(timeout=30, follow_redirects=False, trust_env=False)
+        self.owned = http is None
+        self.base = base_url.rstrip("/") + "/api/v1/ontologies/" + quote(ontology_id, safe="")
+        self.token_provider, self.tenant_id = token_provider, tenant_id
+        self.schema_version = schema_version
+
+    async def close(self) -> None:
+        if self.owned:
+            await self.http.aclose()
+
+    async def request(self, method: str, path: str, body: Any = None,
+                      params: dict[str, Any] | None = None) -> Any:
+        token = await self.token_provider()
+        async with self.http.stream(method, self.base + path,
+            headers={"Authorization": "Bearer " + token, "X-Tenant-ID": self.tenant_id},
+            json=body, params=params, follow_redirects=False) as response:
+            chunks, size = [], 0
+            async for chunk in response.aiter_bytes():
+                size += len(chunk)
+                if size > 5 * 1024 * 1024:
+                    raise ValueError("SDK response exceeds 5 MiB")
+                chunks.append(chunk)
+            import json
+            raw = b"".join(chunks)
+            retained = httpx.Response(response.status_code, content=raw,
+                                      headers=response.headers, request=response.request)
+            if not 200 <= response.status_code < 300:
+                raise SDKError(retained)
+            data = json.loads(raw) if raw else None
+        if isinstance(data, dict) and "schema_version" in data and data["schema_version"] != self.schema_version:
+            raise ValueError("schema_mismatch: regenerate for the active published schema")
+        return data
+
+
+@dataclass(frozen=True)
+class ObjectSet(Generic[P]):
+    transport: Transport
+    model: type[P]
+    ast: dict[str, Any]
+
+    def _with(self, **changes: Any) -> ObjectSet[P]:
+        return ObjectSet(self.transport, self.model, deepcopy(self.ast) | changes)
+
+    def where(self, expression: Expr) -> ObjectSet[P]:
+        ast = deepcopy(self.ast)
+        node = ast["traverse"][-1] if ast.get("traverse") else ast
+        previous = node.get("filter")
+        node["filter"] = {"and": [previous, expression.ast]} if previous else expression.ast
+        return ObjectSet(self.transport, self.model, ast)._with(cursor=None, offset=0)
+
+    def order_by(self, field: Field[Any], descending: bool = False) -> ObjectSet[P]:
+        return self._with(order_by=self.ast.get("order_by", []) +
+                          [{"property": field.id, "direction": "desc" if descending else "asc"}], cursor=None)
+
+    def select(self, *fields: Field[Any]) -> ObjectSet[P]:
+        return self._with(select=[f.id for f in fields], cursor=None)
+
+    def limit(self, count: int) -> ObjectSet[P]:
+        if not 1 <= count <= 200:
+            raise ValueError("Page limit must be 1..200")
+        return self._with(limit=count, cursor=None)
+
+    def after(self, cursor: str) -> ObjectSet[P]:
+        return self._with(cursor=cursor, offset=0, pagination="cursor")
+
+    def offset(self, offset: int) -> ObjectSet[P]:
+        return self._with(offset=offset, cursor=None, pagination="offset")
+
+    def traverse(self, link: str, model: type[C], inverse: bool = False) -> ObjectSet[C]:
+        steps = self.ast.get("traverse", []) + [{"link": link, "direction": "inverse" if inverse else "forward"}]
+        if len(steps) > 4:
+            raise ValueError("At most four traversal steps")
+        ast = deepcopy(self.ast) | {"traverse": steps, "order_by": [], "select": None,
+                                    "cursor": None, "offset": 0}
+        return ObjectSet(self.transport, model, ast)
+
+    async def execute(self) -> Page[P]:
+        return Page[self.model].model_validate(await self.transport.request("POST", "/object-sets/query", self.ast))  # type: ignore[name-defined]
+
+    async def aggregate(self, metrics: list[dict[str, Any]], group_by: Field[Any] | None = None) -> dict[str, Any]:
+        ast = {k: v for k, v in self.ast.items() if k not in {"limit", "cursor", "offset", "pagination", "order_by", "select"}}
+        ast |= {"metrics": metrics, "group_by": group_by.id if group_by else None}
+        return await self.transport.request("POST", "/aggregate", ast)  # type: ignore[no-any-return]
+
+
+class Repository(Generic[P, C, U]):
+    def __init__(self, transport: Transport, type_id: str, model: type[P], create: type[C], patch: type[U]):
+        self.transport, self.type_id, self.model = transport, type_id, model
+        self.create_model, self.patch_model = create, patch
+        self.path = "/objects/" + quote(type_id, safe="")
+
+    def query(self) -> ObjectSet[P]:
+        return ObjectSet(self.transport, self.model, {"object_type": self.type_id, "limit": 50})
+
+    async def get(self, object_id: str) -> Object[P]:
+        data = await self.transport.request("GET", self.path, params={"object_id": object_id})
+        return Object[self.model].model_validate(data)  # type: ignore[name-defined]
+
+    async def create(self, object_id: str, properties: C) -> Object[P]:
+        data = await self.transport.request("POST", self.path,
+            {"object_id": object_id, "properties": properties.model_dump(mode="json", by_alias=True, exclude_unset=True)})
+        return Object[self.model].model_validate(data)  # type: ignore[name-defined]
+
+    async def patch(self, object_id: str, properties: U, *, expected_version: int) -> Object[P]:
+        data = await self.transport.request("PATCH", self.path,
+            {"expected_version": expected_version, "properties": properties.model_dump(mode="json", by_alias=True, exclude_unset=True)},
+            params={"object_id": object_id})
+        return Object[self.model].model_validate(data)  # type: ignore[name-defined]
+
+    async def delete(self, object_id: str, *, expected_version: int) -> None:
+        await self.transport.request("DELETE", self.path, params={"object_id": object_id, "expected_version": expected_version})
+
+
+class Action(Generic[P]):
+    def __init__(self, transport: Transport, action_id: str, parameters: type[P]):
+        self.transport, self.id, self.parameters = transport, action_id, parameters
+
+    async def preview(self, parameters: P) -> ActionResult:
+        body = {"parameters": parameters.model_dump(mode="json", by_alias=True, exclude_unset=True)}
+        return ActionResult.model_validate(await self.transport.request("POST", "/actions/" + quote(self.id, safe="") + "/preview", body))
+
+    async def execute(self, parameters: P, *, idempotency_key: str) -> ActionResult:
+        body = {"parameters": parameters.model_dump(mode="json", by_alias=True, exclude_unset=True), "idempotency_key": idempotency_key}
+        return ActionResult.model_validate(await self.transport.request("POST", "/actions/" + quote(self.id, safe="") + "/execute", body))
+
+    async def history(self, limit: int = 50, offset: int = 0) -> dict[str, Any]:
+        return await self.transport.request("GET", "/actions/executions", params={"limit": limit, "offset": offset})  # type: ignore[no-any-return]
