@@ -12,6 +12,7 @@ import { Field, Notice, Task, useTask } from "./ui";
 import { Manager } from "@/features/manager";
 import { Explorer, Actions } from "@/features/explorer";
 import { Operations } from "@/features/operations";
+import { Brand } from "./brand";
 const navigate = () =>
   window.dispatchEvent(new Event("workspace-navigation", { cancelable: true }));
 export function Workspace() {
@@ -100,9 +101,7 @@ export function Workspace() {
   if (!session || expired)
     return (
       <main className="login">
-        <div className="brand">
-          ◈ FOUNDRY <span>OPEN ONTOLOGY PLATFORM</span>
-        </div>
+        <Brand subtitle="OPEN ONTOLOGY PLATFORM" />
         <h1>
           Your ontology.
           <br />
@@ -154,9 +153,7 @@ export function Workspace() {
         Skip to workspace
       </a>
       <aside>
-        <div className="brand">
-          ◈ FOUNDRY<span>DEVELOPER WORKSPACE</span>
-        </div>
+        <Brand subtitle="DEVELOPER WORKSPACE" />
         <Field label="Tenant">
           <select
             value={session.tenant ?? ""}

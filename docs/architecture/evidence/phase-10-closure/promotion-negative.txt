@@ -1,0 +1,3 @@
+Command: verify_release_evidence.py with exact selected custom-image IDs and source revision
+BLOCKED: [Errno 2] No such file or directory: 'artifacts/acceptance/release-manifest.json'
+Expected rejection exit: 1

@@ -1,0 +1,2749 @@
+{
+  "image-0": {
+    "image": "csh-foundry-ingress:phase10-closure",
+    "image_id": "sha256:98cc2b2325e076c0480211bca694f3536de6d1e58d04b035bca5863332fea767",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL",
+    "scan_timestamp": "2026-11-02T15:20:09.815281421Z",
+    "scanner_version": "0.121.0",
+    "database": {
+      "schemaVersion": "v6.1.10",
+      "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-02T00:22:47Z_1793600812.tar.zst?checksum=sha256%3A68063965a3a023acd330a65a0740976c81f8e13902824134b447deee97a0d838",
+      "built": "2026-11-02T06:26:52Z",
+      "path": "/cache/6/vulnerability.db",
+      "valid": true
+    },
+    "severity_counts": {
+      "High": 6,
+      "Critical": 2,
+      "Medium": 6
+    },
+    "unique_advisories": 12,
+    "unique_high_advisories": 6,
+    "scan_evidence": "artifacts/phase10-closure/remediated-infrastructure-scan/image-0.vulnerabilities.json",
+    "scan_sha256": "0f094a612070ff457b24747dfd6fe3ff467bc6af858ddfcdd50e78340e7c2094",
+    "sbom_sha256": "782df9d6b7dd3860a2a4f7b9a3e7c31be478b831383c86be51ae014503e4b351",
+    "findings": [
+      {
+        "advisory": "CVE-2026-49975",
+        "source": "https://security.alpinelinux.org/vuln/CVE-2026-49975",
+        "package": "nginx",
+        "installed_version": "1.28.3-r1",
+        "upstream": "nginx",
+        "severity": "High",
+        "available_fix": {
+          "versions": [
+            "1.28.3-r3"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "1.28.3-r3",
+              "date": "2026-06-06",
+              "kind": "first-observed"
+            }
+          ]
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match",
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "Reported fixed version requires remediation; see per-image report. Inventory export itself does not modify the image.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-9256",
+        "source": "https://security.alpinelinux.org/vuln/CVE-2026-9256",
+        "package": "nginx",
+        "installed_version": "1.28.3-r1",
+        "upstream": "nginx",
+        "severity": "High",
+        "available_fix": {
+          "versions": [
+            "1.28.3-r2"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "1.28.3-r2",
+              "date": "2026-05-24",
+              "kind": "first-observed"
+            }
+          ]
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match",
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "Reported fixed version requires remediation; see per-image report. Inventory export itself does not modify the image.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-42533",
+        "source": "https://security.alpinelinux.org/vuln/CVE-2026-42533",
+        "package": "nginx",
+        "installed_version": "1.28.3-r1",
+        "upstream": "nginx",
+        "severity": "Critical",
+        "available_fix": {
+          "versions": [
+            "1.28.3-r6"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "1.28.3-r6",
+              "date": "2026-07-20",
+              "kind": "first-observed"
+            }
+          ]
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match",
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "Reported fixed version requires remediation; see per-image report. Inventory export itself does not modify the image.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-42055",
+        "source": "https://security.alpinelinux.org/vuln/CVE-2026-42055",
+        "package": "nginx",
+        "installed_version": "1.28.3-r1",
+        "upstream": "nginx",
+        "severity": "High",
+        "available_fix": {
+          "versions": [
+            "1.28.3-r4"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "1.28.3-r4",
+              "date": "2026-06-23",
+              "kind": "first-observed"
+            }
+          ]
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match",
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "Reported fixed version requires remediation; see per-image report. Inventory export itself does not modify the image.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-15176",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2026-15176",
+        "package": "nginx",
+        "installed_version": "1.28.3-r1",
+        "upstream": "nginx",
+        "severity": "Critical",
+        "available_fix": {
+          "versions": [],
+          "state": "unknown"
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-60005",
+        "source": "https://security.alpinelinux.org/vuln/CVE-2026-60005",
+        "package": "nginx",
+        "installed_version": "1.28.3-r1",
+        "upstream": "nginx",
+        "severity": "High",
+        "available_fix": {
+          "versions": [
+            "1.28.3-r6"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "1.28.3-r6",
+              "date": "2026-07-20",
+              "kind": "first-observed"
+            }
+          ]
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match",
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "Reported fixed version requires remediation; see per-image report. Inventory export itself does not modify the image.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-48142",
+        "source": "https://security.alpinelinux.org/vuln/CVE-2026-48142",
+        "package": "nginx",
+        "installed_version": "1.28.3-r1",
+        "upstream": "nginx",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [
+            "1.28.3-r4"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "1.28.3-r4",
+              "date": "2026-06-23",
+              "kind": "first-observed"
+            }
+          ]
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match",
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "Reported fixed version requires remediation; see per-image report. Inventory export itself does not modify the image.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-56434",
+        "source": "https://security.alpinelinux.org/vuln/CVE-2026-56434",
+        "package": "nginx",
+        "installed_version": "1.28.3-r1",
+        "upstream": "nginx",
+        "severity": "High",
+        "available_fix": {
+          "versions": [
+            "1.28.3-r6"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "1.28.3-r6",
+              "date": "2026-07-20",
+              "kind": "first-observed"
+            }
+          ]
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match",
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "Reported fixed version requires remediation; see per-image report. Inventory export itself does not modify the image.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-95101",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2026-95101",
+        "package": "nginx",
+        "installed_version": "1.28.3-r1",
+        "upstream": "nginx",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "unknown"
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2025-60876",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-60876",
+        "package": "busybox",
+        "installed_version": "1.37.0-r30",
+        "upstream": "busybox",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": ""
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2025-60876",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-60876",
+        "package": "busybox-binsh",
+        "installed_version": "1.37.0-r30",
+        "upstream": "busybox",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": ""
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2025-60876",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-60876",
+        "package": "ssl_client",
+        "installed_version": "1.37.0-r30",
+        "upstream": "busybox",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": ""
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-97629",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2026-97629",
+        "package": "nginx",
+        "installed_version": "1.28.3-r1",
+        "upstream": "nginx",
+        "severity": "High",
+        "available_fix": {
+          "versions": [],
+          "state": "unknown"
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-58055",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2026-58055",
+        "package": "nghttp2-libs",
+        "installed_version": "1.69.0-r0",
+        "upstream": "nghttp2",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": ""
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:c253b4d734990756ceb93766184515d8276b468fe6725aa1aad5944211c1119a",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      }
+    ]
+  },
+  "image-1": {
+    "image": "quay.io/keycloak/keycloak:26.8.1",
+    "image_id": "sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL",
+    "scan_timestamp": "2026-11-02T15:20:35.618771294Z",
+    "scanner_version": "0.121.0",
+    "database": {
+      "schemaVersion": "v6.1.10",
+      "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-02T00:22:47Z_1793600812.tar.zst?checksum=sha256%3A68063965a3a023acd330a65a0740976c81f8e13902824134b447deee97a0d838",
+      "built": "2026-11-02T06:26:52Z",
+      "path": "/cache/6/vulnerability.db",
+      "valid": true
+    },
+    "severity_counts": {
+      "High": 3,
+      "Low": 28,
+      "Critical": 1,
+      "Medium": 37
+    },
+    "unique_advisories": 44,
+    "unique_high_advisories": 3,
+    "scan_evidence": "artifacts/phase10-closure/remediated-infrastructure-scan/image-1.vulnerabilities.json",
+    "scan_sha256": "e3ea6a4a3ca0442ed5d00474e7d458259611308388ea60965770627252e372c1",
+    "sbom_sha256": "a27afdc92585bbf027a429b168f9310ef91c9216d88b8a3a1682df8d503c6c65",
+    "findings": [
+      {
+        "advisory": "CVE-2026-119586",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-119586",
+        "package": "sqlite-libs",
+        "installed_version": "3.34.1-11.el9_8",
+        "upstream": "sqlite",
+        "severity": "High",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2023-50495",
+        "source": "https://access.redhat.com/security/cve/CVE-2023-50495",
+        "package": "ncurses-base",
+        "installed_version": "6.2-12.20210508.el9",
+        "upstream": "ncurses",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Terminal database/infocmp processing required; no endpoint intentionally invokes infocmp. Native dependency reachability not exhaustively proven.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2023-50495",
+        "source": "https://access.redhat.com/security/cve/CVE-2023-50495",
+        "package": "ncurses-libs",
+        "installed_version": "6.2-12.20210508.el9",
+        "upstream": "ncurses",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Terminal database/infocmp processing required; no endpoint intentionally invokes infocmp. Native dependency reachability not exhaustively proven.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2022-41409",
+        "source": "https://access.redhat.com/security/cve/CVE-2022-41409",
+        "package": "pcre2",
+        "installed_version": "10.40-7.el9_8",
+        "upstream": "",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2022-41409",
+        "source": "https://access.redhat.com/security/cve/CVE-2022-41409",
+        "package": "pcre2-syntax",
+        "installed_version": "10.40-7.el9_8",
+        "upstream": "pcre2",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2022-27943",
+        "source": "https://access.redhat.com/security/cve/CVE-2022-27943",
+        "package": "libgcc",
+        "installed_version": "11.5.0-14.el9",
+        "upstream": "gcc",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-91403",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-91403",
+        "package": "java-21-openjdk-headless",
+        "installed_version": "1:21.0.13.0.9-1.2.el9",
+        "upstream": "java-21-openjdk",
+        "severity": "Critical",
+        "available_fix": {
+          "versions": [],
+          "state": "wont-fix"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-95619",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-95619",
+        "package": "libgcc",
+        "installed_version": "11.5.0-14.el9",
+        "upstream": "gcc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2020-12413",
+        "source": "https://access.redhat.com/security/cve/CVE-2020-12413",
+        "package": "nspr",
+        "installed_version": "4.39.0-5.el9_6",
+        "upstream": "nss",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "wont-fix"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2020-12413",
+        "source": "https://access.redhat.com/security/cve/CVE-2020-12413",
+        "package": "nss",
+        "installed_version": "3.124.0-5.el9_6",
+        "upstream": "",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "wont-fix"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2020-12413",
+        "source": "https://access.redhat.com/security/cve/CVE-2020-12413",
+        "package": "nss-softokn",
+        "installed_version": "3.124.0-5.el9_6",
+        "upstream": "nss",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "wont-fix"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2020-12413",
+        "source": "https://access.redhat.com/security/cve/CVE-2020-12413",
+        "package": "nss-softokn-freebl",
+        "installed_version": "3.124.0-5.el9_6",
+        "upstream": "nss",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "wont-fix"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2020-12413",
+        "source": "https://access.redhat.com/security/cve/CVE-2020-12413",
+        "package": "nss-sysinit",
+        "installed_version": "3.124.0-5.el9_6",
+        "upstream": "nss",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "wont-fix"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2020-12413",
+        "source": "https://access.redhat.com/security/cve/CVE-2020-12413",
+        "package": "nss-util",
+        "installed_version": "3.124.0-5.el9_6",
+        "upstream": "nss",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "wont-fix"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "GHSA-xxph-c9ww-hj94",
+        "source": "https://github.com/advisories/GHSA-xxph-c9ww-hj94",
+        "package": "guava",
+        "installed_version": "33.6.0-jre",
+        "upstream": "",
+        "severity": "High",
+        "available_fix": {
+          "versions": [
+            "33.7.2"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "33.7.2",
+              "date": "2026-10-27",
+              "kind": "first-observed"
+            }
+          ]
+        },
+        "origin": "java-archive",
+        "locations": [
+          {
+            "path": "/opt/keycloak/lib/lib/main/com.google.guava.guava-33.6.0-jre.jar",
+            "layerID": "sha256:ca6a653224c2954dc8749c27a15508e5e80b7a8648f44d8f84b800323f78468e",
+            "accessPath": "/opt/keycloak/lib/lib/main/com.google.guava.guava-33.6.0-jre.jar",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "Reported fixed version requires remediation; see per-image report. Inventory export itself does not modify the image.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2021-46195",
+        "source": "https://access.redhat.com/security/cve/CVE-2021-46195",
+        "package": "libgcc",
+        "installed_version": "11.5.0-14.el9",
+        "upstream": "gcc",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-22693",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-22693",
+        "package": "java-21-openjdk-headless",
+        "installed_version": "1:21.0.13.0.9-1.2.el9",
+        "upstream": "java-21-openjdk",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-91382",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-91382",
+        "package": "java-21-openjdk-headless",
+        "installed_version": "1:21.0.13.0.9-1.2.el9",
+        "upstream": "java-21-openjdk",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-114691",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-114691",
+        "package": "libgcc",
+        "installed_version": "11.5.0-14.el9",
+        "upstream": "gcc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-102010",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-102010",
+        "package": "libgcc",
+        "installed_version": "11.5.0-14.el9",
+        "upstream": "gcc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "GHSA-h599-m3w5-9m7x",
+        "source": "https://github.com/advisories/GHSA-h599-m3w5-9m7x",
+        "package": "mariadb-java-client",
+        "installed_version": "3.5.10",
+        "upstream": "",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [
+            "3.5.11"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "3.5.11",
+              "date": "2026-10-31",
+              "kind": "first-observed"
+            }
+          ]
+        },
+        "origin": "java-archive",
+        "locations": [
+          {
+            "path": "/opt/keycloak/lib/lib/main/org.mariadb.jdbc.mariadb-java-client-3.5.10.jar",
+            "layerID": "sha256:ca6a653224c2954dc8749c27a15508e5e80b7a8648f44d8f84b800323f78468e",
+            "accessPath": "/opt/keycloak/lib/lib/main/org.mariadb.jdbc.mariadb-java-client-3.5.10.jar",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "Reported fixed version requires remediation; see per-image report. Inventory export itself does not modify the image.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-84243",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-84243",
+        "package": "glibc",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-84243",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-84243",
+        "package": "glibc-common",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "glibc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-84243",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-84243",
+        "package": "glibc-langpack-en",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "glibc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "GHSA-fhx5-2xqw-2cgm",
+        "source": "https://github.com/advisories/GHSA-fhx5-2xqw-2cgm",
+        "package": "mariadb-java-client",
+        "installed_version": "3.5.10",
+        "upstream": "",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [
+            "3.5.11"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "3.5.11",
+              "date": "2026-10-31",
+              "kind": "first-observed"
+            }
+          ]
+        },
+        "origin": "java-archive",
+        "locations": [
+          {
+            "path": "/opt/keycloak/lib/lib/main/org.mariadb.jdbc.mariadb-java-client-3.5.10.jar",
+            "layerID": "sha256:ca6a653224c2954dc8749c27a15508e5e80b7a8648f44d8f84b800323f78468e",
+            "accessPath": "/opt/keycloak/lib/lib/main/org.mariadb.jdbc.mariadb-java-client-3.5.10.jar",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "Reported fixed version requires remediation; see per-image report. Inventory export itself does not modify the image.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-8674",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-8674",
+        "package": "glibc",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-8674",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-8674",
+        "package": "glibc-common",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "glibc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-8674",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-8674",
+        "package": "glibc-langpack-en",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "glibc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "GHSA-grfq-r75j-rw9x",
+        "source": "https://github.com/advisories/GHSA-grfq-r75j-rw9x",
+        "package": "mariadb-java-client",
+        "installed_version": "3.5.10",
+        "upstream": "",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [
+            "3.5.11"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "3.5.11",
+              "date": "2026-10-31",
+              "kind": "first-observed"
+            }
+          ]
+        },
+        "origin": "java-archive",
+        "locations": [
+          {
+            "path": "/opt/keycloak/lib/lib/main/org.mariadb.jdbc.mariadb-java-client-3.5.10.jar",
+            "layerID": "sha256:ca6a653224c2954dc8749c27a15508e5e80b7a8648f44d8f84b800323f78468e",
+            "accessPath": "/opt/keycloak/lib/lib/main/org.mariadb.jdbc.mariadb-java-client-3.5.10.jar",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "Reported fixed version requires remediation; see per-image report. Inventory export itself does not modify the image.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2025-70873",
+        "source": "https://access.redhat.com/security/cve/CVE-2025-70873",
+        "package": "sqlite-libs",
+        "installed_version": "3.34.1-11.el9_8",
+        "upstream": "sqlite",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2024-0232",
+        "source": "https://access.redhat.com/security/cve/CVE-2024-0232",
+        "package": "sqlite-libs",
+        "installed_version": "3.34.1-11.el9_8",
+        "upstream": "sqlite",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2024-7531",
+        "source": "https://access.redhat.com/security/cve/CVE-2024-7531",
+        "package": "nspr",
+        "installed_version": "4.39.0-5.el9_6",
+        "upstream": "nss",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2024-7531",
+        "source": "https://access.redhat.com/security/cve/CVE-2024-7531",
+        "package": "nss",
+        "installed_version": "3.124.0-5.el9_6",
+        "upstream": "",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2024-7531",
+        "source": "https://access.redhat.com/security/cve/CVE-2024-7531",
+        "package": "nss-softokn",
+        "installed_version": "3.124.0-5.el9_6",
+        "upstream": "nss",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2024-7531",
+        "source": "https://access.redhat.com/security/cve/CVE-2024-7531",
+        "package": "nss-softokn-freebl",
+        "installed_version": "3.124.0-5.el9_6",
+        "upstream": "nss",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2024-7531",
+        "source": "https://access.redhat.com/security/cve/CVE-2024-7531",
+        "package": "nss-sysinit",
+        "installed_version": "3.124.0-5.el9_6",
+        "upstream": "nss",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2024-7531",
+        "source": "https://access.redhat.com/security/cve/CVE-2024-7531",
+        "package": "nss-util",
+        "installed_version": "3.124.0-5.el9_6",
+        "upstream": "nss",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-91409",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-91409",
+        "package": "java-21-openjdk-headless",
+        "installed_version": "1:21.0.13.0.9-1.2.el9",
+        "upstream": "java-21-openjdk",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-89092",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-89092",
+        "package": "glibc",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-89092",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-89092",
+        "package": "glibc-common",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "glibc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-89092",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-89092",
+        "package": "glibc-langpack-en",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "glibc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-119373",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-119373",
+        "package": "sqlite-libs",
+        "installed_version": "3.34.1-11.el9_8",
+        "upstream": "sqlite",
+        "severity": "High",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-40930",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-40930",
+        "package": "java-21-openjdk-headless",
+        "installed_version": "1:21.0.13.0.9-1.2.el9",
+        "upstream": "java-21-openjdk",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "GHSA-4jq2-8v3c-97w8",
+        "source": "https://github.com/advisories/GHSA-4jq2-8v3c-97w8",
+        "package": "mariadb-java-client",
+        "installed_version": "3.5.10",
+        "upstream": "",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [
+            "3.5.11"
+          ],
+          "state": "fixed",
+          "available": [
+            {
+              "version": "3.5.11",
+              "date": "2026-10-31",
+              "kind": "first-observed"
+            }
+          ]
+        },
+        "origin": "java-archive",
+        "locations": [
+          {
+            "path": "/opt/keycloak/lib/lib/main/org.mariadb.jdbc.mariadb-java-client-3.5.10.jar",
+            "layerID": "sha256:ca6a653224c2954dc8749c27a15508e5e80b7a8648f44d8f84b800323f78468e",
+            "accessPath": "/opt/keycloak/lib/lib/main/org.mariadb.jdbc.mariadb-java-client-3.5.10.jar",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "Reported fixed version requires remediation; see per-image report. Inventory export itself does not modify the image.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2025-64505",
+        "source": "https://access.redhat.com/security/cve/CVE-2025-64505",
+        "package": "java-21-openjdk-headless",
+        "installed_version": "1:21.0.13.0.9-1.2.el9",
+        "upstream": "java-21-openjdk",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-95512",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-95512",
+        "package": "java-21-openjdk-headless",
+        "installed_version": "1:21.0.13.0.9-1.2.el9",
+        "upstream": "java-21-openjdk",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-97399",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-97399",
+        "package": "glibc",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-97399",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-97399",
+        "package": "glibc-common",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "glibc",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-97399",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-97399",
+        "package": "glibc-langpack-en",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "glibc",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-34757",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-34757",
+        "package": "java-21-openjdk-headless",
+        "installed_version": "1:21.0.13.0.9-1.2.el9",
+        "upstream": "java-21-openjdk",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-119378",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-119378",
+        "package": "sqlite-libs",
+        "installed_version": "3.34.1-11.el9_8",
+        "upstream": "sqlite",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-50812",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-50812",
+        "package": "sqlite-libs",
+        "installed_version": "3.34.1-11.el9_8",
+        "upstream": "sqlite",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2025-64506",
+        "source": "https://access.redhat.com/security/cve/CVE-2025-64506",
+        "package": "java-21-openjdk-headless",
+        "installed_version": "1:21.0.13.0.9-1.2.el9",
+        "upstream": "java-21-openjdk",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2025-28164",
+        "source": "https://access.redhat.com/security/cve/CVE-2025-28164",
+        "package": "java-21-openjdk-headless",
+        "installed_version": "1:21.0.13.0.9-1.2.el9",
+        "upstream": "java-21-openjdk",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-5958",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-5958",
+        "package": "sed",
+        "installed_version": "4.8-10.el9",
+        "upstream": "",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-27171",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-27171",
+        "package": "java-21-openjdk-headless",
+        "installed_version": "1:21.0.13.0.9-1.2.el9",
+        "upstream": "java-21-openjdk",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-27171",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-27171",
+        "package": "zlib",
+        "installed_version": "1.2.11-40.el9",
+        "upstream": "",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-95818",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-95818",
+        "package": "glibc",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-95818",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-95818",
+        "package": "glibc-common",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "glibc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-95818",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-95818",
+        "package": "glibc-langpack-en",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "glibc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-115456",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-115456",
+        "package": "libgcc",
+        "installed_version": "11.5.0-14.el9",
+        "upstream": "gcc",
+        "severity": "Low",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-56391",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-56391",
+        "package": "coreutils-single",
+        "installed_version": "8.32-41.el9_8.1",
+        "upstream": "coreutils",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-119591",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-119591",
+        "package": "sqlite-libs",
+        "installed_version": "3.34.1-11.el9_8",
+        "upstream": "sqlite",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-114690",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-114690",
+        "package": "libgcc",
+        "installed_version": "11.5.0-14.el9",
+        "upstream": "gcc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-86805",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-86805",
+        "package": "glibc",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-direct-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-86805",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-86805",
+        "package": "glibc-common",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "glibc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-86805",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-86805",
+        "package": "glibc-langpack-en",
+        "installed_version": "2.34-283.el9_8",
+        "upstream": "glibc",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-49919",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-49919",
+        "package": "java-21-openjdk-headless",
+        "installed_version": "1:21.0.13.0.9-1.2.el9",
+        "upstream": "java-21-openjdk",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-46675",
+        "source": "https://access.redhat.com/security/cve/CVE-2026-46675",
+        "package": "java-21-openjdk-headless",
+        "installed_version": "1:21.0.13.0.9-1.2.el9",
+        "upstream": "java-21-openjdk",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "not-fixed"
+        },
+        "origin": "rpm",
+        "locations": [
+          {
+            "path": "/var/lib/rpm/rpmdb.sqlite",
+            "layerID": "sha256:6590a9eaacd7cf0004c7aa546416d8e499e13cafe4c5a22393d30b0d61a61422",
+            "accessPath": "/var/lib/rpm/rpmdb.sqlite",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "exact-indirect-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      }
+    ]
+  }
+}

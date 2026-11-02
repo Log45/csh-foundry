@@ -12,8 +12,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from ontology_platform.db.models import DerivedFact, SemanticArtifact, SemanticJob
+from ontology_platform.db.session import clock
 from ontology_platform.errors import ApplicationError
-from ontology_platform.ingestion.worker import clock
 from ontology_platform.security.interfaces import Principal
 from ontology_platform.semantic.compiler import parse, serialize, triple_id
 from ontology_platform.semantic.contracts import JobInput

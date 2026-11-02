@@ -1,0 +1,18 @@
+{
+  "csh-foundry-api:phase10-closure": {
+    "Pod::Text": {
+      "exit": 2,
+      "loadable": false
+    },
+    "Archive::Tar": {
+      "exit": 2,
+      "loadable": false
+    },
+    "infocmp": "/usr/bin/infocmp",
+    "LANG": "C.UTF-8",
+    "LANGUAGE": null
+  },
+  "csh-foundry-studio:phase10-closure": {
+    "perl_module_load_exit_codes": "2 2"
+  }
+}

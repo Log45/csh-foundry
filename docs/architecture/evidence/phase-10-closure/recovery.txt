@@ -1,0 +1,3 @@
+PASS PostgreSQL 17.6 physical base backup, WAL archival, named-point recovery and promotion
+PASS pre-backup and committed post-backup records recovered; post-target record excluded
+Scope: isolated Docker volumes; off-host encrypted storage and disaster-site recovery NOT RUN

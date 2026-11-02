@@ -13,7 +13,7 @@ def main() -> None:
             raise SystemExit("FAIL explicit lowercase DNS host required: " + name)
         if "localhost" in value or value.endswith(".test"):
             raise SystemExit("FAIL production DNS required: " + name)
-    for name in ("API_IMAGE", "STUDIO_IMAGE", "SEMANTIC_IMAGE"):
+    for name in ("API_IMAGE", "STUDIO_IMAGE", "SEMANTIC_IMAGE", "INGRESS_IMAGE"):
         if not re.fullmatch(r"[a-z0-9./_-]+@sha256:[0-9a-f]{64}", os.environ.get(name, "")):
             raise SystemExit("FAIL approved immutable image digest required: " + name)
     root = Path(os.environ["SECRETS_DIRECTORY"])

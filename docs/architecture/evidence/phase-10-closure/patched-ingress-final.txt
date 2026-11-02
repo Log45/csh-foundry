@@ -1,0 +1,9 @@
+Error response from daemon: container bda5ea9efeb0b81a55ee3cc09db29c79680b2c563c2e76df6c9604efb6aecff6 is not running
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/test_ingress.py", line 159, in <module>
+    main()
+  File "/Users/log/Documents/code/csh-foundry/scripts/test_ingress.py", line 77, in main
+    subprocess.run(["docker", "exec", container, "nginx", "-t"], check=True)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['docker', 'exec', 'bda5ea9efeb0b81a55ee3cc09db29c79680b2c563c2e76df6c9604efb6aecff6', 'nginx', '-t']' returned non-zero exit status 1.

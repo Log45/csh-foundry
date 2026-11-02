@@ -1,0 +1,20 @@
+{
+  "result": "PASS",
+  "environment": "foundry-accept-d9737777",
+  "checked_fields": [
+    "FOUNDRY_BROWSER_STATE_KEYS",
+    "FOUNDRY_BROWSER_STATE_SECRET",
+    "FOUNDRY_DATABASE_URL",
+    "FOUNDRY_QUERY_CURSOR_SECRET",
+    "FOUNDRY_WORKER_CLIENT_SECRET",
+    "disposable_realm_user_credential_0",
+    "keycloak_admin_password",
+    "keycloak_password",
+    "migrator_password",
+    "postgres_password",
+    "runtime_password"
+  ],
+  "compose_log_sha256": "2cd5b611b5923610b47cc6eecfea1c6e9678414c1fdd211e58f2adc1a584ce12",
+  "procedure": "Search actual retained combined-profile logs for exact current mounted secret values and disposable realm password; callback query sentinels tested separately",
+  "limitations": "Current retained secret files and realm credential only; does not prove absence of every historical rotated value or secrets in external collectors"
+}

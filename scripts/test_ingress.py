@@ -1,6 +1,7 @@
 """Actual nginx TLS, host validation and private-path checks on a disposable loopback port."""
 
 import ipaddress
+import os
 import ssl
 import subprocess
 import tempfile
@@ -63,11 +64,15 @@ def main() -> None:
                     "-d",
                     "-p",
                     "127.0.0.1::443",
+                    "-p",
+                    "127.0.0.1::80",
                     "-v",
                     f"{root}:/etc/nginx/tls:ro",
                     "-v",
                     f"{root / 'default.conf'}:/etc/nginx/conf.d/default.conf:ro",
-                    "nginx:1.28.3-alpine",
+                    os.environ.get(
+                        "FOUNDRY_INGRESS_TEST_IMAGE", "csh-foundry-ingress:phase10-closure"
+                    ),
                 ],
                 text=True,
             ).strip()
@@ -76,6 +81,20 @@ def main() -> None:
                 ["docker", "port", container, "443"], text=True
             ).strip()
             base = "https://127.0.0.1:" + binding.rsplit(":", 1)[1]
+            plain_binding = subprocess.check_output(
+                ["docker", "port", container, "80"], text=True
+            ).strip()
+            marker = "disposable-callback-log-sentinel"
+            redirect = httpx.get(
+                "http://127.0.0.1:"
+                + plain_binding.rsplit(":", 1)[1]
+                + "/auth/callback?code="
+                + marker,
+                headers={"Host": "studio.example.org"},
+                trust_env=False,
+            )
+            assert redirect.status_code == 308
+            assert redirect.headers["location"].startswith("https://studio.example.org/")
             with httpx.Client(
                 verify=ssl.create_default_context(cafile=str(root / "fullchain.pem")),
                 trust_env=False,
@@ -110,7 +129,7 @@ def main() -> None:
                     == 404
                 )
                 try:
-                    client.get(base + "/", headers={"Host": "attacker.example"})
+                    client.get(base + "/?code=" + marker, headers={"Host": "attacker.example"})
                 except httpx.RemoteProtocolError:
                     pass
                 else:
@@ -121,6 +140,10 @@ def main() -> None:
                 pass
             else:
                 raise AssertionError("Untrusted certificate accepted")
+            logs = subprocess.check_output(["docker", "logs", container], text=True)
+            assert marker not in logs
+            assert '"event":"ingress_status"' in logs
+            print("PASS HTTP redirects and default-host logs omit callback/query values")
             print(
                 "PASS actual nginx configuration, trusted TLS, HSTS, private path "
                 "isolation, unknown Host rejection"

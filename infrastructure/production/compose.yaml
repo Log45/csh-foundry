@@ -12,7 +12,7 @@ x-runtime: &runtime
   restart: unless-stopped
   init: true
   read_only: true
-  tmpfs: [/tmp:size=128m,mode=1777]
+  tmpfs: ["/tmp:size=128m,mode=1777"]
   cap_drop: [ALL]
   security_opt: [no-new-privileges:true]
   group_add: ["10001"]
@@ -33,7 +33,7 @@ x-worker-health: &worker-health
 
 services:
   postgres:
-    image: postgres:17.11-trixie
+    image: postgres:17.11-trixie@sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -62,10 +62,12 @@ services:
     environment: *api-environment
     secrets: [FOUNDRY_DATABASE_URL, FOUNDRY_BROWSER_STATE_SECRET,
               FOUNDRY_BROWSER_STATE_KEYS, FOUNDRY_QUERY_CURSOR_SECRET]
+    volumes:
+      - ${WORKER_CATALOG_FILE:?Set WORKER_CATALOG_FILE}:/run/secrets/FOUNDRY_INGESTION_CATALOG_JSON:ro
     networks: [front, data]
     depends_on:
       postgres: {condition: service_healthy}
-      keycloak: {condition: service_started}
+      keycloak: {condition: service_healthy}
       ingress: {condition: service_started}
     healthcheck:
       test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://api:8000/health/ready', timeout=3)"]
@@ -99,7 +101,7 @@ services:
       retries: 6
 
   keycloak:
-    image: quay.io/keycloak/keycloak:26.8.1
+    image: quay.io/keycloak/keycloak:26.8.1@sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332
     restart: unless-stopped
     init: true
     environment:
@@ -128,23 +130,33 @@ services:
     pids_limit: 256
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
+    healthcheck:
+      test:
+        - CMD
+        - /bin/bash
+        - -ec
+        - "{ printf 'HEAD /health/ready HTTP/1.0\\r\\n\\r\\n' >&0; grep 'HTTP/1.0 200'; } 0<>/dev/tcp/localhost/9000"
+      interval: 5s
+      timeout: 3s
+      start_period: 180s
+      retries: 24
 
   ingress:
-    image: nginx:1.28.3-alpine
+    image: ${INGRESS_IMAGE:?Set a verified patched ingress image digest}
     restart: unless-stopped
     environment:
       STUDIO_HOST: ${STUDIO_HOST}
       API_HOST: ${API_HOST}
       IDENTITY_HOST: ${IDENTITY_HOST}
       NGINX_ENVSUBST_FILTER: STUDIO_HOST|API_HOST|IDENTITY_HOST
-    ports: ["443:443"]
+    ports: ["80:80", "443:443"]
     volumes:
       - ./nginx.conf.template:/etc/nginx/templates/default.conf.template:ro
       - ${TLS_DIRECTORY:?Set private TLS_DIRECTORY}:/etc/nginx/tls:ro
     networks:
       front:
         ipv4_address: 172.30.10.2
-        aliases: ["${IDENTITY_HOST}"]
+        aliases: ["${IDENTITY_HOST}", "${API_HOST}", "${STUDIO_HOST}"]
       identity:
         ipv4_address: 172.30.11.2
       egress: {}
@@ -190,7 +202,7 @@ services:
     command: [python, -m, ontology_platform.jobs.supervisor, --kind, semantic,
               --ontology, "${WORKER_ONTOLOGY:-manufacturing}", --deadline, "60"]
     networks: [front, data]
-    tmpfs: [/tmp:size=128m,mode=1777]
+    tmpfs: ["/tmp:size=128m,mode=1777"]
     mem_limit: 768m
     cpus: 1
 

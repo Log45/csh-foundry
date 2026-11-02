@@ -1,0 +1,9 @@
+Checking /config/rules.yaml
+  SUCCESS: 3 rules found
+
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/test_alert_delivery.py", line 162, in <module>
+    main()
+  File "/Users/log/Documents/code/csh-foundry/scripts/test_alert_delivery.py", line 131, in main
+    raise RuntimeError("No resolved webhook within 150 seconds")
+RuntimeError: No resolved webhook within 150 seconds

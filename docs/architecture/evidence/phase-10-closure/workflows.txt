@@ -1,0 +1,2 @@
+PASS YAML and immutable external action pins: .github/workflows/ci.yaml
+PASS YAML and immutable external action pins: .github/workflows/release.yaml

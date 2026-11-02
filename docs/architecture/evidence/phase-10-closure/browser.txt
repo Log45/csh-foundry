@@ -1,0 +1,58 @@
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test
+
+
+Running 5 tests using 1 worker
+
+(node:80352) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/workflow.spec.ts:47:1 › verified browser reference workflow (7.6s)
+(node:80500) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 tests/e2e/workflow.spec.ts:205:1 › CSRF and unauthenticated proxy requests fail closed (1.1s)
+  ✓  3 tests/e2e/workflow.spec.ts:220:1 › native authoring, OWL diagnostics, tenant isolation and session loss (3.8s)
+  ✓  4 tests/e2e/workflow.spec.ts:304:1 › schema branching, resolved merge and private SDK download (3.5s)
+  ✓  5 tests/e2e/workflow.spec.ts:405:3 › durable sessions survive replica restart and logout revokes every replica (2.7s)
+
+
+  1) tests/e2e/workflow.spec.ts:47:1 › verified browser reference workflow ─────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Active 1.0.0', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Active 1.0.0', { exact: true }) with timeout 5000ms
+      - waiting for getByText('Active 1.0.0', { exact: true })
+
+
+      65 |     .getByRole("button", { name: "Activate schema", exact: true })
+      66 |     .click();
+    > 67 |   await expect(page.getByText("Active 1.0.0", { exact: true })).toBeVisible();
+         |                                                                 ^
+      68 |   await page.getByRole("button", { name: "Ingestion", exact: true }).click();
+      69 |   const schema = JSON.parse(
+      70 |     fs.readFileSync(
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/workflow.spec.ts:67:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/workflow-verified-browser-reference-workflow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/workflow-verified-browser-reference-workflow/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/workflow-verified-browser-reference-workflow/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/workflow-verified-browser-reference-workflow/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/e2e/workflow.spec.ts:47:1 › verified browser reference workflow ──────────────────────────
+  4 passed (20.7s)

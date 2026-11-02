@@ -28,8 +28,8 @@ Assign named humans to the following operational roles before deployment:
 | Tenant administrator | Platform membership, least-privilege roles, restrictive ABAC, deactivation |
 | Security/release reviewer | Vulnerability findings, artifact integrity, release/deployment approval |
 
-Networks isolate frontend, broker proxy, database and outbound access. Only nginx publishes a port
-(443). API does not trust forwarded headers. Nginx replaces forwarded identity headers; Keycloak
+Networks isolate frontend, broker proxy, database and outbound access. Only nginx publishes ports
+80/443 (HTTP redirects only on 80). API does not trust forwarded headers. Nginx replaces forwarded identity headers; Keycloak
 trusts only nginx's fixed identity-network address. Origins/redirects are fixed operator values.
 The API internal session/metrics routes are inaccessible through public ingress. Keep the Docker
 socket and host administration private. External source/outbox access requires explicit egress
@@ -197,7 +197,12 @@ are at-least-once; recipients deduplicate event IDs. Do not enable arbitrary des
 Defaults: 120 verified requests/minute/issuer-subject; 20 combined active jobs/tenant; 256 MiB
 logical retained artifact/staging bytes/tenant. Set `FOUNDRY_REQUEST_LIMIT_PER_MINUTE`,
 `FOUNDRY_TENANT_PENDING_JOB_LIMIT`, `FOUNDRY_TENANT_STORAGE_LIMIT_BYTES` explicitly when capacity
-testing justifies it. Pool defaults are five connections plus five overflow, three-second pool wait,
+testing justifies it. The ordinary pool defaults to five connections plus five overflow. Each API
+process reserves a separate audit pool capped at two connections with no overflow, using the same
+restricted role and database. Budget **12 connections per API process** at the default settings,
+plus workers, broker and operational connections. This prevents business lock waiters from starving
+the independent audit transaction required before the lock holder commits. Both pools retain the
+three-second pool wait,
 two-second lock and three-second ordinary statement budgets. Some existing governed workflows have
 explicit bounded statement extensions. Admission/quota failure rolls back the governed transaction.
 
@@ -288,3 +293,103 @@ is the supported release process. Configure required reviewers on the `productio
 GitHub environment; an environment name alone does not enforce a reviewer. Failed scan/tests stop
 packaging. There is no automatic production deploy step. Review all remaining scan findings and
 target acceptance gates before approving an image, even if local regression tests pass.
+
+## Acceptance closure — disposable production profile
+
+The Phase 10 closure harness is `scripts/accept_phase10.py`. It creates a unique Compose project,
+new databases/roles, a short-lived private CA, disposable broker identities/secrets and fixture
+registrations. It uses the production template and real production images. It never reads `.env`
+for deployment configuration and never attaches the developer database volume or existing broker.
+Generated credentials, dumps and detailed failure logs remain in ignored `artifacts/foundry-accept-*/`.
+Do not publish those directories. Redacted check results go to
+`docs/architecture/evidence/phase-10-closure/`.
+
+Build the four prerequisite images from the reviewed checkout:
+
+```bash
+docker build -t csh-foundry-ingress:phase10-closure -f infrastructure/docker/ingress.Dockerfile .
+docker build -t csh-foundry-api:phase10-closure -f infrastructure/docker/api.Dockerfile .
+docker build -t csh-foundry-studio:phase10-closure -f infrastructure/docker/studio.Dockerfile .
+docker build --platform linux/amd64 -t csh-foundry-api:phase10-closure-amd64 -f infrastructure/docker/api.Dockerfile .
+docker build --platform linux/amd64 --build-arg BASE_IMAGE=csh-foundry-api:phase10-closure-amd64 \
+  -t csh-foundry-semantic:phase10-closure -f infrastructure/docker/semantic.Dockerfile .
+uv run python scripts/accept_phase10.py
+uv run python scripts/test_alert_delivery.py
+```
+
+Prerequisites: Docker Compose supporting `!override`, Node >=22 on PATH, frozen uv dependencies,
+Studio's installed TypeScript compiler, free Docker subnets 172.29.100/101 and sufficient resources.
+The pinned upstream Linux engine release is amd64; ARM Docker Desktop uses emulation for the
+semantic image. This is not representative target hardware. The encrypted restore check uses the
+retained local `artifacts/age-tool/age/{age,age-keygen}` tools; without them that check is NOT RUN.
+Install reviewed age tools there or adapt that path in a reviewed change; never substitute a
+plaintext backup and call encryption accepted.
+
+The harness overrides public ports with random loopback bindings, adds only public CA mounts,
+uses separate test subnets/trusted proxy address and adds a disposable PostgreSQL management
+network/loopback port for offline provisioning. API/Studio/workers keep their production internal
+networks and runtime limits. The production DNS/digest preflight intentionally rejects `.test`
+hostnames and local image tags; passing Compose validation in this test is not target preflight.
+The physical recovery helper `scripts/phase10_pitr.py` verifies the source Compose-project label
+and exact WAL bind mount before changing archive ownership. It refuses developer projects and
+existing restore volumes. It streams a base backup to a new volume, replays the profile's archived
+WAL to a named target, and checks all Foundry/Keycloak public-table row counts and content hashes.
+Its restore container has no network. The original source cluster is retained until the normal
+disposable-project teardown. This is a same-host database drill; it does not start the restored
+application/broker or certify target RPO/RTO.
+
+Only the harness's own project and volumes are removed in `finally`. Private evidence is retained.
+Interrupted runs may need the project-specific `docker compose ... down --volumes` command from
+that generated directory; never use a broad Docker prune or remove existing developer resources.
+
+Production changes validated by this work: quoted tmpfs options, API source-catalog registration,
+Keycloak readiness before API warmup, frontend aliases for the ingress hosts, and HTTP-to-HTTPS
+redirects for exact allowed hosts. Only nginx exposes ports 80/443; unknown HTTP hosts are dropped.
+Port 80 serves redirects only. Internal metrics/session endpoints remain private. Semantic leases
+use the shared database clock without initializing the ingestion/Polars runtime.
+
+The harness records assertions individually; a partial run is not a full acceptance pass. Read
+`deployment.json`, the last run log, runtime limits, deployed load results, backup checksums and the
+readiness matrix together. A failed assertion writes private diagnostics and exits nonzero.
+`test_alert_delivery.py` evaluates the unchanged two-minute API outage rule with actual Prometheus
+and Alertmanager, then verifies local firing/resolution webhooks. It uses a synthetic scrape target,
+not production monitoring; configure and test the actual receiver and deployed scrape topology
+separately. Host/WAL/backup/queue/storage alert rules are not supplied by this small rule set.
+
+## Evidence required before release promotion
+
+Read [the vulnerability disposition](vulnerability-disposition.md). High findings block release;
+upstream `wont-fix` classifications do not authorize platform exceptions. All four custom images,
+including semantic execution and patched ingress, are scanned and archived. Pinned PostgreSQL
+and Keycloak images are also scanned. Scanner/SBOM JSON is retained by
+CI even when scanning fails. Image base/tool identities are pinned to reviewed digests.
+
+`verify_release_evidence.py` rejects missing or non-PASS mandatory local gates, wrong revision/image
+identities, evidence path escapes and changed evidence bytes. The release workflow expects
+`artifacts/acceptance/release-manifest.json` for the exact candidate; it does not manufacture that
+file from partial results. The evidence collection/owner review handoff must be configured before
+hosted promotion can succeed. A manifest has `source_revision`, `images` (api/studio/semantic/ingress image
+IDs), and `checks`, with one entry for every name in the script's `REQUIRED` set. Each entry contains
+`result: PASS`, a repository-relative `evidence` file and its `sha256`. Use distinct executed evidence
+where appropriate; hashes establish integrity, not the truth or approval of a claim. Owner review,
+required environment reviewers, off-host custody, live SSO and target certification remain separate.
+The validator implements no implicit risk-exception path. Missing evidence deliberately blocks the
+archive/provenance/approval jobs. The workflow still performs no deployment.
+
+For operator capacity planning, alert before free data/backup/WAL space drops below an agreed
+headroom threshold (provisional starting point: 20% free; page at 10%), and on WAL archive failures
+or age beyond the intended RPO. Measure data/TOAST/index, immutable audit/branch/SDK growth and
+backup retention separately. These are operator proposals, not enforced physical quotas or approved
+business SLOs. Establish named owners, alert routes and measured target retention/capacity before
+certification. Logical tenant quotas cannot certify physical disk bounds.
+
+The ingress image now uses the supplier's maintained stable nginx 1.30.6 release (reviewed digest),
+which upstream lists as fixed for the remaining nginx-core advisories, and applies maintained Alpine
+OS updates. Unused ACME/GeoIP/image-filter/njs/XSLT modules and their unnecessary libraries are removed;
+the profile uses built-in HTTP proxy/TLS only. An intermediate 1.28.3 package update was insufficient
+and its evidence is retained. `INGRESS_IMAGE` is a new required immutable image input, checked by
+preflight. Build, scan and validate it before promotion.
+The Keycloak 26.8.1 digest was refreshed from the supplier; existing developer containers are not
+recreated. Remaining supplier-library findings still block release and require owner review.
+All nginx server blocks, including HTTP redirects and rejected hosts, explicitly select status-only
+logging. The callback-sentinel regression caught inherited URI logging before this fix.

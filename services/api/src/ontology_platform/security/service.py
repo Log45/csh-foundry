@@ -58,8 +58,15 @@ class SecuritySnapshot:
 
 
 class PlatformAuthorizer:
-    def __init__(self, sessions: sessionmaker[Session], *, test_mode: bool = False):
+    def __init__(
+        self,
+        sessions: sessionmaker[Session],
+        *,
+        test_mode: bool = False,
+        audit_sessions: sessionmaker[Session] | None = None,
+    ):
         self.sessions = sessions
+        self.audit_sessions = audit_sessions if audit_sessions is not None else sessions
         self.test_mode = test_mode
         self.current: ContextVar[Session | None] = ContextVar("security_session", default=None)
         self.snapshot: ContextVar[SecuritySnapshot | None] = ContextVar(
@@ -234,7 +241,7 @@ class PlatformAuthorizer:
         )
         snapshot = self.snapshot.get()
         if snapshot is None:
-            with self.sessions.begin() as audit_session:
+            with self.audit_sessions.begin() as audit_session:
                 audit_session.add(row)
         else:
             snapshot.pending_audit.append(row)
@@ -248,7 +255,7 @@ class PlatformAuthorizer:
         if not snapshot.pending_audit:
             return
         rows, snapshot.pending_audit = snapshot.pending_audit, []
-        with self.sessions.begin() as audit_session:
+        with self.audit_sessions.begin() as audit_session:
             audit_session.add_all(rows)
 
     def policy_denial(self, p: Principal, operation: str, resource: str) -> None:

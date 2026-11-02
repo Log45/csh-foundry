@@ -35,3 +35,14 @@ coarse locks, synchronous bounded SDK compilation, indefinite immutable history,
 integer limits, JSON branch authoring, API-only advanced history comparison and private artifact
 retrieval. Review these deliberately before selecting production workloads; do not silently expand
 schema/SDK guarantees or introduce a second registry/database/authorization engine.
+
+Acceptance-closure execution is now recorded in `docs/architecture/evidence/phase-10-closure/` and
+the continuation `docs/architecture/evidence/phase-10-closure-2/` and the appended report.
+Combined PG 17.11 PITR and deployed concurrent job admission now pass; the admission exercise
+identified API audit-pool starvation, fixed with two reserved audit connections. Latest scoped
+read-latency targets fail; full Python regression passes 529 tests/one strict xfail/zero skips.
+Scoped combined deployment, manufacturing, sessions, supported credential
+rotation, recovery, worker SIGKILL reclaim and rollback checks pass. Stable patched ingress passes
+scanning, while retained application-base high and PostgreSQL/Keycloak critical findings block
+promotion. Local, production-like and production certification remain separate decisions; live
+SSO, hosted controls, off-host recovery and remaining operational exercises are not implied PASS.

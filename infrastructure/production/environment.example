@@ -16,3 +16,6 @@ WORKER_SUBJECT_ID=REPLACE_WITH_PROVISIONED_INITIATOR
 WORKER_ONTOLOGY=manufacturing
 WORKER_CATALOG_FILE=/srv/foundry/secrets/FOUNDRY_INGESTION_CATALOG_JSON
 INGESTION_DIRECTORY=/srv/foundry/inputs
+
+# Built from infrastructure/docker/ingress.Dockerfile; do not use the unpatched base.
+INGRESS_IMAGE=registry.example.org/foundry-ingress@sha256:REPLACE_WITH_APPROVED_DIGEST

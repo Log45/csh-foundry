@@ -3,10 +3,10 @@
 import time
 from collections import Counter
 from collections.abc import Callable
-from datetime import datetime, timedelta
+from datetime import timedelta
 from uuid import UUID, uuid4
 
-from sqlalchemy import func, or_, select
+from sqlalchemy import or_, select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -18,6 +18,7 @@ from ontology_platform.db.models import (
     IngestionRun,
     IngestionStage,
 )
+from ontology_platform.db.session import clock
 from ontology_platform.errors import ApplicationError
 from ontology_platform.ingestion.connectors import Extraction, encode, extract
 from ontology_platform.ingestion.materialize import Materializer
@@ -25,12 +26,6 @@ from ontology_platform.ingestion.service import IngestionService
 from ontology_platform.ingestion.transform import Proposed, transform, validate_mapping
 from ontology_platform.metadata.storage import active_definition
 from ontology_platform.security.interfaces import Principal
-
-
-def clock(session: Session) -> datetime:
-    value = session.scalar(select(func.clock_timestamp()))
-    assert isinstance(value, datetime)
-    return value
 
 
 class IngestionWorker(IngestionService):

@@ -1,0 +1,21 @@
+PASS production-template-configuration
+No new upgrade operations detected.
+PASS new-cluster-owner-migration-and-runtime-grants
+PASS complete-production-profile-core-startup
+/Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+PASS governed-manufacturing-schema-and-explicit-worker-delegations
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10.py", line 630, in <module>
+    try:
+    ^^^^^
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10.py", line 624, in main
+    def main() -> None:
+            ^^^^^^^^^^^^
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10.py", line 590, in execute
+    self.prepare()
+    ^^^^^^^^^^^^^^^
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10.py", line 391, in wait
+    pass
+^^^^^^^^^
+KeyboardInterrupt

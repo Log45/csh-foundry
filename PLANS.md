@@ -3315,3 +3315,13 @@ The first deliverable should include:
 **Stop after completing Phase 0 and report results before proceeding.**
 
 The implementation must establish a reliable foundation before adding object storage, actions, ingestion, or semantic reasoning workflows.
+
+## Phase 10 acceptance-closure status (2026-11-02)
+
+Continue Phase 10 only. Combined production-template acceptance and operational evidence are
+tracked in `docs/architecture/evidence/phase-10-closure/`, the continuation evidence in
+`docs/architecture/evidence/phase-10-closure-2/`, and the appended Phase 10 report.
+Container high-severity findings still block release. Do not mark local/production-like acceptance
+or production certification from application regressions alone. Remaining Phase 10 acceptance,
+off-host custody, hosted controls and live provider certification are not moved into Phase 11.
+Phase 11 remains unapproved and unimplemented.

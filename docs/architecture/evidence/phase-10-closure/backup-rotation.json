@@ -1,0 +1,10 @@
+{
+  "result": "PASS",
+  "procedure": "Decrypt the tested combined-profile age backup in memory; encrypt to a new disposable recipient; compare old/new decrypted archive hashes; reject old key for new ciphertext; retain old-key readability of historical backup",
+  "environment": "foundry-accept-d9737777",
+  "original_ciphertext_sha256": "cc1684add1538a8129fad670829fa235cd096c7369a61ad702491be4512f5c44",
+  "rotated_ciphertext_sha256": "7c5c2c128d83ab82103017ad32eb37e54974160add80ed7f97bbe055b758604f",
+  "archive_sha256": "a62eff6c805dd6ed000e796ebb3ab7caf71ceb2ecdd6ac1bf1e3b245b29c27ff",
+  "private_evidence": "artifacts/foundry-accept-d9737777",
+  "limitations": "Local recipient rotation mechanics only; production/off-host key custody, retention, authorization and host-loss recovery NOT RUN"
+}

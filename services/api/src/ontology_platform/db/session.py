@@ -1,20 +1,30 @@
 from collections.abc import Iterator
 from contextlib import contextmanager
+from datetime import datetime
 
-from sqlalchemy import Engine, create_engine, text
+from sqlalchemy import Engine, create_engine, func, select, text
 from sqlalchemy.orm import Session, sessionmaker
 
 from ontology_platform.config import Settings
 from ontology_platform.errors import ApplicationError
 
 
-def make_engine(settings: Settings) -> Engine:
+def clock(session: Session) -> datetime:
+    """Use the database clock for durable leases across independent worker processes."""
+    value = session.scalar(select(func.clock_timestamp()))
+    assert isinstance(value, datetime)
+    return value
+
+
+def make_engine(settings: Settings, *, audit: bool = False) -> Engine:
     return create_engine(
         settings.database_url.get_secret_value(),
         pool_pre_ping=True,
         hide_parameters=True,
-        pool_size=settings.database_pool_size,
-        max_overflow=settings.database_pool_overflow,
+        # Independent audit transactions must not compete with business transactions
+        # that hold all ordinary connections while waiting for the same ontology lock.
+        pool_size=2 if audit else settings.database_pool_size,
+        max_overflow=0 if audit else settings.database_pool_overflow,
         pool_timeout=3,
         connect_args={
             "connect_timeout": 3,

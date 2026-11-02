@@ -1,0 +1,112 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from ingress.Dockerfile
+#1 transferring dockerfile: 564B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/nginx:1.28.3-alpine@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 173B done
+#3 DONE 0.0s
+
+#4 [1/2] FROM docker.io/library/nginx:1.28.3-alpine@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236
+#4 resolve docker.io/library/nginx:1.28.3-alpine@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236 0.0s done
+#4 CACHED
+
+#5 [2/2] RUN apk del nginx-module-acme nginx-module-geoip nginx-module-image-filter nginx-module-njs nginx-module-xslt     && apk add --no-cache nginx=1.28.3-r7     && apk upgrade --no-cache
+#5 0.159 WARNING: opening from cache https://dl-cdn.alpinelinux.org/alpine/v3.23/main/aarch64/APKINDEX.tar.gz: No such file or directory
+#5 0.159 WARNING: opening from cache https://dl-cdn.alpinelinux.org/alpine/v3.23/community/aarch64/APKINDEX.tar.gz: No such file or directory
+#5 0.159 ( 1/40) Purging nginx-module-acme (1.28.3.0.3.1-r1)
+#5 0.172 ( 2/40) Purging nginx-module-geoip (1.28.3-r1)
+#5 0.174 ( 3/40) Purging nginx-module-image-filter (1.28.3-r1)
+#5 0.176 ( 4/40) Purging nginx-module-njs (1.28.3.0.9.6-r1)
+#5 0.181 ( 5/40) Purging nginx-module-xslt (1.28.3-r1)
+#5 0.183 ( 6/40) Purging libgd (2.3.3-r10)
+#5 0.184 ( 7/40) Purging libavif (1.3.0-r0)
+#5 0.186 ( 8/40) Purging aom-libs (3.13.1-r1)
+#5 0.187 ( 9/40) Purging fontconfig (2.17.1-r0)
+#5 0.215 (10/40) Purging freetype (2.14.1-r0)
+#5 0.215 (11/40) Purging geoip (1.6.12-r6)
+#5 0.215 (12/40) Purging libxpm (3.5.17-r0)
+#5 0.216 (13/40) Purging libxext (1.3.6-r2)
+#5 0.216 (14/40) Purging libxt (1.3.1-r0)
+#5 0.216 (15/40) Purging libx11 (1.8.12-r1)
+#5 0.305 (16/40) Purging libxcb (1.17.0-r1)
+#5 0.310 (17/40) Purging libxdmcp (1.1.5-r1)
+#5 0.310 (18/40) Purging libbsd (0.12.2-r0)
+#5 0.311 (19/40) Purging libbz2 (1.0.8-r6)
+#5 0.311 (20/40) Purging libdav1d (1.5.2-r0)
+#5 0.311 (21/40) Purging libedit (20251016.3.1-r0)
+#5 0.311 (22/40) Purging libexpat (2.7.5-r0)
+#5 0.312 (23/40) Purging libyuv (0.0.1887.20251502-r1)
+#5 0.312 (24/40) Purging libstdc++ (15.2.0-r2)
+#5 0.313 (25/40) Purging libgcc (15.2.0-r2)
+#5 0.313 (26/40) Purging libsm (1.2.6-r0)
+#5 0.313 (27/40) Purging libice (1.1.2-r0)
+#5 0.314 (28/40) Purging tiff (4.7.1-r0)
+#5 0.314 (29/40) Purging libjpeg-turbo (3.1.2-r0)
+#5 0.315 (30/40) Purging libmd (1.1.0-r0)
+#5 0.315 (31/40) Purging libncursesw (6.5_p20251123-r0)
+#5 0.316 (32/40) Purging ncurses-terminfo-base (6.5_p20251123-r0)
+#5 0.344 (33/40) Purging libpng (1.6.55-r0)
+#5 0.344 (34/40) Purging libwebp (1.6.0-r0)
+#5 0.345 (35/40) Purging libsharpyuv (1.6.0-r0)
+#5 0.345 (36/40) Purging libuuid (2.41.2-r0)
+#5 0.345 (37/40) Purging libxau (1.0.12-r0)
+#5 0.346 (38/40) Purging libxslt (1.1.43-r3)
+#5 0.347 (39/40) Purging libxml2 (2.13.9-r0)
+#5 0.347 (40/40) Purging xz-libs (5.8.2-r0)
+#5 0.347 Executing busybox-1.37.0-r30.trigger
+#5 0.371 OK: 18.1 MiB in 32 packages
+#5 0.858 (1/1) Upgrading nginx (1.28.3-r1 -> 1.28.3-r7)
+#5 0.890   Executing nginx-1.28.3-r7.pre-upgrade
+#5 0.927   Executing nginx-1.28.3-r7.post-upgrade
+#5 0.941 Executing busybox-1.37.0-r30.trigger
+#5 0.946 OK: 16.6 MiB in 32 packages
+#5 1.381 Preupgrading:
+#5 1.381 (1/2) Upgrading libapk (3.0.3-r1 -> 3.0.8-r0)
+#5 1.400 (2/2) Upgrading apk-tools (3.0.3-r1 -> 3.0.8-r0)
+#5 1.417 Executing busybox-1.37.0-r30.trigger
+#5 1.440 Continuing with the main upgrade transaction:
+#5 1.777 ( 1/18) Upgrading musl (1.2.5-r21 -> 1.2.5-r24)
+#5 1.834 ( 2/18) Upgrading alpine-baselayout-data (3.7.1-r8 -> 3.7.2-r0)
+#5 1.854   Installing file to etc/group.apk-new
+#5 1.854   Installing file to etc/hosts.apk-new
+#5 1.855   Installing file to etc/passwd.apk-new
+#5 1.856   Installing file to etc/shadow.apk-new
+#5 1.856 ( 3/18) Upgrading alpine-baselayout (3.7.1-r8 -> 3.7.2-r0)
+#5 1.869   Executing alpine-baselayout-3.7.2-r0.pre-upgrade
+#5 1.882   Executing alpine-baselayout-3.7.2-r0.post-upgrade
+#5 1.888 ( 4/18) Upgrading alpine-release (3.23.3-r0 -> 3.23.7-r0)
+#5 1.898 ( 5/18) Upgrading libcrypto3 (3.5.5-r0 -> 3.5.9-r0)
+#5 1.994 ( 6/18) Upgrading libssl3 (3.5.5-r0 -> 3.5.9-r0)
+#5 2.024 ( 7/18) Upgrading zlib (1.3.1-r2 -> 1.3.2-r1)
+#5 2.048 ( 8/18) Upgrading ca-certificates-bundle (20251003-r0 -> 20261020-r0)
+#5 2.066 ( 9/18) Upgrading ca-certificates (20251003-r0 -> 20261020-r0)
+#5 2.115 (10/18) Upgrading brotli-libs (1.2.0-r0 -> 1.2.1-r0)
+#5 2.146 (11/18) Upgrading c-ares (1.34.6-r0 -> 1.34.9-r0)
+#5 2.169 (12/18) Upgrading nghttp2-libs (1.68.0-r0 -> 1.69.0-r0)
+#5 2.218 (13/18) Upgrading libcurl (8.17.0-r1 -> 8.23.0-r0)
+#5 2.262 (14/18) Upgrading curl (8.17.0-r1 -> 8.23.0-r0)
+#5 2.282 (15/18) Upgrading musl-utils (1.2.5-r21 -> 1.2.5-r24)
+#5 2.295 (16/18) Upgrading pcre2 (10.47-r0 -> 10.49-r0)
+#5 2.329 (17/18) Upgrading tzdata (2026a-r0 -> 2026e-r0)
+#5 2.456 (18/18) Purging nghttp3 (1.13.1-r0)
+#5 2.456 Executing busybox-1.37.0-r30.trigger
+#5 2.460 Executing ca-certificates-20261020-r0.trigger
+#5 2.512 OK: 16.5 MiB in 31 packages
+#5 DONE 2.6s
+
+#6 exporting to image
+#6 exporting layers
+#6 exporting layers 0.5s done
+#6 exporting manifest sha256:2edc0d113c30d5a34de0069e683f08583249272502504d122ec98e86cab6cec3 done
+#6 exporting config sha256:8975617863f5314bb2b9723b07f80fb7b831bb926f5f50263ec25f61ffdb6392 done
+#6 exporting attestation manifest sha256:2204feb2fd1c90513151010fd4db867991a3388924afd9619a686caaff0872b7 0.0s done
+#6 exporting manifest list sha256:77d136246db964c152d0f2a0bd257b1e7854579c4f02a1bed45491be8f480610 done
+#6 naming to docker.io/library/csh-foundry-ingress:phase10-closure done
+#6 unpacking to docker.io/library/csh-foundry-ingress:phase10-closure
+#6 unpacking to docker.io/library/csh-foundry-ingress:phase10-closure 0.2s done
+#6 DONE 1.0s

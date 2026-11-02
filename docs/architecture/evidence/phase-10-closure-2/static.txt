@@ -1,0 +1,7 @@
+$ uv run ruff check .
+All checks passed!
+$ uv run ruff format --check .
+184 files already formatted
+$ uv run mypy
+Success: no issues found in 97 source files
+$ git diff --check

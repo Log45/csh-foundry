@@ -55,6 +55,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         logger.setLevel(logging.INFO)
         logger.propagate = False
     engine = make_engine(configuration)
+    audit_engine = make_engine(configuration, audit=True)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
@@ -71,6 +72,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             if hasattr(app.state, "oidc"):
                 app.state.oidc.client.close()
             engine.dispose()
+            audit_engine.dispose()
 
     app = FastAPI(
         title="Operational Ontology Platform",
@@ -142,7 +144,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.add_middleware(TransportBounds)
     app.add_middleware(RequestTelemetry, telemetry=app.state.telemetry)
     app.state.authorizer = (
-        PlatformAuthorizer(app.state.sessions, test_mode=configuration.auth_mode == "test")
+        PlatformAuthorizer(
+            app.state.sessions,
+            test_mode=configuration.auth_mode == "test",
+            audit_sessions=sessionmaker(audit_engine),
+        )
         if configuration.auth_mode in {"oidc", "test"}
         else LocalAuthorizer(configuration)
     )

@@ -1,0 +1,43 @@
+17.11-trixie: Pulling from library/postgres
+96cb4123a71b: Pulling fs layer
+b7fdfce169ad: Pulling fs layer
+f12d00c34e93: Pulling fs layer
+546322afd7bc: Pulling fs layer
+2f75c87e1374: Pulling fs layer
+12b09b94437a: Pulling fs layer
+173574376bbc: Pulling fs layer
+a7f6a423747d: Pulling fs layer
+107589310653: Pulling fs layer
+5d40b62b0250: Pulling fs layer
+cbc844c8bfe2: Pulling fs layer
+6c63f77bbde2: Pulling fs layer
+48be034e5108: Pulling fs layer
+96cb4123a71b: Download complete
+12b09b94437a: Download complete
+173574376bbc: Download complete
+b7fdfce169ad: Download complete
+546322afd7bc: Download complete
+107589310653: Download complete
+107589310653: Pull complete
+f12d00c34e93: Download complete
+a7f6a423747d: Download complete
+cbc844c8bfe2: Download complete
+5d40b62b0250: Download complete
+6c63f77bbde2: Download complete
+2f75c87e1374: Download complete
+2f75c87e1374: Pull complete
+5d40b62b0250: Pull complete
+6c63f77bbde2: Pull complete
+cbc844c8bfe2: Pull complete
+b7fdfce169ad: Pull complete
+546322afd7bc: Pull complete
+48be034e5108: Download complete
+a7f6a423747d: Pull complete
+48be034e5108: Pull complete
+12b09b94437a: Pull complete
+173574376bbc: Pull complete
+f12d00c34e93: Pull complete
+96cb4123a71b: Pull complete
+Digest: sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1
+Status: Downloaded newer image for postgres:17.11-trixie
+docker.io/library/postgres:17.11-trixie

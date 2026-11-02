@@ -30,9 +30,25 @@ certification of a deployed environment; unexecuted operational exercises remain
 | Secret disclosure / logs | File-backed secrets; no URI/body/token request logging; private metrics | Root/DB owners trusted; collectors must preserve redaction | Structured HTTP/load logs and internal denial tests |
 | Audit destruction / database | Immutable triggers, runtime audit-mutation revocation, security decisions fail closed | Owner-proof off-host archive NOT implemented | Existing audit immutability/security regressions |
 | Backup exposure / disaster | Encrypted streaming dump, physical backup/WAL drill, off-host custody runbook | Off-host destination/custody/RPO/RTO exercise NOT RUN | Local encrypted backup and WAL recovery evidence |
-| Supply-chain compromise | Locked dependencies, action/scanner digests, audits/SBOMs, release gate/provenance workflow | Remaining high OS findings block promotion; hosted provenance NOT RUN | Actual audit/SBOM/scan outputs; no exceptions hidden |
+| Supply-chain compromise | Locked dependencies, action/scanner digests, audits/SBOMs, release gate/provenance workflow | Remaining app high and PostgreSQL/Keycloak critical findings block promotion; hosted provenance NOT RUN | Actual audit/SBOM/scan outputs; no exceptions hidden |
 
-Nginx access logging is disabled on OAuth paths. Operators must ensure error/collector logging does
-not retain callback queries; production public ingress logs should remain URI-free. Security audit
+Nginx access logging records status/duration only on all server blocks, including HTTP redirects
+and rejected hosts. A callback-sentinel regression verifies query values are absent. Operators
+must ensure error/collector logging preserves this boundary; public ingress logs remain URI-free. Security audit
 is intentionally separate from request telemetry and survives denied/rolled-back business requests.
 Target-environment incident/alert delivery and disaster recovery exercises remain required gates.
+
+Closure evidence is in `docs/architecture/evidence/phase-10-closure/`. The final maintained stable
+ingress image scans without high/critical findings. Retained PostgreSQL libxml2 parsing exposure
+and Keycloak Java CA trust/Guava/native-library findings remain blocking: network/role boundaries
+and local tests do not approve residual risk. See `vulnerability-disposition.md` for supplier fixes,
+reachability limits, exact package/image identities and required owner decisions. No exception is
+approved. Live-provider TLS and off-host/owner-led incident exercises remain NOT RUN.
+
+Concurrent acceptance exposed a connection-starvation availability defect: ordinary lock waiters
+could consume the connection needed for independent authorization audit. API audit writes now use
+a separate pool capped at two connections, with no overflow and the same restricted role. Audit
+failure still aborts business mutations; durable audit on business rollback is preserved. This
+reserves progress under ordinary-pool contention, not capacity against arbitrary load. Count both
+pools in connection sizing and retain target load/abuse validation. Continuation evidence is in
+`docs/architecture/evidence/phase-10-closure-2/`.

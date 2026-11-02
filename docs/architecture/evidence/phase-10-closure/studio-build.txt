@@ -1,0 +1,88 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from studio.Dockerfile
+#1 transferring dockerfile: 772B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:24-trixie-slim
+#2 DONE 0.5s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 173B 0.0s done
+#3 DONE 0.1s
+
+#4 [build 1/6] FROM docker.io/library/node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446
+#4 resolve docker.io/library/node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446
+#4 resolve docker.io/library/node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446 0.1s done
+#4 DONE 0.1s
+
+#5 [internal] load build context
+#5 transferring context: 29.19kB 0.0s done
+#5 DONE 0.1s
+
+#6 [build 2/6] WORKDIR /app
+#6 CACHED
+
+#7 [build 3/6] COPY apps/studio/package.json apps/studio/package-lock.json ./
+#7 CACHED
+
+#8 [build 4/6] RUN npm ci --no-audit --no-fund
+#8 CACHED
+
+#9 [build 5/6] COPY apps/studio/ ./
+#9 DONE 0.2s
+
+#10 [build 6/6] RUN npm run build
+#10 1.012 
+#10 1.012 > @foundry/studio@0.8.0 build
+#10 1.012 > next build --webpack
+#10 1.012 
+#10 2.435 ▲ Next.js 16.4.3 (webpack)
+#10 2.999 ✓ Running next.config.ts took 562ms
+#10 3.076 
+#10 3.170   Creating an optimized production build ...
+#10 14.46 ✓ Compiled successfully in 7.8s
+#10 14.47   Running TypeScript ...
+#10 20.65   Finished TypeScript in 6.2s ...
+#10 20.66   Collecting page data using 6 workers ...
+#10 22.01   Generating static pages using 6 workers (0/3) ...
+#10 22.52 ✓ Generating static pages using 6 workers (3/3) in 507ms
+#10 22.71   Finalizing page optimization ...
+#10 22.71   Collecting build traces ...
+#10 40.60 
+#10 40.60 Route (app)
+#10 40.60 ┌ ƒ /
+#10 40.60 ├ ƒ /_not-found
+#10 40.60 ├ ƒ /auth/[operation]
+#10 40.60 └ ƒ /bff
+#10 40.60 
+#10 40.60 
+#10 40.60 ƒ Proxy (Middleware)
+#10 40.60 
+#10 40.60 ƒ  (Dynamic)  server-rendered on demand
+#10 40.60 
+#10 DONE 41.4s
+
+#11 [runtime 3/6] RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /opt/yarn-* /usr/local/bin/yarn* /usr/local/bin/corepack
+#11 CACHED
+
+#12 [runtime 4/6] COPY --from=build --chown=node:node /app/.next/standalone ./
+#12 DONE 0.9s
+
+#13 [runtime 5/6] COPY --from=build --chown=node:node /app/.next/static ./.next/static
+#13 DONE 0.1s
+
+#14 [runtime 6/6] COPY --chown=node:node infrastructure/docker/studio-entry.mjs ./
+#14 DONE 0.0s
+
+#15 exporting to image
+#15 exporting layers
+#15 exporting layers 1.9s done
+#15 exporting manifest sha256:57a0517057ab17d2f241384484d14753cf04517f84890d6c0a83c711875fb81e done
+#15 exporting config sha256:74b1f2ca429b92c000022da6e1f3a34c1405d079ed006a0a673f1d8cca08984c done
+#15 exporting attestation manifest sha256:a85ff9bbb34d155348dd5f0e8de627d726896493af6980dbd48589a10bec514b done
+#15 exporting manifest list sha256:a81c3a17124e62bbb31de7102c845907ad1126ae69332de2577b401cf06a3b20 done
+#15 naming to docker.io/library/csh-foundry-studio:phase10-closure done
+#15 unpacking to docker.io/library/csh-foundry-studio:phase10-closure
+#15 unpacking to docker.io/library/csh-foundry-studio:phase10-closure 0.6s done
+#15 DONE 2.6s

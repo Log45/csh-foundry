@@ -539,3 +539,45 @@ def test_audit_failure_rolls_back_authorized_mutations(security, monkeypatch):
         assert (
             session.get(Object, (admin.tenant_id, "manufacturing", "Factory", "NO-AUDIT")) is None
         )
+
+
+def test_api_audit_progress_with_exhausted_business_pool(security):
+    w, _, _, admin, _, _ = security
+    with w.sessions() as session:
+        schema = session.scalar(text("SELECT current_schema()"))
+        before = session.scalar(select(func.count()).select_from(AuthorizationAudit))
+    app = create_app(
+        Settings(
+            database_url=w.settings.database_url,
+            database_schema=schema,
+            database_pool_size=1,
+            database_pool_overflow=0,
+            auth_mode="test",
+            test_issuer=ISSUER,
+            test_subject="admin",
+            _env_file=None,
+        )
+    )
+    with TestClient(app) as client:
+
+        def create(index):
+            return client.post(
+                "/api/v1/ontologies/manufacturing/objects/Factory",
+                headers={"x-tenant-id": str(admin.tenant_id)},
+                json=factory("AUDIT-POOL-" + str(index)).model_dump(
+                    mode="json", exclude={"object_type_id"}
+                ),
+            ).status_code
+
+        with ThreadPoolExecutor(4) as pool:
+            assert list(pool.map(create, range(4))) == [201] * 4
+    with w.sessions() as session:
+        assert session.scalar(select(func.count()).select_from(AuthorizationAudit)) >= before + 4
+        assert (
+            session.scalar(
+                select(func.count())
+                .select_from(Object)
+                .where(Object.object_id.like("AUDIT-POOL-%"))
+            )
+            == 4
+        )

@@ -1,0 +1,155 @@
+{
+  "project": "foundry-accept-34819e89",
+  "environment": "Disposable local Compose; test CA; loopback ports",
+  "private_evidence": "artifacts/foundry-accept-34819e89",
+  "checks": [
+    {
+      "check": "production-template-configuration",
+      "result": "PASS"
+    },
+    {
+      "check": "disposable-production-wal-directory-owner-and-write-permission",
+      "result": "PASS"
+    },
+    {
+      "check": "new-cluster-owner-migration-and-runtime-grants",
+      "result": "PASS",
+      "head": "0017_capacity"
+    },
+    {
+      "check": "complete-production-profile-core-startup",
+      "result": "PASS"
+    },
+    {
+      "check": "governed-manufacturing-schema-and-explicit-worker-delegations",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-ingestion-sigkill-durable-checkpoint-lease-reclaim-idempotent-final-state",
+      "result": "PASS",
+      "attempts": 2,
+      "checkpoint_at_kill": 37,
+      "final_checkpoint": 65
+    },
+    {
+      "check": "production-ingestion-worker-63-objects-70-links-query-traversal-action-idempotency-concurrency",
+      "result": "PASS"
+    },
+    {
+      "check": "production-sdk-generation-download-integrity-python",
+      "result": "PASS",
+      "artifact": "b64bcb24-2d53-404d-966c-ffa1e46f3126"
+    },
+    {
+      "check": "production-sdk-generation-download-integrity-typescript",
+      "result": "PASS",
+      "artifact": "6515583c-c973-47a4-a666-51f6197d3010"
+    },
+    {
+      "check": "production-branch-conflict-resolved-merge-provenance-draft-publication-separate-activation",
+      "result": "PASS"
+    },
+    {
+      "check": "production-semantic-supervised-validation",
+      "result": "PASS",
+      "outputs": 1
+    },
+    {
+      "check": "production-semantic-supervised-reasoning",
+      "result": "PASS",
+      "outputs": 3
+    },
+    {
+      "check": "semantic-and-schema-development-did-not-mutate-operational-objects",
+      "result": "PASS"
+    },
+    {
+      "check": "actual-runtime-semantic-container-limits-and-network-configuration",
+      "result": "PASS"
+    },
+    {
+      "check": "actual-runtime-database-privilege-check",
+      "result": "PASS"
+    },
+    {
+      "check": "semantic-nonroot-readonly-tmpfs-cgroup-enforcement-no-direct-egress",
+      "result": "PASS",
+      "cgroups": {
+        "memory.max": "805306368",
+        "cpu.max": "100000 100000",
+        "pids.max": "128"
+      }
+    },
+    {
+      "check": "independently-installed-python-built-typescript-sdks-real-https-queries-actions-replay-unauthorized-cross-tenant-denials",
+      "result": "PASS"
+    },
+    {
+      "check": "paced-deployed-https-load-1-4-8-clients",
+      "result": "PASS",
+      "requests": 260
+    },
+    {
+      "check": "deployed-active-session-role-and-membership-revocation-before-jwt-expiry",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-worker-oidc-client-secret-rotation-old-secret-rejected",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-worker-reacquires-rotated-credential-queued-delegation-revocation-idempotent-continuation",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-api-studio-internal-credential-maintenance-rotation-session-continuity",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-database-credential-maintenance-rotation-old-login-rejected-session-continuity",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-encrypted-logical-restore-all-domain-identity-history-session-checksums",
+      "result": "PASS",
+      "tables": {
+        "alembic_version": "1:7a128e33a6d8196d64ab04396cb1d7bb",
+        "ontologies": "1:b3ede75b9b080363148aea556743e226",
+        "ontology_versions": "2:cde5bb6ca584fb85380d4c9a35da05a1",
+        "schema_activations": "1:c68c91060bd124f4ad138df7ebb4cb2d",
+        "objects": "63:4d5752e17d2c08a9c420f6741b4eeb59",
+        "object_links": "70:edeca261557cb6c0ab8f6d84ea2da0dd",
+        "ontology_branches": "2:3280f7ea8129f6551d5b34b45e096509",
+        "ontology_branch_revisions": "5:33fb77c914e63f416e5080a0ea1673de",
+        "ontology_branch_merges": "1:6941d8ff170748bcb905f387b080c761",
+        "sdk_artifacts": "2:8098c18f13132f4bd46086ed444bdaff",
+        "principals": "3:baa5a7f99962591dc4178e135ff68ecd",
+        "external_identities": "3:4044fef4d0ddd562e0f3e0e9de9ac398",
+        "tenant_memberships": "3:7bd0bd7c55213fc0ed8878d39e90c867",
+        "role_assignments": "3:a5e09cb5a88ffd2e880bba22942a4496",
+        "authorization_audit": "5364:f498bf50ee08bc102a109ca63806cd80",
+        "action_executions": "3:9b0f8fd457cd55a9cd55d91a21f93a70",
+        "action_audit_events": "3:56ec807ee2972b7307b564098287bd1c",
+        "ingestion_runs": "2:7e9ea9df4f70241b402ae1cf7f468f61",
+        "semantic_jobs": "2:472a7f2b2f419b6242fa3fc407ed0ac8",
+        "semantic_artifacts": "7:3f87d15a3ec7acb3b8905e0ec6d24c7b",
+        "browser_state": "2:b11dfa6b9c05052f4e6e2149fc2a76b9"
+      },
+      "ciphertext_sha256": "ffded7393b13248fd5f57397395c7eb41aac739b671d37a00fdeaa162ae04af7"
+    },
+    {
+      "check": "acceptance-execution",
+      "result": "FAIL",
+      "error_type": "AssertionError",
+      "detail": "See private failure.txt; downstream checks NOT RUN"
+    }
+  ]
+}

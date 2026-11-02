@@ -34,3 +34,52 @@ brief's deliverables to changes and evidence. Implementation is not production a
 
 No external infrastructure/provider resources were modified. Remaining production gates are not
 silently reclassified as Phase 11 work.
+
+## Acceptance closure (2026-11-02)
+
+- [x] Starting revision and initially clean checkout reviewed; head remains `0017_capacity`.
+- [x] Full baseline reproduced: 521 passed, one strict expected failure, zero skips.
+- [x] Production profile startup defects corrected without a migration.
+- [x] Semantic-worker/Polars import crash corrected; shared database-clock semantics retained.
+- [x] Fresh builds/scans and per-match vulnerability disposition; high gate still **FAIL**.
+- [x] Actual local broker/HTTPS, manufacturing ingestion/actions, branching/publication, both SDK
+  artifacts and supervised semantic validation/reasoning exercised in the combined profile.
+- [x] Actual nonroot/read-only/tmpfs/cgroup and direct egress restrictions checked.
+- [x] Local Prometheus/Alertmanager firing, webhook delivery and resolution verified.
+- [x] Release rejects missing/tampered/non-PASS evidence; semantic image included in scanning.
+- [ ] Full security release gate, complete mandatory fault/rotation/admission scenarios and
+  representative target load acceptance. See the final report for precise executed coverage.
+- [ ] Named operational owners, off-host DR/custody, production alert delivery and hosted release
+  controls/provenance verification.
+- [ ] Live Microsoft, Google and Workspace certification with approved test registrations/users.
+
+A checkmark records the stated scoped execution only. It does not make Phase 10 locally accepted
+or production certified. The report retains intermediate failures and the final exact results.
+
+Final selected-profile closure evidence: 34 passing assertions (32 distinct checks), including
+SIGKILL/checkpoint reclaim, independent HTTPS SDKs, 21-table encrypted restore, supported credential
+rotations, both replica restarts/shared logout, runtime cgroups and compatible API rollback. Local
+backup-recipient rotation passes separately. Stable nginx 1.30.6 ingress now passes scanning (zero
+high/critical); its preceding image/layout experiments remain evidence, not accepted builds.
+PostgreSQL/Keycloak critical and application-base high findings still block promotion. Final Python
+release regression: **525 passed, one preserved strict xfail, zero skips**. The scoped final load
+targets pass; representative target capacity and comprehensive fault certification remain open.
+
+
+## Acceptance continuation — recovered UX environment preserved
+
+- [x] Combined PostgreSQL 17.11 physical base/WAL named-target recovery; 46 Foundry/101 Keycloak
+  public-table hashes match, later governed record excluded, source unchanged.
+- [x] Disposable-source/WAL mount guards tested before archive ownership changes.
+- [x] Actual concurrent admission exposed pool starvation; API independent audit now has a
+  separate bounded two-connection pool. Audit rollback/failure semantics retained; no migration.
+- [x] Rebuilt-profile retest: 24 submissions/12 clients, 20 accepted/four quota rejections,
+  cancellation release/reuse, final active usage zero; 38 passing assertions/35 distinct checks.
+- [x] Final configured regression: 529 passed, one strict xfail, zero skips; frontend 27 tests,
+  typecheck/format/build PASS. Earlier five browser E2E passes retained; not rerun against user UX.
+- [x] Rebuilt API/semantic scans and SBOMs: SBOM PASS, vulnerability gate FAIL (60 high each).
+- [ ] Latest paced read p95 target: FAIL, maximum 556.513 ms; zero request errors. Representative
+  target capacity, byte/cross-tenant quotas and complete fault certification remain unverified.
+
+See `docs/architecture/evidence/phase-10-closure-2/` and the appended report. Existing local Studio,
+Keycloak, credentials and databases were preserved. Overall acceptance remains BLOCKED.

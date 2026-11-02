@@ -1,0 +1,4 @@
+Checking /config/rules.yaml
+  SUCCESS: 3 rules found
+
+PASS rule evaluation, firing, local webhook delivery and resolution

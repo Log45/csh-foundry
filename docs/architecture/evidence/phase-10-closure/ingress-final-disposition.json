@@ -1,0 +1,122 @@
+{
+  "image-0": {
+    "image": "csh-foundry-ingress:phase10-closure",
+    "image_id": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "PASS",
+    "scan_timestamp": "2026-11-02T15:40:55.196363922Z",
+    "scanner_version": "0.121.0",
+    "database": {
+      "schemaVersion": "v6.1.10",
+      "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-02T00:22:47Z_1793600812.tar.zst?checksum=sha256%3A68063965a3a023acd330a65a0740976c81f8e13902824134b447deee97a0d838",
+      "built": "2026-11-02T06:26:52Z",
+      "path": "/cache/6/vulnerability.db",
+      "valid": true
+    },
+    "severity_counts": {
+      "Medium": 3
+    },
+    "unique_advisories": 1,
+    "unique_high_advisories": 0,
+    "scan_evidence": "artifacts/phase10-closure/ingress-stable-scan/image-0.vulnerabilities.json",
+    "scan_sha256": "913e3860170e18f6e2e1880b59f9a35f765aba4679d7911b193c50304faedc7d",
+    "sbom_sha256": "33fe12b579f0896c1c8c70542687cd4f3fd4af56dfa73deda162e15222b0347e",
+    "findings": [
+      {
+        "advisory": "CVE-2025-60876",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-60876",
+        "package": "busybox",
+        "installed_version": "1.37.0-r31",
+        "upstream": "busybox",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": ""
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:69fd5aae47c67aa3170bed85f00565f333de37a9c60a27c9fde4ad179a22f906",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2025-60876",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-60876",
+        "package": "busybox-binsh",
+        "installed_version": "1.37.0-r31",
+        "upstream": "busybox",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": ""
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:69fd5aae47c67aa3170bed85f00565f333de37a9c60a27c9fde4ad179a22f906",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2025-60876",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-60876",
+        "package": "ssl_client",
+        "installed_version": "1.37.0-r31",
+        "upstream": "busybox",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": ""
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:69fd5aae47c67aa3170bed85f00565f333de37a9c60a27c9fde4ad179a22f906",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      }
+    ]
+  }
+}

@@ -1,0 +1,110 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from api.Dockerfile
+#1 transferring dockerfile: 745B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7
+#2 DONE 0.5s
+
+#3 [internal] load metadata for docker.io/library/python:3.12.16-slim-trixie@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
+#3 DONE 0.6s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 173B done
+#4 DONE 0.0s
+
+#5 FROM ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7
+#5 resolve ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7 0.0s done
+#5 DONE 0.0s
+
+#6 [stage-0 1/6] FROM docker.io/library/python:3.12.16-slim-trixie@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
+#6 resolve docker.io/library/python:3.12.16-slim-trixie@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30 0.0s done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 33.40MB 0.7s done
+#7 DONE 0.7s
+
+#8 [stage-0 2/6] COPY --from=ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7 /uv /usr/local/bin/uv
+#8 CACHED
+
+#9 [stage-0 3/6] WORKDIR /app
+#9 CACHED
+
+#10 [stage-0 4/6] COPY . .
+#10 DONE 0.4s
+
+#11 [stage-0 5/6] RUN uv sync --frozen --no-dev
+#11 0.513 Using CPython 3.12.16 interpreter at: /usr/local/bin/python3.12
+#11 0.514 Creating virtual environment at: .venv
+#11 0.566    Building ontology-schema @ file:///app/packages/ontology-schema
+#11 0.573    Building ontology-platform-api @ file:///app/services/api
+#11 0.695 Downloading sqlalchemy (3.3MiB)
+#11 0.700 Downloading cryptography (4.5MiB)
+#11 0.702 Downloading pydantic-core (2.0MiB)
+#11 0.704 Downloading polars-runtime-32 (44.4MiB)
+#11 0.708 Downloading psycopg-binary (6.5MiB)
+#11 1.157  Downloading pydantic-core
+#11 1.379  Downloading sqlalchemy
+#11 1.558  Downloading cryptography
+#11 1.588  Downloading psycopg-binary
+#11 2.114       Built ontology-schema @ file:///app/packages/ontology-schema
+#11 2.114       Built ontology-platform-api @ file:///app/services/api
+#11 2.649  Downloading polars-runtime-32
+#11 2.649 Prepared 36 packages in 2.09s
+#11 2.700 Installed 36 packages in 50ms
+#11 2.701  + alembic==1.20.1
+#11 2.701  + annotated-doc==0.0.5
+#11 2.701  + annotated-types==0.8.0
+#11 2.701  + anyio==4.15.1
+#11 2.702  + certifi==2026.10.23
+#11 2.702  + cffi==2.1.1
+#11 2.702  + click==8.5.0
+#11 2.702  + cryptography==50.0.2
+#11 2.702  + fastapi==0.162.0
+#11 2.702  + greenlet==3.5.6
+#11 2.702  + h11==0.16.0
+#11 2.702  + httpcore==1.0.9
+#11 2.702  + httpx==0.28.1
+#11 2.702  + idna==3.20
+#11 2.702  + mako==1.4.3
+#11 2.702  + markupsafe==3.0.4
+#11 2.702  + ontology-platform-api==0.0.1 (from file:///app/services/api)
+#11 2.702  + ontology-schema==0.0.1 (from file:///app/packages/ontology-schema)
+#11 2.702  + opentelemetry-api==1.45.1
+#11 2.702  + polars==1.44.2
+#11 2.702  + polars-runtime-32==1.44.2
+#11 2.702  + psycopg==3.3.6
+#11 2.702  + psycopg-binary==3.3.6
+#11 2.702  + pycparser==3.12
+#11 2.702  + pydantic==2.14.1
+#11 2.702  + pydantic-core==2.50.1
+#11 2.702  + pydantic-settings==2.16.2
+#11 2.702  + pyjwt==2.15.0
+#11 2.702  + pyparsing==3.3.3
+#11 2.702  + python-dotenv==1.2.4
+#11 2.702  + rdflib==7.1.4
+#11 2.702  + sqlalchemy==2.0.55
+#11 2.702  + starlette==1.10.0
+#11 2.702  + typing-extensions==4.16.0
+#11 2.702  + typing-inspection==0.4.4
+#11 2.702  + uvicorn==0.54.0
+#11 DONE 3.2s
+
+#12 [stage-0 6/6] RUN groupadd --gid 10001 foundry && useradd --uid 10001 --gid 10001 --create-home foundry
+#12 DONE 0.3s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 6.4s done
+#13 exporting manifest sha256:940888169ff831519003b4538856416bf83d703be161ff46528576474eaf16c9 done
+#13 exporting config sha256:f122764117f056c235531d967a9340751a142336bafe82fa942fdf47d7406170 done
+#13 exporting attestation manifest sha256:206ac1c6270981c76ce4081c7f6985a95637b09dc257fe53f57f9883e6365550 0.0s done
+#13 exporting manifest list sha256:0d90245410da20fccbb181fb647cdee9b438184213a85801e34c1993b33a2946 done
+#13 naming to docker.io/library/csh-foundry-api:phase10-closure done
+#13 unpacking to docker.io/library/csh-foundry-api:phase10-closure
+#13 unpacking to docker.io/library/csh-foundry-api:phase10-closure 1.7s done
+#13 DONE 8.2s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/ny8i50dte9hw2nb1jpnzxinox

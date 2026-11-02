@@ -1,0 +1,80 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from ingress.Dockerfile
+#1 transferring dockerfile: 456B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/nginx:1.30.6-alpine@sha256:0e52bd054126cdc040b1276c0af347aeb02a41b9cfe305d6094767ac30e97949
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 173B done
+#3 DONE 0.0s
+
+#4 [1/2] FROM docker.io/library/nginx:1.30.6-alpine@sha256:0e52bd054126cdc040b1276c0af347aeb02a41b9cfe305d6094767ac30e97949
+#4 resolve docker.io/library/nginx:1.30.6-alpine@sha256:0e52bd054126cdc040b1276c0af347aeb02a41b9cfe305d6094767ac30e97949 0.0s done
+#4 DONE 0.0s
+
+#4 [1/2] FROM docker.io/library/nginx:1.30.6-alpine@sha256:0e52bd054126cdc040b1276c0af347aeb02a41b9cfe305d6094767ac30e97949
+#4 DONE 0.1s
+
+#5 [2/2] RUN apk del nginx-module-acme nginx-module-geoip nginx-module-image-filter nginx-module-njs nginx-module-xslt     && apk upgrade --no-cache
+#5 0.956 ( 1/40) Purging nginx-module-acme (1.30.6.0.4.1-r1)
+#5 0.968 ( 2/40) Purging nginx-module-geoip (1.30.6-r1)
+#5 0.970 ( 3/40) Purging nginx-module-image-filter (1.30.6-r1)
+#5 0.974 ( 4/40) Purging nginx-module-njs (1.30.6.1.0.2-r1)
+#5 0.979 ( 5/40) Purging nginx-module-xslt (1.30.6-r1)
+#5 0.980 ( 6/40) Purging libgd (2.3.3-r10)
+#5 0.980 ( 7/40) Purging libavif (1.4.1-r0)
+#5 0.983 ( 8/40) Purging aom-libs (3.14.1-r0)
+#5 0.983 ( 9/40) Purging fontconfig (2.17.1-r1)
+#5 1.005 (10/40) Purging freetype (2.14.3-r0)
+#5 1.005 (11/40) Purging geoip (1.6.12-r6)
+#5 1.005 (12/40) Purging libxpm (3.5.20-r0)
+#5 1.006 (13/40) Purging libxext (1.3.7-r0)
+#5 1.006 (14/40) Purging libxt (1.3.1-r0)
+#5 1.006 (15/40) Purging libx11 (1.8.14-r0)
+#5 1.097 (16/40) Purging libxcb (1.17.0-r2)
+#5 1.100 (17/40) Purging libxdmcp (1.1.5-r1)
+#5 1.100 (18/40) Purging libbsd (0.12.2-r0)
+#5 1.100 (19/40) Purging libbz2 (1.0.8-r6)
+#5 1.100 (20/40) Purging libdav1d (1.5.3-r0)
+#5 1.100 (21/40) Purging libedit (20260508.3.1-r1)
+#5 1.101 (22/40) Purging libexpat (2.9.0-r0)
+#5 1.101 (23/40) Purging libyuv (0.0.1928-r0)
+#5 1.101 (24/40) Purging libstdc++ (15.2.0-r5)
+#5 1.101 (25/40) Purging libgcc (15.2.0-r5)
+#5 1.101 (26/40) Purging libsm (1.2.6-r0)
+#5 1.101 (27/40) Purging libice (1.1.2-r0)
+#5 1.101 (28/40) Purging tiff (4.7.2-r0)
+#5 1.101 (29/40) Purging libjpeg-turbo (3.1.3-r0)
+#5 1.101 (30/40) Purging libmd (1.2.0-r0)
+#5 1.102 (31/40) Purging libncursesw (6.6_p20260516-r0)
+#5 1.102 (32/40) Purging ncurses-terminfo-base (6.6_p20260516-r0)
+#5 1.127 (33/40) Purging libpng (1.6.59-r0)
+#5 1.127 (34/40) Purging libwebp (1.6.0-r0)
+#5 1.127 (35/40) Purging libsharpyuv (1.6.0-r0)
+#5 1.129 (36/40) Purging libuuid (2.42.3-r1)
+#5 1.129 (37/40) Purging libxau (1.0.12-r0)
+#5 1.129 (38/40) Purging libxslt (1.1.43-r3)
+#5 1.129 (39/40) Purging libxml2 (2.13.9-r2)
+#5 1.129 (40/40) Purging xz-libs (5.8.4-r0)
+#5 1.129 Executing busybox-1.37.0-r31.trigger
+#5 1.153 OK: 18.1 MiB in 31 packages
+#5 2.047 (1/3) Upgrading brotli-libs (1.2.0-r1 -> 1.2.1-r0)
+#5 2.079 (2/3) Upgrading libcurl (8.22.0-r0 -> 8.23.0-r0)
+#5 2.138 (3/3) Upgrading curl (8.22.0-r0 -> 8.23.0-r0)
+#5 2.158 Executing busybox-1.37.0-r31.trigger
+#5 2.171 OK: 18.1 MiB in 31 packages
+#5 DONE 2.3s
+
+#6 exporting to image
+#6 exporting layers
+#6 exporting layers 0.2s done
+#6 exporting manifest sha256:56d22c37a18e8da7dca3820efffe6104817f390cf5974c1d945fb9400b153307 done
+#6 exporting config sha256:e145129f21be32c3795a8d3a39e169ff9e6d799568ddfd2db56fd0804c0b37ef done
+#6 exporting attestation manifest sha256:7f003fa6432e796c49d784859aaa4e1d9e8625a70d226d17f324c5668f6cdfcb 0.0s done
+#6 exporting manifest list sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1 done
+#6 naming to docker.io/library/csh-foundry-ingress:phase10-closure done
+#6 unpacking to docker.io/library/csh-foundry-ingress:phase10-closure 0.1s done
+#6 DONE 0.4s

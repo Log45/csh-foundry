@@ -1,0 +1,21 @@
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+2026/11/02 15:20:13 [notice] 1#1: using the "epoll" event method
+2026/11/02 15:20:13 [notice] 1#1: nginx/1.28.3
+2026/11/02 15:20:13 [notice] 1#1: built by gcc 15.2.0 (Alpine 15.2.0) 
+2026/11/02 15:20:13 [notice] 1#1: OS: Linux 6.10.14-linuxkit
+2026/11/02 15:20:13 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2026/11/02 15:20:13 [notice] 1#1: start worker processes
+2026/11/02 15:20:13 [notice] 1#1: start worker process 21
+2026/11/02 15:20:13 [notice] 1#1: start worker process 22
+2026/11/02 15:20:13 [notice] 1#1: start worker process 23
+2026/11/02 15:20:13 [notice] 1#1: start worker process 24
+2026/11/02 15:20:13 [notice] 1#1: start worker process 25
+2026/11/02 15:20:13 [notice] 1#1: start worker process 26
+2026/11/02 15:20:13 [notice] 1#1: start worker process 27
+2026/11/02 15:20:13 [notice] 1#1: start worker process 28
+2026/11/02 15:20:13 [notice] 1#1: start worker process 29
+2026/11/02 15:20:13 [notice] 1#1: start worker process 30
+PASS HTTP redirects and default-host logs omit callback/query values
+PASS actual nginx configuration, trusted TLS, HSTS, private path isolation, unknown Host rejection
+Scope: ingress contract; production DNS/certificates and full deployed topology are separate gates

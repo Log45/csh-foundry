@@ -270,3 +270,20 @@ scripts/test_studio.py` after a Studio build. These use disposable local resourc
 fault or restoration tests at production. Image vulnerability findings and missing target acceptance
 are release gates. Live Entra/Google/Workspace sign-in is NOT RUN / NOT CERTIFIED without external
 registrations, credentials and test organizations. No production deployment or Phase 11 work was done.
+
+The [Phase 10 acceptance-closure evidence](docs/architecture/evidence/phase-10-closure/) now includes
+combined production-template manufacturing/security/runtime checks and a
+[per-match vulnerability disposition](docs/operations/vulnerability-disposition.md). The high-severity
+container gate remains **FAIL / BLOCKED**. Application regression, local deployment tests and live
+provider/production certification are separate decisions; consult the updated report/readiness matrix.
+The disposable runner is `scripts/accept_phase10.py`; local alert delivery is
+`scripts/test_alert_delivery.py`. Setup, generated private evidence and promotion requirements are
+in the [operator runbook](docs/operations/production.md#acceptance-closure--disposable-production-profile).
+
+The [acceptance continuation](docs/architecture/evidence/phase-10-closure-2/) closes full-profile
+PostgreSQL 17.11 PITR and concurrent job admission, including a fix for API audit-pool starvation.
+Final checks include **529 Python passes + one preserved strict xfail**, **27 frontend tests**,
+**38 passing deployment assertions**, and five browser E2E passes retained from earlier closure.
+The latest paced sample has zero errors but misses the provisional read-latency target. The
+patched ingress image passes scanning; retained application-base high findings and supplier
+PostgreSQL/Keycloak critical findings still block promotion. No production certification is claimed.

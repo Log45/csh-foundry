@@ -1,0 +1,248 @@
+{
+  "image-0": {
+    "image": "csh-foundry-ingress:phase10-closure",
+    "image_id": "sha256:6e27e73a46fe1d2022c963b26e092d75e6b9937d00eb70aa0dcc0b0202529c4c",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL",
+    "scan_timestamp": "2026-11-02T15:36:10.380325012Z",
+    "scanner_version": "0.121.0",
+    "database": {
+      "schemaVersion": "v6.1.10",
+      "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-02T00:22:47Z_1793600812.tar.zst?checksum=sha256%3A68063965a3a023acd330a65a0740976c81f8e13902824134b447deee97a0d838",
+      "built": "2026-11-02T06:26:52Z",
+      "path": "/cache/6/vulnerability.db",
+      "valid": true
+    },
+    "severity_counts": {
+      "Critical": 1,
+      "Medium": 5,
+      "High": 1
+    },
+    "unique_advisories": 5,
+    "unique_high_advisories": 1,
+    "scan_evidence": "artifacts/phase10-closure/ingress-release-scan/image-0.vulnerabilities.json",
+    "scan_sha256": "c971c6aa45f7f20080f69b707f3145cd2aa534660246a738fab023af13527284",
+    "sbom_sha256": "a338c25fa681fb38c491f85d298457082c99ca2fddc81621a24fc11ba82fa655",
+    "findings": [
+      {
+        "advisory": "CVE-2026-15176",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2026-15176",
+        "package": "nginx",
+        "installed_version": "1.28.3-r7",
+        "upstream": "nginx",
+        "severity": "Critical",
+        "available_fix": {
+          "versions": [],
+          "state": "unknown"
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:bb1be4ba955930e76dd6266d50052984ff38fd787186e503107eb9308f0e4942",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-95101",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2026-95101",
+        "package": "nginx",
+        "installed_version": "1.28.3-r7",
+        "upstream": "nginx",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": "unknown"
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:bb1be4ba955930e76dd6266d50052984ff38fd787186e503107eb9308f0e4942",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2025-60876",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-60876",
+        "package": "busybox",
+        "installed_version": "1.37.0-r30",
+        "upstream": "busybox",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": ""
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:bb1be4ba955930e76dd6266d50052984ff38fd787186e503107eb9308f0e4942",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2025-60876",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-60876",
+        "package": "busybox-binsh",
+        "installed_version": "1.37.0-r30",
+        "upstream": "busybox",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": ""
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:bb1be4ba955930e76dd6266d50052984ff38fd787186e503107eb9308f0e4942",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2025-60876",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2025-60876",
+        "package": "ssl_client",
+        "installed_version": "1.37.0-r30",
+        "upstream": "busybox",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": ""
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:bb1be4ba955930e76dd6266d50052984ff38fd787186e503107eb9308f0e4942",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-97629",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2026-97629",
+        "package": "nginx",
+        "installed_version": "1.28.3-r7",
+        "upstream": "nginx",
+        "severity": "High",
+        "available_fix": {
+          "versions": [],
+          "state": "unknown"
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:bb1be4ba955930e76dd6266d50052984ff38fd787186e503107eb9308f0e4942",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      },
+      {
+        "advisory": "CVE-2026-58055",
+        "source": "https://nvd.nist.gov/vuln/detail/CVE-2026-58055",
+        "package": "nghttp2-libs",
+        "installed_version": "1.69.0-r0",
+        "upstream": "nghttp2",
+        "severity": "Medium",
+        "available_fix": {
+          "versions": [],
+          "state": ""
+        },
+        "origin": "apk",
+        "locations": [
+          {
+            "path": "/lib/apk/db/installed",
+            "layerID": "sha256:bb1be4ba955930e76dd6266d50052984ff38fd787186e503107eb9308f0e4942",
+            "accessPath": "/lib/apk/db/installed",
+            "annotations": {
+              "evidence": "primary"
+            }
+          }
+        ],
+        "match_type": [
+          "cpe-match"
+        ],
+        "same_advisory_package_version_matches": 1,
+        "runtime_relevance_and_prerequisites": "Reachability NOT RUN; component remains in runtime inventory. Requires package-specific security review.",
+        "remediation": "No fix version reported in this scan; see per-image remediation and residual-risk report. No suppression or owner acceptance inferred.",
+        "residual_exposure": "Retained for security-owner review",
+        "required_approval": "Named security/release owner; none supplied or inferred"
+      }
+    ]
+  }
+}

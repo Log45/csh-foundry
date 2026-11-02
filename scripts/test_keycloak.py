@@ -11,6 +11,7 @@ import tempfile
 import time
 from pathlib import Path
 from urllib.parse import parse_qs, urlencode, urlsplit
+from uuid import UUID
 
 import httpx
 import jwt
@@ -25,7 +26,18 @@ ORIGIN = "https://studio.phase10.test"
 def main() -> None:
     container = None
     with tempfile.TemporaryDirectory(prefix="foundry-keycloak-test-") as directory:
-        configuration = realm_configuration(ISSUER, ORIGIN)
+        configuration = realm_configuration(
+            ISSUER,
+            ORIGIN,
+            entra_tenant=UUID("00000000-0000-0000-0000-000000000001"),
+            entra_client="disposable-entra-client",
+            google_client="disposable-google-client",
+            workspace_client="disposable-workspace-client",
+            workspace_domain="example.test",
+        )
+        # Import compatibility only. Never invoke these external providers or use real credentials.
+        for upstream in configuration["identityProviders"]:
+            upstream["config"]["clientSecret"] = secrets.token_urlsafe(32)
         # Test transport only: no HTTP exception is added to the platform verifier.
         configuration["sslRequired"] = "none"
         password = secrets.token_urlsafe(32)
@@ -56,7 +68,8 @@ def main() -> None:
                     "127.0.0.1::8080",
                     "-v",
                     f"{path}:/opt/keycloak/data/import/phase10-realm.json:ro",
-                    f"quay.io/keycloak/keycloak:{KEYCLOAK_VERSION}",
+                    f"quay.io/keycloak/keycloak:{KEYCLOAK_VERSION}"
+                    "@sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332",
                     "start-dev",
                     "--hostname",
                     "https://identity.phase10.test",
@@ -81,6 +94,7 @@ def main() -> None:
                 time.sleep(0.5)
             else:
                 raise RuntimeError("Pinned Keycloak did not become ready")
+            print("PASS pinned Keycloak imports Entra/Google/Workspace provider configurations")
 
             def local(url):
                 parsed = urlsplit(str(url))

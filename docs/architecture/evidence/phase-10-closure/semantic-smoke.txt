@@ -1,0 +1,1 @@
+Wrote /Users/log/Documents/code/csh-foundry/docs/architecture/evidence/semantic-smoke.json

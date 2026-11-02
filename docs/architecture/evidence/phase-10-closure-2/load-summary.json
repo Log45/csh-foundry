@@ -1,0 +1,41 @@
+[
+  {
+    "concurrency": 1,
+    "errors": 0,
+    "requests": 20,
+    "requests_per_second": 0.9971405126153929,
+    "p95_by_operation_ms": {
+      "object_set": 172.037,
+      "preview": 273.514,
+      "query": 334.675,
+      "sdk": 300.644,
+      "traversal": 161.686
+    }
+  },
+  {
+    "concurrency": 4,
+    "errors": 0,
+    "requests": 80,
+    "requests_per_second": 3.9868989173944662,
+    "p95_by_operation_ms": {
+      "object_set": 491.289,
+      "preview": 509.173,
+      "query": 492.879,
+      "sdk": 539.256,
+      "traversal": 503.448
+    }
+  },
+  {
+    "concurrency": 8,
+    "errors": 0,
+    "requests": 160,
+    "requests_per_second": 7.953083533869263,
+    "p95_by_operation_ms": {
+      "object_set": 452.484,
+      "preview": 556.513,
+      "query": 474.851,
+      "sdk": 582.937,
+      "traversal": 517.547
+    }
+  }
+]

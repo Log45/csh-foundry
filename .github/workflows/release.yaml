@@ -26,10 +26,34 @@ jobs:
       - run: npm audit --omit=dev --prefix apps/studio
       - run: docker build -t csh-foundry-api:phase10 -f infrastructure/docker/api.Dockerfile .
       - run: docker build -t csh-foundry-studio:phase10 -f infrastructure/docker/studio.Dockerfile .
-      - run: uv run python scripts/scan_images.py csh-foundry-api:phase10 csh-foundry-studio:phase10
+      - run: docker build --build-arg BASE_IMAGE=csh-foundry-api:phase10 -t csh-foundry-semantic:phase10 -f infrastructure/docker/semantic.Dockerfile .
+      - run: docker build -t csh-foundry-ingress:phase10 -f infrastructure/docker/ingress.Dockerfile .
+      - run: FOUNDRY_INGRESS_TEST_IMAGE=csh-foundry-ingress:phase10 uv run python scripts/test_ingress.py
+      - run: |
+          docker pull postgres:17.11-trixie@sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1
+          docker pull quay.io/keycloak/keycloak:26.8.1@sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332
+      - run: |
+          uv run python scripts/scan_images.py csh-foundry-api:phase10 csh-foundry-studio:phase10 \
+            csh-foundry-semantic:phase10 csh-foundry-ingress:phase10 \
+            postgres:17.11-trixie@sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1 \
+            quay.io/keycloak/keycloak:26.8.1@sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: security-evidence
+          path: artifacts/supply-chain/*.json
+          if-no-files-found: error
+      - name: Require acceptance evidence for these release images
+        run: |
+          uv run python scripts/verify_release_evidence.py artifacts/acceptance/release-manifest.json \
+            --revision "$GITHUB_SHA" \
+            --image "api=$(docker image inspect csh-foundry-api:phase10 --format '{{.Id}}')" \
+            --image "studio=$(docker image inspect csh-foundry-studio:phase10 --format '{{.Id}}')" \
+            --image "semantic=$(docker image inspect csh-foundry-semantic:phase10 --format '{{.Id}}')" \
+            --image "ingress=$(docker image inspect csh-foundry-ingress:phase10 --format '{{.Id}}')"
       - run: |
           mkdir -p artifacts/release
-          docker save csh-foundry-api:phase10 csh-foundry-studio:phase10 -o artifacts/release/images.tar
+          docker save csh-foundry-api:phase10 csh-foundry-studio:phase10 csh-foundry-semantic:phase10 csh-foundry-ingress:phase10 -o artifacts/release/images.tar
           sha256sum artifacts/release/images.tar > artifacts/release/SHA256SUMS
       - uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a
         with:

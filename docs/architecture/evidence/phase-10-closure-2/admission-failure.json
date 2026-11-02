@@ -1,0 +1,14 @@
+{
+  "project": "foundry-accept-34819e89",
+  "requests": 24,
+  "concurrent_clients": 12,
+  "http_status_counts": {
+    "500": 23,
+    "200": 1
+  },
+  "max_seconds": 3.262051083991537,
+  "result": "FAIL",
+  "diagnosis": "Ordinary pool exhausted by ontology lock waiters; lock holder needs a second connection for independent audit",
+  "downstream_checks": "NOT RUN",
+  "private_evidence": "artifacts/foundry-accept-34819e89"
+}

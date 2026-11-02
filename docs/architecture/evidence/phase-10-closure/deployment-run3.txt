@@ -1,0 +1,5 @@
+PASS production-template-configuration
+No new upgrade operations detected.
+PASS new-cluster-owner-migration-and-runtime-grants
+FAIL acceptance-execution
+FAIL: see deployment.json and its private evidence directory

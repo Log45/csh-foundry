@@ -1,0 +1,6 @@
+PASS http://127.0.0.1:3000/ 200
+PASS http://127.0.0.1:8000/health/ready 200
+PASS https://keycloak.localhost/realms/foundry/.well-known/openid-configuration 200
+PASS developer manufacturing objects preserved: 1
+PASS migration: 0017_capacity
+NOT RUN user browser password entry; no acceptance fixture loaded into developer DB

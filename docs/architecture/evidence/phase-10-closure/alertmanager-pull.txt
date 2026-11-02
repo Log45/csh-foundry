@@ -1,0 +1,19 @@
+v0.28.1: Pulling from prom/alertmanager
+24e8d7e9d087: Pulling fs layer
+77b3946d0a9c: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+de945409924b: Pulling fs layer
+81f115908e32: Pulling fs layer
+4f4fb700ef54: Already exists
+4f4fb700ef54: Pull complete
+24e8d7e9d087: Download complete
+77b3946d0a9c: Download complete
+81f115908e32: Download complete
+de945409924b: Download complete
+de945409924b: Pull complete
+24e8d7e9d087: Pull complete
+77b3946d0a9c: Pull complete
+81f115908e32: Pull complete
+Digest: sha256:27c475db5fb156cab31d5c18a4251ac7ed567746a2483ff264516437a39b15ba
+Status: Downloaded newer image for prom/alertmanager:v0.28.1
+docker.io/prom/alertmanager:v0.28.1

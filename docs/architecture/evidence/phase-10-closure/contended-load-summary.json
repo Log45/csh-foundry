@@ -1,0 +1,120 @@
+{
+  "source_sha256": "42484f360f8cd0600ae172ca157f385b5f0f39a24d2a20b02e4fdaeaddd4fd28",
+  "levels": [
+    {
+      "clients": 1,
+      "requests": 20,
+      "errors": 0,
+      "throughput": 0.9977976547793868,
+      "operations": {
+        "object_set": {
+          "samples": 4,
+          "p95_ms": 313.157,
+          "target_ms": 500,
+          "result": "PASS"
+        },
+        "preview": {
+          "samples": 4,
+          "p95_ms": 553.709,
+          "target_ms": 500,
+          "result": "FAIL"
+        },
+        "query": {
+          "samples": 4,
+          "p95_ms": 271.934,
+          "target_ms": 500,
+          "result": "PASS"
+        },
+        "sdk": {
+          "samples": 4,
+          "p95_ms": 408.603,
+          "target_ms": 2000,
+          "result": "PASS"
+        },
+        "traversal": {
+          "samples": 4,
+          "p95_ms": 438.471,
+          "target_ms": 500,
+          "result": "PASS"
+        }
+      }
+    },
+    {
+      "clients": 4,
+      "requests": 80,
+      "errors": 0,
+      "throughput": 3.986089063969466,
+      "operations": {
+        "object_set": {
+          "samples": 16,
+          "p95_ms": 973.899,
+          "target_ms": 500,
+          "result": "FAIL"
+        },
+        "preview": {
+          "samples": 16,
+          "p95_ms": 851.862,
+          "target_ms": 500,
+          "result": "FAIL"
+        },
+        "query": {
+          "samples": 16,
+          "p95_ms": 974.812,
+          "target_ms": 500,
+          "result": "FAIL"
+        },
+        "sdk": {
+          "samples": 16,
+          "p95_ms": 1024.674,
+          "target_ms": 2000,
+          "result": "PASS"
+        },
+        "traversal": {
+          "samples": 16,
+          "p95_ms": 975.639,
+          "target_ms": 500,
+          "result": "FAIL"
+        }
+      }
+    },
+    {
+      "clients": 8,
+      "requests": 160,
+      "errors": 0,
+      "throughput": 7.9719341910467,
+      "operations": {
+        "object_set": {
+          "samples": 32,
+          "p95_ms": 595.796,
+          "target_ms": 500,
+          "result": "FAIL"
+        },
+        "preview": {
+          "samples": 32,
+          "p95_ms": 507.518,
+          "target_ms": 500,
+          "result": "FAIL"
+        },
+        "query": {
+          "samples": 32,
+          "p95_ms": 578.426,
+          "target_ms": 500,
+          "result": "FAIL"
+        },
+        "sdk": {
+          "samples": 32,
+          "p95_ms": 538.841,
+          "target_ms": 2000,
+          "result": "PASS"
+        },
+        "traversal": {
+          "samples": 32,
+          "p95_ms": 594.229,
+          "target_ms": 500,
+          "result": "FAIL"
+        }
+      }
+    }
+  ],
+  "targets": "Provisional engineering sample only; not approved SLOs or capacity certification"
+}

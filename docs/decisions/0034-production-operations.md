@@ -33,3 +33,39 @@ OpenTelemetry collector. Long-term log/audit export and alert delivery are opera
 Maintenance-window migrations/deployments are supported. No zero-downtime, automatic destructive
 downgrade, rolling mixed-version, multi-host or HA guarantee is made. Release scans and approval
 gates must fail closed; outstanding vulnerability findings block production promotion.
+
+## Phase 10 acceptance-closure addendum (2026-11-02)
+
+Actual combined deployment exposed invalid YAML tmpfs splitting and an API/broker startup race.
+Quote mount options and require the broker's actual management readiness endpoint before API
+OIDC warmup. The broker probe uses the [documented Bash TCP method](https://www.keycloak.org/observability/health); no curl package is added.
+API receives the same server-owned ingestion catalog as its worker. Exact-host HTTP redirects
+use nginx; no forwarded client origin selects a callback or provider.
+
+A semantic-worker import of the ingestion clock initialized Polars and crashed under amd64
+emulation without AVX. Lease time now comes from the shared database module. This removes an
+unnecessary tabular runtime initialization while preserving database-clock lease/fencing behavior,
+the pinned native semantic engine, and ingestion's Polars transformations.
+
+Reviewed multi-platform base/tool digests are pinned in application Dockerfiles. Release packages
+include and scan the semantic image as well as API/Studio, retain failed-scan evidence, and require
+exact-candidate acceptance evidence before promotion. Integrity hashes are not owner approval.
+No residual vulnerability exception, external infrastructure change, schema migration, new
+reasoning/identity authority or Phase 11 capability is introduced.
+
+Infrastructure scanning also exposed fixable findings in the retained nginx base. Use a reviewed
+patched ingress image (`INGRESS_IMAGE`), supplier stable nginx 1.30.6, updated
+Alpine OS libraries and no unused vendor modules. Preserve the official HTTP include/template layout. Pin PostgreSQL and the refreshed same-version Keycloak supplier image by digest.
+Do not mix unstable Debian packages into PostgreSQL or independently replace Keycloak's bundled
+Guava jar and call it supplier-certified. Retained critical supplier findings require review; no
+exception is approved. Explicit status-only access logs cover redirect and rejected-host servers.
+
+Concurrent full-profile admission testing exposed pool starvation: business transactions waiting
+for an ontology lock consumed the ordinary pool while the lock holder needed an independent audit
+transaction before commit. The API now gives authorization audit inserts a separate bounded pool
+of two connections with no overflow, using the same database, schema and restricted role. Business
+pool limits and lock/statement deadlines are unchanged. Independent decision evidence still survives
+business rollback, and failed audit persistence still aborts the mutation. Default API connection
+capacity becomes 12 per process; operators must include both pools in PostgreSQL sizing. Single-job
+worker children keep their existing pool and sequential audit behavior. No database migration is
+needed. Regression checks exercise concurrent mutations with a one-connection business pool.
