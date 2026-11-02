@@ -1,12 +1,15 @@
 """Run Studio E2E with a local TLS IdP, actual FastAPI and disposable PostgreSQL schema."""
 
 import os
+import secrets
+import shutil
 import signal
 import subprocess
 import time
 from pathlib import Path
 
 import httpx
+from cryptography.fernet import Fernet
 
 ROOT = Path(__file__).resolve().parents[1]
 cert = ROOT / "artifacts/studio-e2e/cert.pem"
@@ -22,6 +25,22 @@ env = os.environ | {
     "NODE_OPTIONS": "--import=" + str(ROOT / "apps/studio/tests/oidc_transport.mjs"),
 }
 processes = []
+durable = os.environ.get("STUDIO_E2E_DURABLE") == "true"
+if durable:
+    shutil.copytree(
+        ROOT / "apps/studio/.next/static",
+        ROOT / "apps/studio/.next/standalone/.next/static",
+        dirs_exist_ok=True,
+    )
+    credential = secrets.token_urlsafe(32)
+    env.update(
+        {
+            "STUDIO_STATE_SECRET": credential,
+            "FOUNDRY_BROWSER_STATE_SECRET": credential,
+            "FOUNDRY_BROWSER_STATE_KEYS": Fernet.generate_key().decode(),
+            "STUDIO_E2E_REPLICA_PORT": "3001",
+        }
+    )
 try:
     with (log / "backend.log").open("w") as backend, (log / "next.log").open("w") as frontend:
         processes.append(
@@ -47,11 +66,11 @@ try:
             raise RuntimeError("Backend readiness timed out")
         processes.append(
             subprocess.Popen(
-                ["npm", "run", "dev"],
+                ["node", ".next/standalone/server.js"] if durable else ["npm", "run", "dev"],
                 cwd=ROOT / "apps/studio",
                 stdout=frontend,
                 stderr=subprocess.STDOUT,
-                env=env,
+                env=env | {"HOSTNAME": "127.0.0.1", "PORT": "3000"},
                 start_new_session=True,
             )
         )
@@ -64,6 +83,26 @@ try:
             time.sleep(0.5)
         else:
             raise RuntimeError("Frontend readiness timed out")
+        if durable:
+            replica = subprocess.Popen(
+                ["node", ".next/standalone/server.js"],
+                cwd=ROOT / "apps/studio",
+                stdout=frontend,
+                stderr=subprocess.STDOUT,
+                env=env | {"HOSTNAME": "127.0.0.1", "PORT": "3001"},
+                start_new_session=True,
+            )
+            processes.append(replica)
+            for _ in range(120):
+                try:
+                    if httpx.get("http://127.0.0.1:3001", timeout=2).status_code == 200:
+                        break
+                except httpx.HTTPError:
+                    pass
+                time.sleep(0.5)
+            else:
+                raise RuntimeError("Second replica readiness timed out")
+            env["STUDIO_E2E_REPLICA_PID"] = str(replica.pid)
         raise SystemExit(
             subprocess.call(["npm", "run", "test:e2e"], cwd=ROOT / "apps/studio", env=env)
         )

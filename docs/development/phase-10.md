@@ -1,6 +1,8 @@
-# Phase 10 preparation — production hardening and SSO
+# Phase 10 — production hardening and SSO
 
-Preparation only. Phase 10 requires explicit approval; no items below are implemented by Phase 9.
+Phase 10 was approved with Keycloak selected. The original preparation list below is historical;
+see the [implementation checklist](phase-10-checklist.md), [report](phase-10-report.md) and
+[readiness matrix](../operations/readiness.md) for implemented work and outstanding acceptance gates.
 Retain the existing Phase 7 authorization model and canonical PostgreSQL source of truth.
 
 - [ ] Review production deployment architecture, supported topology and environment boundaries.

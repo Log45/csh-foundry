@@ -2,7 +2,7 @@
 
 ## Architecture, Implementation Roadmap, and Coding Agent Specification
 
-**Project status:** Phases 0–9 implemented within documented completion-report boundaries; Phase 10 requires separate approval
+**Project status:** Phases 0–9 implemented; Phase 10 approved with Keycloak, implementation and acceptance tracked in docs/development/phase-10-report.md; Phase 11 not approved
 
 **Document version:** 1.2 (Codex-ready; provider-independent SSO roadmap)
 

@@ -1,0 +1,20 @@
+WARN Fixing invalid version specifier by removing star after comparison operator other than equal and not equal (before: `>=3.6.*`; after: `>=3.6`)
+WARN Fixing invalid version specifier by removing star after comparison operator other than equal and not equal (before: `>=3.6.*`; after: `>=3.6`)
+WARN Fixing invalid version specifier by removing star after comparison operator other than equal and not equal (before: `>=3.6.*`; after: `>=3.6`)
+WARN Fixing invalid version specifier by removing star after comparison operator other than equal and not equal (before: `>=3.6.*`; after: `>=3.6`)
+WARN Fixing invalid version specifier by removing star after comparison operator other than equal and not equal (before: `>=3.6.*`; after: `>=3.6`)
+WARN Fixing invalid version specifier by removing star after comparison operator other than equal and not equal (before: `>=3.6.*`; after: `>=3.6`)
+WARN Fixing invalid version specifier by removing star after comparison operator other than equal and not equal (before: `>=3.6.*`; after: `>=3.6`)
+WARN Fixing invalid version specifier by removing star after comparison operator other than equal and not equal (before: `>=3.6.*`; after: `>=3.6`)
+WARN Skipping file for toml: toml-0.10.0-py2.7.egg
+WARN Fixing invalid version specifier by removing star after comparison operator other than equal and not equal (before: `>=3.6.*`; after: `>=3.6`)
+WARN Fixing invalid version specifier by removing star after comparison operator other than equal and not equal (before: `>=3.6.*`; after: `>=3.6`)
+WARN Skipping file for requests: requests-2.23.0-py2.7.egg
+WARN Fixing invalid version specifier by removing star after comparison operator other than equal and not equal (before: `>=3.6.*`; after: `>=3.6`)
+WARN Fixing invalid version specifier by removing star after comparison operator other than equal and not equal (before: `>=3.6.*`; after: `>=3.6`)
+Downloading pip (1.7MiB)
+ Downloading pip
+Installed 27 packages in 38ms
+WARNING:pip_audit._cli:--no-deps is supported, but users are encouraged to fully hash their pinned dependencies
+WARNING:pip_audit._cli:Consider using a tool like `pip-compile`: https://pip-tools.readthedocs.io/en/latest/#using-hashes
+No known vulnerabilities found

@@ -1,7 +1,7 @@
 # Database migrations
 
 Apply with `uv run alembic upgrade head`; inspect with `uv run alembic current` and
-`uv run alembic check`. Readiness expects `0013_security`.
+`uv run alembic check`. Readiness expects `0017_capacity`.
 
 | Revision | Objects |
 |---|---|
@@ -134,3 +134,18 @@ security/import state remains. Exercise downgrades only on disposable schemas or
 backup/restore plan. The tests use migrated private PostgreSQL schemas and verify re-upgrade,
 metadata drift, ownership constraints and retention of prior-phase state. During development the
 uncommitted parent-history check was synchronized on the local database without editing snapshots.
+
+## Phase 10: 0016_operations and 0017_capacity
+
+0016 adds encrypted browser login/session state with expiry/revision and shared request-budget
+rows. 0017 adds tenant logical artifact/staging accounting plus combined pending/running ingestion
+and semantic admission triggers. Accounting is backfilled; operational objects, memberships,
+canonical published snapshots and Phase 9 history are preserved. Production uses a non-owner DML
+role; migrations run separately under the owner. Verify backups before upgrading and regrant runtime
+table privileges afterward. Ordinary application startup never performs DDL.
+
+Downgrade 0017 drops accounting/admission controls without deleting artifacts; downgrade 0016
+invalidates all durable sessions and removes budget state. Earlier Phase 9 downgrades still destroy
+branch/SDK history. Use a maintenance window and an approved forward-repair/restore plan rather
+than assuming destructive downgrade is a production rollback. Test schema reversals only in
+isolated databases. See the Phase 10 runbook and validation report.

@@ -1,0 +1,22 @@
+[0000]  WARN unable to get filesystem cache at /.cache/syft: unable to create directory at '/.cache/syft': mkdir /.cache: read-only file system
+[0135] ERROR discovered vulnerabilities at or above the severity threshold
+[0000]  WARN unable to get filesystem cache at /.cache/syft: unable to create directory at '/.cache/syft': mkdir /.cache: read-only file system
+[0014] ERROR discovered vulnerabilities at or above the severity threshold
+{
+  "image-0": {
+    "image": "csh-foundry-api:phase10",
+    "image_id": "sha256:0f41afc186f07ff957e2e546be522484e05a9ca18526347f71cd81abc504146c",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL"
+  },
+  "image-1": {
+    "image": "csh-foundry-studio:phase10",
+    "image_id": "sha256:1a20f9924488f6fa39807e9ba8f3d25332be1a570c91024d932e888877de0ea5",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL"
+  }
+}

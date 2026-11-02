@@ -1,0 +1,2 @@
+PASS encrypted logical backup and ciphertext SHA256; restore drill is a separate check
+PASS actual age decryption -> isolated PostgreSQL logical restore; object count 1 matches source

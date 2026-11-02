@@ -1,0 +1,18 @@
+groups:
+  - name: foundry-api
+    rules:
+      - alert: FoundryAPIUnavailable
+        expr: up{job="foundry-api"} == 0
+        for: 2m
+        labels: {severity: critical}
+        annotations: {summary: "Foundry API metrics unavailable; verify readiness, network and credentials"}
+      - alert: FoundryAPIErrorRate
+        expr: sum(rate(foundry_requests_total{status=~"5.."}[5m])) / clamp_min(sum(rate(foundry_requests_total[5m])), 0.01) > 0.05
+        for: 5m
+        labels: {severity: warning}
+        annotations: {summary: "Foundry API 5xx exceeds provisional five percent threshold"}
+      - alert: FoundryAPILatency
+        expr: histogram_quantile(0.95, sum by(le) (rate(foundry_request_seconds_bucket[5m]))) > 2
+        for: 5m
+        labels: {severity: warning}
+        annotations: {summary: "Foundry API p95 exceeds provisional two second threshold"}

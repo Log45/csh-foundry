@@ -30,6 +30,7 @@ from ontology_platform.main import create_app
 from ontology_platform.metadata.service import RegistryService
 from ontology_platform.security.admin import SecurityAdministration
 from ontology_platform.security.bootstrap import bootstrap
+from ontology_platform.security.browser import BrowserStore
 from ontology_platform.security.contracts import AssignmentInput, DelegationInput, IdentityInput
 from ontology_platform.security.identity import resolve
 from ontology_platform.security.oidc import OIDCVerifier, Provider
@@ -266,6 +267,7 @@ def main():
         )
         app = create_app(settings)
         app.state.sessions = w.sessions
+        app.state.browser_store = BrowserStore(w.sessions, settings)
         app.state.authorizer = auth
         app.state.ingestion_catalog = catalog
         app.state.oidc.client.close()

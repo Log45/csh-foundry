@@ -14,7 +14,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "generate:api": "openapi-typescript lib/openapi.json -o lib/api-schema.ts --default-non-nullable false",
-    "format:check": "prettier --check \"app/**/*.{ts,tsx,css}\" \"components/**/*.tsx\" \"features/**/*.tsx\" lib/api.ts lib/server.ts \"tests/**/*.{ts,tsx,mjs}\" next.config.ts playwright.config.ts vitest.config.ts"
+    "format:check": "prettier --check \"app/**/*.{ts,tsx,css}\" \"components/**/*.tsx\" \"features/**/*.tsx\" lib/api.ts lib/server.ts \"tests/**/*.{ts,tsx,mjs}\" next.config.ts playwright.config.ts vitest.config.ts proxy.ts instrumentation.ts"
   },
   "dependencies": {
     "jose": "6.2.14",

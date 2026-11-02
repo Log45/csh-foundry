@@ -1,0 +1,3 @@
+PASS packaged Python/TypeScript generator templates and deterministic archives
+PASS final API image: migrated PostgreSQL readiness, branch/SDK OpenAPI, unauthenticated and forged-token denial
+PASS final Studio image: rendered root, security headers, non-root runtime, private BFF denial and fail-closed unconfigured login

@@ -1,0 +1,204 @@
+{
+  "environment": "macOS-15.6.1-arm64-arm-64bit",
+  "concurrency": 8,
+  "requests": 70,
+  "throughput_per_second": 52.34,
+  "error_rate": 0.0,
+  "cpu_seconds": 1.175,
+  "max_rss_platform_units": 166395904,
+  "database_shared_stats": {
+    "numbackends": 9,
+    "xact_commit": 373107,
+    "xact_rollback": 38995,
+    "blks_read": 279176,
+    "blks_hit": 604771992
+  },
+  "lock_waiters_at_end": 0,
+  "pool_checked_out": 0,
+  "measurements": {
+    "tenants": {
+      "count": 5,
+      "p50_ms": 25.462,
+      "p95_ms": 36.259,
+      "p99_ms": 36.259,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "membership": {
+      "count": 5,
+      "p50_ms": 37.832,
+      "p95_ms": 126.74,
+      "p99_ms": 126.74,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "query": {
+      "count": 5,
+      "p50_ms": 155.21,
+      "p95_ms": 185.867,
+      "p99_ms": 185.867,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "object_set": {
+      "count": 5,
+      "p50_ms": 148.92,
+      "p95_ms": 185.987,
+      "p99_ms": 185.987,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "traversal": {
+      "count": 5,
+      "p50_ms": 154.189,
+      "p95_ms": 167.857,
+      "p99_ms": 167.857,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "preview": {
+      "count": 5,
+      "p50_ms": 201.193,
+      "p95_ms": 211.374,
+      "p99_ms": 211.374,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "execute_replay": {
+      "count": 5,
+      "p50_ms": 209.431,
+      "p95_ms": 215.409,
+      "p99_ms": 215.409,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "comparison": {
+      "count": 5,
+      "p50_ms": 213.222,
+      "p95_ms": 215.671,
+      "p99_ms": 215.671,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "merge_preview": {
+      "count": 5,
+      "p50_ms": 201.502,
+      "p95_ms": 215.313,
+      "p99_ms": 215.313,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "sdk_python": {
+      "count": 5,
+      "p50_ms": 160.453,
+      "p95_ms": 181.868,
+      "p99_ms": 181.868,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "sdk_typescript": {
+      "count": 5,
+      "p50_ms": 150.843,
+      "p95_ms": 182.224,
+      "p99_ms": 182.224,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "artifact": {
+      "count": 5,
+      "p50_ms": 135.634,
+      "p95_ms": 161.01,
+      "p99_ms": 161.01,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "ingestion_submit": {
+      "count": 5,
+      "p50_ms": 164.301,
+      "p95_ms": 185.694,
+      "p99_ms": 185.694,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "semantic_submit": {
+      "count": 5,
+      "p50_ms": 169.419,
+      "p95_ms": 235.569,
+      "p99_ms": 235.569,
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ]
+    }
+  },
+  "scope": "Local 63-object/70-link fixture, 5 samples per operation, real HTTP/PostgreSQL and signed controlled OIDC. Conservative nearest-rank percentiles; not production capacity.",
+  "provisional_targets": "p95 read 500ms, write 2000ms, errors 0%; proposed only; inspect measurements, not business-approved SLOs."
+}

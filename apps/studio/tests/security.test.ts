@@ -13,6 +13,9 @@ import {
   issueSession,
   session,
   sessions,
+  issueBrowserSession,
+  browserSession,
+  brokerLogout,
 } from "../lib/server";
 beforeEach(() => {
   vi.stubEnv("STUDIO_ORIGIN", "http://127.0.0.1:3000");
@@ -20,6 +23,39 @@ beforeEach(() => {
   vi.stubEnv("STUDIO_OIDC_CLIENT_ID", "studio");
   vi.stubEnv("STUDIO_API_AUDIENCE", "foundry");
   sessions.clear();
+});
+it("fails closed during shared-session outages without admitting memory sessions", async () => {
+  vi.stubEnv("STUDIO_STATE_SECRET", "s".repeat(43));
+  vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
+  await expect(
+    issueBrowserSession("private-token", Date.now() + 10000),
+  ).rejects.toThrow("session_store_unavailable");
+  await expect(browserSession("unknown")).rejects.toThrow(
+    "session_store_unavailable",
+  );
+  expect(sessions.size).toBe(0);
+});
+it("requires durable credentials and HTTPS in the production profile", () => {
+  vi.stubEnv("STUDIO_ENVIRONMENT", "production");
+  vi.stubEnv("STUDIO_STATE_SECRET", "");
+  expect(() => config()).toThrow("production_configuration_required");
+});
+it("rejects a broker logout endpoint outside the configured issuer origin", async () => {
+  vi.stubEnv("STUDIO_BROKER_LOGOUT", "true");
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockResolvedValue(
+      Response.json({
+        issuer: config().issuer,
+        code_challenge_methods_supported: ["S256"],
+        authorization_endpoint: config().issuer + "/authorize",
+        token_endpoint: config().issuer + "/token",
+        jwks_uri: config().issuer + "/keys",
+        end_session_endpoint: "https://attacker.example/logout",
+      }),
+    ),
+  );
+  await expect(brokerLogout()).rejects.toThrow("invalid_discovery");
 });
 afterEach(() => {
   vi.unstubAllGlobals();

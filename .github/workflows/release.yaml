@@ -1,0 +1,48 @@
+name: Reviewed release artifacts
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validation:
+    uses: ./.github/workflows/ci.yaml
+  package:
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    needs: validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e
+        with: {version: "0.9.5"}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with: {node-version: "24"}
+      - run: uv sync --frozen && npm ci --prefix apps/studio
+      - run: uv export --frozen --no-dev --no-emit-workspace -o requirements.txt
+      - run: uvx --python 3.12 --from pip-audit==2.9.0 pip-audit --disable-pip --no-deps -r requirements.txt
+      - run: npm audit --omit=dev --prefix apps/studio
+      - run: docker build -t csh-foundry-api:phase10 -f infrastructure/docker/api.Dockerfile .
+      - run: docker build -t csh-foundry-studio:phase10 -f infrastructure/docker/studio.Dockerfile .
+      - run: uv run python scripts/scan_images.py csh-foundry-api:phase10 csh-foundry-studio:phase10
+      - run: |
+          mkdir -p artifacts/release
+          docker save csh-foundry-api:phase10 csh-foundry-studio:phase10 -o artifacts/release/images.tar
+          sha256sum artifacts/release/images.tar > artifacts/release/SHA256SUMS
+      - uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a
+        with:
+          subject-path: artifacts/release/images.tar
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: reviewed-release
+          path: |
+            artifacts/release/
+            artifacts/supply-chain/*.json
+  approve:
+    needs: package
+    runs-on: ubuntu-latest
+    environment: production-approval
+    steps:
+      - run: echo 'Approval recorded. Deployment remains an explicit operator action under the release runbook.'

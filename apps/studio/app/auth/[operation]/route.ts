@@ -3,17 +3,18 @@ import { NextResponse } from "next/server";
 import {
   authorization,
   backend,
-  beginLogin,
+  beginBrowserLogin,
   BoundaryError,
   config,
-  consumeLogin,
+  consumeBrowserLogin,
   csrfCheck,
-  digest,
   exchange,
   input,
   originCheck,
-  session,
-  sessions,
+  browserSession,
+  revokeBrowserSession,
+  selectBrowserTenant,
+  brokerLogout,
 } from "@/lib/server";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -37,7 +38,7 @@ async function handle(
   try {
     if (operation === "login" && request.method === "POST") {
       originCheck(request);
-      const login = beginLogin();
+      const login = await beginBrowserLogin();
       const url = await authorization(login);
       const result = NextResponse.json({ authorization: url.href });
       result.cookies.set(loginName, login.id, options(300));
@@ -45,19 +46,19 @@ async function handle(
     }
     if (operation === "callback" && request.method === "GET") {
       const url = new URL(request.url);
-      const login = consumeLogin(
+      const login = await consumeBrowserLogin(
         jar.get(loginName)?.value ?? "",
         url.searchParams.get("state") ?? "",
       );
       const id = await exchange(url.searchParams.get("code") ?? "", login);
       const old = jar.get(sessionName)?.value;
-      if (old) sessions.delete(digest(old));
+      if (old) await revokeBrowserSession(old);
       const result = NextResponse.redirect(config().origin, 303);
       result.cookies.set(sessionName, id, options(3600));
       result.cookies.set(loginName, "", options(0));
       return result;
     }
-    const value = session(jar.get(sessionName)?.value);
+    const value = await browserSession(jar.get(sessionName)?.value);
     if (operation === "session" && request.method === "GET") {
       const offset = new URL(request.url).searchParams.get("offset") ?? "0";
       if (!/^[0-9]{1,5}$/.test(offset) || Number(offset) > 10000)
@@ -84,8 +85,10 @@ async function handle(
       throw new BoundaryError(405, "method_not_allowed");
     csrfCheck(request, value);
     if (operation === "logout") {
-      sessions.delete(digest(jar.get(sessionName)!.value));
-      const result = NextResponse.json({ status: "signed_out" });
+      await revokeBrowserSession(jar.get(sessionName)!.value);
+      // Local invalidation succeeds even during a broker outage. No tokens in logout URLs.
+      const logout = await brokerLogout().catch(() => undefined);
+      const result = NextResponse.json({ status: "signed_out", logout });
       result.cookies.set(sessionName, "", options(0));
       return result;
     }
@@ -94,7 +97,7 @@ async function handle(
       if (typeof tenant !== "string" || !/^[a-f0-9-]{36}$/.test(tenant))
         throw new BoundaryError(403, "forbidden");
       await backend(value, "/api/v1/security/me", "GET", undefined, tenant);
-      value.tenant = tenant;
+      await selectBrowserTenant(jar.get(sessionName)!.value, value, tenant);
       return NextResponse.json({ status: "selected" });
     }
     throw new BoundaryError(404, "not_found");

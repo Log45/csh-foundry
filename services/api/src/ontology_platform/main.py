@@ -4,12 +4,13 @@ from typing import Annotated
 
 from fastapi import Depends, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
 from pydantic import BaseModel
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session, sessionmaker
 from starlette.exceptions import HTTPException
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from ontology_platform.actions.limits import ActionPayloadLimit
 from ontology_platform.actions.routes import router as action_router
@@ -17,15 +18,18 @@ from ontology_platform.api.v1.routes import router
 from ontology_platform.branching.routes import router as branch_router
 from ontology_platform.config import Settings, get_settings
 from ontology_platform.db.governance import SCHEMA_REVISION
-from ontology_platform.db.session import make_engine
+from ontology_platform.db.session import make_engine, require_runtime_role
 from ontology_platform.dependencies import get_session
 from ontology_platform.errors import ApplicationError
 from ontology_platform.ingestion.catalog import SourceCatalog
 from ontology_platform.ingestion.routes import router as ingestion_router
 from ontology_platform.interoperability.routes import router as interchange_router
+from ontology_platform.operations import RequestTelemetry, Telemetry, TransportBounds
 from ontology_platform.queries.cursor import CursorCodec
 from ontology_platform.queries.routes import router as query_router
 from ontology_platform.sdk.routes import router as sdk_router
+from ontology_platform.security.browser import BrowserStore
+from ontology_platform.security.browser import router as browser_router
 from ontology_platform.security.local import LocalAuthorizer
 from ontology_platform.security.oidc import OIDCVerifier
 from ontology_platform.security.routes import router as security_router
@@ -39,11 +43,24 @@ class Health(BaseModel):
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     configuration = settings or get_settings()
+    if configuration.environment == "production":
+        import logging
+        import sys
+
+        logger = logging.getLogger("foundry.operations")
+        if not logger.handlers:
+            handler = logging.StreamHandler(sys.stdout)
+            handler.setFormatter(logging.Formatter("%(message)s"))
+            logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+        logger.propagate = False
     engine = make_engine(configuration)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         try:
+            if configuration.environment == "production":
+                require_runtime_role(app.state.sessions)
             if configuration.auth_mode == "oidc":
                 # Startup must fail rather than fall back to development identity.
                 import asyncio
@@ -90,6 +107,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(semantic_router)
     app.include_router(interchange_router)
     app.include_router(security_router)
+    app.include_router(browser_router)
+    app.add_middleware(
+        ActionPayloadLimit,
+        paths=("/internal/",),
+        code="session_payload_too_large",
+        message="Session payload exceeds 64 KiB",
+    )
+    if configuration.allowed_hosts:
+        app.add_middleware(TrustedHostMiddleware, allowed_hosts=list(configuration.allowed_hosts))
     app.add_middleware(
         ActionPayloadLimit,
         paths=("/interchange/",),
@@ -111,6 +137,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.settings = configuration
     app.state.engine = engine
     app.state.sessions = sessionmaker(engine, expire_on_commit=False)
+    app.state.browser_store = BrowserStore(app.state.sessions, configuration)
+    app.state.telemetry = Telemetry()
+    app.add_middleware(TransportBounds)
+    app.add_middleware(RequestTelemetry, telemetry=app.state.telemetry)
     app.state.authorizer = (
         PlatformAuthorizer(app.state.sessions, test_mode=configuration.auth_mode == "test")
         if configuration.auth_mode in {"oidc", "test"}
@@ -159,6 +189,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/health/live", response_model=Health, tags=["health"])
     def live() -> Health:
         return Health(status="ok")
+
+    @app.get("/internal/metrics", include_in_schema=False)
+    def metrics(request: Request) -> PlainTextResponse:
+        app.state.browser_store.authenticate(request.headers.get("authorization"))
+        return PlainTextResponse(
+            app.state.telemetry.render(), media_type="text/plain; version=0.0.4"
+        )
 
     @app.get("/health/ready", response_model=Health, tags=["health"])
     def ready(session: Annotated[Session, Depends(get_session)]) -> Health:

@@ -383,6 +383,7 @@ version = "0.0.1"
 source = { editable = "services/api" }
 dependencies = [
     { name = "alembic" },
+    { name = "cryptography" },
     { name = "fastapi" },
     { name = "httpx" },
     { name = "ontology-schema" },
@@ -398,6 +399,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "alembic", specifier = ">=1.15,<2" },
+    { name = "cryptography", specifier = "==50.0.2" },
     { name = "fastapi", specifier = ">=0.115,<1" },
     { name = "httpx", specifier = ">=0.28,<1" },
     { name = "ontology-schema", editable = "packages/ontology-schema" },

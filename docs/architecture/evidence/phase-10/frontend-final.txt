@@ -1,0 +1,15 @@
+(node:33026) [DEP0174] DeprecationWarning: Calling promisify on a function that returns a Promise is likely a mistake.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+> @foundry/studio@0.8.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /Users/log/Documents/code/csh-foundry/apps/studio
+
+
+ Test Files  3 passed (3)
+      Tests  27 passed (27)
+   Start at  17:13:12
+   Duration  888ms (environment 44%, tests 33%, import 17%, transform 5%, worker 1%)
+

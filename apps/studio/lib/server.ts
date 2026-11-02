@@ -16,6 +16,15 @@ export function config() {
   const issuer = process.env.STUDIO_OIDC_ISSUER;
   const client = process.env.STUDIO_OIDC_CLIENT_ID;
   const audience = process.env.STUDIO_API_AUDIENCE;
+  if (
+    process.env.STUDIO_ENVIRONMENT === "production" &&
+    (!process.env.STUDIO_ORIGIN ||
+      !process.env.STUDIO_API_ORIGIN ||
+      origin.protocol !== "https:" ||
+      !process.env.STUDIO_STATE_SECRET ||
+      process.env.STUDIO_STATE_SECRET.length < 43)
+  )
+    throw new BoundaryError(503, "production_configuration_required");
   if (!issuer || !client || !audience)
     throw new BoundaryError(503, "authentication_not_configured");
   const loopback = (url: URL) =>
@@ -80,6 +89,7 @@ export interface Session {
   expires: number;
   csrf: string;
   tenant?: string;
+  revision?: number;
 }
 interface Login {
   state: string;
@@ -135,6 +145,122 @@ export function session(id?: string) {
     throw new BoundaryError(401, "session_expired");
   }
   return found;
+}
+// All replicas use the same governed internal service. Memory storage is development only.
+function durable() {
+  if (
+    process.env.STUDIO_ENVIRONMENT === "production" &&
+    !process.env.STUDIO_STATE_SECRET
+  )
+    throw new BoundaryError(503, "session_store_required");
+  return !!process.env.STUDIO_STATE_SECRET;
+}
+async function stateRequest(
+  kind: "login" | "session",
+  id: string,
+  method: string,
+  body?: { data: object; expires: number; revision?: number },
+) {
+  config();
+  const response = await fetch(
+    `${config().api}/internal/browser-state/${kind}/${digest(id)}`,
+    {
+      method,
+      redirect: "error",
+      cache: "no-store",
+      signal: AbortSignal.timeout(5000),
+      headers: {
+        Authorization: `Bearer ${process.env.STUDIO_STATE_SECRET}`,
+        ...(body ? { "content-type": "application/json" } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    },
+  ).catch(() => {
+    throw new BoundaryError(503, "session_store_unavailable");
+  });
+  if (!response.ok)
+    throw new BoundaryError(
+      response.status === 401 ? 401 : response.status === 409 ? 409 : 503,
+      response.status === 401 ? "session_expired" : "session_store_unavailable",
+    );
+  return JSON.parse(await bounded(response, 32768)) as {
+    data: Session | Login;
+    expires: number;
+    revision: number;
+  };
+}
+export async function beginBrowserLogin() {
+  if (!durable()) return beginLogin();
+  const login = {
+    id: random(),
+    state: random(),
+    nonce: random(),
+    verifier: random(),
+    expires: Date.now() + 299_000,
+  };
+  await stateRequest("login", login.id, "PUT", {
+    data: {
+      state: login.state,
+      nonce: login.nonce,
+      verifier: login.verifier,
+      expires: login.expires,
+    },
+    expires: login.expires,
+  });
+  return login;
+}
+export async function consumeBrowserLogin(id: string, value: string) {
+  if (!durable()) return consumeLogin(id, value);
+  const result = await stateRequest("login", id, "DELETE");
+  const login = result.data as Login;
+  if (result.expires <= Date.now() || !equal(login.state, value))
+    throw new BoundaryError(401, "invalid_login_state");
+  return login;
+}
+export async function issueBrowserSession(token: string, expires: number) {
+  if (!durable()) return issueSession(token, expires);
+  const id = random();
+  const expiry = Math.min(expires, Date.now() + 3_599_000);
+  await stateRequest("session", id, "PUT", {
+    data: { token, csrf: random(), expires: expiry },
+    expires: expiry,
+  });
+  return id;
+}
+export async function browserSession(id?: string) {
+  if (!durable()) return session(id);
+  if (!id) throw new BoundaryError(401, "session_expired");
+  const result = await stateRequest("session", id, "GET");
+  if (result.expires <= Date.now())
+    throw new BoundaryError(401, "session_expired");
+  return { ...(result.data as Session), revision: result.revision };
+}
+export async function revokeBrowserSession(id: string) {
+  if (!durable()) {
+    sessions.delete(digest(id));
+    return;
+  }
+  try {
+    await stateRequest("session", id, "DELETE");
+  } catch (error) {
+    if (!(error instanceof BoundaryError) || error.status !== 401) throw error;
+  }
+}
+export async function selectBrowserTenant(
+  id: string,
+  value: Session,
+  tenant: string,
+) {
+  if (!durable()) {
+    value.tenant = tenant;
+    return;
+  }
+  const { revision, ...data } = value;
+  await stateRequest("session", id, "PATCH", {
+    data: { ...data, tenant },
+    expires: value.expires,
+    revision,
+  });
 }
 export function originCheck(request: Request) {
   if (
@@ -209,12 +335,36 @@ export async function discovery() {
     )
       throw new BoundaryError(502, "invalid_discovery");
   }
+  if (data.end_session_endpoint) {
+    const endpoint = new URL(data.end_session_endpoint);
+    if (
+      endpoint.origin !== new URL(c.issuer).origin ||
+      endpoint.search ||
+      endpoint.hash ||
+      endpoint.username ||
+      endpoint.password
+    )
+      throw new BoundaryError(502, "invalid_discovery");
+  }
   return data as {
     issuer: string;
     authorization_endpoint: string;
     token_endpoint: string;
     jwks_uri: string;
+    end_session_endpoint?: string;
   };
+}
+export async function brokerLogout() {
+  if (process.env.STUDIO_BROKER_LOGOUT !== "true") return undefined;
+  const c = config();
+  const metadata = await discovery();
+  if (!metadata.end_session_endpoint) return undefined;
+  const endpoint = new URL(metadata.end_session_endpoint);
+  endpoint.search = new URLSearchParams({
+    client_id: c.client,
+    post_logout_redirect_uri: c.origin,
+  }).toString();
+  return endpoint.href;
 }
 export async function authorization(login: ReturnType<typeof beginLogin>) {
   const c = config(),
@@ -307,7 +457,7 @@ export async function exchange(
   )
     throw new BoundaryError(401, "invalid_access_token");
   // ID tokens are used only above; only the independently validated API access token is retained.
-  return issueSession(tokens.access_token, (p.exp as number) * 1000);
+  return issueBrowserSession(tokens.access_token, (p.exp as number) * 1000);
 }
 export function allowed(path: string, method: string) {
   if (

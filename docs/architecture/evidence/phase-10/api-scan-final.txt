@@ -1,0 +1,12 @@
+[0000]  WARN unable to get filesystem cache at /.cache/syft: unable to create directory at '/.cache/syft': mkdir /.cache: read-only file system
+[0113] ERROR discovered vulnerabilities at or above the severity threshold
+{
+  "image-0": {
+    "image": "csh-foundry-api:phase10",
+    "image_id": "sha256:3c507f1afde76f22d54e3aacdc68ae41da4c0420d7d85df258057a21cca8c287",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL"
+  }
+}

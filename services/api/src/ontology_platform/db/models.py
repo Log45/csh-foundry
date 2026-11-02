@@ -9,6 +9,7 @@ from sqlalchemy import (
     ForeignKey,
     ForeignKeyConstraint,
     Index,
+    LargeBinary,
     String,
     Text,
     UniqueConstraint,
@@ -27,6 +28,35 @@ class Tenant(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(200))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class BrowserState(Base):
+    __tablename__ = "browser_state"
+    kind: Mapped[str] = mapped_column(String(10), primary_key=True)
+    key: Mapped[str] = mapped_column(String(43), primary_key=True)
+    ciphertext: Mapped[bytes] = mapped_column(LargeBinary)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    revision: Mapped[int] = mapped_column(default=1)
+    __table_args__ = (
+        CheckConstraint("kind IN ('login','session')", name="ck_browser_kind"),
+        CheckConstraint("revision > 0", name="ck_browser_revision"),
+        CheckConstraint("octet_length(ciphertext) <= 32768", name="ck_browser_size"),
+    )
+
+
+class RequestBudget(Base):
+    __tablename__ = "request_budgets"
+    key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    window_minute: Mapped[int] = mapped_column(BigInteger)
+    count: Mapped[int]
+    __table_args__ = (CheckConstraint("count > 0", name="ck_budget_count"),)
+
+
+class TenantResourceUsage(Base):
+    __tablename__ = "tenant_resource_usage"
+    tenant_id: Mapped[UUID] = mapped_column(ForeignKey("tenants.id"), primary_key=True)
+    bytes_used: Mapped[int] = mapped_column(BigInteger)
+    __table_args__ = (CheckConstraint("bytes_used >= 0", name="ck_usage_nonnegative"),)
 
 
 class Ontology(Base):

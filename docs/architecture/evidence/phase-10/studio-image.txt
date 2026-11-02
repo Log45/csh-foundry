@@ -1,0 +1,94 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from studio.Dockerfile
+#1 transferring dockerfile: 772B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:24-trixie-slim
+#2 DONE 0.5s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 173B done
+#3 DONE 0.0s
+
+#4 [build 1/6] FROM docker.io/library/node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446
+#4 resolve docker.io/library/node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446 0.0s done
+#4 DONE 0.0s
+
+#5 [build 2/6] WORKDIR /app
+#5 CACHED
+
+#6 [internal] load build context
+#6 transferring context: 21.38kB 0.1s done
+#6 DONE 0.1s
+
+#7 [build 3/6] COPY apps/studio/package.json apps/studio/package-lock.json ./
+#7 DONE 0.1s
+
+#8 [runtime 3/6] RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /opt/yarn-* /usr/local/bin/yarn* /usr/local/bin/corepack
+#8 DONE 1.5s
+
+#9 [build 4/6] RUN npm ci --no-audit --no-fund
+#9 14.53 
+#9 14.53 added 154 packages in 14s
+#9 14.54 npm notice
+#9 14.54 npm notice New major version of npm available! 11.19.1 -> 12.2.1
+#9 14.54 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+#9 14.54 npm notice To update run: npm install -g npm@12.2.1
+#9 14.54 npm notice
+#9 DONE 15.9s
+
+#10 [build 5/6] COPY apps/studio/ ./
+#10 DONE 0.2s
+
+#11 [build 6/6] RUN npm run build
+#11 0.292 
+#11 0.292 > @foundry/studio@0.8.0 build
+#11 0.292 > next build --webpack
+#11 0.292 
+#11 0.608 ▲ Next.js 16.4.3 (webpack)
+#11 0.654 ✓ Running next.config.ts took 46ms
+#11 0.667 
+#11 0.690   Creating an optimized production build ...
+#11 7.767 ✓ Compiled successfully in 5.4s
+#11 7.777   Running TypeScript ...
+#11 10.95   Finished TypeScript in 3.2s ...
+#11 10.97   Collecting page data using 6 workers ...
+#11 12.36   Generating static pages using 6 workers (0/3) ...
+#11 12.83 ✓ Generating static pages using 6 workers (3/3) in 474ms
+#11 12.99   Finalizing page optimization ...
+#11 12.99   Collecting build traces ...
+#11 26.36 
+#11 26.37 Route (app)
+#11 26.37 ┌ ƒ /
+#11 26.37 ├ ƒ /_not-found
+#11 26.37 ├ ƒ /auth/[operation]
+#11 26.37 └ ƒ /bff
+#11 26.37 
+#11 26.37 
+#11 26.37 ƒ Proxy (Middleware)
+#11 26.37 
+#11 26.37 ƒ  (Dynamic)  server-rendered on demand
+#11 26.37 
+#11 DONE 26.7s
+
+#12 [runtime 4/6] COPY --from=build --chown=node:node /app/.next/standalone ./
+#12 DONE 1.0s
+
+#13 [runtime 5/6] COPY --from=build --chown=node:node /app/.next/static ./.next/static
+#13 DONE 0.1s
+
+#14 [runtime 6/6] COPY --chown=node:node infrastructure/docker/studio-entry.mjs ./
+#14 DONE 0.0s
+
+#15 exporting to image
+#15 exporting layers
+#15 exporting layers 1.9s done
+#15 exporting manifest sha256:33398ab7b1286f9ed39a97896512ac03006a8119fc0d4f3be917834237f62da8 done
+#15 exporting config sha256:7aefdfd11213897cff079cd9187394fcdf19917cf70a29fd3c54469de246c763 done
+#15 exporting attestation manifest sha256:c8383a8e9a05efc63b6e65911ec2db1e6e3ed9eeeb4e4023e4793caafa134148 0.0s done
+#15 exporting manifest list sha256:b552431bc29d398a6258c7332b00f6fb079ea59b3275c70aa81c721f75f14185 done
+#15 naming to docker.io/library/csh-foundry-studio:phase10 done
+#15 unpacking to docker.io/library/csh-foundry-studio:phase10
+#15 unpacking to docker.io/library/csh-foundry-studio:phase10 0.8s done
+#15 DONE 2.8s

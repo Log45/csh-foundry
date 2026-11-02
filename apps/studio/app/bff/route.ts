@@ -5,13 +5,15 @@ import {
   BoundaryError,
   csrfCheck,
   input,
-  session,
+  browserSession,
 } from "@/lib/server";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
   try {
-    const value = session((await cookies()).get("foundry-session")?.value);
+    const value = await browserSession(
+      (await cookies()).get("foundry-session")?.value,
+    );
     csrfCheck(request, value);
     if (!value.tenant)
       throw new BoundaryError(403, "tenant_selection_required");

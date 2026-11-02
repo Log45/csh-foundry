@@ -259,10 +259,11 @@ export function Workspace() {
           <button
             onClick={() =>
               void task.run(async () => {
-                await auth("logout");
+                const result = (await auth("logout")) as { logout?: string };
                 setSession(undefined);
                 setOntologies([]);
                 setActive(undefined);
+                if (result.logout) window.location.assign(result.logout);
               })
             }
           >

@@ -64,4 +64,10 @@ def verified_identity(request: Request) -> tuple[str, str, str, datetime]:
         raise ApplicationError("authentication_required", "Authentication is required", 401)
     if expiry <= datetime.now(UTC):
         raise ApplicationError("invalid_token", "Access token expired", 401)
+    if settings.environment == "production":
+        from ontology_platform.operations import rate_limit
+
+        rate_limit(
+            request.app.state.sessions, issuer + "\0" + subject, settings.request_limit_per_minute
+        )
     return issuer, subject, method, expiry

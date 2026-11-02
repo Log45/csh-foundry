@@ -1,0 +1,228 @@
+name: csh-foundry-production
+
+x-api-environment: &api-environment
+  FOUNDRY_ENVIRONMENT: production
+  FOUNDRY_PUBLIC_ORIGIN: https://${STUDIO_HOST:?Set STUDIO_HOST}
+  FOUNDRY_ALLOWED_HOSTS: '["api","${API_HOST:?Set API_HOST}"]'
+  FOUNDRY_AUTH_MODE: oidc
+  FOUNDRY_OIDC_PROVIDERS: '[{"id":"keycloak","issuer":"https://${IDENTITY_HOST:?Set IDENTITY_HOST}/realms/${KEYCLOAK_REALM:-foundry}","audience":"foundry-api","clients":["studio","worker"],"algorithms":["RS256"]}]'
+  FOUNDRY_SECRETS_DIRECTORY: /run/secrets
+
+x-runtime: &runtime
+  restart: unless-stopped
+  init: true
+  read_only: true
+  tmpfs: [/tmp:size=128m,mode=1777]
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  group_add: ["10001"]
+  pids_limit: 128
+  cpus: 2
+  mem_limit: 1g
+  stop_grace_period: 40s
+  logging:
+    driver: json-file
+    options: {max-size: 10m, max-file: "5"}
+
+x-worker-health: &worker-health
+  test: [CMD, python, -c, "import time,pathlib; assert time.time()-pathlib.Path('/tmp/foundry-worker-heartbeat').stat().st_mtime<240"]
+  interval: 30s
+  timeout: 5s
+  start_period: 180s
+  retries: 3
+
+services:
+  postgres:
+    image: postgres:17.11-trixie
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets: [postgres_password]
+    volumes:
+      - database:/var/lib/postgresql/data
+      - ${WAL_ARCHIVE_DIRECTORY:?Set encrypted WAL_ARCHIVE_DIRECTORY}:/archive
+    command: [postgres, -c, wal_level=replica, -c, archive_mode=on,
+              -c, "archive_command=test ! -f /archive/%f && cp %p /archive/%f",
+              -c, archive_timeout=60, -c, max_connections=100]
+    networks: [data]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    mem_limit: 2g
+    cpus: 2
+    shm_size: 256m
+    stop_grace_period: 60s
+
+  api:
+    <<: *runtime
+    image: ${API_IMAGE:?Set a verified API image digest}
+    environment: *api-environment
+    secrets: [FOUNDRY_DATABASE_URL, FOUNDRY_BROWSER_STATE_SECRET,
+              FOUNDRY_BROWSER_STATE_KEYS, FOUNDRY_QUERY_CURSOR_SECRET]
+    networks: [front, data]
+    depends_on:
+      postgres: {condition: service_healthy}
+      keycloak: {condition: service_started}
+      ingress: {condition: service_started}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://api:8000/health/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 6
+
+  studio:
+    <<: *runtime
+    image: ${STUDIO_IMAGE:?Set a verified Studio image digest}
+    environment:
+      STUDIO_ENVIRONMENT: production
+      STUDIO_ORIGIN: https://${STUDIO_HOST}
+      STUDIO_API_ORIGIN: http://api:8000
+      STUDIO_INTERNAL_HTTP: "true"
+      STUDIO_OIDC_ISSUER: https://${IDENTITY_HOST}/realms/${KEYCLOAK_REALM:-foundry}
+      STUDIO_OIDC_CLIENT_ID: studio
+      STUDIO_API_AUDIENCE: foundry-api
+      STUDIO_STATE_SECRET_FILE: /run/secrets/FOUNDRY_BROWSER_STATE_SECRET
+      STUDIO_BROKER_LOGOUT: "true"
+    secrets: [FOUNDRY_BROWSER_STATE_SECRET]
+    networks: [front]
+    depends_on:
+      api: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 6
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.1
+    restart: unless-stopped
+    init: true
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_HOSTNAME: https://${IDENTITY_HOST}
+      KC_HOSTNAME_STRICT: "true"
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY_HEADERS: xforwarded
+      KC_PROXY_TRUSTED_ADDRESSES: 172.30.11.2/32
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+      KC_BOOTSTRAP_ADMIN_USERNAME: operator
+    entrypoint: [/bin/bash, /opt/foundry/keycloak-entry.sh]
+    group_add: ["10001"]
+    secrets: [keycloak_password, keycloak_admin_password, FOUNDRY_WORKER_CLIENT_SECRET]
+    volumes:
+      - ./keycloak-entry.sh:/opt/foundry/keycloak-entry.sh:ro
+      - ${KEYCLOAK_IMPORT_DIRECTORY:?Set private KEYCLOAK_IMPORT_DIRECTORY}:/opt/keycloak/data/import:ro
+    networks: [identity, data, egress]
+    depends_on:
+      postgres: {condition: service_healthy}
+    mem_limit: 1g
+    cpus: 2
+    pids_limit: 256
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+  ingress:
+    image: nginx:1.28.3-alpine
+    restart: unless-stopped
+    environment:
+      STUDIO_HOST: ${STUDIO_HOST}
+      API_HOST: ${API_HOST}
+      IDENTITY_HOST: ${IDENTITY_HOST}
+      NGINX_ENVSUBST_FILTER: STUDIO_HOST|API_HOST|IDENTITY_HOST
+    ports: ["443:443"]
+    volumes:
+      - ./nginx.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ${TLS_DIRECTORY:?Set private TLS_DIRECTORY}:/etc/nginx/tls:ro
+    networks:
+      front:
+        ipv4_address: 172.30.10.2
+        aliases: ["${IDENTITY_HOST}"]
+      identity:
+        ipv4_address: 172.30.11.2
+      egress: {}
+    mem_limit: 256m
+    cpus: 1
+    pids_limit: 128
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: "5"}
+
+  ingestion-worker:
+    <<: *runtime
+    image: ${API_IMAGE}
+    profiles: [workers]
+    healthcheck: *worker-health
+    environment:
+      <<: *api-environment
+      FOUNDRY_PROCESS_ROLE: worker
+      FOUNDRY_WORKER_PROVIDER_ID: keycloak
+      FOUNDRY_WORKER_TENANT_ID: ${WORKER_TENANT_ID:?Set WORKER_TENANT_ID}
+      FOUNDRY_WORKER_SUBJECT_ID: ${WORKER_SUBJECT_ID:?Set WORKER_SUBJECT_ID}
+    secrets: [FOUNDRY_DATABASE_URL, FOUNDRY_WORKER_CLIENT_SECRET]
+    command: [python, -m, ontology_platform.jobs.supervisor, --kind, ingestion,
+              --ontology, "${WORKER_ONTOLOGY:-manufacturing}"]
+    networks: [front, data]
+    volumes:
+      - ${WORKER_CATALOG_FILE:?Set WORKER_CATALOG_FILE}:/run/secrets/FOUNDRY_INGESTION_CATALOG_JSON:ro
+      - ${INGESTION_DIRECTORY:?Set INGESTION_DIRECTORY}:/data/ingestion:ro
+
+  semantic-worker:
+    <<: *runtime
+    image: ${SEMANTIC_IMAGE:?Set verified semantic worker image digest}
+    profiles: [workers]
+    healthcheck: *worker-health
+    environment:
+      <<: *api-environment
+      FOUNDRY_PROCESS_ROLE: worker
+      FOUNDRY_WORKER_PROVIDER_ID: keycloak
+      FOUNDRY_WORKER_TENANT_ID: ${WORKER_TENANT_ID}
+      FOUNDRY_WORKER_SUBJECT_ID: ${WORKER_SUBJECT_ID}
+      OPEN_ONTOLOGIES_BIN: /usr/local/bin/open-ontologies
+    secrets: [FOUNDRY_DATABASE_URL, FOUNDRY_WORKER_CLIENT_SECRET]
+    command: [python, -m, ontology_platform.jobs.supervisor, --kind, semantic,
+              --ontology, "${WORKER_ONTOLOGY:-manufacturing}", --deadline, "60"]
+    networks: [front, data]
+    tmpfs: [/tmp:size=128m,mode=1777]
+    mem_limit: 768m
+    cpus: 1
+
+  outbox-worker:
+    <<: *runtime
+    image: ${API_IMAGE}
+    profiles: [outbox]
+    healthcheck: *worker-health
+    environment:
+      <<: *api-environment
+      FOUNDRY_PROCESS_ROLE: worker
+      FOUNDRY_WORKER_PROVIDER_ID: keycloak
+      FOUNDRY_WORKER_TENANT_ID: ${WORKER_TENANT_ID}
+      FOUNDRY_OUTBOX_DESTINATION: ${OUTBOX_DESTINATION:-}
+    secrets: [FOUNDRY_DATABASE_URL, FOUNDRY_WORKER_CLIENT_SECRET]
+    command: [python, -m, ontology_platform.jobs.supervisor, --kind, outbox,
+              --ontology, "${WORKER_ONTOLOGY:-manufacturing}"]
+    networks: [front, data, egress]
+
+volumes:
+  database:
+networks:
+  front: {internal: true, ipam: {config: [{subnet: 172.30.10.0/24}]}}
+  identity: {internal: true, ipam: {config: [{subnet: 172.30.11.0/24}]}}
+  data: {internal: true}
+  egress: {}
+secrets:
+  postgres_password: {file: "${SECRETS_DIRECTORY:?Set SECRETS_DIRECTORY}/postgres_password"}
+  keycloak_password: {file: "${SECRETS_DIRECTORY}/keycloak_password"}
+  keycloak_admin_password: {file: "${SECRETS_DIRECTORY}/keycloak_admin_password"}
+  FOUNDRY_DATABASE_URL: {file: "${SECRETS_DIRECTORY}/FOUNDRY_DATABASE_URL"}
+  FOUNDRY_WORKER_CLIENT_SECRET: {file: "${SECRETS_DIRECTORY}/FOUNDRY_WORKER_CLIENT_SECRET"}
+  FOUNDRY_BROWSER_STATE_SECRET: {file: "${SECRETS_DIRECTORY}/FOUNDRY_BROWSER_STATE_SECRET"}
+  FOUNDRY_BROWSER_STATE_KEYS: {file: "${SECRETS_DIRECTORY}/FOUNDRY_BROWSER_STATE_KEYS"}
+  FOUNDRY_QUERY_CURSOR_SECRET: {file: "${SECRETS_DIRECTORY}/FOUNDRY_QUERY_CURSOR_SECRET"}

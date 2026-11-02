@@ -1,0 +1,26 @@
+{
+  "actions/checkout": {
+    "version": "v4",
+    "sha": "11d5960a326750d5838078e36cf38b85af677262"
+  },
+  "astral-sh/setup-uv": {
+    "version": "v6",
+    "sha": "d0cc045d04ccac9d8b7881df0226f9e82c39688e"
+  },
+  "actions/setup-java": {
+    "version": "v4",
+    "sha": "cf277c60eb25467037889841efdb72551f06f6c3"
+  },
+  "actions/setup-node": {
+    "version": "v4",
+    "sha": "49933ea5288caeca8642d1e84afbd3f7d6820020"
+  },
+  "actions/upload-artifact": {
+    "version": "v4",
+    "sha": "ea165f8d65b6e75b540449e92b4886f43607fa02"
+  },
+  "actions/attest-build-provenance": {
+    "version": "v3",
+    "sha": "977bb373ede98d70efdf65b84cb5f73e068dcc2a"
+  }
+}

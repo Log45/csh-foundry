@@ -1,6 +1,6 @@
 # CSH Foundry — operational ontology platform
 
-Phase 9 governed schema branching and generated SDKs, extending the native Ontology Manager
+Phase 10 production hardening with Keycloak, extending governed schema branching, SDKs and Ontology Manager
 and Ontology Studio for the modular platform specified in [PLANS.md](PLANS.md).
 PostgreSQL owns operational state; canonical metadata is independent of RDF/OWL.
 Open Ontologies supplies external semantic checks. Protégé is optional authoring tooling.
@@ -12,7 +12,7 @@ ingestion, deterministic RDF/OWL/SHACL compilation, governed RDF exports, durabl
 and separately approved derived facts. Phase 6 adds explicit Turtle/RDF/XML authoring imports into
 unpublished canonical drafts, source preservation, diagnostics, IRI conflicts and deterministic exports.
 Phase 7 adds verified OIDC access tokens, platform tenant membership, RBAC, restrictive SQL ABAC,
-security administration/audit and delegated service workers. Phase 9 adds governed branches and generated SDKs; Phase 10 and later are not implemented.
+security administration/audit and delegated service workers. Phase 9 adds governed branches and generated SDKs. Phase 10 adds production configuration, durable sessions, a Keycloak broker profile and operational controls; production acceptance remains gated by the readiness matrix. Phase 11 is not implemented.
 
 ## Local setup
 
@@ -249,4 +249,24 @@ because that suite independently builds generated TypeScript packages. Run
 
 Scope limits include same-published-base merges, JSON branch editing, explicit history/query bounds,
 JavaScript safe integer limits and current active-schema SDK alignment. Production hardening and
-live Microsoft/Google sign-in require separate [Phase 10 approval](docs/development/phase-10.md).
+live Microsoft/Google sign-in follow the approved [Phase 10 readiness gates](docs/development/phase-10.md).
+
+## Phase 10 hardening and Keycloak
+
+Keycloak is the selected replaceable broker. Runtime authentication stays standard OIDC/RFC 9068;
+PostgreSQL principal bindings, memberships and RBAC/ABAC remain authoritative. Shared encrypted
+PostgreSQL browser sessions support two tested Studio processes, restart continuity and shared
+logout. New production configuration fails closed and rejects owner/superuser runtime DB roles.
+
+The opt-in production Compose profile includes TLS ingress, network boundaries, nonroot application
+images, separate bounded workers, file-backed secrets, workload admission and monitoring foundations.
+Read the [operator runbooks](docs/operations/production.md), [implementation checklist](docs/development/phase-10-checklist.md),
+[readiness matrix](docs/operations/readiness.md) and [Phase 10 report](docs/development/phase-10-report.md).
+Migrate to `0017_capacity` after a verified backup; earlier destructive downgrade warnings still apply.
+
+Validation commands include `scripts/test_keycloak.py`, `scripts/test_ingress.py`,
+`scripts/test_recovery.py`, `scripts/load_phase10.py`, and `STUDIO_E2E_DURABLE=true uv run python
+scripts/test_studio.py` after a Studio build. These use disposable local resources; do not point
+fault or restoration tests at production. Image vulnerability findings and missing target acceptance
+are release gates. Live Entra/Google/Workspace sign-in is NOT RUN / NOT CERTIFIED without external
+registrations, credentials and test organizations. No production deployment or Phase 11 work was done.

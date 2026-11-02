@@ -1,5 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 import fs from "node:fs";
+import { spawn } from "node:child_process";
 const root = new URL("../../../../", import.meta.url);
 async function operation(page: Page, name: string, body?: unknown) {
   const panel = page
@@ -399,3 +400,67 @@ test("schema branching, resolved merge and private SDK download", async ({
   ).toBeVisible();
   await expect(development.getByRole("alert")).toHaveCount(0);
 });
+
+if (process.env.STUDIO_E2E_REPLICA_PORT) {
+  test("durable sessions survive replica restart and logout revokes every replica", async ({
+    page,
+  }) => {
+    await login(page);
+    const secondary = "http://127.0.0.1:" + process.env.STUDIO_E2E_REPLICA_PORT;
+    const before = await page.request.get(secondary + "/auth/session");
+    expect(before.status()).toBe(200);
+    const session = await before.json();
+    expect(session.tenant).toBeTruthy();
+    process.kill(-Number(process.env.STUDIO_E2E_REPLICA_PID), "SIGTERM");
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    expect((await page.request.get("/auth/session")).status()).toBe(200);
+    const replacement = spawn(
+      process.execPath,
+      [".next/standalone/server.js"],
+      {
+        cwd: process.cwd(),
+        env: {
+          ...process.env,
+          HOSTNAME: "127.0.0.1",
+          PORT: process.env.STUDIO_E2E_REPLICA_PORT,
+        },
+        stdio: "ignore",
+      },
+    );
+    try {
+      await expect
+        .poll(async () => {
+          try {
+            return (
+              await page.request.get(secondary + "/auth/session")
+            ).status();
+          } catch {
+            return 0;
+          }
+        })
+        .toBe(200);
+      expect(
+        (await (await page.request.get(secondary + "/auth/session")).json())
+          .csrf,
+      ).toBe(session.csrf);
+      const logout = await page.request.post("/auth/logout", {
+        headers: {
+          Origin: "http://127.0.0.1:3000",
+          "x-csrf-token": session.csrf,
+        },
+        data: {},
+      });
+      expect(logout.status()).toBe(200);
+      expect(
+        (await page.request.get(secondary + "/auth/session")).status(),
+      ).toBe(401);
+    } finally {
+      replacement.kill("SIGTERM");
+      await Promise.race([
+        new Promise((resolve) => replacement.once("exit", resolve)),
+        new Promise((resolve) => setTimeout(resolve, 2000)),
+      ]);
+      if (replacement.exitCode === null) replacement.kill("SIGKILL");
+    }
+  });
+}

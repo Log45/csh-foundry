@@ -1,0 +1,100 @@
+error_log /dev/null crit;
+log_format foundry_status escape=json '{"event":"ingress_status","status":$status,"duration":$request_time}';
+resolver 127.0.0.11 valid=5s ipv6=off;
+limit_req_zone $binary_remote_addr zone=browser:10m rate=10r/s;
+limit_req_zone $binary_remote_addr zone=login:10m rate=2r/s;
+limit_conn_zone $binary_remote_addr zone=connections:10m;
+server {
+    listen 443 ssl default_server;
+    server_name _;
+    ssl_certificate /etc/nginx/tls/fullchain.pem;
+    ssl_certificate_key /etc/nginx/tls/key.pem;
+    return 444;
+}
+server {
+    listen 443 ssl;
+    server_name ${STUDIO_HOST};
+    ssl_certificate /etc/nginx/tls/fullchain.pem;
+    ssl_certificate_key /etc/nginx/tls/key.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    client_max_body_size 64k;
+    client_body_timeout 10s;
+    send_timeout 60s;
+    limit_conn connections 20;
+    limit_req zone=browser burst=30 nodelay;
+    limit_req_status 429;
+    # Callback query strings contain authorization codes: never enable access logging here.
+    access_log /dev/stdout foundry_status;
+    location /internal/ { return 404; }
+    location / {
+        set $target http://studio:3000;
+        proxy_pass $target;
+        proxy_set_header Host ${STUDIO_HOST};
+        proxy_set_header X-Forwarded-Host ${STUDIO_HOST};
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Forwarded "";
+        proxy_connect_timeout 3s;
+        proxy_read_timeout 60s;
+        proxy_send_timeout 10s;
+        proxy_buffering on;
+        proxy_max_temp_file_size 0;
+    }
+}
+server {
+    listen 443 ssl;
+    server_name ${API_HOST};
+    ssl_certificate /etc/nginx/tls/fullchain.pem;
+    ssl_certificate_key /etc/nginx/tls/key.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    add_header X-Content-Type-Options nosniff always;
+    client_max_body_size 1m;
+    client_body_timeout 10s;
+    send_timeout 60s;
+    limit_req zone=browser burst=30 nodelay;
+    limit_req_status 429;
+    access_log /dev/stdout foundry_status;
+    location /internal/ { return 404; }
+    location /docs { return 404; }
+    location / {
+        set $target http://api:8000;
+        proxy_pass $target;
+        proxy_set_header Host ${API_HOST};
+        proxy_set_header X-Forwarded-For "";
+        proxy_set_header X-Forwarded-Proto "";
+        proxy_set_header Forwarded "";
+        proxy_connect_timeout 3s;
+        proxy_read_timeout 60s;
+        proxy_send_timeout 10s;
+    }
+}
+server {
+    listen 443 ssl;
+    server_name ${IDENTITY_HOST};
+    ssl_certificate /etc/nginx/tls/fullchain.pem;
+    ssl_certificate_key /etc/nginx/tls/key.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    access_log /dev/stdout foundry_status;
+    client_max_body_size 64k;
+    limit_req zone=login burst=10 nodelay;
+    limit_req_status 429;
+    location /admin/ { return 404; }
+    location /health { return 404; }
+    location /metrics { return 404; }
+    location / {
+        set $target http://keycloak:8080;
+        proxy_pass $target;
+        proxy_set_header Host ${IDENTITY_HOST};
+        proxy_set_header X-Forwarded-Host ${IDENTITY_HOST};
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-Port 443;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Forwarded "";
+        proxy_connect_timeout 3s;
+        proxy_read_timeout 15s;
+        proxy_send_timeout 10s;
+    }
+}

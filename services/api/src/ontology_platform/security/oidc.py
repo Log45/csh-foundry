@@ -74,10 +74,12 @@ class OIDCVerifier:
         self.attempts: dict[str, float] = {}
         self.lock = threading.Lock()
 
-    def document(self, url: str) -> dict[str, Any]:
+    def document(self, url: str, *, form: dict[str, str] | None = None) -> dict[str, Any]:
         started = time.monotonic()
         content = bytearray()
-        with self.client.stream("GET", url, follow_redirects=False) as response:
+        with self.client.stream(
+            "POST" if form is not None else "GET", url, data=form, follow_redirects=False
+        ) as response:
             if response.status_code != 200:
                 raise ValueError("OIDC endpoint unavailable")
             # raw bytes also bound compressed bodies; compressed responses are excluded.

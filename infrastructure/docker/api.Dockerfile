@@ -1,7 +1,10 @@
-FROM python:3.12.12-slim-bookworm
+FROM python:3.12.16-slim-trixie
 COPY --from=ghcr.io/astral-sh/uv:0.9.5 /uv /usr/local/bin/uv
 WORKDIR /app
 COPY . .
 RUN uv sync --frozen --no-dev
+RUN groupadd --gid 10001 foundry && useradd --uid 10001 --gid 10001 --create-home foundry
+ENV PATH=/app/.venv/bin:$PATH PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+USER foundry
 EXPOSE 8000
-CMD ["uv", "run", "--no-sync", "uvicorn", "ontology_platform.main:create_app", "--factory", "--host", "0.0.0.0"]
+CMD ["uvicorn", "ontology_platform.main:create_app", "--factory", "--host", "0.0.0.0", "--no-proxy-headers", "--no-access-log", "--limit-concurrency", "64", "--timeout-keep-alive", "5", "--timeout-graceful-shutdown", "30"]
