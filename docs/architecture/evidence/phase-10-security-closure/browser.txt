@@ -1,0 +1,16 @@
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test
+
+
+Running 5 tests using 1 worker
+
+(node:16163) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/workflow.spec.ts:47:1 › verified browser reference workflow (21.1s)
+  ✓  2 tests/e2e/workflow.spec.ts:205:1 › CSRF and unauthenticated proxy requests fail closed (1.1s)
+  ✓  3 tests/e2e/workflow.spec.ts:220:1 › native authoring, OWL diagnostics, tenant isolation and session loss (2.8s)
+  ✓  4 tests/e2e/workflow.spec.ts:304:1 › schema branching, resolved merge and private SDK download (2.4s)
+  ✓  5 tests/e2e/workflow.spec.ts:405:3 › durable sessions survive replica restart and logout revokes every replica (2.4s)
+
+  5 passed (30.6s)

@@ -70,6 +70,8 @@ class ClosureAcceptance(Acceptance):
         )
 
     def load(self, **kwargs):
+        if self.candidate_images is not None:
+            return super().load(**kwargs)  # Bounded security regression, no latency investigation.
         if getattr(self, "retained_load", None):
             prior = self.retained_load
             fields = ("image", "memory", "nano_cpus", "pids", "read_only")
@@ -239,19 +241,20 @@ class ClosureAcceptance(Acceptance):
         from test_alert_delivery import main as alerts
 
         OperationsAcceptance.authentication_faults(self)
-        self.run(
-            [
-                "uv",
-                "run",
-                "python",
-                "scripts/profile_phase10_queries.py",
-                "--project",
-                self.project,
-                "--output",
-                str(self.output / "query-profile.json"),
-            ]
-        )
-        self.record("governed-query-sql-pool-diagnostic-and-redacted-explain-analyze")
+        if self.candidate_images is None:
+            self.run(
+                [
+                    "uv",
+                    "run",
+                    "python",
+                    "scripts/profile_phase10_queries.py",
+                    "--project",
+                    self.project,
+                    "--output",
+                    str(self.output / "query-profile.json"),
+                ]
+            )
+            self.record("governed-query-sql-pool-diagnostic-and-redacted-explain-analyze")
         alerts(
             target="api:8000",
             credential=self.passwords["FOUNDRY_BROWSER_STATE_SECRET"],
@@ -593,8 +596,10 @@ def main() -> None:
         "--output", type=Path, default=ROOT / "docs/architecture/evidence/phase-10-closure-3"
     )
     parser.add_argument("--retained-load", type=Path)
+    parser.add_argument("--candidate-images", type=Path)
     args = parser.parse_args()
-    acceptance = ClosureAcceptance(args.output)
+    images = json.loads(args.candidate_images.read_text()) if args.candidate_images else None
+    acceptance = ClosureAcceptance(args.output, images)
     acceptance.retained_load = args.retained_load.resolve() if args.retained_load else None
     acceptance.execute()
 

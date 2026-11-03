@@ -1,0 +1,134 @@
+[
+  {
+    "role": "api",
+    "before": {
+      "High": 60,
+      "Critical": 0
+    },
+    "after": {
+      "High": 56,
+      "Critical": 0
+    },
+    "image_id": "sha256:8c31765818485841caeab2b9c8b0d9c268ea2e4815dee9de264db6db24a16e15",
+    "scan_execution": "EXECUTED",
+    "sbom_result": "PASS",
+    "identity_result": "PASS",
+    "scanner_database": {
+      "schemaVersion": "v6.1.10",
+      "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-03T00:19:54Z_1793686847.tar.zst?checksum=sha256%3Aab581eb337614de4e5f2f1f944ae78992d98242387632c235b406a51dd4d9cd1",
+      "built": "2026-11-03T06:20:47Z",
+      "path": "/cache/6/vulnerability.db",
+      "valid": true
+    }
+  },
+  {
+    "role": "studio",
+    "before": {
+      "High": 59,
+      "Critical": 0
+    },
+    "after": {
+      "High": 55,
+      "Critical": 0
+    },
+    "image_id": "sha256:310da527c2d32b558f68772159389fab438f4d4af053dc73ad31187cd04ae552",
+    "scan_execution": "EXECUTED",
+    "sbom_result": "PASS",
+    "identity_result": "PASS",
+    "scanner_database": {
+      "schemaVersion": "v6.1.10",
+      "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-03T00:19:54Z_1793686847.tar.zst?checksum=sha256%3Aab581eb337614de4e5f2f1f944ae78992d98242387632c235b406a51dd4d9cd1",
+      "built": "2026-11-03T06:20:47Z",
+      "path": "/cache/6/vulnerability.db",
+      "valid": true
+    }
+  },
+  {
+    "role": "semantic",
+    "before": {
+      "High": 60,
+      "Critical": 0
+    },
+    "after": {
+      "High": 56,
+      "Critical": 0
+    },
+    "image_id": "sha256:9f02aa6215865f555a9e5603b652210fb850a8e36af003ede83cef81b174d680",
+    "scan_execution": "EXECUTED",
+    "sbom_result": "PASS",
+    "identity_result": "PASS",
+    "scanner_database": {
+      "schemaVersion": "v6.1.10",
+      "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-03T00:19:54Z_1793686847.tar.zst?checksum=sha256%3Aab581eb337614de4e5f2f1f944ae78992d98242387632c235b406a51dd4d9cd1",
+      "built": "2026-11-03T06:20:47Z",
+      "path": "/cache/6/vulnerability.db",
+      "valid": true
+    }
+  },
+  {
+    "role": "ingress",
+    "before": {
+      "High": 0,
+      "Critical": 0
+    },
+    "after": {
+      "High": 0,
+      "Critical": 0
+    },
+    "image_id": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+    "scan_execution": "REUSED_UNCHANGED_IMAGE_AND_DATABASE",
+    "sbom_result": "PASS",
+    "identity_result": "PASS",
+    "scanner_database": {
+      "schemaVersion": "v6.1.10",
+      "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-03T00:19:54Z_1793686847.tar.zst?checksum=sha256%3Aab581eb337614de4e5f2f1f944ae78992d98242387632c235b406a51dd4d9cd1",
+      "built": "2026-11-03T06:20:47Z",
+      "path": "/cache/6/vulnerability.db",
+      "valid": true
+    }
+  },
+  {
+    "role": "postgres",
+    "before": {
+      "High": 92,
+      "Critical": 1
+    },
+    "after": {
+      "High": 81,
+      "Critical": 1
+    },
+    "image_id": "sha256:246ee6bd8302cb470031cc521bc72aed563bfed97062d49a73abaf5e97183ccd",
+    "scan_execution": "EXECUTED",
+    "sbom_result": "PASS",
+    "identity_result": "PASS",
+    "scanner_database": {
+      "schemaVersion": "v6.1.10",
+      "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-03T00:19:54Z_1793686847.tar.zst?checksum=sha256%3Aab581eb337614de4e5f2f1f944ae78992d98242387632c235b406a51dd4d9cd1",
+      "built": "2026-11-03T06:20:47Z",
+      "path": "/cache/6/vulnerability.db",
+      "valid": true
+    }
+  },
+  {
+    "role": "keycloak",
+    "before": {
+      "High": 3,
+      "Critical": 1
+    },
+    "after": {
+      "High": 3,
+      "Critical": 1
+    },
+    "image_id": "sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332",
+    "scan_execution": "REUSED_UNCHANGED_IMAGE_AND_DATABASE",
+    "sbom_result": "PASS",
+    "identity_result": "PASS",
+    "scanner_database": {
+      "schemaVersion": "v6.1.10",
+      "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-03T00:19:54Z_1793686847.tar.zst?checksum=sha256%3Aab581eb337614de4e5f2f1f944ae78992d98242387632c235b406a51dd4d9cd1",
+      "built": "2026-11-03T06:20:47Z",
+      "path": "/cache/6/vulnerability.db",
+      "valid": true
+    }
+  }
+]

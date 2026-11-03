@@ -1,0 +1,33 @@
+{
+  "requests": 24,
+  "concurrent_clients": 12,
+  "accepted": 20,
+  "quota_rejected": 4,
+  "active_limit": 20,
+  "after_cancellation": 0,
+  "failed_admission_consumed_slot": false,
+  "cancelled_slot_reused": true,
+  "lock_waiter_samples": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "peak_observed_lock_waiters": 0,
+  "median_http_ms": 182.108,
+  "max_http_ms": 326.878,
+  "scope": "One disposable tenant's shared ingestion/semantic admission; not physical storage or cross-tenant quota saturation certification"
+}

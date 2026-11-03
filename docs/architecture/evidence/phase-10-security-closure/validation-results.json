@@ -1,0 +1,117 @@
+[
+  {
+    "check": "Turtle parsing",
+    "result": "PASS",
+    "evidence": "regression.txt; test_fixtures.py"
+  },
+  {
+    "check": "CSV identity/FK and RDF consistency",
+    "result": "PASS",
+    "evidence": "regression.txt; test_fixtures.py"
+  },
+  {
+    "check": "Normalized SHACL and nine negative cases",
+    "result": "PASS",
+    "evidence": "regression.txt; test_fixtures.py"
+  },
+  {
+    "check": "Raw pySHACL conformance",
+    "result": "FAIL",
+    "evidence": "Strict expected failure preserved; regression.txt"
+  },
+  {
+    "check": "Pinned engine parse/SHACL/extended reasoning",
+    "result": "PASS",
+    "evidence": "regression.txt; test_semantic.py"
+  },
+  {
+    "check": "Base owl-rl CriticalMachine inference",
+    "result": "NOT SUPPORTED",
+    "evidence": "Pinned profile limitation asserted in test_semantic.py"
+  },
+  {
+    "check": "PostgreSQL persistence/query/action/ingestion/authorization",
+    "result": "PASS",
+    "evidence": "585 passed / one strict xfail / zero skips; regression.txt"
+  },
+  {
+    "check": "Prot\u00e9g\u00e9-compatible supported file import/export",
+    "result": "PASS",
+    "evidence": "Configured regression and browser reference workflow"
+  },
+  {
+    "check": "Prot\u00e9g\u00e9 GUI / independent proof verification",
+    "result": "NOT RUN",
+    "evidence": "No GUI / independent proof verifier used"
+  },
+  {
+    "check": "Ruff lint/format",
+    "result": "PASS",
+    "evidence": "lint-final.txt; format-final.txt"
+  },
+  {
+    "check": "Strict mypy",
+    "result": "PASS",
+    "evidence": "mypy.txt (98 files); disposition-mypy.txt (one additional module)"
+  },
+  {
+    "check": "Migration upgrade/drift",
+    "result": "PASS",
+    "evidence": "migrate.txt; drift.txt; head 0017_capacity; no new migration"
+  },
+  {
+    "check": "Frontend tests/typecheck/build/format",
+    "result": "PASS",
+    "evidence": "29 tests; frontend-*.txt"
+  },
+  {
+    "check": "Durable browser E2E",
+    "result": "PASS",
+    "evidence": "five tests; browser.txt"
+  },
+  {
+    "check": "Python/npm production dependency audit",
+    "result": "PASS",
+    "evidence": "python-audit.txt; npm-audit.json"
+  },
+  {
+    "check": "Final focused security/release/recovery guards",
+    "result": "PASS",
+    "evidence": "55 passed; final-focused-tests.txt"
+  },
+  {
+    "check": "Six selected raw scan/SBOM identity and integrity checks",
+    "result": "PASS",
+    "evidence": "supply-chain-binding.json; four fresh, two verified reused"
+  },
+  {
+    "check": "Six-image high/critical security policy",
+    "result": "FAIL",
+    "evidence": "251 high / two critical / 31 distinct IDs; no exception"
+  },
+  {
+    "check": "Exact six-image combined deployment",
+    "result": "PASS",
+    "evidence": "combined/; 58 PASS assertions / 50 distinct checks; all candidate IDs match"
+  },
+  {
+    "check": "Physical PITR and recovered application startup",
+    "result": "PASS",
+    "evidence": "combined/physical-recovery.json and deployment.json; exact final database image"
+  },
+  {
+    "check": "Earlier final browser attempt",
+    "result": "FAIL",
+    "evidence": "browser-final-first-browser.txt; four pass/one stale activation-header failure; final isolated rerun five pass; cause unresolved"
+  },
+  {
+    "check": "Disposable candidate cleanup",
+    "result": "PASS",
+    "evidence": "disposable-cleanup.json; no labeled resources remain"
+  },
+  {
+    "check": "Target infrastructure/physical host failure, live SSO, off-host DR, production ownership and hosted approval",
+    "result": "NOT RUN",
+    "evidence": "External prerequisites unavailable; local combined testing does not certify them"
+  }
+]

@@ -1,0 +1,1869 @@
+{
+  "measurements": [
+    {
+      "concurrency": 1,
+      "seconds": 20.080106834007893,
+      "requests": 20,
+      "requests_per_second": 0.9960106370613416,
+      "errors": 0,
+      "p50_ms": 49.33479201281443,
+      "p95_ms": 78.07666598819196,
+      "p99_ms": 78.98058299906552,
+      "samples": [
+        {
+          "operation": "query",
+          "seconds": 0.05886358302086592,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 0
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.05129879101878032,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 1
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.054598583024926484,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 2
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.07898058299906552,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 3
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.05808149999938905,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 4
+        },
+        {
+          "operation": "query",
+          "seconds": 0.039984332979656756,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 5
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.048336542036850005,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 6
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.044842417002655566,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 7
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.07807666598819196,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 8
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.043935875000897795,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 9
+        },
+        {
+          "operation": "query",
+          "seconds": 0.043532125011552125,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 10
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.04241516598267481,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 11
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.0431936249951832,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 12
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.051935041963588446,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 13
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.042242375027853996,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 14
+        },
+        {
+          "operation": "query",
+          "seconds": 0.04080862499540672,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 15
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.04517433303408325,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 16
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.06309237499954179,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 17
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.058781041007023305,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 18
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.05033304198877886,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 19
+        }
+      ]
+    },
+    {
+      "concurrency": 4,
+      "seconds": 20.08552745898487,
+      "requests": 80,
+      "requests_per_second": 3.9829673461830626,
+      "errors": 0,
+      "p50_ms": 81.44760399591178,
+      "p95_ms": 128.80000000586733,
+      "p99_ms": 157.72137499880046,
+      "samples": [
+        {
+          "operation": "query",
+          "seconds": 0.1382337919785641,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 0
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.10221266601001844,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 1
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.12009674997534603,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 2
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.08130308298859745,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 3
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.08753079199232161,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 4
+        },
+        {
+          "operation": "query",
+          "seconds": 0.07564333296613768,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 5
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.0782666250015609,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 6
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1017101249890402,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 7
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.07694533298490569,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 8
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.08344658301211894,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 9
+        },
+        {
+          "operation": "query",
+          "seconds": 0.07241554197389632,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 10
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.0678572499891743,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 11
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.08406424999702722,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 12
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.09108120802557096,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 13
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.06530058401403949,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 14
+        },
+        {
+          "operation": "query",
+          "seconds": 0.0640269999857992,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 15
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.05953041696920991,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 16
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.0918648749939166,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 17
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.09154162497725338,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 18
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.06999074999475852,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 19
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.13534404197707772,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 0
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.09813358302926645,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 1
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.09850083297351375,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 2
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.08689783402951434,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 3
+        },
+        {
+          "operation": "query",
+          "seconds": 0.06809616595273837,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 4
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.07049200002802536,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 5
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.07220183400204405,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 6
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.08296245796373114,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 7
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.08616445900406688,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 8
+        },
+        {
+          "operation": "query",
+          "seconds": 0.06831708399113268,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 9
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.07176237500971183,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 10
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.06462116597685963,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 11
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.11155062500620261,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 12
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.0651456670020707,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 13
+        },
+        {
+          "operation": "query",
+          "seconds": 0.07811699999729171,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 14
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.06474341702414677,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 15
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.07452670903876424,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 16
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.10160320799332112,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 17
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.09837733302265406,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 18
+        },
+        {
+          "operation": "query",
+          "seconds": 0.07093029195675626,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 19
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.13500895799370483,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 0
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.12880000000586733,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 1
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.09370495798066258,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 2
+        },
+        {
+          "operation": "query",
+          "seconds": 0.08618045796174556,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 3
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.0700846670079045,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 4
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.07524775003548712,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 5
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.09062375000212342,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 6
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.06153100001392886,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 7
+        },
+        {
+          "operation": "query",
+          "seconds": 0.07564866699976847,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 8
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.06610516697401181,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 9
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.06585566699504852,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 10
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.08693487499840558,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 11
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.09202733298297971,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 12
+        },
+        {
+          "operation": "query",
+          "seconds": 0.08965045801596716,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 13
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.07527400000253692,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 14
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.06704274995718151,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 15
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.09163616702426225,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 16
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.07097287499345839,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 17
+        },
+        {
+          "operation": "query",
+          "seconds": 0.093973291979637,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 18
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.07079904101556167,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 19
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.15772137499880046,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 0
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.10726062499452382,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 1
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1183914159773849,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 2
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.09389124996960163,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 3
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.07009604200720787,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 4
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.09397399995941669,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 5
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.07710837502963841,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 6
+        },
+        {
+          "operation": "query",
+          "seconds": 0.09221224999055266,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 7
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.08430633402895182,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 8
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.06262124999193475,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 9
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.07840683299582452,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 10
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.09002766699995846,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 11
+        },
+        {
+          "operation": "query",
+          "seconds": 0.07740720798028633,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 12
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.08545516699086875,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 13
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.07456666597863659,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 14
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.07901237503392622,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 15
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.06231491599464789,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 16
+        },
+        {
+          "operation": "query",
+          "seconds": 0.0815921250032261,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 17
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.08946691697929054,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 18
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.07223537500249222,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 19
+        }
+      ]
+    },
+    {
+      "concurrency": 8,
+      "seconds": 20.10316745802993,
+      "requests": 160,
+      "requests_per_second": 7.9589447948457615,
+      "errors": 0,
+      "p50_ms": 140.64470850280486,
+      "p95_ms": 187.47383396839723,
+      "p99_ms": 231.03441699640825,
+      "samples": [
+        {
+          "operation": "query",
+          "seconds": 0.14420833298936486,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 0
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1636090410174802,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 1
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1262222090153955,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 2
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.142039125028532,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 3
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.18128845799947158,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 4
+        },
+        {
+          "operation": "query",
+          "seconds": 0.14218154200352728,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 5
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.14480654103681445,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 6
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1611366670113057,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 7
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.12069641699781641,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 8
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.14988116698805243,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 9
+        },
+        {
+          "operation": "query",
+          "seconds": 0.11427587497746572,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 10
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.13254424999468029,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 11
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.13181266601895913,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 12
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.1778089579893276,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 13
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.10883754200767726,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 14
+        },
+        {
+          "operation": "query",
+          "seconds": 0.13136149995261803,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 15
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.13378191704396158,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 16
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.11760962498374283,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 17
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.1435153330094181,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 18
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.13926775002619252,
+          "result": "PASS",
+          "client": 0,
+          "iteration": 19
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.12242770899320021,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 0
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.13733749999664724,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 1
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.16529391700169072,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 2
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.1735804170020856,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 3
+        },
+        {
+          "operation": "query",
+          "seconds": 0.23103441699640825,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 4
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.12296041700756177,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 5
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.11551537504419684,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 6
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.12762474996270612,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 7
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.11504804203286767,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 8
+        },
+        {
+          "operation": "query",
+          "seconds": 0.14374475000659004,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 9
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.09751616703579202,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 10
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.10556495800847188,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 11
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.19633420900208876,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 12
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.11991479102289304,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 13
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1407357080024667,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 14
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.13545250002061948,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 15
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.14011245797155425,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 16
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.15791041700867936,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 17
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.11810700001660734,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 18
+        },
+        {
+          "operation": "query",
+          "seconds": 0.13236004195641726,
+          "result": "PASS",
+          "client": 1,
+          "iteration": 19
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.14242495800135657,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 0
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.18661387503379956,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 1
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.146178291994147,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 2
+        },
+        {
+          "operation": "query",
+          "seconds": 0.12415412499103695,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 3
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1956256249686703,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 4
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.10796091600786895,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 5
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.13678595901001245,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 6
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.13134374999208376,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 7
+        },
+        {
+          "operation": "query",
+          "seconds": 0.13487029203679413,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 8
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1364147499552928,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 9
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.145911666972097,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 10
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.12566295795841143,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 11
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.15541620797012,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 12
+        },
+        {
+          "operation": "query",
+          "seconds": 0.13731795799685642,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 13
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.13683845900231972,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 14
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.14146879100007936,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 15
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.11980254098307341,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 16
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.10867866600165144,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 17
+        },
+        {
+          "operation": "query",
+          "seconds": 0.15504604199668393,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 18
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.11834879202069715,
+          "result": "PASS",
+          "client": 2,
+          "iteration": 19
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.17154783301521093,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 0
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.16709674999583513,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 1
+        },
+        {
+          "operation": "query",
+          "seconds": 0.12028479197761044,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 2
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.17152758303564042,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 3
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.18900770897744223,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 4
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.1591545830015093,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 5
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.14940745901549235,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 6
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1363578750169836,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 7
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.14628283301135525,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 8
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.13287404202856123,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 9
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.1595019999658689,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 10
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.14019133296096697,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 11
+        },
+        {
+          "operation": "query",
+          "seconds": 0.12819029204547405,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 12
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.18487170798471197,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 13
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.12629220803501084,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 14
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.147911167005077,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 15
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.13496574998134747,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 16
+        },
+        {
+          "operation": "query",
+          "seconds": 0.17135870800120756,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 17
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.14778537501115352,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 18
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.12635370797943324,
+          "result": "PASS",
+          "client": 3,
+          "iteration": 19
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.15236141596687958,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 0
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1449595419690013,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 1
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.12296400003833696,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 2
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.14418687502620742,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 3
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.2061021250556223,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 4
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.1610601669526659,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 5
+        },
+        {
+          "operation": "query",
+          "seconds": 0.17125562496948987,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 6
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.13220204098615795,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 7
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.14076783403288573,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 8
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.1665774579741992,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 9
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.13771366700530052,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 10
+        },
+        {
+          "operation": "query",
+          "seconds": 0.14180099999066442,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 11
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.12567466602195054,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 12
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.18278945802012458,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 13
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.1539668749901466,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 14
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.15256425004918128,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 15
+        },
+        {
+          "operation": "query",
+          "seconds": 0.15658520796569064,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 16
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.11084387503797188,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 17
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.17420712497550994,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 18
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.1557203340344131,
+          "result": "PASS",
+          "client": 4,
+          "iteration": 19
+        },
+        {
+          "operation": "query",
+          "seconds": 0.14021695801056921,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 0
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.15205070900265127,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 1
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1255137500120327,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 2
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.11649170803138986,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 3
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.2239380410173908,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 4
+        },
+        {
+          "operation": "query",
+          "seconds": 0.13349020900204778,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 5
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.17410095798550174,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 6
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.13452525000320747,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 7
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.16222408396424726,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 8
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.14827091700863093,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 9
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1315843330230564,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 10
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1228917499538511,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 11
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.11853737500496209,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 12
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.15126124996459112,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 13
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.13501958403503522,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 14
+        },
+        {
+          "operation": "query",
+          "seconds": 0.12772579200100154,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 15
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1303128749714233,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 16
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.15746504196431488,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 17
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.17229966598097235,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 18
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.14590175001649186,
+          "result": "PASS",
+          "client": 5,
+          "iteration": 19
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.14126624999335036,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 0
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.14913854096084833,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 1
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.1741609580349177,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 2
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.140553709003143,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 3
+        },
+        {
+          "operation": "query",
+          "seconds": 0.23228045902214944,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 4
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1382755829836242,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 5
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.14247479097684845,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 6
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.17038545897230506,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 7
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.13652987498790026,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 8
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1270960409892723,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 9
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.13318762503331527,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 10
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.15153154102154076,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 11
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.17331033397931606,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 12
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.12461133301258087,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 13
+        },
+        {
+          "operation": "query",
+          "seconds": 0.13189020898425952,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 14
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.12990008405176923,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 15
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.13583829201525077,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 16
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.18051187501987442,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 17
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.1255350839928724,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 18
+        },
+        {
+          "operation": "query",
+          "seconds": 0.12562695797532797,
+          "result": "PASS",
+          "client": 6,
+          "iteration": 19
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.11903929198160768,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 0
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.1927003330201842,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 1
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.1711510419845581,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 2
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1658338750130497,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 3
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.18747383396839723,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 4
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.13193970796419308,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 5
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.16389304102631286,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 6
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.14303904096595943,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 7
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1236790000111796,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 8
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.12900854198960587,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 9
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1257798339938745,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 10
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.16623045899905264,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 11
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.142351167043671,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 12
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1263657080125995,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 13
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.14221824996639043,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 14
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1289298749761656,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 15
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.15820183302275836,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 16
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.1232980839558877,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 17
+        },
+        {
+          "operation": "query",
+          "seconds": 0.12472949997754768,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 18
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1278095419984311,
+          "result": "PASS",
+          "client": 7,
+          "iteration": 19
+        }
+      ]
+    }
+  ],
+  "scope": "20 iterations/client at (1, 4, 8) clients; paced <=1 request/s/client through HTTPS Studio BFF; fixture scale; curl/client overhead included; not saturation or approved capacity certification",
+  "metrics_not_measured": [
+    "continuous database pool usage",
+    "lock-wait distribution",
+    "worker throughput",
+    "queue age",
+    "storage growth under sustained ingestion"
+  ],
+  "provisional_targets": "read p95 <500ms; writes <2000ms; zero errors; not business SLOs"
+}

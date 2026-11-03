@@ -1,0 +1,25 @@
+{
+  "before": {
+    "high": 274,
+    "critical": 2,
+    "distinct_advisories": 32
+  },
+  "after": {
+    "high": 267,
+    "critical": 2,
+    "distinct_advisories": 31
+  },
+  "classifications": {
+    "VENDOR_DEPENDENT": 29,
+    "ALREADY_REMEDIATED": 2,
+    "REQUIRES_REVIEW": 1
+  },
+  "removed_inventory_advisories": [
+    "CVE-2026-24882"
+  ],
+  "new_upstream_patches": 0,
+  "new_runtime_removal": "GnuPG toolchain",
+  "security_gate": "FAIL",
+  "release_gate": "BLOCKED",
+  "risk_acceptance": "NONE AUTHORIZED"
+}

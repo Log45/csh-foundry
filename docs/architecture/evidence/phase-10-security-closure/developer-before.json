@@ -1,0 +1,257 @@
+[
+  {
+    "Id": "cd499ad5797e4c49395b2189fdddc6094f2530f41b71408a7edaeeae1b51c9e2",
+    "Name": "/csh-foundry-studio-1",
+    "Image": "sha256:c4d10ffc3877d9cf7c9869055f7d8c1b51945d9438f3aeda04e29f89b7b11653",
+    "State": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 1859,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-11-03T02:25:29.373077585Z",
+      "FinishedAt": "2026-11-03T02:24:27.111698375Z"
+    },
+    "Mounts": [
+      {
+        "Type": "bind",
+        "Source": "/Users/log/Documents/code/csh-foundry/artifacts/keycloak-local/trust",
+        "Destination": "/etc/foundry/certs",
+        "Mode": "ro",
+        "RW": false,
+        "Propagation": "rprivate"
+      }
+    ]
+  },
+  {
+    "Id": "f57363325f7c80612d084e6b640435165573fb9e389b0c9da30ac9b2b18a7291",
+    "Name": "/csh-foundry-api-1",
+    "Image": "sha256:70e208b210e1403cd19eee2d5d52df9bbfb990bf59dd612e1dff310fa3d837d6",
+    "State": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 1923,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-11-03T02:25:29.567769418Z",
+      "FinishedAt": "2026-11-03T02:24:27.119986292Z"
+    },
+    "Mounts": [
+      {
+        "Type": "bind",
+        "Source": "/Users/log/Documents/code/csh-foundry/artifacts/keycloak-local/trust",
+        "Destination": "/etc/foundry/certs",
+        "Mode": "ro",
+        "RW": false,
+        "Propagation": "rprivate"
+      }
+    ]
+  },
+  {
+    "Id": "352ae233e8cb29856593440399e330387a43311119ed74367441d961ebabfa33",
+    "Name": "/foundry-keycloak",
+    "Image": "sha256:a41669d51f416e8332a75ec97dc32400d488d05f29c95d9d6102951decff0d0d",
+    "State": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 967,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-11-03T02:24:28.100799334Z",
+      "FinishedAt": "2026-11-03T02:24:27.11846575Z"
+    },
+    "Mounts": []
+  },
+  {
+    "Id": "026ca27afa2b1072402a06de5f77f2da3e8eac2330d08eedf6f0c6a4c22f5662",
+    "Name": "/foundry-keycloak-tls",
+    "Image": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+    "State": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 5051,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-11-03T02:27:32.412283336Z",
+      "FinishedAt": "2026-11-03T02:27:32.248581003Z"
+    },
+    "Mounts": [
+      {
+        "Type": "bind",
+        "Source": "/Users/log/Documents/code/csh-foundry/artifacts/keycloak-local/issuer-key.pem",
+        "Destination": "/certs/issuer-key.pem",
+        "Mode": "ro",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/Users/log/Documents/code/csh-foundry/artifacts/keycloak-local/issuer.pem",
+        "Destination": "/certs/issuer.pem",
+        "Mode": "ro",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/Users/log/Documents/code/csh-foundry/artifacts/keycloak-recovered-20261102/nginx.conf",
+        "Destination": "/etc/nginx/nginx.conf",
+        "Mode": "ro",
+        "RW": false,
+        "Propagation": "rprivate"
+      }
+    ]
+  },
+  {
+    "Id": "019d58d4155d39ab5cd8e493077521c19eeb94349af861639b9da5ceca1f8a89",
+    "Name": "/csh-foundry-postgres-1",
+    "Image": "sha256:f3bd19c606e442c3d7bdfa8002e03fe260a1023351e0ea4598032022b68dd6e3",
+    "State": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 1985,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-11-03T02:25:29.758547293Z",
+      "FinishedAt": "2026-11-03T02:24:27.118916667Z",
+      "Health": {
+        "Status": "healthy",
+        "FailingStreak": 0,
+        "Log": [
+          {
+            "Start": "2026-11-03T15:05:31.921652084Z",
+            "End": "2026-11-03T15:05:31.988084209Z",
+            "ExitCode": 0,
+            "Output": "/var/run/postgresql:5432 - accepting connections\n"
+          },
+          {
+            "Start": "2026-11-03T15:05:33.991486293Z",
+            "End": "2026-11-03T15:05:34.072604085Z",
+            "ExitCode": 0,
+            "Output": "/var/run/postgresql:5432 - accepting connections\n"
+          },
+          {
+            "Start": "2026-11-03T15:05:36.075140086Z",
+            "End": "2026-11-03T15:05:36.140067961Z",
+            "ExitCode": 0,
+            "Output": "/var/run/postgresql:5432 - accepting connections\n"
+          },
+          {
+            "Start": "2026-11-03T15:05:38.14572367Z",
+            "End": "2026-11-03T15:05:38.212357587Z",
+            "ExitCode": 0,
+            "Output": "/var/run/postgresql:5432 - accepting connections\n"
+          },
+          {
+            "Start": "2026-11-03T15:05:40.213046796Z",
+            "End": "2026-11-03T15:05:40.28563563Z",
+            "ExitCode": 0,
+            "Output": "/var/run/postgresql:5432 - accepting connections\n"
+          }
+        ]
+      }
+    },
+    "Mounts": [
+      {
+        "Type": "volume",
+        "Name": "csh-foundry_postgres-data",
+        "Source": "/var/lib/docker/volumes/csh-foundry_postgres-data/_data",
+        "Destination": "/var/lib/postgresql/data",
+        "Driver": "local",
+        "Mode": "rw",
+        "RW": true,
+        "Propagation": ""
+      }
+    ]
+  },
+  {
+    "Id": "b491efd6d9f66bcfbb0ed42e0080a860fbad3fb77d9eaa6704cba62de1fc1198",
+    "Name": "/language_app_db",
+    "Image": "sha256:69e8582b781cb44fa4557b98ed586fe68361e320d9b12f9707494335634f4f3d",
+    "State": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 969,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-11-03T02:24:28.100122542Z",
+      "FinishedAt": "2026-11-03T02:24:27.107154959Z"
+    },
+    "Mounts": [
+      {
+        "Type": "volume",
+        "Name": "project_endes_logan_dir_postgres_data",
+        "Source": "/var/lib/docker/volumes/project_endes_logan_dir_postgres_data/_data",
+        "Destination": "/var/lib/postgresql",
+        "Driver": "local",
+        "Mode": "rw",
+        "RW": true,
+        "Propagation": ""
+      }
+    ]
+  },
+  {
+    "Id": "36d68b606d9613ea7a6bb922926fd08b642efac264068a824f1a5c0db2913bca",
+    "Name": "/language_app_neo4j",
+    "Image": "sha256:b357872da95a164c5243ca8d9060601130717ff43cee3c829402fab46209a412",
+    "State": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 968,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-11-03T02:24:28.101246834Z",
+      "FinishedAt": "2026-11-03T02:24:27.118869584Z"
+    },
+    "Mounts": [
+      {
+        "Type": "volume",
+        "Name": "project_endes_logan_dir_neo4j_data",
+        "Source": "/var/lib/docker/volumes/project_endes_logan_dir_neo4j_data/_data",
+        "Destination": "/data",
+        "Driver": "local",
+        "Mode": "rw",
+        "RW": true,
+        "Propagation": ""
+      },
+      {
+        "Type": "volume",
+        "Name": "4b1adc38ed82d539a7ee68433424e8c8720f2420262170642a1240f1cdc15393",
+        "Source": "/var/lib/docker/volumes/4b1adc38ed82d539a7ee68433424e8c8720f2420262170642a1240f1cdc15393/_data",
+        "Destination": "/logs",
+        "Driver": "local",
+        "Mode": "",
+        "RW": true,
+        "Propagation": ""
+      }
+    ]
+  }
+]

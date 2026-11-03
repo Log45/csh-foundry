@@ -1,0 +1,11 @@
+{
+  "result": "PASS focused fail-closed validation",
+  "focused_tests": 41,
+  "command": "uv run pytest services/api/tests/test_security_dispositions.py services/api/tests/test_release_evidence.py services/api/tests/test_production_profile.py services/api/tests/test_scan_images.py -q",
+  "full_regression": "585 passed, one strict xfail, zero skips",
+  "production_authorizer": "NOT CONFIGURED; dispositions rejected by release CLI",
+  "test_key_lifetime": "Ephemeral in-memory test fixture only; no trust root installed",
+  "risk_exception": "NONE AUTHORIZED",
+  "final_focused_tests": 55,
+  "final_focused_evidence": "final-focused-tests.txt"
+}

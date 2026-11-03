@@ -1,0 +1,30 @@
+[
+  {
+    "project": "foundry-accept-d9b7054a",
+    "result": "PASS",
+    "remaining_labeled_resources": {
+      "container": [],
+      "network": [],
+      "volume": []
+    },
+    "remaining_named_resources": {
+      "container": [],
+      "network": [],
+      "volume": []
+    }
+  },
+  {
+    "project": "foundry-accept-6944b866",
+    "result": "PASS",
+    "remaining_labeled_resources": {
+      "container": [],
+      "network": [],
+      "volume": []
+    },
+    "remaining_named_resources": {
+      "container": [],
+      "network": [],
+      "volume": []
+    }
+  }
+]

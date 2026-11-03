@@ -1,0 +1,23 @@
+{
+  ".github/workflows/release.yaml": "9431c6b943c836af72847c8ab56c1935d91313c4467e6309de48d56184493c7f",
+  "PLANS.md": "80c2adef4917eeeec8bd0e6d987df1d67ecc19cffedc0a729b37394540ead3be",
+  "README.md": "197146259a22bd28bf1eafd1d7452265a49a896eae4a5b3d50d5841c272271c8",
+  "docs/development/phase-10-checklist.md": "dc0915d9f21a502f7758e7dbf5ca17bd8ce27f976c389bfc8ea524957d636743",
+  "docs/development/phase-10-report.md": "5a3f90ebeca9e3459e2e6255a2aa5b1c039bc3cfe52c5cc4cfe2fc7701b238d8",
+  "docs/operations/production.md": "8061626134b613bda0ef0f030a6eb61365c3a1fc64e3f973f5cade00173921d7",
+  "docs/operations/readiness.md": "77a9f91bef7daa3b61fb7ca5a613c3bc2282a7b0000b6ba3c0c4a083e46a6e2b",
+  "docs/operations/vulnerability-disposition.md": "6a98ec8e9b4a30bbd5fde1ec80e98f209f0d0fab449f644a58f68ee329accfb1",
+  "infrastructure/docker/api.Dockerfile": "aaf368f64785a4e7bcbf4d216fb46cbd250bbb9f82b5190f7d09141970c19b6b",
+  "infrastructure/docker/postgres.Dockerfile": "cbaedcceff890edc268d32ff4c9e91d7601ccbd6083fdfb9f99023aa50c96bb2",
+  "infrastructure/docker/studio.Dockerfile": "ad59cd12240f7022b347d4a545a03d5b3db32ae27b6b9acf0743e5179ca733a6",
+  "infrastructure/production/compose.yaml": "d4223e587d842364e522293318493b38f4d661e12d082228770d998d59147245",
+  "infrastructure/production/environment.example": "e63546ed32a0db54b5f0efd4f5753b55ce43c2aeff6ce7cc8decafb051ecc6dd",
+  "scripts/accept_phase10.py": "5e4b356fa6b3f395498c671233f7b865df4a8bcf3200fe1c084d93cff76f578e",
+  "scripts/accept_phase10_closure3.py": "082597437ecf72e4e7fe054c31352e972a6846d921ee0293a244b94d00df7687",
+  "scripts/security_dispositions.py": "2b82e4d908022fc9ee699bcb4454127679f8ae8424a0d96f1c51b9a278b00b47",
+  "scripts/validate_production_config.py": "c6b916c0e54e8b2f36023e23053b7768d1b7dd27f286fe8d9b9ab4f6cd2245fd",
+  "scripts/verify_release_evidence.py": "d479a48a40ee1ac16849c44a9a41889f75b3b70741cbcbe2ecf96f2bb81968b4",
+  "services/api/tests/test_production_profile.py": "85de04ef582218d7fb4310375e4e1972c69f5775159baa4602314901913ab6d8",
+  "services/api/tests/test_release_evidence.py": "89f4cffe5b901d92d8318a843f3b203c4dc79ef9db6202fba1a9ded295d82976",
+  "services/api/tests/test_security_dispositions.py": "d16c72542cafe7b27b380104600952cff0f5bbb8d5f1d8652b608ade5887c84a"
+}

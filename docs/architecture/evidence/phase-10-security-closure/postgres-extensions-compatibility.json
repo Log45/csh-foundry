@@ -1,0 +1,7 @@
+{
+  "result": "PASS all PostgreSQL 17 binary/extension/share files and locale names byte-identical",
+  "inventory_sha256": "2d87e8f991121f0e02181b77e5e6aa40dcb12ddcd2ff2bce407047c160b60f28",
+  "file_count": 1577,
+  "source": "postgres:17.11-trixie@sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1",
+  "candidate": "sha256:246ee6bd8302cb470031cc521bc72aed563bfed97062d49a73abaf5e97183ccd"
+}

@@ -1,0 +1,73 @@
+[
+  {
+    "candidate": "PostgreSQL 17.11-trixie derived runtime",
+    "decision": "SELECTED FOR VALIDATION, NOT PROMOTION",
+    "basis": "Same pinned official supplier base, major version, glibc and PostgreSQL binaries. apt purge/autoremove of build-only GnuPG tools; all SQL/locale/backup dependencies retained. Candidate runtime apt signature verification passes.",
+    "compatibility": "Combined logical restore and physical PITR/application checks pending separate deployment evidence."
+  },
+  {
+    "candidate": "Newer PostgreSQL 17 / trixie package update",
+    "decision": "UNAVAILABLE",
+    "basis": "Current official-images inventory still 17.11; registry index identity unchanged. apt simulation only tzdata 2026e -> 2026f; no security fix for retained packages."
+  },
+  {
+    "candidate": "PostgreSQL 17.11 bookworm",
+    "decision": "NOT SELECTED",
+    "basis": "Maintained glibc variant, but vendor tracker still lists libxml2 critical vulnerable. Changes base distribution/locale/extension assumptions; no full physical restore/collation certification performed. Not a critical remediation."
+  },
+  {
+    "candidate": "PostgreSQL 17.11 Alpine",
+    "decision": "NOT SELECTED",
+    "basis": "Maintained variant changes libc/collations/native extension assumptions. No compatibility proof for existing physical clusters. Lower scan counts alone insufficient; build/scan not run."
+  },
+  {
+    "candidate": "sid/forky libxml2 or other essential-library replacement",
+    "decision": "REJECTED",
+    "basis": "No supported trixie package path; unsupported distribution mixture would require ABI/extension/recovery qualification."
+  },
+  {
+    "candidate": "Keycloak 26.8.1 refreshed supplier image",
+    "decision": "RETAINED",
+    "basis": "Current downloads still 26.8.1; registry index unchanged. CA remediation already installed; Guava still 33.6.0-jre. No qualified supplier image bundling 33.7.2 found."
+  },
+  {
+    "candidate": "Independent Guava 33.7.2 JAR substitution",
+    "decision": "REJECTED",
+    "basis": "Upstream fix exists, but replacement is not the supported vendor distribution and compatibility is not established."
+  },
+  {
+    "candidate": "API / semantic same pinned Python base with build-stage installer",
+    "decision": "SELECTED FOR VALIDATION",
+    "basis": "Same Python 3.12.16/trixie digest; runtime uv/cache removed; dependencies/semantic 2.1.0 unchanged. Runtime imports/nonroot checks pass. No CVE patch claimed."
+  },
+  {
+    "candidate": "Studio Node 24/trixie-slim",
+    "decision": "RETAINED",
+    "basis": "Registry digest unchanged, existing standalone multi-stage runtime already removes npm/Yarn. All retained high findings are OS packages, none Python/Node/Rust application dependencies."
+  },
+  {
+    "candidate": "Force removal of ncurses-bin/util-linux/bsdutils/perl-base",
+    "decision": "REJECTED",
+    "basis": "apt identifies essential packages; does not provide a safe supported runtime minimization path. Libraries remain required; no force-essential override."
+  },
+  {
+    "candidate": "Distroless / musl application runtimes",
+    "decision": "NOT SELECTED",
+    "basis": "Not justified by current fixes; requires native wheel/engine and diagnostic/recovery qualification. No build/scan claimed."
+  },
+  {
+    "candidate": "nginx 1.30.6 Alpine derived image",
+    "decision": "RETAINED",
+    "basis": "Existing selected index unchanged and raw zero-high/critical scan retained with verified hashes."
+  },
+  {
+    "candidate": "Studio libsqlite3-0 removal",
+    "decision": "REJECTED",
+    "basis": "Node is not dynamically linked to system SQLite, but essential util-linux PreDepends liblastlog2-2, which requires libsqlite3-0. apt simulation rejects removal. API _sqlite3 requires it too; no essential removal override."
+  },
+  {
+    "candidate": "Optional standalone mount package removal",
+    "decision": "SELECTED",
+    "basis": "apt simulation shows one package removed, no reverse dependency or essential package removal. Removed in API, Studio, semantic and PostgreSQL. Required util-linux/libmount retained; affected advisory IDs remain unresolved."
+  }
+]

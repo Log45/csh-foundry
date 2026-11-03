@@ -1,0 +1,9 @@
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following packages will be REMOVED:
+  mount*
+0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
+Purg mount [2.41.5-0+deb13u1]
+mount
+Reverse Depends:

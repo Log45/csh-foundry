@@ -6,6 +6,7 @@ KEYCLOAK_REALM=foundry
 # Replace with approved registry@sha256:... values, never mutable production tags.
 API_IMAGE=registry.example.org/foundry-api@sha256:REPLACE
 STUDIO_IMAGE=registry.example.org/foundry-studio@sha256:REPLACE
+POSTGRES_IMAGE=registry.example.org/foundry-postgres@sha256:REPLACE
 SEMANTIC_IMAGE=registry.example.org/foundry-semantic@sha256:REPLACE
 SECRETS_DIRECTORY=/srv/foundry/secrets
 TLS_DIRECTORY=/srv/foundry/tls

@@ -1,0 +1,8 @@
+	linux-vdso.so.1 (0x0000ffff9dd2c000)
+	libsqlite3.so.0 => /lib/aarch64-linux-gnu/libsqlite3.so.0 (0x0000ffff9db10000)
+	libc.so.6 => /lib/aarch64-linux-gnu/libc.so.6 (0x0000ffff9d950000)
+	/lib/ld-linux-aarch64.so.1 (0x0000ffff9dcef000)
+	libm.so.6 => /lib/aarch64-linux-gnu/libm.so.6 (0x0000ffff9d8a0000)
+libsqlite3-0
+Reverse Depends:
+  liblastlog2-2

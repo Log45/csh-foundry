@@ -1,0 +1,172 @@
+Name:      docker.io/library/postgres:17.11-trixie
+MediaType: application/vnd.oci.image.index.v1+json
+Digest:    sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1
+           
+Manifests: 
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:0b81cec82228160abfa753aeaad0609b709eb26eeb950f2e404ad2326e1cc370
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/amd64
+  Annotations: 
+    org.opencontainers.image.base.name:       debian:trixie-slim
+    org.opencontainers.image.created:         2026-10-28T01:30:45Z
+    org.opencontainers.image.revision:        2603e26e245e558218728ee14e0a42dcb020dc7f
+    org.opencontainers.image.source:          https://github.com/docker-library/postgres.git#2603e26e245e558218728ee14e0a42dcb020dc7f:17/trixie
+    org.opencontainers.image.url:             https://hub.docker.com/_/postgres
+    org.opencontainers.image.version:         17.11
+    com.docker.official-images.bashbrew.arch: amd64
+    org.opencontainers.image.base.digest:     sha256:1e1a22175fbf1b32157ddaf0219e1db4e5401fab2b94ed285add64d18587cd2d
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:cac5b920c8dda46306ebe76b57b240580142054820579d3d4f4c75019475e25a
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations: 
+    vnd.docker.reference.digest:              sha256:0b81cec82228160abfa753aeaad0609b709eb26eeb950f2e404ad2326e1cc370
+    vnd.docker.reference.type:                attestation-manifest
+    com.docker.official-images.bashbrew.arch: amd64
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:ba28b58e4c3832b9c2b60ab8d2c107bab41cfcb6d424f5fbd2bc99b5c6c46553
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/arm/v5
+  Annotations: 
+    org.opencontainers.image.source:          https://github.com/docker-library/postgres.git#2603e26e245e558218728ee14e0a42dcb020dc7f:17/trixie
+    org.opencontainers.image.url:             https://hub.docker.com/_/postgres
+    org.opencontainers.image.version:         17.11
+    com.docker.official-images.bashbrew.arch: arm32v5
+    org.opencontainers.image.base.digest:     sha256:490c1ef86813e511a5e3d223eab6df6542f28209a074f00dd388db723a8daf9a
+    org.opencontainers.image.base.name:       debian:trixie-slim
+    org.opencontainers.image.created:         2026-10-28T01:32:07Z
+    org.opencontainers.image.revision:        2603e26e245e558218728ee14e0a42dcb020dc7f
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:4e5afc61dac70c2c318326ac5c9101beb961c00f63acf6942bd7b50315c3fb85
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations: 
+    com.docker.official-images.bashbrew.arch: arm32v5
+    vnd.docker.reference.digest:              sha256:ba28b58e4c3832b9c2b60ab8d2c107bab41cfcb6d424f5fbd2bc99b5c6c46553
+    vnd.docker.reference.type:                attestation-manifest
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:217d2561fedc65e24f64ea7adc8c4f19a5e108e88149ce110a393445d223717a
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/arm/v7
+  Annotations: 
+    com.docker.official-images.bashbrew.arch: arm32v7
+    org.opencontainers.image.base.digest:     sha256:93c6fe8a2a6593f29349f2bcf2ea7976833c59a6dd215a6808f274b2fa5e67c9
+    org.opencontainers.image.base.name:       debian:trixie-slim
+    org.opencontainers.image.created:         2026-10-28T02:04:06Z
+    org.opencontainers.image.revision:        2603e26e245e558218728ee14e0a42dcb020dc7f
+    org.opencontainers.image.source:          https://github.com/docker-library/postgres.git#2603e26e245e558218728ee14e0a42dcb020dc7f:17/trixie
+    org.opencontainers.image.url:             https://hub.docker.com/_/postgres
+    org.opencontainers.image.version:         17.11
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:78c8fe1bb5b8b58a97230ec2f80fee111b21dc83c188e3e1c1e92ce7e6d68841
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations: 
+    com.docker.official-images.bashbrew.arch: arm32v7
+    vnd.docker.reference.digest:              sha256:217d2561fedc65e24f64ea7adc8c4f19a5e108e88149ce110a393445d223717a
+    vnd.docker.reference.type:                attestation-manifest
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:ac359420747e1f5f8ac4d23f40d7ce022c0a39090ed6cdd8dde5f596affbe41d
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/arm64/v8
+  Annotations: 
+    org.opencontainers.image.revision:        2603e26e245e558218728ee14e0a42dcb020dc7f
+    org.opencontainers.image.source:          https://github.com/docker-library/postgres.git#2603e26e245e558218728ee14e0a42dcb020dc7f:17/trixie
+    org.opencontainers.image.url:             https://hub.docker.com/_/postgres
+    org.opencontainers.image.version:         17.11
+    com.docker.official-images.bashbrew.arch: arm64v8
+    org.opencontainers.image.base.digest:     sha256:1470991b497d26788dc4d6f438bf5690c6ba0d499235d237e55f4b43caea7a75
+    org.opencontainers.image.base.name:       debian:trixie-slim
+    org.opencontainers.image.created:         2026-10-28T01:33:15Z
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:21e392b5db77237c634f3abe207ec358ab4bc15787c0ac8ae2d5f052d385d160
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations: 
+    com.docker.official-images.bashbrew.arch: arm64v8
+    vnd.docker.reference.digest:              sha256:ac359420747e1f5f8ac4d23f40d7ce022c0a39090ed6cdd8dde5f596affbe41d
+    vnd.docker.reference.type:                attestation-manifest
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:b555988fc2f5b43b33a16037b7f2836331c166b8c164e327df98b3cd5797ef17
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/386
+  Annotations: 
+    org.opencontainers.image.created:         2026-10-28T01:31:23Z
+    org.opencontainers.image.revision:        2603e26e245e558218728ee14e0a42dcb020dc7f
+    org.opencontainers.image.source:          https://github.com/docker-library/postgres.git#2603e26e245e558218728ee14e0a42dcb020dc7f:17/trixie
+    org.opencontainers.image.url:             https://hub.docker.com/_/postgres
+    org.opencontainers.image.version:         17.11
+    com.docker.official-images.bashbrew.arch: i386
+    org.opencontainers.image.base.digest:     sha256:54d4782cc10f415e6c52ed7873f2b7d6498a888555ee66e45ae688efc3dda6ee
+    org.opencontainers.image.base.name:       debian:trixie-slim
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:cd1f76c83739f44ae0d4927382a364d8e0f66a05354651117e6bd3e658c58379
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations: 
+    com.docker.official-images.bashbrew.arch: i386
+    vnd.docker.reference.digest:              sha256:b555988fc2f5b43b33a16037b7f2836331c166b8c164e327df98b3cd5797ef17
+    vnd.docker.reference.type:                attestation-manifest
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:f314c41723be8b8c456598bcdec07a8afeb1bb3c5e27f75dedc0ab153c1f46ae
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/ppc64le
+  Annotations: 
+    com.docker.official-images.bashbrew.arch: ppc64le
+    org.opencontainers.image.base.digest:     sha256:36d7020e168d5a85d1b1391efed8f4aa655cb01b750310f5021bd63836d36d27
+    org.opencontainers.image.base.name:       debian:trixie-slim
+    org.opencontainers.image.created:         2026-10-28T03:59:30Z
+    org.opencontainers.image.revision:        2603e26e245e558218728ee14e0a42dcb020dc7f
+    org.opencontainers.image.source:          https://github.com/docker-library/postgres.git#2603e26e245e558218728ee14e0a42dcb020dc7f:17/trixie
+    org.opencontainers.image.url:             https://hub.docker.com/_/postgres
+    org.opencontainers.image.version:         17.11
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:6cf31e67b7d5aa646a7469c0b5ef44b5233ff11189fb3c630b2455d69ca9a804
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations: 
+    com.docker.official-images.bashbrew.arch: ppc64le
+    vnd.docker.reference.digest:              sha256:f314c41723be8b8c456598bcdec07a8afeb1bb3c5e27f75dedc0ab153c1f46ae
+    vnd.docker.reference.type:                attestation-manifest
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:aba41e0d8c37d0fcd486e3360056731312fc9cd528c8cf9d00cfd849ccf4b2f3
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/riscv64
+  Annotations: 
+    com.docker.official-images.bashbrew.arch: riscv64
+    org.opencontainers.image.base.digest:     sha256:d2603372b44ea7e55fcc4b2f5fd667024d6f298af5af7c7474f639321570c5cc
+    org.opencontainers.image.base.name:       debian:trixie-slim
+    org.opencontainers.image.created:         2026-11-01T03:13:36Z
+    org.opencontainers.image.revision:        2603e26e245e558218728ee14e0a42dcb020dc7f
+    org.opencontainers.image.source:          https://github.com/docker-library/postgres.git#2603e26e245e558218728ee14e0a42dcb020dc7f:17/trixie
+    org.opencontainers.image.url:             https://hub.docker.com/_/postgres
+    org.opencontainers.image.version:         17.11
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:ad787a50f361843e7e3beeeba7e8bf31b04746ee92157c51fdb643863628f093
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations: 
+    com.docker.official-images.bashbrew.arch: riscv64
+    vnd.docker.reference.digest:              sha256:aba41e0d8c37d0fcd486e3360056731312fc9cd528c8cf9d00cfd849ccf4b2f3
+    vnd.docker.reference.type:                attestation-manifest
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:4f57ae1a33218cdaa8351fd7abefecad5cf76995edbb4c72acb7e30260bcd726
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/s390x
+  Annotations: 
+    com.docker.official-images.bashbrew.arch: s390x
+    org.opencontainers.image.base.digest:     sha256:b52f4830ac1fe39bb67a84fd3f71aa45ad7a151085cb2cc770dd5b789ba6669b
+    org.opencontainers.image.base.name:       debian:trixie-slim
+    org.opencontainers.image.created:         2026-10-28T02:15:22Z
+    org.opencontainers.image.revision:        2603e26e245e558218728ee14e0a42dcb020dc7f
+    org.opencontainers.image.source:          https://github.com/docker-library/postgres.git#2603e26e245e558218728ee14e0a42dcb020dc7f:17/trixie
+    org.opencontainers.image.url:             https://hub.docker.com/_/postgres
+    org.opencontainers.image.version:         17.11
+               
+  Name:        docker.io/library/postgres:17.11-trixie@sha256:208c8e5bd9b5df0b4d9a5e4ec37e6a9c4a7b54e6cb271518232ca07a1f5361a5
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations: 
+    com.docker.official-images.bashbrew.arch: s390x
+    vnd.docker.reference.digest:              sha256:4f57ae1a33218cdaa8351fd7abefecad5cf76995edbb4c72acb7e30260bcd726
+    vnd.docker.reference.type:                attestation-manifest

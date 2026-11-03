@@ -1,0 +1,61 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from postgres.Dockerfile
+#1 transferring dockerfile: 563B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/postgres:17.11-trixie@sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 173B done
+#3 DONE 0.0s
+
+#4 [1/2] FROM docker.io/library/postgres:17.11-trixie@sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1
+#4 resolve docker.io/library/postgres:17.11-trixie@sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1 done
+#4 CACHED
+
+#5 [2/2] RUN apt-get purge -y --auto-remove gnupg gnupg-l10n gpg gpg-agent gpgconf gpgsm dirmngr mount     && apt-get clean     && rm -rf /var/lib/apt/lists/*
+#5 0.212 Reading package lists...
+#5 0.226 Building dependency tree...
+#5 0.226 Reading state information...
+#5 0.243 The following packages will be REMOVED:
+#5 0.243   dirmngr* gnupg* gnupg-l10n* gpg* gpg-agent* gpgconf* gpgsm* libassuan9*
+#5 0.243   libgnutls30t64* libksba8* libnpth0t64* libp11-kit0* libtasn1-6* mount*
+#5 0.243   pinentry-curses*
+#5 0.391 0 upgraded, 0 newly installed, 15 to remove and 0 not upgraded.
+#5 0.391 After this operation, 18.2 MB disk space will be freed.
+#5 0.401 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 11468 files and directories currently installed.)
+#5 0.452 Removing gnupg (2.4.7-21+deb13u1) ...
+#5 0.495 Removing dirmngr (2.4.7-21+deb13u1+b5) ...
+#5 0.581 Removing gnupg-l10n (2.4.7-21+deb13u1) ...
+#5 0.616 Removing gpg (2.4.7-21+deb13u1+b5) ...
+#5 0.642 Removing gpg-agent (2.4.7-21+deb13u1+b5) ...
+#5 0.691 Removing gpgsm (2.4.7-21+deb13u1+b5) ...
+#5 0.749 Removing gpgconf (2.4.7-21+deb13u1+b5) ...
+#5 0.785 Removing pinentry-curses (1.3.1-2) ...
+#5 0.813 Removing libassuan9:arm64 (3.0.2-2) ...
+#5 0.833 Removing libgnutls30t64:arm64 (3.8.9-3+deb13u4) ...
+#5 0.854 Removing libksba8:arm64 (1.6.7-2+b1) ...
+#5 0.875 Removing libnpth0t64:arm64 (1.8-3) ...
+#5 0.891 Removing libp11-kit0:arm64 (0.25.5-3) ...
+#5 0.911 Removing libtasn1-6:arm64 (4.20.0-2+deb13u1) ...
+#5 0.936 Removing mount (2.41.5-0+deb13u1) ...
+#5 0.978 Processing triggers for libc-bin (2.41-12+deb13u4) ...
+#5 1.053 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 11181 files and directories currently installed.)
+#5 1.058 Purging configuration files for gpg-agent (2.4.7-21+deb13u1+b5) ...
+#5 1.119 Purging configuration files for dirmngr (2.4.7-21+deb13u1+b5) ...
+#5 1.166 Purging configuration files for gpg (2.4.7-21+deb13u1+b5) ...
+#5 DONE 1.3s
+
+#6 exporting to image
+#6 exporting layers 0.1s done
+#6 exporting manifest sha256:e7d95f7b16b22fa2ec787024c9f5577bf2aee225297af59b02ca9b37e824fa21 done
+#6 exporting config sha256:9a4a49121ab84cc71ca2072be5513caaafe68f426c19750b413ffd6c5d75a9a3 done
+#6 exporting attestation manifest sha256:347db2708e6802e4250f9ed4ae4033d15816652ae8800113a1ca647c0d1dd25e done
+#6 exporting manifest list sha256:246ee6bd8302cb470031cc521bc72aed563bfed97062d49a73abaf5e97183ccd done
+#6 naming to docker.io/library/csh-foundry-postgres:phase10-security-final done
+#6 unpacking to docker.io/library/csh-foundry-postgres:phase10-security-final 0.0s done
+#6 DONE 0.2s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/bydi183l9gtjg4jgbdh84sky8

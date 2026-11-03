@@ -1,0 +1,5 @@
+{
+  "revision": "6ae76602bc329ed212a09970787f65354caeb585",
+  "working_tree": "",
+  "developer_containers": "cd499ad5797e csh-foundry-studio csh-foundry-studio-1\nf57363325f7c csh-foundry-api csh-foundry-api-1\n352ae233e8cb foundry-keycloak-recovered:20261029 foundry-keycloak\n026ca27afa2b 1c3e02f39229 foundry-keycloak-tls\n019d58d4155d postgres:17.6-bookworm csh-foundry-postgres-1\nb491efd6d9f6 postgres:18 language_app_db\n36d68b606d96 neo4j:5 language_app_neo4j\n"
+}

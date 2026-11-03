@@ -1,0 +1,17 @@
+[
+  {
+    "check": "migrate",
+    "result": "PASS",
+    "exit_code": 0
+  },
+  {
+    "check": "drift",
+    "result": "PASS",
+    "exit_code": 0
+  },
+  {
+    "check": "regression",
+    "result": "PASS",
+    "exit_code": 0
+  }
+]

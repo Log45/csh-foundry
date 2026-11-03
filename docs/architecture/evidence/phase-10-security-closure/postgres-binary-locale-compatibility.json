@@ -1,0 +1,8 @@
+{
+  "result": "PASS byte-identical PostgreSQL/backup/restore/libxml2/glibc and locale inventory",
+  "evidence": {
+    "postgres:17.11-trixie": "aeaeae7bb5f8de76e2923b30d048c7f380075fdcba2fbe25cd4ca4c4a1ff150b  /usr/lib/postgresql/17/bin/postgres\n60aa0600ffa06b731f896ff6b1a575b391dfe9d7899ebb28a1fed65591db6f4f  /usr/lib/postgresql/17/bin/pg_basebackup\n0d6d5449e9d13dd0efeeb19a15dbf0f2d9051496e07b395f3c0ba0b1be545b96  /usr/lib/postgresql/17/bin/pg_restore\n1729c2e360adc7a56b1358758234bca7395c2b990bb8cf5acb4218d06839602d  /usr/lib/aarch64-linux-gnu/libxml2.so.2\n70fa4c4cf57eabeb96097cce47582d02379c4cd1de3db3e98ade4dd7089a1b13  /usr/lib/aarch64-linux-gnu/libc.so.6\nC\nC.utf8\nen_US.utf8\nPOSIX\n",
+    "csh-foundry-postgres:phase10-security-final": "aeaeae7bb5f8de76e2923b30d048c7f380075fdcba2fbe25cd4ca4c4a1ff150b  /usr/lib/postgresql/17/bin/postgres\n60aa0600ffa06b731f896ff6b1a575b391dfe9d7899ebb28a1fed65591db6f4f  /usr/lib/postgresql/17/bin/pg_basebackup\n0d6d5449e9d13dd0efeeb19a15dbf0f2d9051496e07b395f3c0ba0b1be545b96  /usr/lib/postgresql/17/bin/pg_restore\n1729c2e360adc7a56b1358758234bca7395c2b990bb8cf5acb4218d06839602d  /usr/lib/aarch64-linux-gnu/libxml2.so.2\n70fa4c4cf57eabeb96097cce47582d02379c4cd1de3db3e98ade4dd7089a1b13  /usr/lib/aarch64-linux-gnu/libc.so.6\nC\nC.utf8\nen_US.utf8\nPOSIX\n"
+  },
+  "selected_image": "sha256:246ee6bd8302cb470031cc521bc72aed563bfed97062d49a73abaf5e97183ccd"
+}

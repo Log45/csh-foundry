@@ -513,3 +513,54 @@ package advisory; no automatic scanner exception is introduced. Stable trixie li
 UNFIXED. A named security/release owner must obtain supported fixes or authorize a separate reviewed
 disposition process. Existing external SSO/off-host/receiver/owner/target/hosted prerequisites and
 procedures remain mandatory. No actual target deployment or external modification was performed.
+
+## Security candidate and deployment configuration — 2026-11-03
+
+Build the reviewed database runtime using
+`docker build -t csh-foundry-postgres:REVIEWED -f infrastructure/docker/postgres.Dockerfile .`.
+It retains the pinned official PostgreSQL 17.11-trixie base/ABI/locale/extension/backup layout and
+uses apt to remove supplier-build GnuPG tools. PostgreSQL libxml2 is retained and still vulnerable.
+`POSTGRES_IMAGE` is now **required**, alongside API/Studio/semantic/ingress identities in the public
+production environment file. Set it to the independently reviewed derived image's immutable
+registry digest after an authorized publication. Do not substitute the unminimized supplier image
+and assume the new scan applies. No image was published here; local candidate IDs in evidence are
+not downloadable registry artifacts. Developer Compose is unchanged; no in-place cluster conversion.
+
+The API Dockerfile now installs dependencies in a separate same-base stage; runtime has no uv
+installer/cache. Operators use the installed Python commands at runtime. Semantic engine pin and
+security/transaction/session/worker contracts remain unchanged. See
+[security closure](../architecture/evidence/phase-10-security-closure/README.md) for removed packages,
+all 32 advisory dossiers, supported/rejected upgrade paths and combined recovery evidence.
+
+Run exact local candidate acceptance with the existing harness:
+
+```bash
+PATH=/opt/homebrew/opt/node/bin:$PATH uv run python scripts/accept_phase10_closure3.py   --candidate-images docs/architecture/evidence/phase-10-security-closure/images.json   --output docs/architecture/evidence/NEW_SECURITY_CANDIDATE_RUN
+```
+
+The file must contain all six roles and immutable local `sha256:` identities; replacements cannot
+be pulled. This mode runs the bounded original workload, not a new general latency investigation.
+Use only new owned disposable projects/volumes, never existing developer/production resources.
+
+Release policy has no independently approved advisory-authorization provider. Build provenance does
+not confer risk approval. The CLI rejects disposition submissions and all raw high/critical matches.
+`scripts/security_dispositions.py` validates exact advisory/image/config/package/purl/evidence,
+decision/authority/expiry and detached-signature authorization through an external verifier interface;
+it installs no keys and provides no production CLI bypass. Actual integration requires an independently
+administered approved provider and security/release policy review. Do not use developer keys to
+approve an exception. The Keycloak vendor CA correction dossier is approval-ready technical
+evidence, not authorization. Current raw gate remains FAIL: 251 high/two critical across 31 IDs.
+Review by November 10 or any supplier/image/database/trust-store change. No risk is accepted.
+
+The final candidate additionally removes the optional `mount` command package from API, Studio,
+semantic and PostgreSQL using apt. Sixteen util-linux source-package matches disappear; required
+util-linux/libmount components and their four advisories remain unresolved. No full advisory fix
+is inferred from these command removals. The earlier 267-high candidate and its deployment evidence
+are retained separately; final candidate counts are 251 high/two critical.
+
+Final exact-candidate combined deployment **PASS: 58 assertions / 50 distinct checks**, including
+physical PITR/restored applications, worker recovery, authorization/governance, durable sessions,
+TLS, rotations and rollback. Final isolated browser E2E **five PASS**; an earlier final attempt
+retains one stale activation-header failure despite successful activation. Its cause remains
+unresolved and is recorded as an intermittent validation limitation, not erased by the passing
+rerun. Final security/release/recovery focused suite: **55 PASS**. No assertions/timeouts changed.

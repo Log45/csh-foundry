@@ -1,0 +1,104 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from studio.Dockerfile
+#1 transferring dockerfile: 1.05kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446
+#2 DONE 0.3s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 173B done
+#3 DONE 0.0s
+
+#4 [build 1/6] FROM docker.io/library/node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446
+#4 resolve docker.io/library/node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446 0.0s done
+#4 DONE 0.0s
+
+#5 [build 2/6] WORKDIR /app
+#5 CACHED
+
+#6 [internal] load build context
+#6 transferring context: 3.08kB 0.0s done
+#6 DONE 0.1s
+
+#7 [build 3/6] COPY apps/studio/package.json apps/studio/package-lock.json ./
+#7 CACHED
+
+#8 [build 4/6] RUN npm ci --no-audit --no-fund
+#8 CACHED
+
+#9 [build 5/6] COPY apps/studio/ ./
+#9 DONE 0.1s
+
+#10 [runtime 3/8] RUN apt-get purge -y mount && apt-get clean && rm -rf /var/lib/apt/lists/*
+#10 0.220 Reading package lists...
+#10 0.227 Building dependency tree...
+#10 0.228 Reading state information...
+#10 0.238 The following packages will be REMOVED:
+#10 0.238   mount*
+#10 0.337 0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
+#10 0.337 After this operation, 673 kB disk space will be freed.
+#10 0.344 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 5033 files and directories currently installed.)
+#10 0.367 Removing mount (2.41.5-0+deb13u1) ...
+#10 DONE 0.4s
+
+#11 [runtime 4/8] RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /opt/yarn-* /usr/local/bin/yarn* /usr/local/bin/corepack
+#11 DONE 1.0s
+
+#12 [build 6/6] RUN npm run build
+#12 0.300 
+#12 0.300 > @foundry/studio@0.8.0 build
+#12 0.300 > next build --webpack
+#12 0.300 
+#12 0.899 ▲ Next.js 16.4.3 (webpack)
+#12 1.044 ✓ Running next.config.ts took 144ms
+#12 1.067 
+#12 1.100   Creating an optimized production build ...
+#12 6.957 ✓ Compiled successfully in 4.3s
+#12 6.959   Running TypeScript ...
+#12 9.996   Finished TypeScript in 3.0s ...
+#12 9.998   Collecting page data using 6 workers ...
+#12 11.56   Generating static pages using 6 workers (0/3) ...
+#12 11.95 ✓ Generating static pages using 6 workers (3/3) in 392ms
+#12 11.99   Finalizing page optimization ...
+#12 11.99   Collecting build traces ...
+#12 30.08 
+#12 30.08 Route (app)
+#12 30.08 ┌ ƒ /
+#12 30.08 ├ ƒ /_not-found
+#12 30.08 ├ ƒ /auth/[operation]
+#12 30.08 └ ƒ /bff
+#12 30.08 
+#12 30.08 
+#12 30.08 ƒ Proxy (Middleware)
+#12 30.08 
+#12 30.08 ƒ  (Dynamic)  server-rendered on demand
+#12 30.08 
+#12 DONE 30.3s
+
+#13 [runtime 5/8] COPY --from=build --chown=node:node /app/.next/standalone ./
+#13 DONE 1.1s
+
+#14 [runtime 6/8] COPY --from=build --chown=node:node /app/.next/static ./.next/static
+#14 DONE 0.1s
+
+#15 [runtime 7/8] COPY --from=build --chown=node:node /app/public ./public
+#15 DONE 0.1s
+
+#16 [runtime 8/8] COPY --chown=node:node infrastructure/docker/studio-entry.mjs ./
+#16 DONE 0.0s
+
+#17 exporting to image
+#17 exporting layers
+#17 exporting layers 2.0s done
+#17 exporting manifest sha256:437550f462ba5d2a821d4c69fdbe3347fb188699c65e27f9b8fa7e1ed0864a1c done
+#17 exporting config sha256:4a1182b6a3dda8ebf81d629447239e50442abc94ea88dc82672c911f79e04136 done
+#17 exporting attestation manifest sha256:03306e8afc7b6d9ebdd2c42dc93c5bd36e7ecb615139e251409146da9c47817e done
+#17 exporting manifest list sha256:310da527c2d32b558f68772159389fab438f4d4af053dc73ad31187cd04ae552 done
+#17 naming to docker.io/library/csh-foundry-studio:phase10-security-final done
+#17 unpacking to docker.io/library/csh-foundry-studio:phase10-security-final
+#17 unpacking to docker.io/library/csh-foundry-studio:phase10-security-final 0.5s done
+#17 DONE 2.5s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/olca7dr9in519x56kwtv5r7mg

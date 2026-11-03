@@ -1,0 +1,84 @@
+{
+  "result": "PASS",
+  "rule": "FoundryAPIUnavailable",
+  "rules": "infrastructure/monitoring/alerts.yaml (unchanged)",
+  "prometheus": "prom/prometheus@sha256:49214755b6153f90a597adcbff0252cc61069f8ab69ce8411285cd4a560e8038",
+  "alertmanager": "prom/alertmanager@sha256:27c475db5fb156cab31d5c18a4251ac7ed567746a2483ff264516437a39b15ba",
+  "events": [
+    {
+      "receiver": "local",
+      "status": "firing",
+      "alerts": [
+        {
+          "status": "firing",
+          "labels": {
+            "alertname": "FoundryAPIUnavailable",
+            "instance": "api:8000",
+            "job": "foundry-api",
+            "severity": "critical"
+          },
+          "annotations": {
+            "summary": "Foundry API metrics unavailable; verify readiness, network and credentials"
+          },
+          "startsAt": "2026-11-03T15:26:20.878Z",
+          "endsAt": "0001-01-01T00:00:00Z",
+          "generatorURL": "http://f88e01e1887e:9090/graph?g0.expr=up%7Bjob%3D%22foundry-api%22%7D+%3D%3D+0&g0.tab=1",
+          "fingerprint": "5fa65b51f554efbf"
+        }
+      ],
+      "groupLabels": {},
+      "commonLabels": {
+        "alertname": "FoundryAPIUnavailable",
+        "instance": "api:8000",
+        "job": "foundry-api",
+        "severity": "critical"
+      },
+      "commonAnnotations": {
+        "summary": "Foundry API metrics unavailable; verify readiness, network and credentials"
+      },
+      "externalURL": "http://605ccfa5a35f:9093",
+      "version": "4",
+      "groupKey": "{}:{}",
+      "truncatedAlerts": 0
+    },
+    {
+      "receiver": "local",
+      "status": "resolved",
+      "alerts": [
+        {
+          "status": "resolved",
+          "labels": {
+            "alertname": "FoundryAPIUnavailable",
+            "instance": "api:8000",
+            "job": "foundry-api",
+            "severity": "critical"
+          },
+          "annotations": {
+            "summary": "Foundry API metrics unavailable; verify readiness, network and credentials"
+          },
+          "startsAt": "2026-11-03T15:26:20.878Z",
+          "endsAt": "2026-11-03T15:26:26.878Z",
+          "generatorURL": "http://f88e01e1887e:9090/graph?g0.expr=up%7Bjob%3D%22foundry-api%22%7D+%3D%3D+0&g0.tab=1",
+          "fingerprint": "5fa65b51f554efbf"
+        }
+      ],
+      "groupLabels": {},
+      "commonLabels": {
+        "alertname": "FoundryAPIUnavailable",
+        "instance": "api:8000",
+        "job": "foundry-api",
+        "severity": "critical"
+      },
+      "commonAnnotations": {
+        "summary": "Foundry API metrics unavailable; verify readiness, network and credentials"
+      },
+      "externalURL": "http://605ccfa5a35f:9093",
+      "version": "4",
+      "groupKey": "{}:{}",
+      "truncatedAlerts": 0
+    }
+  ],
+  "production_delivery": "NOT RUN; approved receiver and operational owner unavailable",
+  "actual_api_target": "api:8000",
+  "scope": "Actual authenticated API scrape, injected path failure, recovery"
+}

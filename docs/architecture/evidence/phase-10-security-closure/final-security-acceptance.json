@@ -1,0 +1,48 @@
+{
+  "engineering_remediation": "Supported feasible package removals complete; no supported stable patch or supplier upgrade for remaining findings identified",
+  "security": {
+    "before": {
+      "high": 274,
+      "critical": 2,
+      "distinct_advisories": 32
+    },
+    "after": {
+      "high": 251,
+      "critical": 2,
+      "distinct_advisories": 31
+    },
+    "classifications": {
+      "VENDOR_DEPENDENT": 29,
+      "ALREADY_REMEDIATED": 2,
+      "REQUIRES_REVIEW": 1
+    },
+    "removed_inventory_advisories": [
+      "CVE-2026-24882"
+    ],
+    "new_upstream_patches": 0,
+    "new_runtime_removal": "GnuPG toolchain and optional standalone mount command in four runtimes",
+    "security_gate": "FAIL",
+    "release_gate": "BLOCKED",
+    "risk_acceptance": "NONE AUTHORIZED"
+  },
+  "candidate_combined": {
+    "result": "PASS",
+    "exit_code": 0
+  },
+  "assessments": {
+    "implementation": "PASS",
+    "local_acceptance": "BLOCKED",
+    "production_like_acceptance": "BLOCKED",
+    "production_certification": "NOT RUN"
+  },
+  "release_gate": "BLOCKED",
+  "required_decisions": [
+    "Independent confirmation of Keycloak CVE-2026-91403 vendor CA correction for exact image/scan/configuration",
+    "Supported fixes or independently authorized advisory/image/package-specific risk decisions for remaining findings",
+    "Independently administered approved authorization provider before any signed advisory disposition can affect policy",
+    "Investigate/review retained intermittent browser activation-display failure; no assertions weakened",
+    "External actual IdP/off-host recovery/custody/production owners/target infrastructure/workload/hosted approval certification"
+  ],
+  "no_phase_11": true,
+  "migrations": []
+}

@@ -1,0 +1,70 @@
+Terraform for Knowledge Graphs — AI-native ontology engine
+
+Usage: open-ontologies [OPTIONS] <COMMAND>
+
+Commands:
+  init               Initialize data directory, DB, and default config
+  serve              Start the MCP server (stdio transport)
+  serve-http         Start the MCP server (Streamable HTTP transport)
+  serve-unix         Start unix socket server for Tardygrada fact grounding
+  batch              Run a batch of commands from a file or stdin (one per line, or JSON array)
+  daemon             Manage background daemon (persistent in-memory store via serve-http)
+  validate           Validate RDF/OWL syntax (file or stdin with -)
+  load               Load RDF file into in-memory graph store
+  save               Save ontology to file
+  clear              Clear in-memory store
+  stats              Show triple count, classes, properties, individuals
+  query              Run SPARQL query (or stdin with -)
+  diff               Compare two ontology files
+  lint               Lint: check for missing labels, domains, ranges
+  defects            Defects: check the ONTOLOGY against itself, before any data is judged by it
+  convert            Convert between RDF formats
+  status             Server health and loaded triple count
+  pull               Fetch ontology from URL or SPARQL endpoint
+  push               Push ontology to SPARQL endpoint
+  marketplace        Browse and install standard ontologies from marketplace
+  import-owl         Resolve and load owl:imports chain
+  version            Save a named snapshot
+  history            List saved version snapshots
+  rollback           Restore a previous version
+  map                Generate mapping config from data file + ontology
+  ingest             Ingest structured data into RDF
+  shacl              Validate against SHACL shapes
+  vocab-check        Closed-world vocab check: flag data terms not declared in the loaded ontology
+  reason             Run inference (rdfs, owl-rl, owl-rl-ext, owl-dl)
+  fol                Export the loaded ontology as first-order logic, for a prover or a model finder
+  rules-import       Read rules written in a STANDARD rule syntax into the `rules.tsv` table `reason --rules` evaluates and `oo-horn check` verifies
+  fol-model          Find a finite model and CHECK it, for a verdict that says what it rests on
+  fol-prove          Run a prover, READ the derivation it prints, and re-check what can be re-checked
+  preserve           Ask whether a retrieved slice still supports the claims an answer rests on
+  closure-diff       Which CONCLUSIONS a projection preserves, with no goals supplied
+  trace-label        Label each step of a reasoning trace against the rule table
+  extend             Full pipeline: ingest → SHACL → reason
+  plan               Plan changes: diff current vs proposed Turtle
+  apply              Apply planned changes (safe or migrate)
+  lock               Lock IRIs to prevent removal
+  drift              Detect drift between two ontology versions
+  enforce            Run design pattern enforcement
+  unpack             Load a pack, refusing it if a digest does not match, and re-run the Lean checker over the certificate the pack carries
+  monitor            Run active SPARQL watchers
+  monitor-clear      Clear monitor block state
+  lineage            View lineage trail
+  align              Detect alignment candidates between two ontologies
+  crosswalk-probe    Carry a crosswalk's claims into the target and report any clash
+  align-feedback     Accept or reject an alignment candidate
+  lint-feedback      Accept or dismiss a lint issue
+  enforce-feedback   Accept or dismiss an enforce violation
+  crosswalk          Look up clinical terminology crosswalk
+  enrich             Add skos:exactMatch triple for clinical code
+  validate-clinical  Validate class labels against clinical terminology
+  import-schema      Import database schema as OWL ontology (Postgres or DuckDB)
+  sql-ingest         Run a SQL query against a relational backbone (Postgres or DuckDB) and ingest the result rows into the triple store as RDF
+  help               Print this message or the help of the given subcommand(s)
+
+Options:
+      --json                 Output results as JSON. This is the default; the flag is accepted so that scripts can state the format they depend on rather than assume it
+      --human                Render results as human-readable text instead of JSON. Overridden by --json or --pretty when both are given
+      --pretty               Pretty-print JSON output (implies --json)
+      --data-dir <DATA_DIR>  Data directory (default: ~/.open-ontologies) [default: ~/.open-ontologies]
+      --no-connect           Force local execution — ignore a running daemon even if one is detected
+  -h, --help                 Print help

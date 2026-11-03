@@ -1,0 +1,40 @@
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Package 'gpgv' is not installed, so not removed
+The following packages were automatically installed and are no longer required:
+  libassuan9 libgnutls30t64 libksba8 libnpth0t64 libp11-kit0 libtasn1-6
+  pinentry-curses
+Use 'apt autoremove' to remove them.
+The following packages will be REMOVED:
+  dirmngr* gnupg* gnupg-l10n* gpg* gpg-agent* gpgconf* gpgsm*
+0 upgraded, 0 newly installed, 7 to remove and 0 not upgraded.
+Purg gnupg [2.4.7-21+deb13u1]
+Purg dirmngr [2.4.7-21+deb13u1+b5]
+Purg gnupg-l10n [2.4.7-21+deb13u1]
+Purg gpg [2.4.7-21+deb13u1+b5]
+Purg gpg-agent [2.4.7-21+deb13u1+b5]
+Purg gpgsm [2.4.7-21+deb13u1+b5]
+Purg gpgconf [2.4.7-21+deb13u1+b5]
+gnupg
+Reverse Depends:
+  gpg
+  gpgsm
+  gpgconf
+  gpgconf
+  gpg-agent
+  gpg
+  gpg
+  dirmngr
+ |apt
+gpg
+Reverse Depends:
+  gnupg
+  gnupg-l10n
+  gnupg
+  dirmngr
+<gpgv>
+ 
+ 
+ 
+ 

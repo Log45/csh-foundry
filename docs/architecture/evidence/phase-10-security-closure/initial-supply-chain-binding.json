@@ -1,0 +1,74 @@
+{
+  "api": {
+    "image_id": "sha256:54617020d2e87d6dbf1d3518b8005d2598fbc4601385a6e7933a0b682aa3f2ce",
+    "config_digest": "sha256:7b8c06420858983abb38e22bd0bc3fa280b070827ee7dfb5ce9186ba08e7d590",
+    "scan": {
+      "evidence": "artifacts/phase10-security-closure/scan/image-0.vulnerabilities.json",
+      "sha256": "d47e3f8640870993fbb93a350e1d11107c5330eac23723ed62be54e7a6779f6b"
+    },
+    "sbom": {
+      "evidence": "artifacts/phase10-security-closure/scan/image-0.sbom.json",
+      "sha256": "8d9c536f6083c4eb43225b83dc70972d2e91f8f2271eba213364dfca2c0a5388"
+    }
+  },
+  "studio": {
+    "image_id": "sha256:bd32fbc1f6984642505e00395fff262df8611c522bc24f332508611806d0af6f",
+    "config_digest": "sha256:81fbc0b261eb3840fa5fd4341801b46960045202ad14f5f0ea8fdbe68bbdfd9c",
+    "scan": {
+      "evidence": "artifacts/phase10-closure-4/scan/image-1.vulnerabilities.json",
+      "sha256": "1b7f9a9016582ea762a105ecd3d4484dfe33da879ee6ce8e54a070deadd73d4f"
+    },
+    "sbom": {
+      "evidence": "artifacts/phase10-closure-4/scan/image-1.sbom.json",
+      "sha256": "ac0048bf4db34b41a8ab356b3b524756dade1547573e1befd8a4467092abf823"
+    }
+  },
+  "semantic": {
+    "image_id": "sha256:7c080979178444c44b82362fc88804c367824677f2943c664e6420ce5827a0a3",
+    "config_digest": "sha256:0b274e567a035de6b8159b578da1c25c79037582ac8ac617e9b612a217e77ff6",
+    "scan": {
+      "evidence": "artifacts/phase10-security-closure/scan/image-1.vulnerabilities.json",
+      "sha256": "9dc168a49762c811ed6d12b1e572f059b2a57514838b81e66e04fa193b774683"
+    },
+    "sbom": {
+      "evidence": "artifacts/phase10-security-closure/scan/image-1.sbom.json",
+      "sha256": "6841682ca1db1873ff6418468ee1d852a6d8a77cb1a740aa047089c588fe0e34"
+    }
+  },
+  "ingress": {
+    "image_id": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+    "config_digest": "sha256:e145129f21be32c3795a8d3a39e169ff9e6d799568ddfd2db56fd0804c0b37ef",
+    "scan": {
+      "evidence": "artifacts/phase10-closure-4/scan/image-3.vulnerabilities.json",
+      "sha256": "144ffd0f7181e2707a66f905344a0241785cae31dad9b7e2c3668f8eec274001"
+    },
+    "sbom": {
+      "evidence": "artifacts/phase10-closure-4/scan/image-3.sbom.json",
+      "sha256": "1939154b7f92cff827a6a197e6cbb0a8aaf85949904eb28512850263d4d137f3"
+    }
+  },
+  "postgres": {
+    "image_id": "sha256:8fcb18a37e9b75bd8d6418419a294175a2956dabba70966f44d904f0dd91a155",
+    "config_digest": "sha256:59e3381081c918ef9a48e35601106666ea2e87d1e8256d567210684137292d48",
+    "scan": {
+      "evidence": "artifacts/phase10-security-closure/scan/image-2.vulnerabilities.json",
+      "sha256": "013144cf7f8f0a46df178b9c8f8e4f53490154d9a52d9094b9a9e6af8bbbb1fc"
+    },
+    "sbom": {
+      "evidence": "artifacts/phase10-security-closure/scan/image-2.sbom.json",
+      "sha256": "c81aaff77971044dbbc6fe046a81f3db4d9bf50f5538112538afef9e31464025"
+    }
+  },
+  "keycloak": {
+    "image_id": "sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332",
+    "config_digest": "sha256:24959b9b2ff0ec6bd9445588d3b488b84dffbe06e6a6ccb50e3d074f7ec581dd",
+    "scan": {
+      "evidence": "artifacts/phase10-closure-4/scan/image-5.vulnerabilities.json",
+      "sha256": "18652b453b671743755c4102ba8c81d25f141bacbb825997647daa72ffc34f68"
+    },
+    "sbom": {
+      "evidence": "artifacts/phase10-closure-4/scan/image-5.sbom.json",
+      "sha256": "e369c825a3d16ba56945d85f9a60e6be87b6887535bda815025f0a135a93bf69"
+    }
+  }
+}

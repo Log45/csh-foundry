@@ -1,0 +1,37 @@
+	linux-vdso.so.1 (0x0000ffff943f9000)
+	libdl.so.2 => /lib/aarch64-linux-gnu/libdl.so.2 (0x0000ffff94390000)
+	libstdc++.so.6 => /lib/aarch64-linux-gnu/libstdc++.so.6 (0x0000ffff94000000)
+	libm.so.6 => /lib/aarch64-linux-gnu/libm.so.6 (0x0000ffff942e0000)
+	libgcc_s.so.1 => /lib/aarch64-linux-gnu/libgcc_s.so.1 (0x0000ffff942a0000)
+	libpthread.so.0 => /lib/aarch64-linux-gnu/libpthread.so.0 (0x0000ffff94270000)
+	libc.so.6 => /lib/aarch64-linux-gnu/libc.so.6 (0x0000ffff93e40000)
+	/lib/ld-linux-aarch64.so.1 (0x0000ffff943bc000)
+libsqlite3-0
+Reverse Depends:
+  liblastlog2-2
+NOTE: This is only a simulation!
+      apt-get needs root privileges for real execution.
+      Keep also in mind that locking is deactivated,
+      so don't depend on the relevance to the real current situation!
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Solving dependencies...
+Some packages could not be installed. This may mean that you have
+requested an impossible situation or if you are using the unstable
+distribution that some required packages have not yet been created
+or been moved out of Incoming.
+The following information may help to resolve the situation:
+
+The following packages have unmet dependencies:
+ util-linux : PreDepends: liblastlog2-2 (= 2.41.5-0+deb13u1) but it is not going to be installed
+              Recommends: sensible-utils but it is not installable
+E: Error, pkgProblemResolver::Resolve generated breaks, this may be caused by held packages.
+E: The following information from --solver 3.0 may provide additional context:
+   Unable to satisfy dependencies. Reached two conflicting decisions:
+   1. liblastlog2-2:arm64 is selected for install because:
+      1. util-linux:arm64 is selected for install
+      2. util-linux:arm64 PreDepends liblastlog2-2 (= 2.41.5-0+deb13u1)
+   2. liblastlog2-2:arm64 Depends libsqlite3-0 (>= 3.5.9)
+      but none of the choices are installable:
+      - libsqlite3-0:arm64 is selected for removal

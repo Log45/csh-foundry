@@ -1,0 +1,21 @@
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following packages were automatically installed and are no longer required:
+  libblkid1 liblastlog2-2 libmount1 libsmartcols1
+Use 'apt autoremove' to remove them.
+The following packages will be REMOVED:
+  bsdutils* mount* ncurses-bin* perl-base* util-linux*
+WARNING: The following essential packages will be removed.
+This should NOT be done unless you know exactly what you are doing!
+  bsdutils ncurses-bin perl-base util-linux
+0 upgraded, 0 newly installed, 5 to remove and 0 not upgraded.
+Purg bsdutils [1:2.41.5-0+deb13u1]
+Purg mount [2.41.5-0+deb13u1]
+Purg ncurses-bin [6.5+20250216-2]
+Purg perl-base [5.40.1-6+deb13u1]
+Purg util-linux [2.41.5-0+deb13u1]
+/usr/local/bin/pip
+295M	/app
+42M	/usr/local/bin/uv
+6.9M	/usr/local/lib/python3.12/site-packages

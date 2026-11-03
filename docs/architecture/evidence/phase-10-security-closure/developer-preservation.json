@@ -1,0 +1,71 @@
+{
+  "result": "PASS container identities/images/start times/mounts preserved; no developer restarts",
+  "containers": [
+    {
+      "name": "/csh-foundry-studio-1",
+      "id": "cd499ad5797e4c49395b2189fdddc6094f2530f41b71408a7edaeeae1b51c9e2",
+      "image": "sha256:c4d10ffc3877d9cf7c9869055f7d8c1b51945d9438f3aeda04e29f89b7b11653",
+      "started_at": "2026-11-03T02:25:29.373077585Z",
+      "mounts_unchanged": true,
+      "running": true,
+      "result": "PASS"
+    },
+    {
+      "name": "/csh-foundry-api-1",
+      "id": "f57363325f7c80612d084e6b640435165573fb9e389b0c9da30ac9b2b18a7291",
+      "image": "sha256:70e208b210e1403cd19eee2d5d52df9bbfb990bf59dd612e1dff310fa3d837d6",
+      "started_at": "2026-11-03T02:25:29.567769418Z",
+      "mounts_unchanged": true,
+      "running": true,
+      "result": "PASS"
+    },
+    {
+      "name": "/foundry-keycloak",
+      "id": "352ae233e8cb29856593440399e330387a43311119ed74367441d961ebabfa33",
+      "image": "sha256:a41669d51f416e8332a75ec97dc32400d488d05f29c95d9d6102951decff0d0d",
+      "started_at": "2026-11-03T02:24:28.100799334Z",
+      "mounts_unchanged": true,
+      "running": true,
+      "result": "PASS"
+    },
+    {
+      "name": "/foundry-keycloak-tls",
+      "id": "026ca27afa2b1072402a06de5f77f2da3e8eac2330d08eedf6f0c6a4c22f5662",
+      "image": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+      "started_at": "2026-11-03T02:27:32.412283336Z",
+      "mounts_unchanged": true,
+      "running": true,
+      "result": "PASS"
+    },
+    {
+      "name": "/csh-foundry-postgres-1",
+      "id": "019d58d4155d39ab5cd8e493077521c19eeb94349af861639b9da5ceca1f8a89",
+      "image": "sha256:f3bd19c606e442c3d7bdfa8002e03fe260a1023351e0ea4598032022b68dd6e3",
+      "started_at": "2026-11-03T02:25:29.758547293Z",
+      "mounts_unchanged": true,
+      "running": true,
+      "result": "PASS"
+    },
+    {
+      "name": "/language_app_db",
+      "id": "b491efd6d9f66bcfbb0ed42e0080a860fbad3fb77d9eaa6704cba62de1fc1198",
+      "image": "sha256:69e8582b781cb44fa4557b98ed586fe68361e320d9b12f9707494335634f4f3d",
+      "started_at": "2026-11-03T02:24:28.100122542Z",
+      "mounts_unchanged": true,
+      "running": true,
+      "result": "PASS"
+    },
+    {
+      "name": "/language_app_neo4j",
+      "id": "36d68b606d9613ea7a6bb922926fd08b642efac264068a824f1a5c0db2913bca",
+      "image": "sha256:b357872da95a164c5243ca8d9060601130717ff43cee3c829402fab46209a412",
+      "started_at": "2026-11-03T02:24:28.101246834Z",
+      "mounts_unchanged": true,
+      "running": true,
+      "result": "PASS"
+    }
+  ],
+  "readonly_developer_database_observation": "BEGIN\n0017_capacity\n1\nROLLBACK\n",
+  "scope": "No full before/after data checksum claimed. Mount lists compared by destination because Docker enumeration order varies.",
+  "post_all_tests_recheck": "PASS"
+}

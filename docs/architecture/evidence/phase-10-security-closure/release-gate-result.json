@@ -1,0 +1,24 @@
+{
+  "result": "BLOCKED",
+  "container_security": "FAIL",
+  "regression_acceptance": "BLOCKED intermittent browser failure retained",
+  "exact_candidate_combined_deployment": "PASS 58 assertions / 50 distinct checks",
+  "actual_verifier_reason": "Acceptance gate is not PASS: container_security",
+  "forged_pass_raw_finding_negative": {
+    "result": "PASS rejection",
+    "reason": "High/critical findings block promotion: api"
+  },
+  "self_signed_disposition_negative": {
+    "result": "PASS rejection",
+    "reason": "Independent disposition authorization unavailable; promotion blocked"
+  },
+  "promotable_archive_created": false,
+  "hosted_release": "NOT RUN",
+  "risk_acceptance": "NONE AUTHORIZED",
+  "manifest": {
+    "evidence": "docs/architecture/evidence/phase-10-security-closure/acceptance-assessment.json",
+    "sha256": "49a0e617914bb5d4cc4f5b5a3d3983e560c14eeb2150c69f01ff97593ec011a7"
+  },
+  "cli_exit_code": 1,
+  "cli_output": "BLOCKED: Acceptance gate is not PASS: container_security"
+}

@@ -47,6 +47,10 @@ def verify(manifest: Path, root: Path, revision: str, images: dict[str, str]) ->
         raise ValueError("Evidence source revision or image identities do not match release")
     if set(images) != IMAGE_ROLES:
         raise ValueError("All six selected image identities required")
+    # Hosted build provenance signs artifacts; it is not advisory-risk approval.
+    # No independently administered disposition trust provider is configured.
+    if data.get("dispositions"):
+        raise ValueError("Independent disposition authorization unavailable; promotion blocked")
     checks = data.get("checks", {})
     if REQUIRED - checks.keys():
         raise ValueError("Missing mandatory acceptance gates")

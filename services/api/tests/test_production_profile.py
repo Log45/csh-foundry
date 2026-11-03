@@ -17,6 +17,7 @@ def test_production_profile_resolves_runtime_mounts_and_security_dependencies():
         "INGRESS_IMAGE": "ingress:acceptance",
         "STUDIO_IMAGE": "studio:acceptance",
         "SEMANTIC_IMAGE": "semantic:acceptance",
+        "POSTGRES_IMAGE": "postgres:acceptance",
         "SECRETS_DIRECTORY": "/disposable/secrets",
         "WAL_ARCHIVE_DIRECTORY": "/disposable/wal",
         "KEYCLOAK_IMPORT_DIRECTORY": "/disposable/realm",

@@ -1,0 +1,22 @@
+{
+  "image_id": "sha256:246ee6bd8302cb470031cc521bc72aed563bfed97062d49a73abaf5e97183ccd",
+  "removed": {
+    "dirmngr": "2.4.7-21+deb13u1+b5",
+    "gnupg": "2.4.7-21+deb13u1",
+    "gnupg-l10n": "2.4.7-21+deb13u1",
+    "gpg": "2.4.7-21+deb13u1+b5",
+    "gpg-agent": "2.4.7-21+deb13u1+b5",
+    "gpgconf": "2.4.7-21+deb13u1+b5",
+    "gpgsm": "2.4.7-21+deb13u1+b5",
+    "libassuan9:arm64": "3.0.2-2",
+    "libgnutls30t64:arm64": "3.8.9-3+deb13u4",
+    "libksba8:arm64": "1.6.7-2+b1",
+    "libnpth0t64:arm64": "1.8-3",
+    "libp11-kit0:arm64": "0.25.5-3",
+    "libtasn1-6:arm64": "4.20.0-2+deb13u1",
+    "mount": "2.41.5-0+deb13u1",
+    "pinentry-curses": "1.3.1-2"
+  },
+  "method": "apt purge --auto-remove; mount removed from all four changed runtimes",
+  "upstream_code_patch": false
+}

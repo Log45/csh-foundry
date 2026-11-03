@@ -1,0 +1,10 @@
+{
+  "result": "FAIL retained attempt",
+  "tests_passed": 4,
+  "tests_failed": 1,
+  "assertion": "Active 1.0.0 header not visible within unchanged 5000ms assertion",
+  "observation": "Error-context page shows No active schema header and successful activation response with active_version 1.0.0",
+  "cause": "UNRESOLVED; no application source changed by security remediation",
+  "private_trace": "artifacts/phase10-security-closure/browser-final-failed-results/",
+  "retry": "Fresh isolated run after concurrent regression; assertions/timeouts unchanged"
+}

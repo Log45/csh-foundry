@@ -1,0 +1,347 @@
+{
+  "result": "PASS",
+  "measurements": [
+    {
+      "operation": "query",
+      "service_ms": 41.846040985547006,
+      "ordinary_sql_ms": 11.973665852565318,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 17.81229197513312,
+      "ordinary_sql_ms": 9.007834014482796,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 13.879749982152134,
+      "ordinary_sql_ms": 5.611375963781029,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 12.926791969221085,
+      "ordinary_sql_ms": 5.255917087197304,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 13.654915965162218,
+      "ordinary_sql_ms": 5.645165976602584,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 18.865666002966464,
+      "ordinary_sql_ms": 9.934998932294548,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 13.140459021087736,
+      "ordinary_sql_ms": 5.217790836468339,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 12.418416969012469,
+      "ordinary_sql_ms": 4.8585840268060565,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 12.075290957000107,
+      "ordinary_sql_ms": 4.709165950771421,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 11.908208020031452,
+      "ordinary_sql_ms": 4.683331004343927,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 12.971375021152198,
+      "ordinary_sql_ms": 4.490124993026257,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 17.656249983701855,
+      "ordinary_sql_ms": 5.141082045156509,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 16.03320799767971,
+      "ordinary_sql_ms": 4.33533190516755,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 15.971250017173588,
+      "ordinary_sql_ms": 8.11762607190758,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 11.394375003874302,
+      "ordinary_sql_ms": 4.451669054105878,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 11.291542032267898,
+      "ordinary_sql_ms": 4.42887406097725,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 10.116208984982222,
+      "ordinary_sql_ms": 3.9099990972317755,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 11.354707996360958,
+      "ordinary_sql_ms": 4.797666915692389,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 31.292708008550107,
+      "ordinary_sql_ms": 4.7489580465480685,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "query",
+      "service_ms": 10.215667018201202,
+      "ordinary_sql_ms": 3.9760820800438523,
+      "ordinary_statements": 10,
+      "returned_objects": 20
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 18.763667030725628,
+      "ordinary_sql_ms": 6.0428730212152,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 14.822957979049534,
+      "ordinary_sql_ms": 5.236165947280824,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 14.346333977300674,
+      "ordinary_sql_ms": 5.047001119237393,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 15.115166956093162,
+      "ordinary_sql_ms": 4.828997829463333,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 13.662832963746041,
+      "ordinary_sql_ms": 4.709667060524225,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 20.508958026766777,
+      "ordinary_sql_ms": 9.77404200239107,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 14.738917001523077,
+      "ordinary_sql_ms": 5.244497035164386,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 14.73920902935788,
+      "ordinary_sql_ms": 5.455956037621945,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 14.309499994851649,
+      "ordinary_sql_ms": 4.781957948580384,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 17.50562497181818,
+      "ordinary_sql_ms": 5.241667036898434,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 15.932540991343558,
+      "ordinary_sql_ms": 5.049831932410598,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 14.612000028137118,
+      "ordinary_sql_ms": 4.415042931213975,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 17.939334036782384,
+      "ordinary_sql_ms": 7.175418082624674,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 14.594833017326891,
+      "ordinary_sql_ms": 4.462790908291936,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 13.948207953944802,
+      "ordinary_sql_ms": 4.22137399436906,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 14.463957981206477,
+      "ordinary_sql_ms": 4.490623075980693,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 12.480417033657432,
+      "ordinary_sql_ms": 4.057376005221158,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 11.596625030506402,
+      "ordinary_sql_ms": 3.8837511092424393,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 13.255917001515627,
+      "ordinary_sql_ms": 4.30516607593745,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    },
+    {
+      "operation": "traversal",
+      "service_ms": 12.477457989007235,
+      "ordinary_sql_ms": 4.065625020302832,
+      "ordinary_statements": 10,
+      "returned_objects": 6
+    }
+  ],
+  "plans": [
+    [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Actual Total Time": 0.077,
+          "Actual Rows": 20,
+          "Shared Hit Blocks": 4,
+          "Shared Read Blocks": 0,
+          "Plans": [
+            {
+              "Node Type": "Sort",
+              "Actual Total Time": 0.075,
+              "Actual Rows": 20,
+              "Shared Hit Blocks": 4,
+              "Shared Read Blocks": 0,
+              "Plans": [
+                {
+                  "Node Type": "Hash Join",
+                  "Actual Total Time": 0.065,
+                  "Actual Rows": 20,
+                  "Shared Hit Blocks": 4,
+                  "Shared Read Blocks": 0,
+                  "Plans": [
+                    {
+                      "Node Type": "Seq Scan",
+                      "Relation Name": "objects",
+                      "Actual Total Time": 0.011,
+                      "Actual Rows": 20,
+                      "Shared Hit Blocks": 2,
+                      "Shared Read Blocks": 0
+                    },
+                    {
+                      "Node Type": "Hash",
+                      "Actual Total Time": 0.012,
+                      "Actual Rows": 20,
+                      "Shared Hit Blocks": 2,
+                      "Shared Read Blocks": 0,
+                      "Plans": [
+                        {
+                          "Node Type": "Seq Scan",
+                          "Relation Name": "objects",
+                          "Actual Total Time": 0.008,
+                          "Actual Rows": 20,
+                          "Shared Hit Blocks": 2,
+                          "Shared Read Blocks": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "Planning Time": 0.162,
+        "Execution Time": 0.093
+      }
+    ]
+  ],
+  "idle_pool_checkout_median_ms": 0.29618749977089465,
+  "scope": "Disposable service/SQL diagnostic; excludes BFF/TLS, no claim of explaining historical shared latency spike; security/audit remain enabled"
+}

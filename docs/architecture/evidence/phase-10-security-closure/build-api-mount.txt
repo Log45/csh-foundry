@@ -1,0 +1,131 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from api.Dockerfile
+#1 transferring dockerfile: 1.14kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12.16-slim-trixie@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
+#2 ...
+
+#3 [internal] load metadata for ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7
+#3 DONE 0.5s
+
+#2 [internal] load metadata for docker.io/library/python:3.12.16-slim-trixie@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
+#2 DONE 0.7s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 173B done
+#4 DONE 0.0s
+
+#5 FROM ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7
+#5 resolve ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7 0.0s done
+#5 DONE 0.0s
+
+#6 [build 1/5] FROM docker.io/library/python:3.12.16-slim-trixie@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
+#6 resolve docker.io/library/python:3.12.16-slim-trixie@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30 0.0s done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 28.39MB 0.6s done
+#7 DONE 0.7s
+
+#8 [build 2/5] COPY --from=ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7 /uv /usr/local/bin/uv
+#8 CACHED
+
+#9 [build 3/5] WORKDIR /app
+#9 CACHED
+
+#10 [build 4/5] COPY . .
+#10 DONE 1.2s
+
+#11 [build 5/5] RUN uv sync --frozen --no-dev
+#11 0.629 Using CPython 3.12.16 interpreter at: /usr/local/bin/python3.12
+#11 0.631 Creating virtual environment at: .venv
+#11 0.690    Building ontology-schema @ file:///app/packages/ontology-schema
+#11 0.694    Building ontology-platform-api @ file:///app/services/api
+#11 0.818 Downloading cryptography (4.5MiB)
+#11 0.819 Downloading polars-runtime-32 (44.4MiB)
+#11 0.819 Downloading sqlalchemy (3.3MiB)
+#11 0.819 Downloading pydantic-core (2.0MiB)
+#11 0.832 Downloading psycopg-binary (6.5MiB)
+#11 1.363  Downloading pydantic-core
+#11 1.601  Downloading sqlalchemy
+#11 1.701  Downloading cryptography
+#11 1.831  Downloading psycopg-binary
+#11 2.103       Built ontology-platform-api @ file:///app/services/api
+#11 2.103       Built ontology-schema @ file:///app/packages/ontology-schema
+#11 3.153  Downloading polars-runtime-32
+#11 3.153 Prepared 36 packages in 2.48s
+#11 3.182 Installed 36 packages in 28ms
+#11 3.182  + alembic==1.20.1
+#11 3.182  + annotated-doc==0.0.5
+#11 3.182  + annotated-types==0.8.0
+#11 3.182  + anyio==4.15.1
+#11 3.182  + certifi==2026.10.23
+#11 3.182  + cffi==2.1.1
+#11 3.182  + click==8.5.0
+#11 3.182  + cryptography==50.0.2
+#11 3.182  + fastapi==0.162.0
+#11 3.182  + greenlet==3.5.6
+#11 3.182  + h11==0.16.0
+#11 3.182  + httpcore==1.0.9
+#11 3.182  + httpx==0.28.1
+#11 3.182  + idna==3.20
+#11 3.182  + mako==1.4.3
+#11 3.182  + markupsafe==3.0.4
+#11 3.182  + ontology-platform-api==0.0.1 (from file:///app/services/api)
+#11 3.182  + ontology-schema==0.0.1 (from file:///app/packages/ontology-schema)
+#11 3.182  + opentelemetry-api==1.45.1
+#11 3.182  + polars==1.44.2
+#11 3.182  + polars-runtime-32==1.44.2
+#11 3.182  + psycopg==3.3.6
+#11 3.182  + psycopg-binary==3.3.6
+#11 3.182  + pycparser==3.12
+#11 3.182  + pydantic==2.14.1
+#11 3.182  + pydantic-core==2.50.1
+#11 3.183  + pydantic-settings==2.16.2
+#11 3.183  + pyjwt==2.15.0
+#11 3.183  + pyparsing==3.3.3
+#11 3.183  + python-dotenv==1.2.4
+#11 3.183  + rdflib==7.1.4
+#11 3.183  + sqlalchemy==2.0.55
+#11 3.183  + starlette==1.10.0
+#11 3.183  + typing-extensions==4.16.0
+#11 3.183  + typing-inspection==0.4.4
+#11 3.183  + uvicorn==0.54.0
+#11 DONE 3.5s
+
+#12 [runtime 2/5] WORKDIR /app
+#12 CACHED
+
+#13 [runtime 3/5] COPY --from=build /app /app
+#13 DONE 0.9s
+
+#14 [runtime 4/5] RUN apt-get purge -y mount && apt-get clean && rm -rf /var/lib/apt/lists/*
+#14 0.171 Reading package lists...
+#14 0.180 Building dependency tree...
+#14 0.180 Reading state information...
+#14 0.188 The following packages will be REMOVED:
+#14 0.188   mount*
+#14 0.272 0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
+#14 0.272 After this operation, 673 kB disk space will be freed.
+#14 0.276 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 5655 files and directories currently installed.)
+#14 0.291 Removing mount (2.41.5-0+deb13u1) ...
+#14 DONE 0.3s
+
+#15 [runtime 5/5] RUN groupadd --gid 10001 foundry && useradd --uid 10001 --gid 10001 --create-home foundry
+#15 DONE 0.2s
+
+#16 exporting to image
+#16 exporting layers
+#16 exporting layers 6.0s done
+#16 exporting manifest sha256:8e9caa2906047b866fb79573225ba1e337660fc836f55eb93f12b9b87b45a46c done
+#16 exporting config sha256:4724b27a6d6d3c6aa53c5750b2a27a9a04217d4bd9402902c2eea7ad4c2a3bb2 done
+#16 exporting attestation manifest sha256:87387f26143417017fb7ce81f74005b93ff52c0e2793e949a2c6974e094bc3f6 done
+#16 exporting manifest list sha256:8c31765818485841caeab2b9c8b0d9c268ea2e4815dee9de264db6db24a16e15 done
+#16 naming to docker.io/library/csh-foundry-api:phase10-security-final done
+#16 unpacking to docker.io/library/csh-foundry-api:phase10-security-final
+#16 unpacking to docker.io/library/csh-foundry-api:phase10-security-final 1.7s done
+#16 DONE 7.8s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/gp6x127f3zqrvg39nz62otj1x

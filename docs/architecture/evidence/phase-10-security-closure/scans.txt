@@ -1,0 +1,35 @@
+[0000]  WARN unable to get filesystem cache at /.cache/syft: unable to create directory at '/.cache/syft': mkdir /.cache: read-only file system
+[0008] ERROR discovered vulnerabilities at or above the severity threshold
+[0000]  WARN unable to get filesystem cache at /.cache/syft: unable to create directory at '/.cache/syft': mkdir /.cache: read-only file system
+[0019] ERROR discovered vulnerabilities at or above the severity threshold
+[0000]  WARN unable to get filesystem cache at /.cache/syft: unable to create directory at '/.cache/syft': mkdir /.cache: read-only file system
+[0012] ERROR discovered vulnerabilities at or above the severity threshold
+{
+  "image-0": {
+    "image": "csh-foundry-api:phase10-security",
+    "image_id": "sha256:54617020d2e87d6dbf1d3518b8005d2598fbc4601385a6e7933a0b682aa3f2ce",
+    "config_digest": "sha256:7b8c06420858983abb38e22bd0bc3fa280b070827ee7dfb5ce9186ba08e7d590",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL"
+  },
+  "image-1": {
+    "image": "csh-foundry-semantic:phase10-security",
+    "image_id": "sha256:7c080979178444c44b82362fc88804c367824677f2943c664e6420ce5827a0a3",
+    "config_digest": "sha256:0b274e567a035de6b8159b578da1c25c79037582ac8ac617e9b612a217e77ff6",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL"
+  },
+  "image-2": {
+    "image": "csh-foundry-postgres:phase10-security",
+    "image_id": "sha256:8fcb18a37e9b75bd8d6418419a294175a2956dabba70966f44d904f0dd91a155",
+    "config_digest": "sha256:59e3381081c918ef9a48e35601106666ea2e87d1e8256d567210684137292d48",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL"
+  }
+}

@@ -31,7 +31,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class Acceptance:
-    def __init__(self, output: Path) -> None:
+    def __init__(self, output: Path, candidate_images: dict[str, str] | None = None) -> None:
+        self.candidate_images = candidate_images
         self.output = output.resolve()
         self.output.mkdir(parents=True, exist_ok=True)
         self.project = "foundry-accept-" + secrets.token_hex(4)
@@ -155,6 +156,7 @@ class Acceptance:
             "INGRESS_IMAGE": "csh-foundry-ingress:phase10-closure",
             "STUDIO_IMAGE": "csh-foundry-studio:phase10-closure",
             "SEMANTIC_IMAGE": "csh-foundry-semantic:phase10-closure",
+            "POSTGRES_IMAGE": "csh-foundry-postgres:phase10-security",
             "SECRETS_DIRECTORY": str(self.root / "secrets"),
             "TLS_DIRECTORY": str(self.root / "tls"),
             "WAL_ARCHIVE_DIRECTORY": str(self.root / "wal"),
@@ -221,6 +223,41 @@ networks:
             "-f",
             str(override),
         ]
+        if self.candidate_images is not None:
+            from verify_release_evidence import IMAGE_ROLES
+
+            if set(self.candidate_images) != IMAGE_ROLES or any(
+                not re.fullmatch(r"sha256:[0-9a-f]{64}", value)
+                for value in self.candidate_images.values()
+            ):
+                raise ValueError("Exactly six immutable candidate image identities required")
+            for role, variable in {
+                "api": "API_IMAGE",
+                "studio": "STUDIO_IMAGE",
+                "semantic": "SEMANTIC_IMAGE",
+                "ingress": "INGRESS_IMAGE",
+            }.items():
+                self.values[variable] = self.candidate_images[role]
+            self.env.update(self.values)
+            services = {
+                service: {"image": self.candidate_images[role], "pull_policy": "never"}
+                for service, role in {
+                    "api": "api",
+                    "studio": "studio",
+                    "semantic-worker": "semantic",
+                    "ingestion-worker": "api",
+                    "outbox-worker": "api",
+                    "ingress": "ingress",
+                    "postgres": "postgres",
+                    "keycloak": "keycloak",
+                }.items()
+            }
+            candidate = self.root / "candidate.json"
+            candidate.write_text(json.dumps({"services": services}))
+            self.compose += ["-f", str(candidate)]
+            (self.output / "candidate-images.json").write_text(
+                json.dumps(self.candidate_images, indent=2) + "\n"
+            )
         self.dc("--profile", "workers", "config", "--quiet")
         self.record("production-template-configuration")
 
@@ -729,6 +766,58 @@ networks:
                 }
             )
         (self.output / "runtime.json").write_text(json.dumps(inventory, indent=2) + "\n")
+        if self.candidate_images is not None:
+            expected = {
+                "api": "api",
+                "studio": "studio",
+                "semantic-worker": "semantic",
+                "ingestion-worker": "api",
+                "postgres": "postgres",
+                "keycloak": "keycloak",
+                "ingress": "ingress",
+            }
+            for service, role in expected.items():
+                actual = next(c for c in inventory if c["name"].endswith("-" + service + "-1"))
+                assert actual["image"] == self.candidate_images[role]
+            for service in ("api", "semantic-worker"):
+                self.dc(
+                    "exec",
+                    "-T",
+                    service,
+                    "python",
+                    "-c",
+                    "import os,shutil; assert os.getuid()!=0; "
+                    "assert shutil.which('uv') is None; assert shutil.which('mount') is None",
+                )
+            self.dc(
+                "exec",
+                "-T",
+                "studio",
+                "node",
+                "-e",
+                "if(process.getuid()===0 || require('fs').existsSync('/usr/bin/mount')) "
+                "process.exit(1)",
+            )
+            pid = self.dc(
+                "exec", "-T", "postgres", "sh", "-ec", 'head -1 "$PGDATA/postmaster.pid"'
+            ).strip()
+            assert pid.isdigit()
+            status = self.dc("exec", "-T", "postgres", "cat", "/proc/" + pid + "/status")
+            uid = next(line.split()[1:] for line in status.splitlines() if line.startswith("Uid:"))
+            assert all(value != "0" for value in uid)
+            self.dc(
+                "exec",
+                "-T",
+                "postgres",
+                "sh",
+                "-ec",
+                "! command -v gpg; ! command -v mount; command -v pg_basebackup; "
+                "command -v pg_restore; command -v sqv",
+            )
+            self.record(
+                "exact-six-candidate-identities-nonroot-runtime-tool-removal-and-recovery-tools"
+            )
+
         semantic = next(c for c in inventory if "semantic-worker" in c["name"])
         assert semantic["read_only"] and semantic["memory"] == 768 * 1024 * 1024
         assert semantic["nano_cpus"] == 1000000000 and semantic["pids"] == 128
@@ -1783,9 +1872,11 @@ def main() -> None:
     parser.add_argument(
         "--output", type=Path, default=ROOT / "docs/architecture/evidence/phase-10-closure"
     )
+    parser.add_argument("--candidate-images", type=Path)
     args = parser.parse_args()
     try:
-        Acceptance(args.output).execute()
+        images = json.loads(args.candidate_images.read_text()) if args.candidate_images else None
+        Acceptance(args.output, images).execute()
     except Exception:
         raise SystemExit("FAIL: see deployment.json and its private evidence directory") from None
 

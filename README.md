@@ -311,3 +311,31 @@ PostgreSQL libxml2 remains UNFIXED. No new package vulnerability was patched or 
 Implementation PASS; local/production-like acceptance BLOCKED; production certification NOT RUN.
 Remaining work is Phase 10 security disposition, causal/fault/target evidence and external operator
 certification. Phase 11 remains unapproved.
+
+## Phase 10 security remediation — 2026-11-03
+
+Current [security closure evidence](docs/architecture/evidence/phase-10-security-closure/README.md)
+reviews all 32 baseline advisories and selects minimized API/semantic and PostgreSQL runtimes.
+GnuPG build tools are removed from PostgreSQL; API excludes the dependency installer/cache.
+Raw selected inventory: **251 high/two critical, 31 distinct IDs** (previously 274/two, 32).
+Both critical matches remain blocking; the Keycloak CA fix is technically verified already present,
+with no approved scanner exception. Six SBOM/scan identities are verified; unchanged image/database
+reports retain their original execution dates. No risk approval, publication or external deployment occurred.
+Production now requires `POSTGRES_IMAGE` for the derived reviewed image; see the operator runbook.
+Regression: 585 Python passes/one strict xfail/zero skips, 29 frontend and five browser passes.
+Implementation PASS; local/production-like acceptance BLOCKED; production certification NOT RUN.
+Historical latency diagnostics are retained and are not an independent release blocker in this
+security scope. Continue Phase 10 supported remediation/independent approval and external gates only.
+
+The final candidate additionally removes the optional `mount` command package from API, Studio,
+semantic and PostgreSQL using apt. Sixteen util-linux source-package matches disappear; required
+util-linux/libmount components and their four advisories remain unresolved. No full advisory fix
+is inferred from these command removals. The earlier 267-high candidate and its deployment evidence
+are retained separately; final candidate counts are 251 high/two critical.
+
+Final exact-candidate combined deployment **PASS: 58 assertions / 50 distinct checks**, including
+physical PITR/restored applications, worker recovery, authorization/governance, durable sessions,
+TLS, rotations and rollback. Final isolated browser E2E **five PASS**; an earlier final attempt
+retains one stale activation-header failure despite successful activation. Its cause remains
+unresolved and is recorded as an intermittent validation limitation, not erased by the passing
+rerun. Final security/release/recovery focused suite: **55 PASS**. No assertions/timeouts changed.

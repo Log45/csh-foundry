@@ -1,0 +1,44 @@
+{
+  "api": {
+    "Id": "sha256:8c31765818485841caeab2b9c8b0d9c268ea2e4815dee9de264db6db24a16e15",
+    "Architecture": "arm64",
+    "Os": "linux",
+    "Size": 130472235,
+    "configured_user": "foundry"
+  },
+  "studio": {
+    "Id": "sha256:310da527c2d32b558f68772159389fab438f4d4af053dc73ad31187cd04ae552",
+    "Architecture": "arm64",
+    "Os": "linux",
+    "Size": 109547764,
+    "configured_user": "node"
+  },
+  "semantic": {
+    "Id": "sha256:9f02aa6215865f555a9e5603b652210fb850a8e36af003ede83cef81b174d680",
+    "Architecture": "amd64",
+    "Os": "linux",
+    "Size": 181960644,
+    "configured_user": "foundry"
+  },
+  "postgres": {
+    "Id": "sha256:246ee6bd8302cb470031cc521bc72aed563bfed97062d49a73abaf5e97183ccd",
+    "Architecture": "arm64",
+    "Os": "linux",
+    "Size": 160087440,
+    "configured_user": ""
+  },
+  "keycloak": {
+    "Id": "sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332",
+    "Architecture": "arm64",
+    "Os": "linux",
+    "Size": 263940606,
+    "configured_user": "1000"
+  },
+  "ingress": {
+    "Id": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+    "Architecture": "arm64",
+    "Os": "linux",
+    "Size": 30044780,
+    "configured_user": ""
+  }
+}

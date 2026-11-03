@@ -130,7 +130,21 @@ def test_release_rejects_failed_gate_tampering_and_path_escape(tmp_path):
 
 @pytest.mark.parametrize(
     "mutation",
-    ["missing", "high", "critical", "identity", "sbom", "db", "exception", "sbom-identity"],
+    [
+        "missing",
+        "high",
+        "critical",
+        "identity",
+        "sbom",
+        "db",
+        "exception",
+        "sbom-identity",
+        "missing-sbom",
+        "missing-scan",
+        "missing-candidate",
+        "incomplete-deployment",
+        "signed-self-exception",
+    ],
 )
 def test_release_raw_supply_chain_cannot_be_bypassed(tmp_path, mutation):
     from hashlib import sha256
@@ -187,7 +201,17 @@ def test_release_raw_supply_chain_cannot_be_bypassed(tmp_path, mutation):
         data["supply_chain"][role] = item
     if mutation == "missing":
         del data["supply_chain"]["keycloak"]
+    if mutation == "missing-sbom":
+        del data["supply_chain"]["postgres"]["sbom"]
+    if mutation == "missing-scan":
+        del data["supply_chain"]["postgres"]["scan"]
+    if mutation == "missing-candidate":
+        del data["images"]["postgres"]
+    if mutation == "incomplete-deployment":
+        data["checks"]["combined_deployment"] = record | {"result": "NOT RUN"}
+    if mutation == "signed-self-exception":
+        data["dispositions"] = [{"signature": "self-signed", "authority": "developer"}]
     manifest = tmp_path / "manifest.json"
     manifest.write_text(json.dumps(data))
-    with pytest.raises(ValueError):
+    with pytest.raises((ValueError, KeyError)):
         module.verify(manifest, tmp_path, "candidate", images)

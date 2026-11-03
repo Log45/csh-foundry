@@ -820,3 +820,66 @@ gaps are documented, corrected and rerun without erasing first-attempt evidence.
 Next work is only unresolved Phase 10 closure: supported vendor fixes/reviewed disposition, a
 causally attributable shared-stall capture, remaining safe target faults and operator-led external
 certification. Phase 11 is not approved. No unresolved vulnerability has been accepted.
+
+## Security remediation and release-gate closure — 2026-11-03
+
+Starting revision `6ae76602bc329ed212a09970787f65354caeb585` was clean. All prior evidence and
+developer services/data/keys/realm/trust/backups are preserved. No migration; `0017_capacity`.
+[Security closure evidence](../architecture/evidence/phase-10-security-closure/README.md) contains
+the complete changed-file inventory, candidate identities, vendor snapshots, all 32 baseline
+dossiers, exact package inventories, raw-report bindings, validation and final gate assessment.
+
+Supported changes: same-base multi-stage API build excludes uv/root cache; semantic inherits this
+runtime without changing Open Ontologies 2.1.0. Same PostgreSQL 17.11-trixie supplier base loses
+seven GnuPG build-tool packages and unused transitive helpers using apt purge/autoremove. apt/sqv,
+PostgreSQL binaries/libraries/locales/extensions and backup/restore commands remain. CI selects,
+scans and archives the derived database image; production operators must set `POSTGRES_IMAGE` to
+its reviewed immutable digest. This changes production configuration, not schema or developer data.
+Keycloak/ingress identities remain unchanged; Studio removes the optional mount command. No application lockfile update is justified by
+the retained high findings, all OS packages except the supplier Guava library. Dependency audits PASS.
+
+Raw selected findings: **251 high/two critical across 31 IDs**, down seven source-package matches
+for **CVE-2026-24882** through complete GnuPG tool removal. No upstream vulnerability patch is
+claimed. Critical **CVE-2026-6653 remains UNFIXED** in stable trixie; critical **CVE-2026-91403 is
+technically already corrected** by the vendor CA-store update, with a fresh 118-anchor verification,
+but its Java-version scanner match remains blocking. Required reviewers remain unassigned; no risk
+exception/false-positive disposition is authorized. Guava's upstream 33.7.2 fix is not bundled by
+maintained Keycloak 26.8.1; unqualified JAR/essential-library/distribution changes were rejected.
+
+Release policy remains default-deny. The CLI explicitly rejects dispositions without an independent
+approval provider. The new validation-only interface binds advisory/image/config/package/purl,
+scan/SBOM/technical evidence, authority/decision and validity dates to detached authorization; tests
+use ephemeral keys only. No production trust root or developer-signable exception route exists.
+Focused scanner/release/production/disposition checks: **41 passed**. Full configured regression:
+**585 passed, one strict expected failure, zero skips**, 318.32 s. Ruff/format/strict mypy (98 source
+files plus the new interface independently) and Alembic drift PASS. Frontend **29 tests**, typecheck,
+production build PASS; isolated durable E2E **five PASS**. Raw pySHACL strict xfail and base owl-rl
+NOT SUPPORTED limit remain unchanged. Initial regression-network and unsupported engine-version
+probe failures are retained separately from corrected passing executions.
+
+All six SBOM/raw scan identity/hash bindings PASS; changed API/Studio/semantic/PostgreSQL reports are
+fresh and two unchanged image/database reports are reused with original timestamps and hashes.
+Exact-candidate combined acceptance and gate outcomes are recorded in the linked closure evidence.
+Implementation PASS; local/production-like acceptance BLOCKED; production certification NOT RUN.
+Remaining security fixes/independent approval, actual providers, off-host recovery/custody,
+production owners/alerts, target workloads/SLOs and hosted reviewer/provenance remain Phase 10 work.
+The retained historical 1,079 ms diagnostic uncertainty is **not an independent release blocker**
+under the current scope; no general performance investigation or new latency gate was introduced.
+No architectural authority changed; no new ADR is required. No Phase 11 work or external deployment.
+
+The final candidate additionally removes the optional `mount` command package from API, Studio,
+semantic and PostgreSQL using apt. Sixteen util-linux source-package matches disappear; required
+util-linux/libmount components and their four advisories remain unresolved. No full advisory fix
+is inferred from these command removals. The earlier 267-high candidate and its deployment evidence
+are retained separately; final candidate counts are 251 high/two critical.
+
+Final exact-candidate combined deployment **PASS: 58 assertions / 50 distinct checks**, including
+physical PITR/restored applications, worker recovery, authorization/governance, durable sessions,
+TLS, rotations and rollback. Final isolated browser E2E **five PASS**; an earlier final attempt
+retains one stale activation-header failure despite successful activation. Its cause remains
+unresolved and is recorded as an intermittent validation limitation, not erased by the passing
+rerun. Final security/release/recovery focused suite: **55 PASS**. No assertions/timeouts changed.
+
+Aggregate regression acceptance remains BLOCKED pending review/remediation of the retained
+intermittent browser activation-header failure. Final passing executions do not erase that FAIL.
+The release verifier also blocks the actual raw high/critical findings and unauthorized dispositions.

@@ -1,0 +1,36 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from semantic.Dockerfile
+#1 transferring dockerfile: 442B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/csh-foundry-api:phase10-security-final-amd64
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 173B done
+#3 DONE 0.0s
+
+#4 [1/3] FROM docker.io/library/csh-foundry-api:phase10-security-final-amd64@sha256:d9738e5096b180a0a04e7dc82582fbc7086c3e17b464b9f4b35453e9f4d5a287
+#4 resolve docker.io/library/csh-foundry-api:phase10-security-final-amd64@sha256:d9738e5096b180a0a04e7dc82582fbc7086c3e17b464b9f4b35453e9f4d5a287 done
+#4 DONE 0.0s
+
+#5 [2/3] RUN python scripts/install_semantic_engine.py
+#5 5.167 PASS SHA256 open-ontologies-x86_64-unknown-linux-gnu; installed /app/.external/open-ontologies
+#5 DONE 5.3s
+
+#6 [3/3] RUN cp .external/open-ontologies /usr/local/bin/open-ontologies
+#6 DONE 0.3s
+
+#7 exporting to image
+#7 exporting layers
+#7 exporting layers 2.8s done
+#7 exporting manifest sha256:e198d7e192287de8873093bf657bdbb1200ea4d4d7e899306b8da84f6d62b9d7
+#7 exporting manifest sha256:e198d7e192287de8873093bf657bdbb1200ea4d4d7e899306b8da84f6d62b9d7 done
+#7 exporting config sha256:eedfe398a88a4c979430a6062a18519289671a3308a40b1befe524399a4e8406 done
+#7 exporting attestation manifest sha256:a4d4cefcbaf95f4518670c2fa54a1830c45c48ccbab590d5178d76375f320b9e done
+#7 exporting manifest list sha256:9f02aa6215865f555a9e5603b652210fb850a8e36af003ede83cef81b174d680 done
+#7 naming to docker.io/library/csh-foundry-semantic:phase10-security-final done
+#7 DONE 2.9s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/uuz26xsap2ens7cdkgdeb4lvl

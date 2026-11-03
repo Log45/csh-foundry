@@ -1,0 +1,48 @@
+{
+  "python": {
+    "result": "PASS",
+    "passed": 585,
+    "strict_xfail": 1,
+    "skipped": 0,
+    "seconds": 318.32,
+    "evidence": {
+      "evidence": "docs/architecture/evidence/phase-10-security-closure/regression.txt",
+      "sha256": "20c807f487bf1ace903244cce39bd37af33d0c5cad11bec7f8ca314a3acfcfbf"
+    }
+  },
+  "frontend": {
+    "result": "PASS",
+    "tests": 29,
+    "typecheck": "PASS",
+    "build": "PASS",
+    "format": "PASS"
+  },
+  "browser_final_isolated": {
+    "result": "PASS",
+    "tests": 5,
+    "evidence": {
+      "evidence": "docs/architecture/evidence/phase-10-security-closure/browser.txt",
+      "sha256": "37d7874f7d53dcca61d9c043d26c60682395eabcfe26479f38e846baeeee9b7e"
+    }
+  },
+  "browser_prior_final_attempt": {
+    "result": "FAIL",
+    "passed": 4,
+    "failed": 1,
+    "evidence": {
+      "evidence": "docs/architecture/evidence/phase-10-security-closure/browser-final-first-browser.txt",
+      "sha256": "faef757a0be424e25a434bcce41bf5499740b8f6491869a18506eb25b71a1617"
+    },
+    "cause": "UNRESOLVED stale activation header despite successful activation response"
+  },
+  "security_release_recovery_focused": {
+    "result": "PASS",
+    "tests": 55,
+    "evidence": {
+      "evidence": "docs/architecture/evidence/phase-10-security-closure/final-focused-tests.txt",
+      "sha256": "c0aab8f3a7ebc158feddc68543f6fa1a696ef594ab10c70dbdcdb4408d870752"
+    }
+  },
+  "acceptance_gate": "BLOCKED pending review/remediation of intermittent browser failure; passing rerun does not erase failed attempt",
+  "assertions_weakened": false
+}

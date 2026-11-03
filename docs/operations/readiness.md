@@ -123,3 +123,39 @@ PostgreSQL libxml2 remains UNFIXED. No risk exception or named owner is invented
 organizations/registrations, independent off-host recovery/custody, production receivers/owners,
 target hardware/workload/SLOs and hosted approval/provenance still require the prerequisites and
 operator handoff in the matrix above. No production readiness or Phase 11 authorization is inferred.
+
+## Security closure — current decision, 2026-11-03
+
+The [security evidence](../architecture/evidence/phase-10-security-closure/README.md) supersedes
+older inventory counts for this selected candidate: **251 high/two critical, 31 distinct IDs**.
+GnuPG toolchain removal eliminates seven source-package matches; API/semantic exclude uv/cache.
+PostgreSQL libxml2 remains unfixed; Keycloak CA correction is technically verified but no authorized
+policy disposition exists. Container gate FAIL; release BLOCKED. No current security baseline is
+accepted for release. All six scan/SBOM identity bindings PASS, with unchanged image/database
+reports explicitly reused. Exact combined deployment is tracked in the linked evidence.
+
+Configured regression: 585 Python passes/one strict xfail/zero skips; 29 frontend and five browser
+passes. Implementation PASS; local and production-like acceptance BLOCKED; production certification
+NOT RUN. Historical shared-tail causal uncertainty remains diagnostic evidence, not an independent
+security-iteration release requirement. Representative target capacity remains a separate external
+gate. No new maximum/p99 target. No production approval provider is configured for advisory-specific
+decisions; disposition submissions fail closed. Named security/release reviewers, supplier fixes or
+independently authorized dispositions, actual providers, off-host custody/recovery, production
+receivers/owners, target infrastructure/SLOs and hosted approval/provenance remain required.
+
+The final candidate additionally removes the optional `mount` command package from API, Studio,
+semantic and PostgreSQL using apt. Sixteen util-linux source-package matches disappear; required
+util-linux/libmount components and their four advisories remain unresolved. No full advisory fix
+is inferred from these command removals. The earlier 267-high candidate and its deployment evidence
+are retained separately; final candidate counts are 251 high/two critical.
+
+Final exact-candidate combined deployment **PASS: 58 assertions / 50 distinct checks**, including
+physical PITR/restored applications, worker recovery, authorization/governance, durable sessions,
+TLS, rotations and rollback. Final isolated browser E2E **five PASS**; an earlier final attempt
+retains one stale activation-header failure despite successful activation. Its cause remains
+unresolved and is recorded as an intermittent validation limitation, not erased by the passing
+rerun. Final security/release/recovery focused suite: **55 PASS**. No assertions/timeouts changed.
+
+Aggregate regression acceptance remains BLOCKED pending review/remediation of the retained
+intermittent browser activation-header failure. Final passing executions do not erase that FAIL.
+The release verifier also blocks the actual raw high/critical findings and unauthorized dispositions.

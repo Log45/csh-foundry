@@ -1,0 +1,47 @@
+{
+  "scope": "Bounded existing workload only; no general latency investigation or new p99/max gate",
+  "measurements": [
+    {
+      "concurrency": 1,
+      "requests": 20,
+      "errors": 0,
+      "p95_by_operation_ms": {
+        "sdk": 88.509,
+        "query": 78.834,
+        "object_set": 123.963,
+        "traversal": 58.186,
+        "preview": 64.329
+      },
+      "read_target": "PASS",
+      "sdk_target": "PASS"
+    },
+    {
+      "concurrency": 4,
+      "requests": 80,
+      "errors": 0,
+      "p95_by_operation_ms": {
+        "sdk": 109.131,
+        "query": 132.603,
+        "object_set": 130.986,
+        "traversal": 128.965,
+        "preview": 137.307
+      },
+      "read_target": "PASS",
+      "sdk_target": "PASS"
+    },
+    {
+      "concurrency": 8,
+      "requests": 160,
+      "errors": 0,
+      "p95_by_operation_ms": {
+        "sdk": 271.997,
+        "query": 248.16,
+        "object_set": 184.133,
+        "traversal": 196.06,
+        "preview": 273.15
+      },
+      "read_target": "PASS",
+      "sdk_target": "PASS"
+    }
+  ]
+}

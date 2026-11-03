@@ -135,3 +135,39 @@ restart. No migration or Phase 11 work was introduced.
 See [Closure 4 evidence](../architecture/evidence/phase-10-closure-4/README.md). No migration, security
 waiver, developer restart or Phase 11 work. Implementation PASS; local/production-like BLOCKED;
 production certification NOT RUN. Original failed probe/resource-attribution attempts remain retained.
+
+## Security remediation — 2026-11-03
+
+- [x] Review all 32 baseline IDs with current authoritative vendor snapshots and package simulations.
+- [x] Remove PostgreSQL GnuPG build tools through supported apt; preserve core runtime/restore libraries.
+- [x] Exclude uv/cache from API/semantic runtime through the same-base multi-stage build.
+- [x] Exact candidate image/config/scan/SBOM bindings; four changed-image scans and two verified
+  unchanged image/database reports, without redundant rescans.
+- [x] Advisory-specific Keycloak CA dossier and independent 118-anchor default-Java-store verification.
+- [x] Fail-closed disposition interface/negative tests; no production authorizer or self-approval path.
+- [x] 585 Python passes/one strict xfail/zero skips, 29 frontend and five isolated browser passes;
+  lint/format/strict mypy/migration drift and dependency audits PASS.
+- [ ] Raw security gate: FAIL (251 high/two critical, 31 distinct IDs); independent decisions absent.
+- [ ] Production certification: actual providers, off-host custody/recovery, owners/alerts/target/hosted gates.
+
+Exact combined deployment and final decision are in
+[security closure](../architecture/evidence/phase-10-security-closure/README.md). No migration,
+authorized risk acceptance, developer restart or Phase 11 work. Historical causal latency uncertainty
+is retained but is not independently release-blocking under the approved security scope.
+
+The final candidate additionally removes the optional `mount` command package from API, Studio,
+semantic and PostgreSQL using apt. Sixteen util-linux source-package matches disappear; required
+util-linux/libmount components and their four advisories remain unresolved. No full advisory fix
+is inferred from these command removals. The earlier 267-high candidate and its deployment evidence
+are retained separately; final candidate counts are 251 high/two critical.
+
+Final exact-candidate combined deployment **PASS: 58 assertions / 50 distinct checks**, including
+physical PITR/restored applications, worker recovery, authorization/governance, durable sessions,
+TLS, rotations and rollback. Final isolated browser E2E **five PASS**; an earlier final attempt
+retains one stale activation-header failure despite successful activation. Its cause remains
+unresolved and is recorded as an intermittent validation limitation, not erased by the passing
+rerun. Final security/release/recovery focused suite: **55 PASS**. No assertions/timeouts changed.
+
+Aggregate regression acceptance remains BLOCKED pending review/remediation of the retained
+intermittent browser activation-header failure. Final passing executions do not erase that FAIL.
+The release verifier also blocks the actual raw high/critical findings and unauthorized dispositions.
