@@ -2,9 +2,9 @@
 
 ## Architecture, Implementation Roadmap, and Coding Agent Specification
 
-**Project status:** Phases 0–9 implemented; Phase 10 approved with Keycloak, implementation and acceptance tracked in docs/development/phase-10-report.md; Phase 11 not approved
+**Project status (2026-11-03 roadmap decision):** Phases 0–9 implemented; Phase 10 engineering complete on the reported local-validation basis, NOT production-certified; remaining release/security/organization-target gates deferred to the final Production Readiness phase. **Phase 11 (Projects, folders, resource registry, and governance) is the only newly authorized implementation phase.** Subsequent phases require separate approval.
 
-**Document version:** 1.5 (engine-neutral pipeline contracts and future Spark-on-Kubernetes integration; existing phase authorization unchanged)
+**Document version:** 1.6 (Phase 10 engineering closure, explicit production-readiness deferral, and Phase 11 authorization; Spark/Rust and MinIO roadmap retained)
 
 **Primary language:** Python
 
@@ -2943,9 +2943,9 @@ Deliverables:
 
 ---
 
-## Phase 10 — Production hardening
+## Phase 10 — Deployment hardening and local engineering validation (engineering closed; production gates deferred)
 
-**Priority: High before production release**
+**Historical scope and original production acceptance criteria are retained below.** As of the 2026-11-03 roadmap decision, implementation/local validation is considered engineering-complete on the reported evidence, but **the original production exit criteria have NOT been met**. Outstanding production security, live-provider certification, target-cluster validation, independent approval, and operations handoff are explicitly transferred to the final Production Readiness phase described in Section 23B. Do not misrepresent historical FAIL/BLOCKED/NOT RUN outcomes as PASS. No production promotion is authorized.
 
 Tasks:
 
@@ -2981,19 +2981,42 @@ Tasks:
 
 ---
 
-## Phase 11 and later — Future platform expansion (not approved)
+## Phase 11 — Projects, folders, resource registry, and governance (AUTHORIZED)
 
-The former optional-capabilities list has been replaced by the explicit, dependency-ordered **Section 23A: Future Platform Architecture**. The immediate candidate foundation is Projects, folders, stable resource identities, governance, and a first dataset vertical slice; later milestones cover artifact storage, dataset versioning, Polars transformations, dataset-to-ontology creation, media, application SDKs, functions, automations, and visual builders.
+**Authorization (2026-11-03):** Implement only milestone A of Section 23A.10, limited to the Project/resource foundation. This approval supersedes historical statements that Phase 11 is unapproved; historical evidence remains intact. It does not approve production deployment or later phases.
 
-**No Phase 11 implementation is authorized by this planning revision.** The existing Phase 10 security and release gates remain in force. Formal approval must specify scope and sequence before work begins.
+**Objective:** Establish the tenant-governed virtual filesystem and resource ownership model needed for datasets, pipelines, media, code, and applications, without implementing those later resource families now.
 
-The **original Rust optimization objective remains explicitly retained** as proposed milestone K in Section 23A, subject to measured bottlenecks and Section 19 safeguards. Other long-term candidates—incremental reasoning, CDC, streaming, graph analytics, full-text/vector search, distributed materialization, cross-ontology federation, SCIM, and advanced schema environments—remain potential extensions under Section 23A's advanced ecosystem milestone.
+**Required deliverables:**
+
+1. Tenant-scoped Projects with stable opaque IDs, explicit owners/members, lifecycle and auditable management operations; preserve existing PostgreSQL-backed tenant membership and OIDC identity bindings.
+2. Nested logical folders within Projects, stable IDs, safe rename/move operations, cycle prevention, deterministic listing/pagination, and unambiguous name/path collision handling. Folder paths are not resource identities or physical storage paths.
+3. A typed, extensible resource registry with stable `resource_id`, `tenant_id`, `resource_type`, `project_id`, optional `folder_id`, metadata, creation/update provenance, lifecycle and ownership; enforce database integrity and tenant consistency.
+4. Project-scoped authorization with explicit permission semantics, least privilege, auditable membership changes, and documented inheritance/sharing rules. Cross-Project access must be explicitly granted and must never override ontology/object/property/action authorization. Cross-tenant access is denied by default.
+5. **Non-destructive adapters for existing ontology resources** (types, links, actions and relevant published assets) so Studio can discover them through Projects without duplicating or replacing the canonical ontology registry. Shared tenant ontology remains shared; a Project is not a separate ontology authority.
+6. Studio Project/folder navigation and resource discovery/management, with consistent authorization error handling, empty/loading states and backward-compatible existing ontology workflows.
+7. Versioned Alembic migrations, API schemas, automated authorization and lifecycle tests, migration/upgrade tests, documentation and an implementation report. Keep existing data, fixture vocabulary, actions, branches, generated SDKs and ontology endpoints working.
+
+**Design decisions to document before coding:** default Project association for pre-existing ontology assets; ownership versus references; folder move/rename semantics; Project deletion/archival and referenced assets; cross-Project sharing and revocation; resource-type registration and permissions; API pagination and audit events. Choose explicit migration-safe defaults rather than silently reparenting or deleting historical assets.
+
+**Explicit exclusions:** No raw dataset uploads, general dataset catalog, MinIO/S3 implementation, transformation engine, user-code execution, Pipeline Builder, Spark, Rust acceleration, media processing, React application hosting, Workshop, or generalized automations in Phase 11. No 'small dataset vertical slice' in this phase; that starts with later dataset milestones.
+
+**Acceptance gates:**
+
+- Two Projects in one tenant; nested folders; resource create/list/move/rename/archive with stable identity, integrity and audit; folder-cycle/path-collision negatives.
+- Existing ontology assets appear through governed resource references without changing canonical identifiers or schema authority; published ontology, actions, branches and SDK behavior remain backward-compatible.
+- An explicitly shared asset is discoverable by an authorized second Project; unshared assets and revoked shares are denied. Project permissions never bypass ontology/property/action permissions.
+- Independent tenants cannot enumerate, infer, mutate or reference each other's Projects, folders or resources, including via direct IDs, search, pagination, error messages and concurrent operations.
+- Database migration and upgrade preserve existing records; ordinary backend/frontend regression, type checks, and new end-to-end Project tests pass. Preserve pre-existing known expected failures and report any new failures without hiding them.
+- No new production image certification requirement is imposed on this development-phase exit; security-sensitive regressions (auth, isolation, secret exposure, untrusted execution, dependency changes) still block Phase 11 acceptance.
+
+**Stop rule:** Stop after Phase 11 acceptance and report changed files, migration head, tests, unresolved risks and proposed Phase 12 scope. Do not automatically implement Phase 12.
 
 ---
 
-# 23A. Future Platform Architecture — Proposed, Not Yet Authorized
+# 23A. Future Platform Architecture — Approved Direction, Phased Implementation
 
-> **Planning status:** This section is an approved-for-discussion product direction only. It does **not** authorize Phase 11 or any implementation beyond the currently approved Phase 10 scope. Phases 0–10, their historical acceptance evidence, and existing release gates remain unchanged. Before implementation, reconcile this proposal with `AGENTS.md`, architecture decisions, current code, and the formal phase-approval process. Do not reinterpret planned capabilities as implemented.
+> **Current authorization:** The architecture below is the approved long-term direction. **Only Phase 11 / milestone A is authorized for implementation now.** Milestones B–L remain planned and require explicit future approval. This supersedes the historical 'Phase 11 not approved' instructions recorded in the 2026-11-02/03 Phase 10 evidence; preserve those records as contemporaneous history, not current instructions. Reconcile implementation with `AGENTS.md`, current code, architecture decisions, and current migrations; planned features are not implemented features.
 
 ## 23A.1 Product model and end-to-end workflows
 
@@ -3123,13 +3146,13 @@ Dataset ingestion and transformations **must not require** an existing ontology.
 - Preserve Docker Compose for local/self-hosted operation, and portable deployment configuration for externally managed PostgreSQL, S3-compatible object storage, and OIDC providers. Do not make hosted infrastructure mandatory for the original ontology-only local workflow.
 - Apply consistent resource IDs, audit, search/discovery, dependency graph, versioning, quotas, lifecycle, and retention across resource families; do not reimplement these separately in every UI app.
 
-## 23A.10 Proposed future delivery sequence and approval gates
+## 23A.10 Approved direction, milestone mapping, and approval gates
 
-The following are **proposed milestones, not approved phase numbers or instructions to begin implementation**. The previous generic “Phase 11 optional advanced capabilities” bucket is superseded for planning by this dependency-ordered sequence. Assign/approve numbered phases only through a separate roadmap decision.
+The following is the **approved architectural direction**. **Milestone A is authorized as Phase 11 only**, with the narrower scope and acceptance criteria specified above. B–L are not authorized; their phase numbers are proposed sequencing labels, not permission to begin implementation. Assign/approve each later numbered phase by a separate decision. The former generic “Phase 11 optional advanced capabilities” bucket is superseded.
 
 | Order | Proposed milestone | Deliverable and measurable exit |
 |---|---|---|
-| A | Project/resource foundation | Projects, folders, stable IDs, resource browsing, project-scoped RBAC, existing ontology resource adapters, and a small dataset vertical slice |
+| A / Phase 11 **AUTHORIZED** | Project/resource foundation | Projects, folders, stable IDs, resource browsing, project-scoped RBAC, and existing ontology resource adapters; **no dataset upload or dataset vertical slice** |
 | B | Artifact storage | Durable pluggable storage, immutable artifacts, **MinIO + idempotent init in local Compose**, external S3-compatible OKD profile, access control, upload/download, retention |
 | C | Dataset platform | Independent raw datasets, versioned schema/preview, PostgreSQL registrations, provenance and basic lineage |
 | D | Transformation pipelines | Versioned Polars/Python pipeline runs in isolated execution, immutable outputs, retries, lineage |
@@ -3139,8 +3162,8 @@ The following are **proposed milestones, not approved phase numbers or instructi
 | H | Visual Pipeline Builder | No-code DAG editor compiling to the existing pipeline representation |
 | I | Workshop-like application builder | Declarative app schema, runtime renderer, visual editor, app publication |
 | J | Advanced ecosystem | Rich lineage/analytics, ML/model registry, agent/MCP tooling, additional connectors, streaming, CDC, search, scale-out as demand justifies (Spark tracked separately in L) |
-| L | **Spark distributed execution (explicit, conditional)** | Introduce a Spark pipeline adapter and OKD4 execution integration only after a benchmarked distributed-workload need; test against MinIO/S3, shared pipeline IR, isolated drivers/executors, immutable outputs, and engine parity |
 | K | **Rust performance optimization (explicit, conditional)** | Profile Python/Polars/PostgreSQL baselines; prototype targeted Rust/PyO3 accelerators only for demonstrated bottlenecks; verify functional parity, benchmark improvements, packaging, and rollback |
+| L | **Spark distributed execution (explicit, conditional)** | Introduce a Spark pipeline adapter and OKD4 execution integration only after a benchmarked distributed-workload need; test against MinIO/S3, shared pipeline IR, isolated drivers/executors, immutable outputs, and engine parity |
 
 ### Explicit Spark and Rust optimization tracks
 
@@ -3152,7 +3175,28 @@ The original Phase 11 Rust optimization objective **remains relevant to the fina
 
 **First end-to-end product acceptance:** In a governed Project, upload a raw CSV → clean with Polars → save a versioned dataset → create an ontology object type from selected columns plus edit-only properties → publish/activate/materialize → execute a governed action → query and act through a React SDK application. Separately demonstrate an empty object type populated by a create action. Cross-Project and cross-tenant negative tests are mandatory.
 
-**Phase-authorization rule:** Phase 10 security/remediation, operator certification, and existing acceptance statuses remain untouched. Planning these milestones does not override “Phase 11 not approved.” A future authorization must explicitly state which milestone, migrations, infrastructure dependencies, security review, and tests are in scope. Preserve existing fixture vocabulary, `0017_capacity` baseline, existing user data, release policy, and historical evidence.
+**Phase-authorization rule (current):** Phase 11 / milestone A is authorized only as scoped above. Later milestones require separate approval. Phase 10 historical acceptance statuses remain unchanged; unresolved production gates are deferred to Section 23B, not waived. Preserve existing fixture vocabulary, the historical `0017_capacity` baseline (new Phase 11 migrations may advance it), existing user data, production release policy, and historical evidence.
+
+---
+
+
+# 23B. Final Production Readiness — Deferred, Mandatory, Not Yet Authorized
+
+**Status:** Planned final release/certification phase. Phase 10 engineering is closed for ordinary feature development; **production release remains BLOCKED**. No vulnerability, risk, approval, or certification gate is waived by this deferral. Development/test deployments must remain clearly non-production and access-controlled. Do not weaken security controls to achieve feature milestones.
+
+**Deferred Phase 10 obligations, to be reassessed against the eventual complete product:**
+
+1. Remediate or independently disposition all release-policy-blocking image and dependency vulnerabilities, including the current application-image high findings and historical critical findings in other deployment profiles. Deduplicate advisory counts; bind findings to exact final image digests and source/SBOMs. No self-approval or scanner suppression as a substitute for authorization.
+2. Validate exact production manifests, restricted-v2 SCC admission, arbitrary UID/fsGroup, Routes, TLS, NetworkPolicies, secrets, external PostgreSQL/Keycloak, storage access and scheduling on an approved real OKD4 target. Docker tests and schema validation alone are not certification.
+3. Verify organizational identity-provider requirements, issuer/token contracts, certificate trust, provider outages, rotation and any intended live Microsoft/Google SSO integrations; mark unsupported/not-run configurations accurately.
+4. Execute independently owned off-host backups, PostgreSQL PITR, object-store artifact recovery, upgrade/rollback, migration safety, cross-node failure and disaster-recovery exercises for the **final** architecture.
+5. Establish observability, security incident response, SLOs, realistic capacity/load benchmarks, quotas, retention, audit custody, credential management, operator ownership, handoff and documented release/rollback procedures.
+6. Validate all **new** image and runtime families introduced after Phase 10: MinIO/local-dev versus approved external production S3, pipeline/job executors, user-code sandboxes, media/ML runtimes, SDK/app ingress, and Spark driver/executors if implemented. Never infer certification from Phase 10's narrower application profile.
+7. Require independent security/release authorization, immutable registry digests, reproducible evidence, exact deployed configuration identity, and a passing release verifier before any production promotion.
+
+**During intermediate development phases:** Keep authentication, authorization, tenant isolation, audit, secrets, migration safety, non-root execution and regression tests enforced. Run proportionate dependency scanning and fix newly introduced critical exploitable issues promptly. A deferred *final image certification* gate must not become permission to ship insecure code or expose development environments publicly. Preserve and report existing findings without forcing repetitive full release certification after each feature milestone.
+
+**Final exit criteria:** The entire intended deployment passes the then-current production security/release policy, independently authorized risk dispositions, real-target OKD4 integration, recovery/operations tests and organization handoff. Until then, product status remains **NOT PRODUCTION-CERTIFIED**.
 
 ---
 
@@ -3453,7 +3497,7 @@ The MVP is complete when the following capabilities work together:
 
 # 27. Immediate First Task for the Coding Agent
 
-Begin with **Phase 0: Architecture and Integration Verification**.
+**Historical original instruction (superseded):** Begin with **Phase 0: Architecture and Integration Verification**.
 
 Do not implement the full platform yet.
 
@@ -3479,7 +3523,7 @@ The first deliverable should include:
 
 10. A detailed task breakdown for Phase 1.
 
-**Stop after completing Phase 0 and report results before proceeding.**
+**Historical Phase 0 stop rule (superseded by current Phase 11 authorization).**
 
 The implementation must establish a reliable foundation before adding object storage, actions, ingestion, or semantic reasoning workflows.
 
@@ -3544,3 +3588,17 @@ TLS, rotations and rollback. Final isolated browser E2E **five PASS**; an earlie
 retains one stale activation-header failure despite successful activation. Its cause remains
 unresolved and is recorded as an intermittent validation limitation, not erased by the passing
 rerun. Final security/release/recovery focused suite: **55 PASS**. No assertions/timeouts changed.
+
+
+---
+
+# Roadmap Decision — 2026-11-03 (CURRENT AUTHORITY)
+
+This dated decision **supersedes prior Phase 10-only / Phase 11-not-approved instructions** elsewhere in this document, including the preserved historical acceptance-closure appendices. Those appendices describe what was true when recorded; their test results and release blockers are not rewritten.
+
+- **Phase 10 engineering disposition:** Engineering-complete on the submitted local evidence, including the later OKD4 readiness report (625 Python PASS, one strict xfail; 33 frontend PASS; two five-test browser runs; non-root and migration/deployment checks). This is not an independent source-code audit and not production certification. The later OKD4 candidate reports 56/55/56 high findings in API/Studio/semantic images, zero critical in those three images; other historical profiles report different totals. These are **different candidate/profile scans**, not evidence that prior findings disappeared across all images.
+- **Production disposition:** Release remains BLOCKED. Vulnerability remediation, target OKD4 certification, external organizational approval and operational readiness are deferred to **Section 23B**, mandatory before any production release. Existing security evidence, release verifier behavior and audit records remain unchanged.
+- **Active implementation authorization:** **Phase 11 only**, defined above as Projects, folders, resource registry, authorization/governance, existing ontology resource adapters and Studio Project navigation. Do not implement datasets, MinIO, transformations, React app hosting, Spark, Rust, or the rest of the platform under this authorization.
+- **Next dependency sequence (future approvals required):** Phase 12 artifact storage (MinIO local / external S3); Phase 13 dataset catalog/upload/versioning; Phase 14 Polars engine-neutral pipelines; Phase 15 dataset-to-ontology; Phase 16 React application SDK/developer experience; later media/functions, visual builders and advanced capabilities. Spark and Rust remain conditional future milestones L and K. Phase numbers beyond 16 are not assigned here.
+- **Baseline:** Preserve current source, existing data, historical `0017_capacity` migration reference, canonical fixtures, identity/authorization model and existing Phase 10 evidence. Confirm the actual repository migration head before creating Phase 11 migrations. Keep ordinary regression and security-critical checks mandatory.
+- **Agent stop rule:** Complete and report Phase 11 only; request a new approval before starting Phase 12. Do not run production release or organizational cluster mutation without explicit separate authorization.
