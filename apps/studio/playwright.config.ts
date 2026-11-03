@@ -4,7 +4,7 @@ export default defineConfig({
   workers: 1,
   timeout: 120000,
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    baseURL: process.env.STUDIO_ORIGIN || "http://127.0.0.1:3000",
     ignoreHTTPSErrors: true,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",

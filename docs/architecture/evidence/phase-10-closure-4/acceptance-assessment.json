@@ -1,0 +1,195 @@
+{
+  "source_revision": "86bf658eb8cca52b1e9c6a5cc82f98dc5961c618",
+  "images": {
+    "api": "sha256:0ae9f5b2e0c98982cc5d284300539ad9da1ccfdedeab9ad84cc964cd6c3e11f8",
+    "studio": "sha256:bd32fbc1f6984642505e00395fff262df8611c522bc24f332508611806d0af6f",
+    "semantic": "sha256:b621bb7806776edf8d9ea54c1783f489126a6637e90206f7301432120dd2c591",
+    "ingress": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+    "postgres": "sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1",
+    "keycloak": "sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332"
+  },
+  "supply_chain": {
+    "api": {
+      "image_id": "sha256:0ae9f5b2e0c98982cc5d284300539ad9da1ccfdedeab9ad84cc964cd6c3e11f8",
+      "config_digest": "sha256:fdfdae38b7fcefc5f271c01573c54ac47219833c986bde2b938e07fc7025db83",
+      "scan": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-0.vulnerabilities.json",
+        "sha256": "b514c9c756cad32034beeb4204361148e30b308bda32857bb6f5e64489aa8c4f"
+      },
+      "sbom": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-0.sbom.json",
+        "sha256": "05d32747af366c2a446345b351fe56afa29188a70eea6edef6c959ad0a4a30e2"
+      }
+    },
+    "studio": {
+      "image_id": "sha256:bd32fbc1f6984642505e00395fff262df8611c522bc24f332508611806d0af6f",
+      "config_digest": "sha256:81fbc0b261eb3840fa5fd4341801b46960045202ad14f5f0ea8fdbe68bbdfd9c",
+      "scan": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-1.vulnerabilities.json",
+        "sha256": "1b7f9a9016582ea762a105ecd3d4484dfe33da879ee6ce8e54a070deadd73d4f"
+      },
+      "sbom": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-1.sbom.json",
+        "sha256": "ac0048bf4db34b41a8ab356b3b524756dade1547573e1befd8a4467092abf823"
+      }
+    },
+    "semantic": {
+      "image_id": "sha256:b621bb7806776edf8d9ea54c1783f489126a6637e90206f7301432120dd2c591",
+      "config_digest": "sha256:8de2f7ceeb1404383eb74ae49c6095aa66db45c6b57fd466c68cec8a5272405f",
+      "scan": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-2.vulnerabilities.json",
+        "sha256": "262982ce7736df25ec0799ade6f68b32c5d09f2b047a471e1aaa6c8803de51e6"
+      },
+      "sbom": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-2.sbom.json",
+        "sha256": "0a06e6be2876bcab529e7b965e20562860849fa96413902866dfa5207b8f3e71"
+      }
+    },
+    "ingress": {
+      "image_id": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+      "config_digest": "sha256:e145129f21be32c3795a8d3a39e169ff9e6d799568ddfd2db56fd0804c0b37ef",
+      "scan": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-3.vulnerabilities.json",
+        "sha256": "144ffd0f7181e2707a66f905344a0241785cae31dad9b7e2c3668f8eec274001"
+      },
+      "sbom": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-3.sbom.json",
+        "sha256": "1939154b7f92cff827a6a197e6cbb0a8aaf85949904eb28512850263d4d137f3"
+      }
+    },
+    "postgres": {
+      "image_id": "sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1",
+      "config_digest": "sha256:bbdfc26f27f4b2fecdc289b63295a0228cab33657a7b859afe54dc78d184dd1d",
+      "scan": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-4.vulnerabilities.json",
+        "sha256": "e3fb1ab7ca3d41afe773451ccf6633891b0772860d7108186ac16abe4fecce9d"
+      },
+      "sbom": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-4.sbom.json",
+        "sha256": "64b6fc4d9ff604c011f5021ab8bc47cc07bcbb921ef5e2e9f45b4c09f72b3bf4"
+      }
+    },
+    "keycloak": {
+      "image_id": "sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332",
+      "config_digest": "sha256:24959b9b2ff0ec6bd9445588d3b488b84dffbe06e6a6ccb50e3d074f7ec581dd",
+      "scan": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-5.vulnerabilities.json",
+        "sha256": "18652b453b671743755c4102ba8c81d25f141bacbb825997647daa72ffc34f68"
+      },
+      "sbom": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-5.sbom.json",
+        "sha256": "e369c825a3d16ba56945d85f9a60e6be87b6887535bda815025f0a135a93bf69"
+      }
+    }
+  },
+  "checks": {
+    "regression": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-4/final-validation/regression-full.txt",
+      "sha256": "6f03b8f51ab0eaed4517ab09dae029deb4b13650759b0f1cca010d466c9fc685"
+    },
+    "container_security": {
+      "result": "FAIL",
+      "evidence": "docs/architecture/evidence/phase-10-closure-4/vulnerability-disposition.json",
+      "sha256": "02f15b015e502c1bb240461c48df6b2c23c3b0ae494db67f51916ff25382fe65"
+    },
+    "combined_deployment": {
+      "result": "INCONCLUSIVE",
+      "evidence": "docs/architecture/evidence/phase-10-closure-4/README.md",
+      "sha256": "afa4db97dd12415cb69618a64da7cc72754a42b68a8ef9673065f9b878345b95",
+      "scope": "Targeted current-image startup/read/write/fault follow-ups pass; no new complete combined operational drill claimed"
+    },
+    "manufacturing": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-3/combined-final/deployment.json",
+      "sha256": "8a42081ae45fe19f9374e16ea1d18350629e60e102bd0288060d043633f2e72d"
+    },
+    "sessions": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-3/combined-final/deployment.json",
+      "sha256": "8a42081ae45fe19f9374e16ea1d18350629e60e102bd0288060d043633f2e72d"
+    },
+    "worker_recovery": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-3/combined-final/deployment.json",
+      "sha256": "8a42081ae45fe19f9374e16ea1d18350629e60e102bd0288060d043633f2e72d"
+    },
+    "semantic_isolation": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-3/combined-final/runtime.json",
+      "sha256": "852ad90c5cab2f80754348a0674aca01351c6951b6e05be727be6f6cf586410c"
+    },
+    "database_recovery": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-3/combined-final/physical-recovery.json",
+      "sha256": "a7839b0a726b8516fce32b76347c9632741624cdcd83fcd39c49092a51dd8a5b"
+    },
+    "monitoring_delivery": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-3/combined-final/real-api-alerts.json",
+      "sha256": "bcce26ff4f0310f892f467dbdd7edffe0373a33c04fc6a292648b3e8ff0b699f"
+    },
+    "quotas": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-3/combined-final/deployment.json",
+      "sha256": "8a42081ae45fe19f9374e16ea1d18350629e60e102bd0288060d043633f2e72d"
+    },
+    "load": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-4/read-performance.md",
+      "sha256": "a61ce74dfa961344d1a272d36905ea1a2ae05256e51d1077ce2a5c29947f2852"
+    },
+    "failure_injection": {
+      "result": "BLOCKED",
+      "evidence": "docs/architecture/evidence/phase-10-closure-4/fault-coverage.md",
+      "sha256": "ec97d4bd606817740723526d5d128fbb2319daae7051f60e00e082e6b593662c"
+    },
+    "secret_rotation": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-3/combined-final/deployment.json",
+      "sha256": "8a42081ae45fe19f9374e16ea1d18350629e60e102bd0288060d043633f2e72d"
+    },
+    "role_revocation": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-3/combined-final/deployment.json",
+      "sha256": "8a42081ae45fe19f9374e16ea1d18350629e60e102bd0288060d043633f2e72d"
+    },
+    "sdk_integrity": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-3/combined-final/deployment.json",
+      "sha256": "8a42081ae45fe19f9374e16ea1d18350629e60e102bd0288060d043633f2e72d"
+    },
+    "rollback": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-3/combined-final/deployment.json",
+      "sha256": "8a42081ae45fe19f9374e16ea1d18350629e60e102bd0288060d043633f2e72d"
+    },
+    "sbom": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-4/supply-chain-binding.json",
+      "sha256": "4714e5c5570dd53780748e5faa33e9de5fc32a0d6cab403098f8ea684fa263c3"
+    },
+    "write_load": {
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-4/write-performance.md",
+      "sha256": "374d209418a5ff7da2038008fd4bd651951bb57b6e91b21ce9ca72f90795b235"
+    }
+  },
+  "assessments": {
+    "implementation": "PASS",
+    "local_acceptance": "BLOCKED",
+    "production_like_acceptance": "BLOCKED",
+    "production_certification": "NOT RUN"
+  },
+  "risk_exception": "NONE AUTHORIZED",
+  "note": "Retained prior checks keep their original evidence and scope. Dirty source is separately bound; this is a blocked acceptance assessment, not an approved release manifest.",
+  "latency_root_cause": "UNRESOLVED",
+  "source_files": {
+    "evidence": "docs/architecture/evidence/phase-10-closure-4/source-files.json",
+    "sha256": "1af8d47ed686fe2df88afc286dcd7a0d13bd184e06c66dfa96f9a00c1669436a"
+  },
+  "working_tree": {
+    "evidence": "docs/architecture/evidence/phase-10-closure-4/working-tree-final.txt",
+    "sha256": "dcc19e6cdec6a41594bf416cda6879e4a95c10ca693165c00eb23989cdc054b9"
+  }
+}

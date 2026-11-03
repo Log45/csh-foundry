@@ -1,0 +1,38 @@
+{
+  "api": {
+    "image_id": "sha256:0ae9f5b2e0c98982cc5d284300539ad9da1ccfdedeab9ad84cc964cd6c3e11f8",
+    "config_digest": "sha256:fdfdae38b7fcefc5f271c01573c54ac47219833c986bde2b938e07fc7025db83",
+    "syft_image": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom_sha256": "05d32747af366c2a446345b351fe56afa29188a70eea6edef6c959ad0a4a30e2"
+  },
+  "studio": {
+    "image_id": "sha256:bd32fbc1f6984642505e00395fff262df8611c522bc24f332508611806d0af6f",
+    "config_digest": "sha256:81fbc0b261eb3840fa5fd4341801b46960045202ad14f5f0ea8fdbe68bbdfd9c",
+    "syft_image": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom_sha256": "ac0048bf4db34b41a8ab356b3b524756dade1547573e1befd8a4467092abf823"
+  },
+  "semantic": {
+    "image_id": "sha256:b621bb7806776edf8d9ea54c1783f489126a6637e90206f7301432120dd2c591",
+    "config_digest": "sha256:8de2f7ceeb1404383eb74ae49c6095aa66db45c6b57fd466c68cec8a5272405f",
+    "syft_image": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom_sha256": "0a06e6be2876bcab529e7b965e20562860849fa96413902866dfa5207b8f3e71"
+  },
+  "ingress": {
+    "image_id": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+    "config_digest": "sha256:e145129f21be32c3795a8d3a39e169ff9e6d799568ddfd2db56fd0804c0b37ef",
+    "syft_image": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom_sha256": "1939154b7f92cff827a6a197e6cbb0a8aaf85949904eb28512850263d4d137f3"
+  },
+  "postgres": {
+    "image_id": "sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1",
+    "config_digest": "sha256:bbdfc26f27f4b2fecdc289b63295a0228cab33657a7b859afe54dc78d184dd1d",
+    "syft_image": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom_sha256": "64b6fc4d9ff604c011f5021ab8bc47cc07bcbb921ef5e2e9f45b4c09f72b3bf4"
+  },
+  "keycloak": {
+    "image_id": "sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332",
+    "config_digest": "sha256:24959b9b2ff0ec6bd9445588d3b488b84dffbe06e6a6ccb50e3d074f7ec581dd",
+    "syft_image": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom_sha256": "e369c825a3d16ba56945d85f9a60e6be87b6887535bda815025f0a135a93bf69"
+  }
+}

@@ -1,0 +1,31 @@
+ M .github/workflows/release.yaml
+ M PLANS.md
+ M README.md
+ M apps/studio/playwright.config.ts
+ M apps/studio/tests/e2e/workflow.spec.ts
+ M apps/studio/tests/e2e_backend.py
+ M docs/decisions/0034-production-operations.md
+ M docs/development/phase-10-checklist.md
+ M docs/development/phase-10-report.md
+ M docs/operations/production.md
+ M docs/operations/readiness.md
+ M docs/operations/threat-model.md
+ M docs/operations/vulnerability-disposition.md
+ M infrastructure/production/compose.yaml
+ M scripts/accept_phase10.py
+ M scripts/phase10_pitr.py
+ M scripts/scan_images.py
+ M scripts/test_alert_delivery.py
+ M scripts/test_studio.py
+ M scripts/verify_release_evidence.py
+ M scripts/vulnerability_disposition.py
+ M services/api/tests/test_pitr_guard.py
+ M services/api/tests/test_production_profile.py
+ M services/api/tests/test_release_evidence.py
+?? docs/architecture/evidence/phase-10-closure-3/
+?? scripts/accept_phase10_closure3.py
+?? scripts/accept_phase10_operations.py
+?? scripts/profile_phase10_queries.py
+?? scripts/sample_phase10_resources.py
+?? services/api/tests/test_capacity_acceptance.py
+?? services/api/tests/test_scan_images.py

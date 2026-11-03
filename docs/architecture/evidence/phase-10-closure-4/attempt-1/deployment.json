@@ -1,0 +1,257 @@
+{
+  "project": "foundry-accept-27eff73c",
+  "environment": "Disposable local Compose; test CA; loopback ports",
+  "private_evidence": "artifacts/foundry-accept-27eff73c",
+  "checks": [
+    {
+      "check": "production-template-configuration",
+      "result": "PASS"
+    },
+    {
+      "check": "disposable-production-wal-directory-owner-and-write-permission",
+      "result": "PASS"
+    },
+    {
+      "check": "new-cluster-owner-migration-and-runtime-grants",
+      "result": "PASS",
+      "head": "0017_capacity"
+    },
+    {
+      "check": "governed-manufacturing-schema-and-explicit-worker-delegations",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "comparable-manufacturing-fixture-through-governed-ingestion",
+      "result": "PASS",
+      "objects": 63,
+      "links": 70,
+      "admission_seconds": 0.05452083301497623,
+      "completion_seconds": 5.982477249985095
+    },
+    {
+      "check": "final-runtime-broker-pool-cap-and-postgres-budget",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "paced-deployed-https-load",
+      "result": "PASS",
+      "evidence": "overhead-diagnostics-disabled.json",
+      "requests": 80
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "paced-deployed-https-load",
+      "result": "PASS",
+      "evidence": "overhead-without-sampler.json",
+      "requests": 80
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "paced-deployed-https-load",
+      "result": "PASS",
+      "evidence": "overhead-with-sampler.json",
+      "requests": 80
+    },
+    {
+      "check": "paced-deployed-https-load",
+      "result": "PASS",
+      "evidence": "warmup.json",
+      "requests": 65
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "paced-deployed-https-load",
+      "result": "PASS",
+      "evidence": "isolated-1.json",
+      "requests": 260
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "paced-deployed-https-load",
+      "result": "PASS",
+      "evidence": "isolated-2.json",
+      "requests": 260
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "paced-deployed-https-load",
+      "result": "PASS",
+      "evidence": "isolated-3.json",
+      "requests": 260
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "paced-deployed-https-load",
+      "result": "PASS",
+      "evidence": "sustained.json",
+      "requests": 720
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "paced-deployed-https-load",
+      "result": "PASS",
+      "evidence": "contention.json",
+      "requests": 160
+    },
+    {
+      "check": "controlled-repeated-sustained-and-contention-load",
+      "result": "PASS",
+      "isolated_read_target": "PASS",
+      "sdk_write_target": "PASS",
+      "requests": 1660
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "ingestion-asynchronous-completion",
+      "result": "COMPLETED",
+      "concurrency": 1,
+      "completion_seconds": 5.152881833026186
+    },
+    {
+      "check": "semantic-asynchronous-completion",
+      "result": "COMPLETED",
+      "concurrency": 1,
+      "completion_seconds": 5.1369388330494985
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "ingestion-asynchronous-completion",
+      "result": "COMPLETED",
+      "concurrency": 4,
+      "completion_seconds": 4.02436416601995
+    },
+    {
+      "check": "semantic-asynchronous-completion",
+      "result": "COMPLETED",
+      "concurrency": 4,
+      "completion_seconds": 4.015987416030839
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "ingestion-asynchronous-completion",
+      "result": "COMPLETED",
+      "concurrency": 8,
+      "completion_seconds": 3.983373833994847
+    },
+    {
+      "check": "semantic-asynchronous-completion",
+      "result": "COMPLETED",
+      "concurrency": 8,
+      "completion_seconds": 6.1391528329695575
+    },
+    {
+      "check": "bounded-governed-object-action-artifact-write-load",
+      "result": "PASS"
+    },
+    {
+      "check": "two-api-concurrent-governed-actions-revision-conflicts-idempotent-replay",
+      "result": "PASS",
+      "committed": 1,
+      "conflicts_409": 7,
+      "final_revision": 15
+    },
+    {
+      "check": "two-api-concurrent-branch-merges-stale-preview-and-provenance",
+      "result": "PASS",
+      "committed": 1,
+      "stale_preconditions_412": 3,
+      "final_revision": 2
+    },
+    {
+      "check": "two-real-api-replicas-concurrent-writes-audit-rollback-shared-admission-recovery",
+      "result": "PASS",
+      "writes": 8,
+      "submitted": 8,
+      "admitted": 4,
+      "rejected_409": 4,
+      "final_active": 0,
+      "maximum_api_connections": 24,
+      "broker_pool_max": 10
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "concurrent-schema-publication-immutable-version-and-separate-activation",
+      "result": "PASS",
+      "published": 1,
+      "expected_conflicts_409": 7,
+      "unexpected_errors": 0
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "real-outbox-receiver-process-loss-after-effect-before-checkpoint",
+      "result": "PASS",
+      "child_exit": 77,
+      "deliveries": 2,
+      "consumer_effects": 1,
+      "attempts": 2,
+      "duplicate_claim_before_lease_expiry": "DENIED",
+      "retry_after_lease": "DELIVERED",
+      "transport_scope": "Loopback test transport; production SSRF/TLS policy unchanged"
+    },
+    {
+      "check": "closure4-execution",
+      "result": "FAIL",
+      "error_type": "CalledProcessError"
+    }
+  ]
+}

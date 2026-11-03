@@ -1,0 +1,70 @@
+PASS production-template-configuration
+PASS disposable-production-wal-directory-owner-and-write-permission
+No new upgrade operations detected.
+PASS new-cluster-owner-migration-and-runtime-grants
+/Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+PASS governed-manufacturing-schema-and-explicit-worker-delegations
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS comparable-manufacturing-fixture-through-governed-ingestion
+PASS final-runtime-broker-pool-cap-and-postgres-budget
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS paced-deployed-https-load
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS paced-deployed-https-load
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS paced-deployed-https-load
+PASS paced-deployed-https-load
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS paced-deployed-https-load
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS paced-deployed-https-load
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS paced-deployed-https-load
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS paced-deployed-https-load
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS paced-deployed-https-load
+PASS controlled-repeated-sustained-and-contention-load
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+COMPLETED ingestion-asynchronous-completion
+COMPLETED semantic-asynchronous-completion
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+COMPLETED ingestion-asynchronous-completion
+COMPLETED semantic-asynchronous-completion
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+COMPLETED ingestion-asynchronous-completion
+COMPLETED semantic-asynchronous-completion
+PASS bounded-governed-object-action-artifact-write-load
+PASS two-api-concurrent-governed-actions-revision-conflicts-idempotent-replay
+PASS two-api-concurrent-branch-merges-stale-preview-and-provenance
+PASS two-real-api-replicas-concurrent-writes-audit-rollback-shared-admission-recovery
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS concurrent-schema-publication-immutable-version-and-separate-activation
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS real-outbox-receiver-process-loss-after-effect-before-checkpoint
+FAIL closure4-execution
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_closure4.py", line 390, in <module>
+    main()
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_closure4.py", line 386, in main
+    Closure4Acceptance(args.output).execute()
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_closure4.py", line 366, in execute
+    exercise(self)
+  File "/Users/log/Documents/code/csh-foundry/scripts/phase10_outbox_probe.py", line 176, in exercise
+    temporary_storage(a)
+  File "/Users/log/Documents/code/csh-foundry/scripts/phase10_outbox_probe.py", line 206, in temporary_storage
+    a.run(
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10.py", line 53, in run
+    return subprocess.check_output(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['docker', 'run', '--rm', '--name', 'foundry-accept-27eff73c-tmpfs-probe', '--platform', 'linux/amd64', '--network', 'none', '--read-only', '--tmpfs', '/tmp:size=16m,mode=1777', '--memory', '768m', '--cpus', '1', '--pids-limit', '64', '--cap-drop=ALL', '--security-opt=no-new-privileges', 'csh-foundry-semantic:phase10-closure', 'python', '-c', "import errno,json\nfrom pathlib import Path\nfrom ontology_platform.semantic.engine import OpenOntologiesAdapter\npressure=Path('/tmp/pressure')\ntry:\n with pressure.open('wb') as f:\n  for _ in range(17): f.write(b'x'*1048576)\nexcept OSError as e:\n assert e.errno==errno.ENOSPC\nadapter=OpenOntologiesAdapter(Path('/usr/local/bin/open-ontologies'))\ntry:\n adapter.validate_ontology(Path('/app/fixtures/manufacturing.ttl').read_bytes())\nexcept OSError as e:\n assert e.errno==errno.ENOSPC\nelse:\n raise AssertionError('Expected full-tmpfs failure')\npressure.unlink()\nresult=adapter.validate_ontology(Path('/app/fixtures/manufacturing.ttl').read_bytes())\nassert result.engine_version=='2.1.0'\nprint(json.dumps({'result':'PASS','failure':'ENOSPC','recovery':'pinned engine validation succeeds',\n 'physical_bytes_bounded':16777216,\n 'scope':'Adapter filesystem boundary; no database/network attached'}))\n"]' returned non-zero exit status 1.

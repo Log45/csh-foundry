@@ -1,0 +1,1194 @@
+{
+  "main_requests": 1660,
+  "span_coverage": {
+    "request_span": 1660,
+    "bff_span": 1660,
+    "ingress_status": 1660
+  },
+  "slowest_requests": [
+    {
+      "trace_id": "bc9fedb8180cc8bfcfe78f01f8cb4403",
+      "run": "sustained.json",
+      "operation": "preview",
+      "client": 6,
+      "iteration": 62,
+      "start_epoch": 1793713706.079916,
+      "end_epoch": 1793713707.1561549,
+      "end_to_end_ms": 1078.5353340324946,
+      "curl_total_ms": 1034.195,
+      "curl_process_and_file_overhead_ms": 42.053584024142495,
+      "tcp_ms": 0.311,
+      "tls_ms": 103.869,
+      "first_byte_wait_ms": 929.6629999999999,
+      "bff_ms": [
+        740.7039169999771
+      ],
+      "ingress_ms": [
+        893.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.516007+00:00",
+          "trace_id": "bc9fedb8180cc8bfcfe78f01f8cb4403",
+          "span_id": "2af1cc1967da67c3",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.090505,
+          "timings": {
+            "ordinary_acquire_seconds": 0.04792641700259992,
+            "ordinary_sql_seconds": 0.00913912499891012,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:27.149825+00:00",
+          "trace_id": "bc9fedb8180cc8bfcfe78f01f8cb4403",
+          "span_id": "bd5f08b8d329ceed",
+          "route": "/api/v1/ontologies/{ontology_id}/actions/{action_id}/preview",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.63151,
+          "timings": {
+            "authentication_seconds": 0.0005423750008048955,
+            "ordinary_acquire_seconds": 0.025910707001457922,
+            "ordinary_sql_seconds": 0.42565729601483326,
+            "ordinary_statements": 34.0,
+            "audit_acquire_seconds": 0.0008975000018835999,
+            "audit_sql_seconds": 0.0019353749994479585,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "7585a51ee4c8cd496c344d5f42d22e92",
+      "run": "sustained.json",
+      "operation": "preview",
+      "client": 1,
+      "iteration": 62,
+      "start_epoch": 1793713706.0061,
+      "end_epoch": 1793713707.023902,
+      "end_to_end_ms": 1037.89404098643,
+      "curl_total_ms": 843.5709999999999,
+      "curl_process_and_file_overhead_ms": 174.2377499807589,
+      "tcp_ms": 0.265,
+      "tls_ms": 122.186,
+      "first_byte_wait_ms": 720.41,
+      "bff_ms": [
+        554.2995419999934
+      ],
+      "ingress_ms": [
+        709.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.531397+00:00",
+          "trace_id": "7585a51ee4c8cd496c344d5f42d22e92",
+          "span_id": "43b55529fbadb93b",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.118563,
+          "timings": {
+            "ordinary_acquire_seconds": 0.04530108300241409,
+            "ordinary_sql_seconds": 0.014117915998212993,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.916863+00:00",
+          "trace_id": "7585a51ee4c8cd496c344d5f42d22e92",
+          "span_id": "133ae3876f2490f0",
+          "route": "/api/v1/ontologies/{ontology_id}/actions/{action_id}/preview",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.377927,
+          "timings": {
+            "authentication_seconds": 0.0009077499998966232,
+            "ordinary_acquire_seconds": 0.007900042000983376,
+            "ordinary_sql_seconds": 0.3000419959826104,
+            "ordinary_statements": 34.0,
+            "audit_acquire_seconds": 0.00034795800092979334,
+            "audit_sql_seconds": 0.0006619169980695006,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "0edb75fe9236c4480f04b32cca95e379",
+      "run": "sustained.json",
+      "operation": "sdk",
+      "client": 2,
+      "iteration": 62,
+      "start_epoch": 1793713706.063124,
+      "end_epoch": 1793713706.879856,
+      "end_to_end_ms": 819.3329999921843,
+      "curl_total_ms": 754.925,
+      "curl_process_and_file_overhead_ms": 61.813249966874764,
+      "tcp_ms": 0.37000000000000005,
+      "tls_ms": 103.99,
+      "first_byte_wait_ms": 648.44,
+      "bff_ms": [
+        455.6642090000096
+      ],
+      "ingress_ms": [
+        611.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.547715+00:00",
+          "trace_id": "0edb75fe9236c4480f04b32cca95e379",
+          "span_id": "494bb6768ebaa34b",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.119592,
+          "timings": {
+            "ordinary_acquire_seconds": 0.0547677089998615,
+            "ordinary_sql_seconds": 0.020463125001697335,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.870066+00:00",
+          "trace_id": "0edb75fe9236c4480f04b32cca95e379",
+          "span_id": "b87a9a6dd3040f02",
+          "route": "/api/v1/ontologies/{ontology_id}/sdk/generate",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.318302,
+          "timings": {
+            "authentication_seconds": 0.0022161670021887403,
+            "ordinary_acquire_seconds": 0.002785125998343574,
+            "ordinary_sql_seconds": 0.27704087498932495,
+            "ordinary_statements": 13.0,
+            "audit_acquire_seconds": 0.0010678329999791458,
+            "audit_sql_seconds": 0.0011847919995489065,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "b611d337de3fef9e3ba180b50b4a4ae8",
+      "run": "sustained.json",
+      "operation": "traversal",
+      "client": 0,
+      "iteration": 62,
+      "start_epoch": 1793713706.015245,
+      "end_epoch": 1793713706.827224,
+      "end_to_end_ms": 815.0969579583034,
+      "curl_total_ms": 766.227,
+      "curl_process_and_file_overhead_ms": 45.756374995179485,
+      "tcp_ms": 0.2899999999999999,
+      "tls_ms": 108.176,
+      "first_byte_wait_ms": 656.9580000000001,
+      "bff_ms": [
+        544.8207919999841
+      ],
+      "ingress_ms": [
+        628.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.483953+00:00",
+          "trace_id": "b611d337de3fef9e3ba180b50b4a4ae8",
+          "span_id": "db6988d2dd250918",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.103841,
+          "timings": {
+            "ordinary_acquire_seconds": 0.007178291998570785,
+            "ordinary_sql_seconds": 0.011244708999583963,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.821660+00:00",
+          "trace_id": "b611d337de3fef9e3ba180b50b4a4ae8",
+          "span_id": "0786bf9b10303d2d",
+          "route": "/api/v1/ontologies/{ontology_id}/traverse",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.331229,
+          "timings": {
+            "authentication_seconds": 0.0014344999981403816,
+            "ordinary_acquire_seconds": 0.017704042998957448,
+            "ordinary_sql_seconds": 0.22069791800822713,
+            "ordinary_statements": 14.0,
+            "audit_acquire_seconds": 0.0029824999983247835,
+            "audit_sql_seconds": 0.020935166998242494,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "ba0b759793d3fda39bcfc09406bf1041",
+      "run": "sustained.json",
+      "operation": "traversal",
+      "client": 5,
+      "iteration": 62,
+      "start_epoch": 1793713706.057411,
+      "end_epoch": 1793713706.8434381,
+      "end_to_end_ms": 808.8164170039818,
+      "curl_total_ms": 740.1,
+      "curl_process_and_file_overhead_ms": 45.93175003081562,
+      "tcp_ms": 1.027,
+      "tls_ms": 122.35,
+      "first_byte_wait_ms": 616.382,
+      "bff_ms": [
+        414.2192920000525
+      ],
+      "ingress_ms": [
+        580.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.506702+00:00",
+          "trace_id": "ba0b759793d3fda39bcfc09406bf1041",
+          "span_id": "7438b218aa841ffc",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.077343,
+          "timings": {
+            "ordinary_acquire_seconds": 0.017920459002198186,
+            "ordinary_sql_seconds": 0.025751999997737585,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.840137+00:00",
+          "trace_id": "ba0b759793d3fda39bcfc09406bf1041",
+          "span_id": "ff0bda53ab6066d7",
+          "route": "/api/v1/ontologies/{ontology_id}/traverse",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.33242,
+          "timings": {
+            "authentication_seconds": 0.0004582090004987549,
+            "ordinary_acquire_seconds": 0.020179999995889375,
+            "ordinary_sql_seconds": 0.22997983599998406,
+            "ordinary_statements": 14.0,
+            "audit_acquire_seconds": 0.0013069999986328185,
+            "audit_sql_seconds": 0.0035762080005952157,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "d15fc51e2e0d564a927d63afac0ae751",
+      "run": "sustained.json",
+      "operation": "query",
+      "client": 3,
+      "iteration": 62,
+      "start_epoch": 1793713706.023149,
+      "end_epoch": 1793713706.828715,
+      "end_to_end_ms": 807.7857500175014,
+      "curl_total_ms": 754.776,
+      "curl_process_and_file_overhead_ms": 50.79470899521932,
+      "tcp_ms": 0.71,
+      "tls_ms": 123.58899999999998,
+      "first_byte_wait_ms": 629.9870000000001,
+      "bff_ms": [
+        445.08774999994785
+      ],
+      "ingress_ms": [
+        615.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.486096+00:00",
+          "trace_id": "d15fc51e2e0d564a927d63afac0ae751",
+          "span_id": "77064e796247bf22",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.067698,
+          "timings": {
+            "ordinary_acquire_seconds": 0.007291041998541914,
+            "ordinary_sql_seconds": 0.028123917003540555,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.823978+00:00",
+          "trace_id": "d15fc51e2e0d564a927d63afac0ae751",
+          "span_id": "c279a61e3a9ef7a3",
+          "route": "/api/v1/ontologies/{ontology_id}/objects/{type_id}/query",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.332672,
+          "timings": {
+            "authentication_seconds": 0.002114416998665547,
+            "ordinary_acquire_seconds": 0.010468958993442357,
+            "ordinary_sql_seconds": 0.08827624699915759,
+            "ordinary_statements": 14.0,
+            "audit_acquire_seconds": 0.003471500000159722,
+            "audit_sql_seconds": 0.023869832999480423,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "6c1ebac6e77fe3227c640d7c1eebcd87",
+      "run": "sustained.json",
+      "operation": "sdk",
+      "client": 7,
+      "iteration": 62,
+      "start_epoch": 1793713706.102825,
+      "end_epoch": 1793713706.8525708,
+      "end_to_end_ms": 767.9319159942679,
+      "curl_total_ms": 728.7529999999999,
+      "curl_process_and_file_overhead_ms": 21.001916992969825,
+      "tcp_ms": 0.12300000000000001,
+      "tls_ms": 78.146,
+      "first_byte_wait_ms": 650.13,
+      "bff_ms": [
+        439.90649999998277
+      ],
+      "ingress_ms": [
+        636.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.482028+00:00",
+          "trace_id": "6c1ebac6e77fe3227c640d7c1eebcd87",
+          "span_id": "bb06103aa56363cd",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.058141,
+          "timings": {
+            "ordinary_acquire_seconds": 0.010421833001601044,
+            "ordinary_sql_seconds": 0.020680499001173303,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.848687+00:00",
+          "trace_id": "6c1ebac6e77fe3227c640d7c1eebcd87",
+          "span_id": "473eea2cefa18350",
+          "route": "/api/v1/ontologies/{ontology_id}/sdk/generate",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.361687,
+          "timings": {
+            "authentication_seconds": 0.010898958000325365,
+            "ordinary_acquire_seconds": 0.03184033399884356,
+            "ordinary_sql_seconds": 0.2521931239971309,
+            "ordinary_statements": 13.0,
+            "audit_acquire_seconds": 0.00023920799867482856,
+            "audit_sql_seconds": 0.0003867499981424771,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "c21c1965e62e7b513c961669d0cb1f3f",
+      "run": "sustained.json",
+      "operation": "object_set",
+      "client": 4,
+      "iteration": 62,
+      "start_epoch": 1793713706.086524,
+      "end_epoch": 1793713706.845492,
+      "end_to_end_ms": 759.8587499815039,
+      "curl_total_ms": 723.354,
+      "curl_process_and_file_overhead_ms": 35.61745899944002,
+      "tcp_ms": 0.48800000000000004,
+      "tls_ms": 84.63900000000001,
+      "first_byte_wait_ms": 637.186,
+      "bff_ms": [
+        446.0631669999566
+      ],
+      "ingress_ms": [
+        631.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.504612+00:00",
+          "trace_id": "c21c1965e62e7b513c961669d0cb1f3f",
+          "span_id": "f496ae12cd4cb94b",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.083371,
+          "timings": {
+            "ordinary_acquire_seconds": 0.016285290999803692,
+            "ordinary_sql_seconds": 0.023505457997089252,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:26.841952+00:00",
+          "trace_id": "c21c1965e62e7b513c961669d0cb1f3f",
+          "span_id": "5e67d3f56a0f7805",
+          "route": "/api/v1/ontologies/{ontology_id}/object-sets/query",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.334657,
+          "timings": {
+            "authentication_seconds": 0.0004997079995519016,
+            "ordinary_acquire_seconds": 0.006091501003538724,
+            "ordinary_sql_seconds": 0.2510624150017975,
+            "ordinary_statements": 14.0,
+            "audit_acquire_seconds": 0.014364916998601984,
+            "audit_sql_seconds": 0.007869917000789428,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "a878089c93ed3bdfd6655e38a91e0744",
+      "run": "sustained.json",
+      "operation": "preview",
+      "client": 3,
+      "iteration": 40,
+      "start_epoch": 1793713683.8810089,
+      "end_epoch": 1793713684.2879791,
+      "end_to_end_ms": 407.6952920295298,
+      "curl_total_ms": 395.11800000000005,
+      "curl_process_and_file_overhead_ms": 11.855042001482074,
+      "tcp_ms": 0.162,
+      "tls_ms": 4.191,
+      "first_byte_wait_ms": 390.374,
+      "bff_ms": [
+        384.8809170000022
+      ],
+      "ingress_ms": [
+        389.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:03.933610+00:00",
+          "trace_id": "a878089c93ed3bdfd6655e38a91e0744",
+          "span_id": "9f577c46a58452a1",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.031636,
+          "timings": {
+            "ordinary_acquire_seconds": 0.0013767080017714761,
+            "ordinary_sql_seconds": 0.006323334000626346,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:04.285045+00:00",
+          "trace_id": "a878089c93ed3bdfd6655e38a91e0744",
+          "span_id": "7dbf30f87f71f6f9",
+          "route": "/api/v1/ontologies/{ontology_id}/actions/{action_id}/preview",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.348118,
+          "timings": {
+            "authentication_seconds": 0.001861375003500143,
+            "ordinary_acquire_seconds": 0.02874287499798811,
+            "ordinary_sql_seconds": 0.23065154500727658,
+            "ordinary_statements": 34.0,
+            "audit_acquire_seconds": 0.0001735419973556418,
+            "audit_sql_seconds": 0.0005786660003650468,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "7b51a1a978076bec7fcb183ac4d29df4",
+      "run": "sustained.json",
+      "operation": "sdk",
+      "client": 4,
+      "iteration": 40,
+      "start_epoch": 1793713683.8861692,
+      "end_epoch": 1793713684.26595,
+      "end_to_end_ms": 383.3335420349613,
+      "curl_total_ms": 362.15799999999996,
+      "curl_process_and_file_overhead_ms": 17.625916985616108,
+      "tcp_ms": 0.11399999999999999,
+      "tls_ms": 3.799,
+      "first_byte_wait_ms": 357.927,
+      "bff_ms": [
+        345.3942500000121
+      ],
+      "ingress_ms": [
+        352.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:03.963647+00:00",
+          "trace_id": "7b51a1a978076bec7fcb183ac4d29df4",
+          "span_id": "4749686553f7c6a8",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.042661,
+          "timings": {
+            "ordinary_acquire_seconds": 0.01873475000320468,
+            "ordinary_sql_seconds": 0.014780375000555068,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:04.263241+00:00",
+          "trace_id": "7b51a1a978076bec7fcb183ac4d29df4",
+          "span_id": "13937d1cb3d4efa2",
+          "route": "/api/v1/ontologies/{ontology_id}/sdk/generate",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.29743,
+          "timings": {
+            "authentication_seconds": 0.0009483750000072177,
+            "ordinary_acquire_seconds": 0.015078167001775,
+            "ordinary_sql_seconds": 0.2036225810115866,
+            "ordinary_statements": 13.0,
+            "audit_acquire_seconds": 0.0002084580009977799,
+            "audit_sql_seconds": 0.00035237500196672045,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "4e110eb6c6846e9f3d3e06ba369541ed",
+      "run": "sustained.json",
+      "operation": "query",
+      "client": 0,
+      "iteration": 40,
+      "start_epoch": 1793713683.888777,
+      "end_epoch": 1793713684.257169,
+      "end_to_end_ms": 369.2760419799015,
+      "curl_total_ms": 353.917,
+      "curl_process_and_file_overhead_ms": 14.478583005622047,
+      "tcp_ms": 0.18100000000000002,
+      "tls_ms": 7.9030000000000005,
+      "first_byte_wait_ms": 345.48699999999997,
+      "bff_ms": [
+        332.64020799996797
+      ],
+      "ingress_ms": [
+        342.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:03.946254+00:00",
+          "trace_id": "4e110eb6c6846e9f3d3e06ba369541ed",
+          "span_id": "25b35fac1c09eecd",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.022522,
+          "timings": {
+            "ordinary_acquire_seconds": 0.0012591250015248079,
+            "ordinary_sql_seconds": 0.008002874998055631,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:04.257662+00:00",
+          "trace_id": "4e110eb6c6846e9f3d3e06ba369541ed",
+          "span_id": "0fbf9b4d12765c74",
+          "route": "/api/v1/ontologies/{ontology_id}/objects/{type_id}/query",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.310609,
+          "timings": {
+            "authentication_seconds": 0.0005647500001941808,
+            "ordinary_acquire_seconds": 0.047491249002632685,
+            "ordinary_sql_seconds": 0.21020408400363522,
+            "ordinary_statements": 14.0,
+            "audit_acquire_seconds": 0.0009023339989653323,
+            "audit_sql_seconds": 0.0022516659992106725,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "cc1f356ba000ca26f70629016691065c",
+      "run": "isolated-3.json",
+      "operation": "preview",
+      "client": 2,
+      "iteration": 16,
+      "start_epoch": 1793713638.86405,
+      "end_epoch": 1793713639.227041,
+      "end_to_end_ms": 363.84266696404666,
+      "curl_total_ms": 327.18199999999996,
+      "curl_process_and_file_overhead_ms": 35.81304199996593,
+      "tcp_ms": 0.294,
+      "tls_ms": 16.310000000000002,
+      "first_byte_wait_ms": 310.12,
+      "bff_ms": [
+        272.02691700001014
+      ],
+      "ingress_ms": [
+        308.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:47:19.045999+00:00",
+          "trace_id": "cc1f356ba000ca26f70629016691065c",
+          "span_id": "90272fd36ea815d0",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.089902,
+          "timings": {
+            "ordinary_acquire_seconds": 0.004824457999347942,
+            "ordinary_sql_seconds": 0.05938633299956564,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:47:19.224672+00:00",
+          "trace_id": "cc1f356ba000ca26f70629016691065c",
+          "span_id": "69dc81b901f1873b",
+          "route": "/api/v1/ontologies/{ontology_id}/actions/{action_id}/preview",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.176909,
+          "timings": {
+            "authentication_seconds": 0.0006953339980100282,
+            "ordinary_acquire_seconds": 0.0185447080002632,
+            "ordinary_sql_seconds": 0.10698712300654734,
+            "ordinary_statements": 34.0,
+            "audit_acquire_seconds": 0.00013675000082002953,
+            "audit_sql_seconds": 0.0007525000000896398,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "96cc0e94b127fe0e70e93b7fc5a2a85c",
+      "run": "isolated-3.json",
+      "operation": "preview",
+      "client": 7,
+      "iteration": 16,
+      "start_epoch": 1793713638.890945,
+      "end_epoch": 1793713639.253175,
+      "end_to_end_ms": 363.55212499620393,
+      "curl_total_ms": 326.575,
+      "curl_process_and_file_overhead_ms": 35.65870797233656,
+      "tcp_ms": 0.22399999999999998,
+      "tls_ms": 32.306000000000004,
+      "first_byte_wait_ms": 293.693,
+      "bff_ms": [
+        283.7191669999738
+      ],
+      "ingress_ms": [
+        291.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:47:19.031156+00:00",
+          "trace_id": "96cc0e94b127fe0e70e93b7fc5a2a85c",
+          "span_id": "08f64c9c92008495",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.062118,
+          "timings": {
+            "ordinary_acquire_seconds": 0.00437775000318652,
+            "ordinary_sql_seconds": 0.038248000000749016,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:47:19.250459+00:00",
+          "trace_id": "96cc0e94b127fe0e70e93b7fc5a2a85c",
+          "span_id": "c27a1287a8c1c3f2",
+          "route": "/api/v1/ontologies/{ontology_id}/actions/{action_id}/preview",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.21661,
+          "timings": {
+            "authentication_seconds": 0.0004066660003445577,
+            "ordinary_acquire_seconds": 0.012046582996845245,
+            "ordinary_sql_seconds": 0.1550491259986302,
+            "ordinary_statements": 34.0,
+            "audit_acquire_seconds": 0.0005043749988544732,
+            "audit_sql_seconds": 0.00046787500104983337,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "661c38adcd75daa755cf766bceb8d024",
+      "run": "sustained.json",
+      "operation": "traversal",
+      "client": 7,
+      "iteration": 40,
+      "start_epoch": 1793713683.8867378,
+      "end_epoch": 1793713684.2487218,
+      "end_to_end_ms": 363.0725829862058,
+      "curl_total_ms": 349.61199999999997,
+      "curl_process_and_file_overhead_ms": 12.375375013995937,
+      "tcp_ms": 0.27099999999999996,
+      "tls_ms": 5.055,
+      "first_byte_wait_ms": 343.95599999999996,
+      "bff_ms": [
+        338.83675000001676
+      ],
+      "ingress_ms": [
+        343.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:03.942924+00:00",
+          "trace_id": "661c38adcd75daa755cf766bceb8d024",
+          "span_id": "a017d6b995bde4fc",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.029258,
+          "timings": {
+            "ordinary_acquire_seconds": 0.0014193749993864913,
+            "ordinary_sql_seconds": 0.013348667001991998,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:04.245335+00:00",
+          "trace_id": "661c38adcd75daa755cf766bceb8d024",
+          "span_id": "38b3ddbd75be6457",
+          "route": "/api/v1/ontologies/{ontology_id}/traverse",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.301705,
+          "timings": {
+            "authentication_seconds": 0.00036954099778085947,
+            "ordinary_acquire_seconds": 0.006479167001089081,
+            "ordinary_sql_seconds": 0.19276774799800478,
+            "ordinary_statements": 14.0,
+            "audit_acquire_seconds": 0.006704583000100683,
+            "audit_sql_seconds": 0.023217417001433205,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "01e680a0d3d5c7021d0b8da066561e52",
+      "run": "contention.json",
+      "operation": "preview",
+      "client": 2,
+      "iteration": 6,
+      "start_epoch": 1793713772.2482262,
+      "end_epoch": 1793713772.607933,
+      "end_to_end_ms": 360.6039169826545,
+      "curl_total_ms": 345.56,
+      "curl_process_and_file_overhead_ms": 14.119708955809497,
+      "tcp_ms": 0.252,
+      "tls_ms": 3.0,
+      "first_byte_wait_ms": 341.983,
+      "bff_ms": [
+        335.7320419999887
+      ],
+      "ingress_ms": [
+        341.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:49:32.299886+00:00",
+          "trace_id": "01e680a0d3d5c7021d0b8da066561e52",
+          "span_id": "613a4bfc56d02819",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.030903,
+          "timings": {
+            "ordinary_acquire_seconds": 0.0029272909996507224,
+            "ordinary_sql_seconds": 0.0060716240004694555,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:49:32.603510+00:00",
+          "trace_id": "01e680a0d3d5c7021d0b8da066561e52",
+          "span_id": "abb591e078dcec96",
+          "route": "/api/v1/ontologies/{ontology_id}/actions/{action_id}/preview",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.299493,
+          "timings": {
+            "authentication_seconds": 0.0019441670010564849,
+            "ordinary_acquire_seconds": 0.028322582998953294,
+            "ordinary_sql_seconds": 0.22578691800299566,
+            "ordinary_statements": 34.0,
+            "audit_acquire_seconds": 0.00014966700109653175,
+            "audit_sql_seconds": 0.0004206670018902514,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "d60c0426ab34be58925a2a3a72954a4a",
+      "run": "sustained.json",
+      "operation": "query",
+      "client": 5,
+      "iteration": 40,
+      "start_epoch": 1793713683.894455,
+      "end_epoch": 1793713684.250531,
+      "end_to_end_ms": 357.0113749592565,
+      "curl_total_ms": 340.871,
+      "curl_process_and_file_overhead_ms": 15.20749998632448,
+      "tcp_ms": 0.214,
+      "tls_ms": 14.355,
+      "first_byte_wait_ms": 325.96799999999996,
+      "bff_ms": [
+        320.7150419999962
+      ],
+      "ingress_ms": [
+        325.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:03.954741+00:00",
+          "trace_id": "d60c0426ab34be58925a2a3a72954a4a",
+          "span_id": "d40a2fcfb226f4f0",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.025808,
+          "timings": {
+            "ordinary_acquire_seconds": 0.0033448750000388827,
+            "ordinary_sql_seconds": 0.01446754099742975,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:04.247808+00:00",
+          "trace_id": "d60c0426ab34be58925a2a3a72954a4a",
+          "span_id": "c5fb6fe7a8c088f4",
+          "route": "/api/v1/ontologies/{ontology_id}/objects/{type_id}/query",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.291955,
+          "timings": {
+            "authentication_seconds": 0.0009274170006392524,
+            "ordinary_acquire_seconds": 0.005867250001756474,
+            "ordinary_sql_seconds": 0.21968621099949814,
+            "ordinary_statements": 14.0,
+            "audit_acquire_seconds": 0.0024720830006117467,
+            "audit_sql_seconds": 0.009840082999289734,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "25969dfa49fe79f38c59ac1e0d49f37e",
+      "run": "isolated-3.json",
+      "operation": "preview",
+      "client": 2,
+      "iteration": 1,
+      "start_epoch": 1793713623.784768,
+      "end_epoch": 1793713624.135948,
+      "end_to_end_ms": 353.1524169957265,
+      "curl_total_ms": 322.84000000000003,
+      "curl_process_and_file_overhead_ms": 28.344500032104534,
+      "tcp_ms": 0.267,
+      "tls_ms": 10.134,
+      "first_byte_wait_ms": 311.305,
+      "bff_ms": [
+        292.30649999997695
+      ],
+      "ingress_ms": [
+        309.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:47:03.966971+00:00",
+          "trace_id": "25969dfa49fe79f38c59ac1e0d49f37e",
+          "span_id": "cab4d344c24d93ef",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.126728,
+          "timings": {
+            "ordinary_acquire_seconds": 0.00310883299971465,
+            "ordinary_sql_seconds": 0.015957999999955064,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:47:04.130350+00:00",
+          "trace_id": "25969dfa49fe79f38c59ac1e0d49f37e",
+          "span_id": "4769ee6a7d01ef19",
+          "route": "/api/v1/ontologies/{ontology_id}/actions/{action_id}/preview",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.157847,
+          "timings": {
+            "authentication_seconds": 0.0039020000003802124,
+            "ordinary_acquire_seconds": 0.014766583000891842,
+            "ordinary_sql_seconds": 0.1026136689906707,
+            "ordinary_statements": 34.0,
+            "audit_acquire_seconds": 0.00020091599799343385,
+            "audit_sql_seconds": 0.0004959590005455539,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "4d58572798d74f937eeea965b565454b",
+      "run": "sustained.json",
+      "operation": "object_set",
+      "client": 6,
+      "iteration": 40,
+      "start_epoch": 1793713683.8977978,
+      "end_epoch": 1793713684.24929,
+      "end_to_end_ms": 353.06208301335573,
+      "curl_total_ms": 335.709,
+      "curl_process_and_file_overhead_ms": 15.786792041532715,
+      "tcp_ms": 0.256,
+      "tls_ms": 13.152,
+      "first_byte_wait_ms": 321.882,
+      "bff_ms": [
+        317.98445899999933
+      ],
+      "ingress_ms": [
+        320.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:03.965410+00:00",
+          "trace_id": "4d58572798d74f937eeea965b565454b",
+          "span_id": "2cb772e6e93c8b93",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.035603,
+          "timings": {
+            "ordinary_acquire_seconds": 0.004718000000139,
+            "ordinary_sql_seconds": 0.0224402089988871,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:04.246668+00:00",
+          "trace_id": "4d58572798d74f937eeea965b565454b",
+          "span_id": "9746ffc085a29ba4",
+          "route": "/api/v1/ontologies/{ontology_id}/object-sets/query",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.280515,
+          "timings": {
+            "authentication_seconds": 0.001754125001752982,
+            "ordinary_acquire_seconds": 0.007447749998391373,
+            "ordinary_sql_seconds": 0.19098108098842204,
+            "ordinary_statements": 14.0,
+            "audit_acquire_seconds": 0.011531957999977749,
+            "audit_sql_seconds": 0.0008177910021913704,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "8d6d89ec2da6b1c88696136334dcbd19",
+      "run": "sustained.json",
+      "operation": "traversal",
+      "client": 2,
+      "iteration": 40,
+      "start_epoch": 1793713683.8835049,
+      "end_epoch": 1793713684.225033,
+      "end_to_end_ms": 342.79145795153454,
+      "curl_total_ms": 328.49,
+      "curl_process_and_file_overhead_ms": 13.041250043772157,
+      "tcp_ms": 0.183,
+      "tls_ms": 3.8609999999999998,
+      "first_byte_wait_ms": 323.733,
+      "bff_ms": [
+        307.3462089999812
+      ],
+      "ingress_ms": [
+        311.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:03.933182+00:00",
+          "trace_id": "8d6d89ec2da6b1c88696136334dcbd19",
+          "span_id": "ee6db61ca6fbe412",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.029866,
+          "timings": {
+            "ordinary_acquire_seconds": 0.0013568340000347234,
+            "ordinary_sql_seconds": 0.018376833002548665,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:48:04.208067+00:00",
+          "trace_id": "8d6d89ec2da6b1c88696136334dcbd19",
+          "span_id": "d54de58db83248e1",
+          "route": "/api/v1/ontologies/{ontology_id}/traverse",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.271585,
+          "timings": {
+            "authentication_seconds": 0.0006037919993104879,
+            "ordinary_acquire_seconds": 0.017144583005574532,
+            "ordinary_sql_seconds": 0.12529441700462485,
+            "ordinary_statements": 14.0,
+            "audit_acquire_seconds": 0.002247291999083245,
+            "audit_sql_seconds": 0.030859999998938292,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "trace_id": "72b3bc7021982a160f332b4e238017c2",
+      "run": "isolated-3.json",
+      "operation": "traversal",
+      "client": 1,
+      "iteration": 16,
+      "start_epoch": 1793713638.9045389,
+      "end_epoch": 1793713639.2354481,
+      "end_to_end_ms": 331.72129199374467,
+      "curl_total_ms": 284.031,
+      "curl_process_and_file_overhead_ms": 46.88012499823796,
+      "tcp_ms": 0.22699999999999998,
+      "tls_ms": 12.504999999999999,
+      "first_byte_wait_ms": 270.941,
+      "bff_ms": [
+        257.91970800000126
+      ],
+      "ingress_ms": [
+        267.0
+      ],
+      "api": [
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:47:19.061929+00:00",
+          "trace_id": "72b3bc7021982a160f332b4e238017c2",
+          "span_id": "a406d16543b47145",
+          "route": "/internal/browser-state/{kind}/{key}",
+          "method": "GET",
+          "status": 200,
+          "duration_seconds": 0.080549,
+          "timings": {
+            "ordinary_acquire_seconds": 0.030733167001017136,
+            "ordinary_sql_seconds": 0.01985170899934019,
+            "ordinary_statements": 2.0
+          }
+        },
+        {
+          "event": "request_span",
+          "timestamp": "2026-11-03T13:47:19.233107+00:00",
+          "trace_id": "72b3bc7021982a160f332b4e238017c2",
+          "span_id": "2e38997fc0cb574b",
+          "route": "/api/v1/ontologies/{ontology_id}/traverse",
+          "method": "POST",
+          "status": 200,
+          "duration_seconds": 0.169952,
+          "timings": {
+            "authentication_seconds": 0.000652749997243518,
+            "ordinary_acquire_seconds": 0.013225334001617739,
+            "ordinary_sql_seconds": 0.12376370899437461,
+            "ordinary_statements": 14.0,
+            "audit_acquire_seconds": 0.0001458329970773775,
+            "audit_sql_seconds": 0.00029483300022548065,
+            "audit_statements": 1.0
+          }
+        }
+      ]
+    }
+  ],
+  "resources": {
+    "unattributed": {
+      "result": "INCONCLUSIVE",
+      "reason": "Docker omitted name; initial sampler did not retain request container ID",
+      "samples": 10716
+    },
+    "/foundry-accept-27eff73c-api-1": {
+      "samples": 1,
+      "peak_memory_bytes": null,
+      "cpu_usage_ns_delta": 0,
+      "throttling_delta": {
+        "periods": 0,
+        "throttled_periods": 0,
+        "throttled_time": 0
+      },
+      "first_epoch": 1793713874.7338161,
+      "last_epoch": 1793713874.7338161
+    }
+  },
+  "sampler_errors": [],
+  "database": {
+    "samples": 3596,
+    "max_total_connections": 24,
+    "max_active": 1,
+    "max_lock_waiters": 0,
+    "wal_growth_bytes": 6013243,
+    "database_growth_bytes": 2777088
+  },
+  "write_resource_window": {
+    "samples": 243,
+    "first_write_epoch": 1793713841.51509,
+    "last_write_epoch": 1793713867.4899268,
+    "last_resource_epoch": 1793713897.484531,
+    "wal_growth_bytes": 948560,
+    "database_growth_bytes": 630784,
+    "max_connections": 23,
+    "max_lock_waiters": 0
+  },
+  "host_memory_pressure": {
+    "samples": 389,
+    "first": "The system has 17179869184 (1048576 pages with a page size of 16384).\nSystem-wide memory free percentage: 42%\n",
+    "last": "The system has 17179869184 (1048576 pages with a page size of 16384).\nSystem-wide memory free percentage: 40%\n"
+  },
+  "root_cause": "UNRESOLVED: historical target violation not reproduced. Correlation does not establish causality; GC pauses and host scheduler traces are not measured."
+}

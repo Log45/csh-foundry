@@ -1,0 +1,386 @@
+[
+  {
+    "run": "writes-1",
+    "concurrency": 1,
+    "duration_seconds": 8.884113374981098,
+    "throughput": 4.614979376046879,
+    "requests": 41,
+    "errors": 0,
+    "p50_ms": 40.232,
+    "p95_ms": 52.467,
+    "p99_ms": 296.98,
+    "max_ms": 296.9804999884218,
+    "by_operation": {
+      "action_execute": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 43.802,
+        "p95_ms": 54.512,
+        "p99_ms": 54.512,
+        "max_ms": 54.512333997990936
+      },
+      "action_preview": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 41.888,
+        "p95_ms": 46.774,
+        "p99_ms": 46.774,
+        "max_ms": 46.77370801800862
+      },
+      "action_replay": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 36.528,
+        "p95_ms": 39.492,
+        "p99_ms": 39.492,
+        "max_ms": 39.492250012699515
+      },
+      "artifact_sdk": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 41.212,
+        "p95_ms": 296.98,
+        "p99_ms": 296.98,
+        "max_ms": 296.9804999884218
+      },
+      "branch_create": {
+        "requests": 2,
+        "errors": 0,
+        "p50_ms": 36.755,
+        "p95_ms": 48.039,
+        "p99_ms": 48.039,
+        "max_ms": 48.03866700967774
+      },
+      "branch_revision": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 34.658,
+        "p95_ms": 34.658,
+        "p99_ms": 34.658,
+        "max_ms": 34.65750004397705
+      },
+      "ingestion_admission": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 34.745,
+        "p95_ms": 34.745,
+        "p99_ms": 34.745,
+        "max_ms": 34.74475000984967
+      },
+      "merge_execute": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 41.566,
+        "p95_ms": 41.566,
+        "p99_ms": 41.566,
+        "max_ms": 41.56616603722796
+      },
+      "merge_preview": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 39.082,
+        "p95_ms": 39.082,
+        "p99_ms": 39.082,
+        "max_ms": 39.08212500391528
+      },
+      "object_create": {
+        "requests": 8,
+        "errors": 0,
+        "p50_ms": 39.323,
+        "p95_ms": 48.438,
+        "p99_ms": 48.438,
+        "max_ms": 48.43829100718722
+      },
+      "object_update": {
+        "requests": 8,
+        "errors": 0,
+        "p50_ms": 37.002,
+        "p95_ms": 42.465,
+        "p99_ms": 42.465,
+        "max_ms": 42.465000005904585
+      },
+      "semantic_admission": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 51.254,
+        "p95_ms": 51.254,
+        "p99_ms": 51.254,
+        "max_ms": 51.2536249589175
+      },
+      "semantic_artifact": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 40.232,
+        "p95_ms": 40.232,
+        "p99_ms": 40.232,
+        "max_ms": 40.23208300350234
+      },
+      "semantic_export": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 48.61,
+        "p95_ms": 48.61,
+        "p99_ms": 48.61,
+        "max_ms": 48.609666991978884
+      }
+    },
+    "highest_write_p95_ms": 296.98,
+    "write_target": "PASS"
+  },
+  {
+    "run": "writes-4",
+    "concurrency": 4,
+    "duration_seconds": 10.445601875020657,
+    "throughput": 3.9250969442025494,
+    "requests": 41,
+    "errors": 0,
+    "p50_ms": 50.858,
+    "p95_ms": 84.849,
+    "p99_ms": 97.016,
+    "max_ms": 97.01612498611212,
+    "by_operation": {
+      "action_execute": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 49.6,
+        "p95_ms": 56.737,
+        "p99_ms": 56.737,
+        "max_ms": 56.73658300656825
+      },
+      "action_preview": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 47.38,
+        "p95_ms": 54.05,
+        "p99_ms": 54.05,
+        "max_ms": 54.049915983341634
+      },
+      "action_replay": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 32.186,
+        "p95_ms": 33.231,
+        "p99_ms": 33.231,
+        "max_ms": 33.23079104302451
+      },
+      "artifact_sdk": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 40.772,
+        "p95_ms": 43.959,
+        "p99_ms": 43.959,
+        "max_ms": 43.95904199918732
+      },
+      "branch_create": {
+        "requests": 2,
+        "errors": 0,
+        "p50_ms": 35.006,
+        "p95_ms": 45.015,
+        "p99_ms": 45.015,
+        "max_ms": 45.014999981503934
+      },
+      "branch_revision": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 84.156,
+        "p95_ms": 84.156,
+        "p99_ms": 84.156,
+        "max_ms": 84.15616600541398
+      },
+      "ingestion_admission": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 46.2,
+        "p95_ms": 46.2,
+        "p99_ms": 46.2,
+        "max_ms": 46.200042008422315
+      },
+      "merge_execute": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 42.833,
+        "p95_ms": 42.833,
+        "p99_ms": 42.833,
+        "max_ms": 42.833207990042865
+      },
+      "merge_preview": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 43.889,
+        "p95_ms": 43.889,
+        "p99_ms": 43.889,
+        "max_ms": 43.888915970455855
+      },
+      "object_create": {
+        "requests": 8,
+        "errors": 0,
+        "p50_ms": 70.574,
+        "p95_ms": 97.016,
+        "p99_ms": 97.016,
+        "max_ms": 97.01612498611212
+      },
+      "object_update": {
+        "requests": 8,
+        "errors": 0,
+        "p50_ms": 64.026,
+        "p95_ms": 84.849,
+        "p99_ms": 84.849,
+        "max_ms": 84.8487499752082
+      },
+      "semantic_admission": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 48.217,
+        "p95_ms": 48.217,
+        "p99_ms": 48.217,
+        "max_ms": 48.217125004157424
+      },
+      "semantic_artifact": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 41.573,
+        "p95_ms": 41.573,
+        "p99_ms": 41.573,
+        "max_ms": 41.57333297189325
+      },
+      "semantic_export": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 50.858,
+        "p95_ms": 50.858,
+        "p99_ms": 50.858,
+        "max_ms": 50.857707974500954
+      }
+    },
+    "highest_write_p95_ms": 97.016,
+    "write_target": "PASS"
+  },
+  {
+    "run": "writes-8",
+    "concurrency": 8,
+    "duration_seconds": 10.361130749981385,
+    "throughput": 3.9570970571984785,
+    "requests": 41,
+    "errors": 0,
+    "p50_ms": 51.545,
+    "p95_ms": 262.595,
+    "p99_ms": 275.908,
+    "max_ms": 275.9080419782549,
+    "by_operation": {
+      "action_execute": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 51.545,
+        "p95_ms": 57.514,
+        "p99_ms": 57.514,
+        "max_ms": 57.51400004373863
+      },
+      "action_preview": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 47.19,
+        "p95_ms": 51.008,
+        "p99_ms": 51.008,
+        "max_ms": 51.008125010412186
+      },
+      "action_replay": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 33.311,
+        "p95_ms": 36.033,
+        "p99_ms": 36.033,
+        "max_ms": 36.03258298244327
+      },
+      "artifact_sdk": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 38.415,
+        "p95_ms": 40.386,
+        "p99_ms": 40.386,
+        "max_ms": 40.386041975580156
+      },
+      "branch_create": {
+        "requests": 2,
+        "errors": 0,
+        "p50_ms": 37.182,
+        "p95_ms": 50.728,
+        "p99_ms": 50.728,
+        "max_ms": 50.72841700166464
+      },
+      "branch_revision": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 39.194,
+        "p95_ms": 39.194,
+        "p99_ms": 39.194,
+        "max_ms": 39.1941670095548
+      },
+      "ingestion_admission": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 43.059,
+        "p95_ms": 43.059,
+        "p99_ms": 43.059,
+        "max_ms": 43.05941698839888
+      },
+      "merge_execute": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 47.134,
+        "p95_ms": 47.134,
+        "p99_ms": 47.134,
+        "max_ms": 47.13383398484439
+      },
+      "merge_preview": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 42.194,
+        "p95_ms": 42.194,
+        "p99_ms": 42.194,
+        "max_ms": 42.19395894324407
+      },
+      "object_create": {
+        "requests": 8,
+        "errors": 0,
+        "p50_ms": 243.007,
+        "p95_ms": 275.908,
+        "p99_ms": 275.908,
+        "max_ms": 275.9080419782549
+      },
+      "object_update": {
+        "requests": 8,
+        "errors": 0,
+        "p50_ms": 132.912,
+        "p95_ms": 200.146,
+        "p99_ms": 200.146,
+        "max_ms": 200.14616596745327
+      },
+      "semantic_admission": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 56.574,
+        "p95_ms": 56.574,
+        "p99_ms": 56.574,
+        "max_ms": 56.57379201147705
+      },
+      "semantic_artifact": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 45.727,
+        "p95_ms": 45.727,
+        "p99_ms": 45.727,
+        "max_ms": 45.72699998971075
+      },
+      "semantic_export": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 60.459,
+        "p95_ms": 60.459,
+        "p99_ms": 60.459,
+        "max_ms": 60.458790976554155
+      }
+    },
+    "highest_write_p95_ms": 275.908,
+    "write_target": "PASS"
+  }
+]

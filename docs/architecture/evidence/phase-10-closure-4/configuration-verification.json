@@ -1,0 +1,43 @@
+{
+  "result": "PASS documented/inspected scope",
+  "api_ordinary": {
+    "pool_size": 5,
+    "overflow": 5,
+    "source": "Actual selected image defaults/source plus explicit Compose environment and secret mount configuration; no pool overrides"
+  },
+  "api_audit": {
+    "pool_size": 2,
+    "overflow": 0,
+    "source": "Actual selected image make_engine(audit=True), hash verified"
+  },
+  "keycloak": {
+    "initial": 2,
+    "minimum": 2,
+    "maximum": 10,
+    "source": "Inspected running environment in all final-runtime.json files"
+  },
+  "postgres": {
+    "max_connections": 100,
+    "source": "SHOW max_connections asserted on each disposable deployment"
+  },
+  "api_workers_per_replica": 1,
+  "studio_read_replicas": 1,
+  "api_read_replicas": 1,
+  "api_governance_drill_replicas": 2,
+  "connection_budget": {
+    "one_api_two_workers": 52,
+    "two_api_two_workers": 64,
+    "two_api_two_workers_optional_outbox": 74,
+    "postgres_limit": 100
+  },
+  "max_observed_total_connections": 24,
+  "unmeasured": [
+    "Live ordinary/audit checked-out counts",
+    "Replacement API CPU metrics after write-drill recreation"
+  ],
+  "runtime_evidence": [
+    "docs/architecture/evidence/phase-10-closure-4/attempt-1/final-runtime.json",
+    "docs/architecture/evidence/phase-10-closure-4/write-final/final-runtime.json",
+    "docs/architecture/evidence/phase-10-closure-4/attempt-2/final-runtime.json"
+  ]
+}

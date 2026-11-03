@@ -1,0 +1,25 @@
+[
+  {
+    "check": "migrate",
+    "result": "PASS",
+    "exit_code": 0,
+    "command": [
+      "uv",
+      "run",
+      "alembic",
+      "upgrade",
+      "head"
+    ]
+  },
+  {
+    "check": "regression",
+    "result": "PASS",
+    "exit_code": 0,
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/validate_phase0.py"
+    ]
+  }
+]

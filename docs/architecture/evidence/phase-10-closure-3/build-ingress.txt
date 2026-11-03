@@ -1,0 +1,34 @@
+COMMAND: docker build -t csh-foundry-ingress:phase10-closure3-verify -f infrastructure/docker/ingress.Dockerfile .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from ingress.Dockerfile
+#1 transferring dockerfile: 456B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/nginx:1.30.6-alpine@sha256:0e52bd054126cdc040b1276c0af347aeb02a41b9cfe305d6094767ac30e97949
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 173B done
+#3 DONE 0.0s
+
+#4 [1/2] FROM docker.io/library/nginx:1.30.6-alpine@sha256:0e52bd054126cdc040b1276c0af347aeb02a41b9cfe305d6094767ac30e97949
+#4 resolve docker.io/library/nginx:1.30.6-alpine@sha256:0e52bd054126cdc040b1276c0af347aeb02a41b9cfe305d6094767ac30e97949 0.0s done
+#4 DONE 0.0s
+
+#5 [2/2] RUN apk del nginx-module-acme nginx-module-geoip nginx-module-image-filter nginx-module-njs nginx-module-xslt     && apk upgrade --no-cache
+#5 CACHED
+
+#6 exporting to image
+#6 exporting layers 0.0s done
+#6 exporting manifest sha256:56d22c37a18e8da7dca3820efffe6104817f390cf5974c1d945fb9400b153307 done
+#6 exporting config sha256:e145129f21be32c3795a8d3a39e169ff9e6d799568ddfd2db56fd0804c0b37ef done
+#6 exporting attestation manifest sha256:b98749b41705900e0e945087e1b2fcdff0f096d31cccd091d87d8b98b1a5650d 0.0s done
+#6 exporting manifest list sha256:b5d4978c1b230a2781c60e1eb256cff7bb9bcb3689fe9cf472c3948144ce705c
+#6 exporting manifest list sha256:b5d4978c1b230a2781c60e1eb256cff7bb9bcb3689fe9cf472c3948144ce705c 0.0s done
+#6 naming to docker.io/library/csh-foundry-ingress:phase10-closure3-verify done
+#6 unpacking to docker.io/library/csh-foundry-ingress:phase10-closure3-verify
+#6 unpacking to docker.io/library/csh-foundry-ingress:phase10-closure3-verify 0.2s done
+#6 DONE 0.5s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/melnthcyje4wt2g0lcn3lzcp7

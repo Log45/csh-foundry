@@ -52,3 +52,15 @@ failure still aborts business mutations; durable audit on business rollback is p
 reserves progress under ordinary-pool contention, not capacity against arbitrary load. Count both
 pools in connection sizing and retain target load/abuse validation. Continuation evidence is in
 `docs/architecture/evidence/phase-10-closure-2/`.
+
+## Phase 10 continuation 3 evidence
+
+The final disposable integrated profile passes 58 assertions, including actual broker/JWKS outages,
+signed-token expiry, signing-key overlap, interrupted SDK publication, two-API governance conflicts,
+shared quotas, two-Studio session failures and restored application startup. Scope and retained
+failures: [executed matrix](../architecture/evidence/phase-10-closure-3/README.md). Six selected images
+still contain 274 high/two critical matches; promotion remains blocked, with no authorized exception.
+Shared locked scanner caching removes duplicate database copies without removing findings. Cleanup
+validates exact disposable ownership and distinguishes daemon failure from proven resource absence.
+Live provider certification, actual outbox delivery, off-host recovery and production alert ownership
+remain unverified. These local tests do not establish target-environment certification.

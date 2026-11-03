@@ -1,0 +1,206 @@
+{
+  "main_requests": 0,
+  "span_coverage": {
+    "request_span": 0,
+    "bff_span": 0,
+    "ingress_status": 0
+  },
+  "slowest_requests": [],
+  "resources": {
+    "/foundry-accept-983ac327-api-1": {
+      "samples": 126,
+      "peak_memory_bytes": 132145152,
+      "cpu_usage_ns_delta": 4006228000,
+      "throttling_delta": {
+        "periods": 240,
+        "throttled_periods": 0,
+        "throttled_time": 0
+      },
+      "first_epoch": 1793715007.247508,
+      "last_epoch": 1793715039.3615181
+    },
+    "/foundry-accept-983ac327-ingestion-worker-1": {
+      "samples": 211,
+      "peak_memory_bytes": 116387840,
+      "cpu_usage_ns_delta": 14661231000,
+      "throttling_delta": {
+        "periods": 169,
+        "throttled_periods": 0,
+        "throttled_time": 0
+      },
+      "first_epoch": 1793715007.250966,
+      "last_epoch": 1793715061.078166
+    },
+    "/foundry-accept-983ac327-ingress-1": {
+      "samples": 211,
+      "peak_memory_bytes": 14675968,
+      "cpu_usage_ns_delta": 482366000,
+      "throttling_delta": {
+        "periods": 212,
+        "throttled_periods": 0,
+        "throttled_time": 0
+      },
+      "first_epoch": 1793715007.2551308,
+      "last_epoch": 1793715061.083462
+    },
+    "/foundry-accept-983ac327-keycloak-1": {
+      "samples": 211,
+      "peak_memory_bytes": 762580992,
+      "cpu_usage_ns_delta": 2246615000,
+      "throttling_delta": {
+        "periods": 260,
+        "throttled_periods": 0,
+        "throttled_time": 0
+      },
+      "first_epoch": 1793715007.259129,
+      "last_epoch": 1793715061.0870059
+    },
+    "/foundry-accept-983ac327-postgres-1": {
+      "samples": 211,
+      "peak_memory_bytes": 203280384,
+      "cpu_usage_ns_delta": 2690711000,
+      "throttling_delta": {
+        "periods": 525,
+        "throttled_periods": 0,
+        "throttled_time": 0
+      },
+      "first_epoch": 1793715007.2635672,
+      "last_epoch": 1793715061.0913768
+    },
+    "/foundry-accept-983ac327-semantic-worker-1": {
+      "samples": 211,
+      "peak_memory_bytes": 136589312,
+      "cpu_usage_ns_delta": 18727222000,
+      "throttling_delta": {
+        "periods": 207,
+        "throttled_periods": 39,
+        "throttled_time": 95466000
+      },
+      "first_epoch": 1793715007.2671869,
+      "last_epoch": 1793715061.094078
+    },
+    "/foundry-accept-983ac327-studio-1": {
+      "samples": 211,
+      "peak_memory_bytes": 127287296,
+      "cpu_usage_ns_delta": 2475490000,
+      "throttling_delta": {
+        "periods": 249,
+        "throttled_periods": 0,
+        "throttled_time": 0
+      },
+      "first_epoch": 1793715007.2700071,
+      "last_epoch": 1793715061.098741
+    }
+  },
+  "sampler_errors": [
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError",
+    "HTTPStatusError"
+  ],
+  "database": {
+    "samples": 495,
+    "max_total_connections": 23,
+    "max_active": 1,
+    "max_lock_waiters": 0,
+    "wal_growth_bytes": 1433423,
+    "database_growth_bytes": 1064960
+  },
+  "write_resource_window": {
+    "samples": 222,
+    "first_write_epoch": 1793715007.688384,
+    "last_write_epoch": 1793715031.765036,
+    "last_resource_epoch": 1793715061.138552,
+    "wal_growth_bytes": 680628,
+    "database_growth_bytes": 671744,
+    "max_connections": 22,
+    "max_lock_waiters": 0
+  },
+  "host_memory_pressure": {
+    "samples": 54,
+    "first": "The system has 17179869184 (1048576 pages with a page size of 16384).\nSystem-wide memory free percentage: 43%\n",
+    "last": "The system has 17179869184 (1048576 pages with a page size of 16384).\nSystem-wide memory free percentage: 37%\n"
+  },
+  "root_cause": "UNRESOLVED: historical target violation not reproduced. Correlation does not establish causality; GC pauses and host scheduler traces are not measured."
+}

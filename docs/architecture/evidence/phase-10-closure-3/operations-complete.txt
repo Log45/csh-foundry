@@ -1,0 +1,35 @@
+PASS production-template-configuration
+PASS disposable-production-wal-directory-owner-and-write-permission
+No new upgrade operations detected.
+PASS new-cluster-owner-migration-and-runtime-grants
+/Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+PASS governed-manufacturing-schema-and-explicit-worker-delegations
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS real-jwks-only-outage-new-verifier-denial-and-recovery
+PASS broker-outage-login-unavailable-cached-token-bounded-and-fresh-verifier-denied
+PASS real-api-invalid-signing-key-denied
+PASS real-issuer-signed-expired-access-token-denied
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS deployed-logical-byte-saturation-concurrent-rollback-retry-independent-tenant
+PASS two-deployed-tenants-shared-mixed-job-and-logical-byte-quota-isolation
+PASS sdk-interrupted-transaction-no-partial-artifact-retry-concurrent-integrity-isolation
+PASS real-broker-signing-key-rotation-new-kid-overlap-bounded-refresh
+PASS governed-query-sql-pool-diagnostic-and-redacted-explain-analyze
+Checking /config/rules.yaml
+  SUCCESS: 3 rules found
+
+PASS rule evaluation, firing, local webhook delivery and resolution
+PASS actual-authenticated-api-scrape-real-alert-firing-local-delivery-resolution
+PASS two-api-concurrent-governed-actions-revision-conflicts-idempotent-replay
+FAIL additional-operations
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_operations.py", line 761, in <module>
+    main()
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_operations.py", line 757, in main
+    OperationsAcceptance(parser.parse_args().output).execute()
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_operations.py", line 732, in execute
+    ClosureAcceptance.api_replicas(self)
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_closure3.py", line 404, in api_replicas
+    assert sum(r["status"] == 409 for r in merges) == 3
+AssertionError

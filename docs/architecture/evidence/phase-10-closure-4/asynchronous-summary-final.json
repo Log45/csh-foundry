@@ -1,0 +1,70 @@
+{
+  "result": "PASS",
+  "jobs": [
+    {
+      "check": "ingestion-asynchronous-completion",
+      "result": "PASS",
+      "concurrency": 1,
+      "completion_seconds": 1.218196292000357,
+      "job_status": "COMPLETED",
+      "server_queue_seconds": 0.702808,
+      "server_worker_seconds": 0.217222,
+      "server_total_seconds": 0.92003
+    },
+    {
+      "check": "semantic-asynchronous-completion",
+      "result": "PASS",
+      "concurrency": 1,
+      "completion_seconds": 2.3188490830361843,
+      "job_status": "COMPLETED",
+      "server_queue_seconds": 1.078559,
+      "server_worker_seconds": 0.714152,
+      "server_total_seconds": 1.792711
+    },
+    {
+      "check": "ingestion-asynchronous-completion",
+      "result": "PASS",
+      "concurrency": 4,
+      "completion_seconds": 2.8495944169699214,
+      "job_status": "COMPLETED",
+      "server_queue_seconds": 2.527873,
+      "server_worker_seconds": 0.184123,
+      "server_total_seconds": 2.711996
+    },
+    {
+      "check": "semantic-asynchronous-completion",
+      "result": "PASS",
+      "concurrency": 4,
+      "completion_seconds": 6.109579666052014,
+      "job_status": "COMPLETED",
+      "server_queue_seconds": 4.87969,
+      "server_worker_seconds": 0.669918,
+      "server_total_seconds": 5.549608
+    },
+    {
+      "check": "ingestion-asynchronous-completion",
+      "result": "PASS",
+      "concurrency": 8,
+      "completion_seconds": 1.242207708011847,
+      "job_status": "COMPLETED",
+      "server_queue_seconds": 0.629688,
+      "server_worker_seconds": 0.189064,
+      "server_total_seconds": 0.818752
+    },
+    {
+      "check": "semantic-asynchronous-completion",
+      "result": "PASS",
+      "concurrency": 8,
+      "completion_seconds": 6.138097415969241,
+      "job_status": "COMPLETED",
+      "server_queue_seconds": 4.896953,
+      "server_worker_seconds": 0.758497,
+      "server_total_seconds": 5.65545
+    }
+  ],
+  "oldest_sampled_pending_seconds": 4.902163,
+  "source": {
+    "evidence": "docs/architecture/evidence/phase-10-closure-4/write-final/deployment.json",
+    "sha256": "b452e8965ba9c4171afd4df2c9957fda398b825551737bf84d43dce42c78a904"
+  }
+}

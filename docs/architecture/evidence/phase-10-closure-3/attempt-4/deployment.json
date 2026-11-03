@@ -1,0 +1,277 @@
+{
+  "project": "foundry-accept-4fb9a0ad",
+  "environment": "Disposable local Compose; test CA; loopback ports",
+  "private_evidence": "artifacts/foundry-accept-4fb9a0ad",
+  "checks": [
+    {
+      "check": "production-template-configuration",
+      "result": "PASS"
+    },
+    {
+      "check": "disposable-production-wal-directory-owner-and-write-permission",
+      "result": "PASS"
+    },
+    {
+      "check": "new-cluster-owner-migration-and-runtime-grants",
+      "result": "PASS",
+      "head": "0017_capacity"
+    },
+    {
+      "check": "complete-production-profile-core-startup",
+      "result": "PASS"
+    },
+    {
+      "check": "governed-manufacturing-schema-and-explicit-worker-delegations",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-ingestion-sigkill-durable-checkpoint-lease-reclaim-idempotent-final-state",
+      "result": "PASS",
+      "attempts": 2,
+      "checkpoint_at_kill": 42,
+      "final_checkpoint": 65
+    },
+    {
+      "check": "production-ingestion-worker-63-objects-70-links-query-traversal-action-idempotency-concurrency",
+      "result": "PASS"
+    },
+    {
+      "check": "production-sdk-generation-download-integrity-python",
+      "result": "PASS",
+      "artifact": "c0442f30-b8f2-4340-9d3d-9c8894d78569"
+    },
+    {
+      "check": "production-sdk-generation-download-integrity-typescript",
+      "result": "PASS",
+      "artifact": "9e2c6939-ca89-414a-b174-e43d340dba9c"
+    },
+    {
+      "check": "production-branch-conflict-resolved-merge-provenance-draft-publication-separate-activation",
+      "result": "PASS"
+    },
+    {
+      "check": "production-semantic-supervised-validation",
+      "result": "PASS",
+      "outputs": 1
+    },
+    {
+      "check": "production-semantic-supervised-reasoning",
+      "result": "PASS",
+      "outputs": 3
+    },
+    {
+      "check": "semantic-and-schema-development-did-not-mutate-operational-objects",
+      "result": "PASS"
+    },
+    {
+      "check": "actual-runtime-semantic-container-limits-and-network-configuration",
+      "result": "PASS"
+    },
+    {
+      "check": "actual-runtime-database-privilege-check",
+      "result": "PASS"
+    },
+    {
+      "check": "semantic-nonroot-readonly-tmpfs-cgroup-enforcement-no-direct-egress",
+      "result": "PASS",
+      "cgroups": {
+        "memory.max": "805306368",
+        "cpu.max": "100000 100000",
+        "pids.max": "128"
+      }
+    },
+    {
+      "check": "independently-installed-python-built-typescript-sdks-real-https-queries-actions-replay-unauthorized-cross-tenant-denials",
+      "result": "PASS"
+    },
+    {
+      "check": "retained-controlled-load-runtime-identities-match",
+      "result": "PASS",
+      "evidence": "docs/architecture/evidence/phase-10-closure-3/attempt-1/load-summary.json",
+      "sha256": "14b63af6b213ab1cfec10d590e3d07440fcb900b7b0cba723a7a95a3c5fcfeba",
+      "new_measurement": "NOT RUN",
+      "read_target": "FAIL; see retained repeated samples"
+    },
+    {
+      "check": "deployed-active-session-role-and-membership-revocation-before-jwt-expiry",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-worker-oidc-client-secret-rotation-old-secret-rejected",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-worker-reacquires-rotated-credential-queued-delegation-revocation-idempotent-continuation",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-api-studio-internal-credential-maintenance-rotation-session-continuity",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-database-credential-maintenance-rotation-old-login-rejected-session-continuity",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-encrypted-logical-restore-all-domain-identity-history-session-checksums",
+      "result": "PASS",
+      "tables": {
+        "alembic_version": "1:7a128e33a6d8196d64ab04396cb1d7bb",
+        "ontologies": "1:07ad90e318526a230579fa5736ee3f3e",
+        "ontology_versions": "2:a1ec848ab868c7792bb4b9f8a5bf5120",
+        "schema_activations": "1:96e3df5686eb9a3b47e95ed35aaa58d2",
+        "objects": "63:471c7e3c5da192190c59bdfe86bd0a99",
+        "object_links": "70:68d740af94fdc529fc901899a4a472f3",
+        "ontology_branches": "2:f13a6db2a3c184f7d7c5eb1f54551230",
+        "ontology_branch_revisions": "5:acb42505cb25ced8cb85de5b94d206b1",
+        "ontology_branch_merges": "1:18111bce709a5c05a96abb2368d5c5b2",
+        "sdk_artifacts": "2:002bc63f0319a58b78848e40b60214e9",
+        "principals": "3:a22cdefaee9319280a66284c24c346e9",
+        "external_identities": "3:a6ecea33809fd168937f2f1d1e67a656",
+        "tenant_memberships": "3:3756ddbc5ffd8b58cd22683b69e1e78e",
+        "role_assignments": "3:683e02a4a71c18d5c32bb7d7b92c9f25",
+        "authorization_audit": "4423:751209ee14a75ee518301cc4a0b74169",
+        "action_executions": "3:763f51d243e0c50771848ec178151650",
+        "action_audit_events": "3:e0ebcecac72ef0ffab586577e5f65b30",
+        "ingestion_runs": "2:f0e8e51e12bd5a14656b284ca26dda07",
+        "semantic_jobs": "2:051998fa085451f2fe85a038ce650aa6",
+        "semantic_artifacts": "7:a493ff0d731ce7698b4dbe2cd6c1ee0b",
+        "browser_state": "2:48d5e83e8bc133eaf6a68b065b1ca7e4"
+      },
+      "ciphertext_sha256": "78d3d13120444d688eeb9faebc91d2bf19ffd9eded39f122646e943b7be6081e"
+    },
+    {
+      "check": "deployed-concurrent-job-admission-limit-rollback-and-cancel-release",
+      "result": "PASS",
+      "requests": 24,
+      "concurrent_clients": 12,
+      "accepted": 20,
+      "quota_rejected": 4,
+      "active_limit": 20,
+      "after_cancellation": 0,
+      "failed_admission_consumed_slot": false,
+      "cancelled_slot_reused": true,
+      "lock_waiter_samples": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "peak_observed_lock_waiters": 0,
+      "median_http_ms": 232.847,
+      "max_http_ms": 447.656,
+      "scope": "One disposable tenant's shared ingestion/semantic admission; not physical storage or cross-tenant quota saturation certification"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "mixed-ingestion-semantic-deployed-shared-quota",
+      "result": "PASS",
+      "samples": [
+        {
+          "concurrency": 2,
+          "accepted": 20,
+          "rejected_409": 8,
+          "semantic_accepted": 4,
+          "final_active": 0,
+          "repeated_cancel": "PASS"
+        },
+        {
+          "concurrency": 8,
+          "accepted": 20,
+          "rejected_409": 8,
+          "semantic_accepted": 4,
+          "final_active": 0,
+          "repeated_cancel": "PASS"
+        },
+        {
+          "concurrency": 12,
+          "accepted": 20,
+          "rejected_409": 8,
+          "semantic_accepted": 4,
+          "final_active": 0,
+          "repeated_cancel": "PASS"
+        }
+      ]
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "recovered-keycloak-api-studio-startup-login-metadata-objects-history-sdk-auth",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "complete-profile-postgresql-17-physical-wal-pitr-foundry-and-keycloak",
+      "result": "PASS",
+      "tables": {
+        "foundry": 46,
+        "keycloak": 101
+      },
+      "records": [
+        "PITR-before",
+        "PITR-target"
+      ],
+      "target_lsn": "0/501B258"
+    },
+    {
+      "check": "same-schema-api-outage-rollback-to-previous-image-session-data-sdk-history",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-session-key-overlap-and-unsupported-ciphertext-rejection",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-http-redirect-unknown-host-untrusted-cert-forged-origin-fixed-callback-hsts-csrf-body-limit-redacted-logs",
+      "result": "PASS"
+    },
+    {
+      "check": "acceptance-execution",
+      "result": "FAIL",
+      "error_type": "TypeError",
+      "detail": "See private failure.txt; downstream checks NOT RUN"
+    }
+  ]
+}

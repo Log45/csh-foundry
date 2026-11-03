@@ -4,6 +4,7 @@ import os
 import secrets
 import shutil
 import signal
+import socket
 import subprocess
 import time
 from pathlib import Path
@@ -12,15 +13,26 @@ import httpx
 from cryptography.fernet import Fernet
 
 ROOT = Path(__file__).resolve().parents[1]
-cert = ROOT / "artifacts/studio-e2e/cert.pem"
-log = ROOT / "artifacts/studio-e2e"
+studio_port = int(os.environ.get("STUDIO_E2E_PORT", "3000"))
+api_port = int(os.environ.get("STUDIO_E2E_API_PORT", "8001"))
+replica_port = int(os.environ.get("STUDIO_E2E_REPLICA_PORT", "3001"))
+origin = f"http://127.0.0.1:{studio_port}"
+api_origin = f"http://127.0.0.1:{api_port}"
+log = Path(os.environ.get("STUDIO_E2E_DIRECTORY", str(ROOT / "artifacts/studio-e2e")))
+cert = log / "cert.pem"
+# Refuse occupied listeners before starting anything; readiness must be our process.
+for port in (studio_port, api_port, 8443) + (
+    (replica_port,) if os.environ.get("STUDIO_E2E_DURABLE") == "true" else ()
+):
+    with socket.socket() as probe:
+        probe.bind(("127.0.0.1", port))
 log.mkdir(parents=True, exist_ok=True)
 env = os.environ | {
-    "STUDIO_ORIGIN": "http://127.0.0.1:3000",
+    "STUDIO_ORIGIN": origin,
     "STUDIO_OIDC_ISSUER": "https://127.0.0.1/oidc",
     "STUDIO_OIDC_CLIENT_ID": "studio",
     "STUDIO_API_AUDIENCE": "foundry",
-    "STUDIO_API_ORIGIN": "http://127.0.0.1:8001",
+    "STUDIO_API_ORIGIN": api_origin,
     "NODE_EXTRA_CA_CERTS": str(cert),
     "NODE_OPTIONS": "--import=" + str(ROOT / "apps/studio/tests/oidc_transport.mjs"),
 }
@@ -38,7 +50,7 @@ if durable:
             "STUDIO_STATE_SECRET": credential,
             "FOUNDRY_BROWSER_STATE_SECRET": credential,
             "FOUNDRY_BROWSER_STATE_KEYS": Fernet.generate_key().decode(),
-            "STUDIO_E2E_REPLICA_PORT": "3001",
+            "STUDIO_E2E_REPLICA_PORT": str(replica_port),
         }
     )
 try:
@@ -57,7 +69,7 @@ try:
             if processes[0].poll() is not None:
                 raise RuntimeError("E2E backend failed; see artifacts/studio-e2e/backend.log")
             try:
-                if httpx.get("http://127.0.0.1:8001/health/ready").status_code == 200:
+                if httpx.get(api_origin + "/health/ready").status_code == 200:
                     break
             except httpx.HTTPError:
                 pass
@@ -70,13 +82,13 @@ try:
                 cwd=ROOT / "apps/studio",
                 stdout=frontend,
                 stderr=subprocess.STDOUT,
-                env=env | {"HOSTNAME": "127.0.0.1", "PORT": "3000"},
+                env=env | {"HOSTNAME": "127.0.0.1", "PORT": str(studio_port)},
                 start_new_session=True,
             )
         )
         for _ in range(120):
             try:
-                if httpx.get("http://127.0.0.1:3000", timeout=2).status_code == 200:
+                if httpx.get(origin, timeout=2).status_code == 200:
                     break
             except httpx.HTTPError:
                 pass
@@ -89,13 +101,13 @@ try:
                 cwd=ROOT / "apps/studio",
                 stdout=frontend,
                 stderr=subprocess.STDOUT,
-                env=env | {"HOSTNAME": "127.0.0.1", "PORT": "3001"},
+                env=env | {"HOSTNAME": "127.0.0.1", "PORT": str(replica_port)},
                 start_new_session=True,
             )
             processes.append(replica)
             for _ in range(120):
                 try:
-                    if httpx.get("http://127.0.0.1:3001", timeout=2).status_code == 200:
+                    if httpx.get(f"http://127.0.0.1:{replica_port}", timeout=2).status_code == 200:
                         break
                 except httpx.HTTPError:
                     pass

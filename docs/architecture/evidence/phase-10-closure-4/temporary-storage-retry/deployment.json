@@ -1,0 +1,25 @@
+{
+  "project": "foundry-accept-6b3dffcc",
+  "environment": "Disposable local Compose; test CA; loopback ports",
+  "private_evidence": "artifacts/foundry-accept-6b3dffcc",
+  "checks": [
+    {
+      "check": "bounded-semantic-temporary-storage-and-engine-recovery",
+      "result": "PASS",
+      "failure": "FileNotFoundError",
+      "warm_cache": false,
+      "recovery": "pinned engine validation succeeds",
+      "physical_bytes_bounded": 16777216,
+      "scope": "Adapter filesystem boundary; no database/network attached"
+    },
+    {
+      "check": "bounded-semantic-temporary-storage-and-engine-recovery",
+      "result": "PASS",
+      "failure": "OSError",
+      "warm_cache": true,
+      "recovery": "pinned engine validation succeeds",
+      "physical_bytes_bounded": 16777216,
+      "scope": "Adapter filesystem boundary; no database/network attached"
+    }
+  ]
+}

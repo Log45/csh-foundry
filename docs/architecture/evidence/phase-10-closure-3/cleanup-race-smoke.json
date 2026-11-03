@@ -1,0 +1,9 @@
+{
+  "result": "PASS",
+  "scope": "Actual --rm container + named restore-volume cleanup; no database recovery claim",
+  "details": {
+    "result": "PASS",
+    "container_removed": "3ba07802c587962aca78c7012ffd06e891f7c375e7a56d000480fdc11fbe895a",
+    "volume_removed": "foundry-accept-d0297a40-pitr-restored"
+  }
+}

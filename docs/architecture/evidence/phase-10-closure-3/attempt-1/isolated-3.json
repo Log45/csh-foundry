@@ -1,0 +1,1349 @@
+{
+  "measurements": [
+    {
+      "concurrency": 1,
+      "seconds": 20.05737479100935,
+      "requests": 20,
+      "requests_per_second": 0.9971394665749044,
+      "errors": 0,
+      "p50_ms": 61.72410449653398,
+      "p95_ms": 91.2102090078406,
+      "p99_ms": 115.34725001547486,
+      "samples": [
+        {
+          "operation": "query",
+          "seconds": 0.05008991700015031,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.06166587499319576,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.06168099999194965,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.05892008400405757,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.07958379198680632,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.06290758299292065,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.0912102090078406,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.05490429198835045,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.07712379199801944,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.06565341699752025,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.06176720900111832,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.05133329099044204,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.11534725001547486,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.05854558298597112,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.07458079201751389,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.06088029200327583,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.05487225000979379,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.07527200001641177,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.08505399999557994,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.055659125006059185,
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "concurrency": 4,
+      "seconds": 20.080303875001846,
+      "requests": 80,
+      "requests_per_second": 3.9840034542302285,
+      "errors": 0,
+      "p50_ms": 93.0859164946014,
+      "p95_ms": 203.38770799571648,
+      "p99_ms": 276.24191698851064,
+      "samples": [
+        {
+          "operation": "query",
+          "seconds": 0.08859729097457603,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.09043658297741786,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.07335900000180118,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.08108458298374899,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.1448674589919392,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.08070199997746386,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.09379179199459031,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.10669675000826828,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.10603229200933129,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.10233841699664481,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.08351995801785961,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.06865133298560977,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.17612166699836962,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.11881520799943246,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.27624191698851064,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.07705775002250448,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.0923800409946125,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.07447604200569913,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.09749308301252313,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.08241837497917004,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.08744324999861419,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.09211029199650511,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.10057574999518692,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.0972591660101898,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.13945416698697954,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.07761329098138958,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.09890733400243334,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.0983330839953851,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.08108441598596983,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.09807216600165702,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.09105316697969101,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.07491558301262558,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.19922141599818133,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.10589295902173035,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.2732348749996163,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.08141733400407247,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.0948975840001367,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.0954939580115024,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.08449308402487077,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.07145387498894706,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.08337437501177192,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.1143392919912003,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.07505149999633431,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.09525004200986587,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.12966883400804363,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.08118049998302013,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.11667716599185951,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.13473495800280944,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.11189441601163708,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.09230762501829304,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.08296229201368988,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.08858220800175332,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.20338770799571648,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.09047658299095929,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.26644166599726304,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.07758545799879357,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.11548879201291129,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.07038145797559991,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.07761962499353103,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.08126858301693574,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.09390945799532346,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.09037445898866281,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.06264179199934006,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.07640504100709222,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1456283750012517,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.09809987500193529,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.09984204100328498,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.13802162499632686,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.08028745799674653,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.09030858299229294,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.10112141599529423,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.08804237502044998,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.16843091597547755,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.08380095800384879,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.26137454199488275,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.09609033301239833,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.11524966699653305,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.09473079201416112,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.06696654201368801,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.06761433300562203,
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "concurrency": 8,
+      "seconds": 20.10836762501276,
+      "requests": 160,
+      "requests_per_second": 7.95688655507652,
+      "errors": 0,
+      "p50_ms": 174.8918954981491,
+      "p95_ms": 253.13987501431257,
+      "p99_ms": 283.6008340236731,
+      "samples": [
+        {
+          "operation": "query",
+          "seconds": 0.16051083299680613,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.16816662502242252,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.15587824999238364,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.15674674999900162,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.16975870801252313,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.12907316701603122,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.21273075000499375,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.14767962499172427,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.168018167023547,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.12343350000446662,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1440668330178596,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.24277495901333168,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.16319354201550595,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.24078095800359733,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.2393155420140829,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.20658983298926614,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.11490745897754095,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.20563091698568314,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.13952987498487346,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.1512197499978356,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.15070529098738916,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1913242090085987,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.21895279199816287,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.16153724998002872,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.14006670800154097,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.15338108301511966,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1963131669908762,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.18440416699741036,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.12490737499319948,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.18061404101899825,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1814965840021614,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.23692354201921262,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.17642254100064747,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.18659525000839494,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.292746791994432,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.19219416598207317,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.16336458298610523,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.23950074997264892,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.14958816699800082,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1502973339811433,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.15096841598278843,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.1439433339983225,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.16636612502043135,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.11796875001164153,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.16727712500141934,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.16294841599301435,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.24742233398137614,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.20088016698719002,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.16234637500019744,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1723596660012845,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.17605099998763762,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.25351374997990206,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.13661729099112563,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.12919529201462865,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.2389824169804342,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.18842720799148083,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.21132787500391714,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.16897008300293237,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1363733749894891,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.20289804201456718,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.18643916700966656,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.16931629201280884,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.15639783299411647,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.11489416699623689,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.17544966700370423,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.20711541699711233,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.23174341599224135,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1839147909777239,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1675566250050906,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.17635016702115536,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.19951079101883806,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.26478545801364817,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.15188345799106173,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.13672412501182407,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.24052333302097395,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.22189645798061974,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.16432091701426543,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1924683749966789,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1425510410044808,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.18975445898831822,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.15976024998235516,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.2018223330087494,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.14554212501388974,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.12628024999867193,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.21996987497550435,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.18599612498655915,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.22023116698255762,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1313037080108188,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.13019820899353363,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.14490062498953193,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.14897187499445863,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.23247774998890236,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1880689590179827,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.16322795799351297,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.2800486250198446,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.2055000420077704,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.18182166601764038,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.18495008299942128,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.15554808301385492,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.1688251669984311,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.14583716698689386,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.15124029101571068,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1482186249922961,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.17114416699041612,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.17198533299961127,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1587712499895133,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.20109904199489392,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.20599095901707187,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.1733351250004489,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.17460500000743195,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.16532345899031498,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.24707650000345893,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1775834999862127,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.25850624998565763,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.25313987501431257,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1816921659919899,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.20606691698776558,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.17683120799483731,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.16864566699950956,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.18582795897964388,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.14644837501691654,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.14734299998963252,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.17264833400258794,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.15515775000676513,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.18029020799440332,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.15457174999755807,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.20886904202052392,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.22615483301342465,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.12971541698789224,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1706575830176007,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.1705519160022959,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.2249618750065565,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.19862537499284372,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.2700186249858234,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.2836008340236731,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.18525079201208428,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.17798587499419227,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.20407145901117474,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.17457674999604933,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.13715529200271703,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1375949159846641,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.19101883401162922,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.18413779200636782,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.11855695801205002,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.21821424999507144,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.16135116698569618,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.26631220799754374,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.1891625410062261,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1403086250065826,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.17517879098886624,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1768983750080224,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.212923499988392,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.22195154099608772,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.1576257499982603,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.25154129101429135,
+          "result": "PASS"
+        },
+        {
+          "operation": "traversal",
+          "seconds": 0.1838544170022942,
+          "result": "PASS"
+        },
+        {
+          "operation": "preview",
+          "seconds": 0.15097341701039113,
+          "result": "PASS"
+        },
+        {
+          "operation": "sdk",
+          "seconds": 0.1588979579973966,
+          "result": "PASS"
+        },
+        {
+          "operation": "query",
+          "seconds": 0.14333187500596978,
+          "result": "PASS"
+        },
+        {
+          "operation": "object_set",
+          "seconds": 0.20819745797780342,
+          "result": "PASS"
+        }
+      ]
+    }
+  ],
+  "scope": "20 iterations/client at (1, 4, 8) clients; paced <=1 request/s/client through HTTPS Studio BFF; fixture scale; curl/client overhead included; not saturation or approved capacity certification",
+  "metrics_not_measured": [
+    "continuous database pool usage",
+    "lock-wait distribution",
+    "worker throughput",
+    "queue age",
+    "storage growth under sustained ingestion"
+  ],
+  "provisional_targets": "read p95 <500ms; writes <2000ms; zero errors; not business SLOs"
+}

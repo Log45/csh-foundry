@@ -1,0 +1,4 @@
+/bin/bash: line 1: type: sqlite3: not found
+ABSENT /usr/bin/sqlite3
+ABSENT /bin/sqlite3
+ABSENT /usr/local/bin/sqlite3

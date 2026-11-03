@@ -1,0 +1,32 @@
+{
+  "vm/init.log": {
+    "tail_bytes": 84765,
+    "signals": {
+      "no space left": 0,
+      "disk full": 0,
+      "input/output error": 0,
+      "context deadline exceeded": 2,
+      "timeout": 0,
+      "failed": 2,
+      "out of memory": 0,
+      "panic": 0,
+      "fatal": 0
+    },
+    "mtime_utc_epoch": 1793672024.2452266
+  },
+  "host/com.docker.backend.log": {
+    "tail_bytes": 499988,
+    "signals": {
+      "no space left": 0,
+      "disk full": 0,
+      "input/output error": 0,
+      "context deadline exceeded": 0,
+      "timeout": 0,
+      "failed": 0,
+      "out of memory": 0,
+      "panic": 0,
+      "fatal": 0
+    },
+    "mtime_utc_epoch": 1793671700.6535656
+  }
+}

@@ -1,0 +1,60 @@
+PASS production-template-configuration
+PASS disposable-production-wal-directory-owner-and-write-permission
+No new upgrade operations detected.
+PASS new-cluster-owner-migration-and-runtime-grants
+PASS complete-production-profile-core-startup
+/Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+PASS governed-manufacturing-schema-and-explicit-worker-delegations
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS deployed-ingestion-sigkill-durable-checkpoint-lease-reclaim-idempotent-final-state
+PASS production-ingestion-worker-63-objects-70-links-query-traversal-action-idempotency-concurrency
+PASS production-sdk-generation-download-integrity-python
+PASS production-sdk-generation-download-integrity-typescript
+PASS production-branch-conflict-resolved-merge-provenance-draft-publication-separate-activation
+PASS production-semantic-supervised-validation
+PASS production-semantic-supervised-reasoning
+PASS semantic-and-schema-development-did-not-mutate-operational-objects
+PASS actual-runtime-semantic-container-limits-and-network-configuration
+PASS actual-runtime-database-privilege-check
+PASS semantic-nonroot-readonly-tmpfs-cgroup-enforcement-no-direct-egress
+PASS independently-installed-python-built-typescript-sdks-real-https-queries-actions-replay-unauthorized-cross-tenant-denials
+PASS retained-controlled-load-runtime-identities-match
+PASS deployed-active-session-role-and-membership-revocation-before-jwt-expiry
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS deployed-worker-oidc-client-secret-rotation-old-secret-rejected
+PASS deployed-worker-reacquires-rotated-credential-queued-delegation-revocation-idempotent-continuation
+PASS deployed-api-studio-internal-credential-maintenance-rotation-session-continuity
+PASS deployed-database-credential-maintenance-rotation-old-login-rejected-session-continuity
+PASS deployed-encrypted-logical-restore-all-domain-identity-history-session-checksums
+PASS deployed-concurrent-job-admission-limit-rollback-and-cancel-release
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS mixed-ingestion-semantic-deployed-shared-quota
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+FAIL acceptance-execution
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_closure3.py", line 345, in <module>
+    acceptance.execute()
+    ^^^^^^
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_closure3.py", line 341, in main
+    parser.add_argument("--retained-load", type=Path)
+    ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10.py", line 1708, in execute
+    self.physical_recovery()
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10.py", line 1490, in physical_recovery
+    result = physical_recovery(
+             ^^^^^^^^^^^^^^^^^^
+  File "/Users/log/Documents/code/csh-foundry/scripts/phase10_pitr.py", line 238, in physical_recovery
+    verify_application(restored)
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_closure3.py", line 196, in verify_recovered_application
+    "api",
+^^^^^^^^^^
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10.py", line 53, in run
+    return subprocess.check_output(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['docker', 'network', 'connect', '--alias', 'recovered-postgres', 'foundry-accept-928cec58_data', '469aa4c3d3f114a1a7fa7b7574ba6a8e66ccb9952bfd6eca97f3bd85e9bb3dc9']' returned non-zero exit status 1.

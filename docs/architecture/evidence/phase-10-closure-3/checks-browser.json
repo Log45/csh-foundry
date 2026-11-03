@@ -1,0 +1,25 @@
+[
+  {
+    "check": "migrate",
+    "result": "PASS",
+    "exit_code": 0,
+    "command": [
+      "uv",
+      "run",
+      "alembic",
+      "upgrade",
+      "head"
+    ]
+  },
+  {
+    "check": "browser",
+    "result": "PASS",
+    "exit_code": 0,
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/test_studio.py"
+    ]
+  }
+]

@@ -1,0 +1,814 @@
+[
+  {
+    "run": "warmup",
+    "concurrency": 1,
+    "duration_seconds": 5.010973666969221,
+    "throughput": 0.9978100729122653,
+    "requests": 5,
+    "errors": 0,
+    "p50_ms": 53.504,
+    "p95_ms": 299.028,
+    "p99_ms": 299.028,
+    "max_ms": 299.02824998134747,
+    "by_operation": {
+      "object_set": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 48.389,
+        "p95_ms": 48.389,
+        "p99_ms": 48.389,
+        "max_ms": 48.388624971266836
+      },
+      "preview": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 53.504,
+        "p95_ms": 53.504,
+        "p99_ms": 53.504,
+        "max_ms": 53.504083014559
+      },
+      "query": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 44.986,
+        "p95_ms": 44.986,
+        "p99_ms": 44.986,
+        "max_ms": 44.98591698938981
+      },
+      "sdk": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 299.028,
+        "p95_ms": 299.028,
+        "p99_ms": 299.028,
+        "max_ms": 299.02824998134747
+      },
+      "traversal": {
+        "requests": 1,
+        "errors": 0,
+        "p50_ms": 82.044,
+        "p95_ms": 82.044,
+        "p99_ms": 82.044,
+        "max_ms": 82.04449998447672
+      }
+    },
+    "highest_read_p95_ms": 82.044,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 299.028,
+    "write_target": "PASS"
+  },
+  {
+    "run": "warmup",
+    "concurrency": 4,
+    "duration_seconds": 5.032379165990278,
+    "throughput": 3.974263333566674,
+    "requests": 20,
+    "errors": 0,
+    "p50_ms": 87.69,
+    "p95_ms": 115.13,
+    "p99_ms": 127.411,
+    "max_ms": 127.41125002503395,
+    "by_operation": {
+      "object_set": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 82.663,
+        "p95_ms": 114.955,
+        "p99_ms": 114.955,
+        "max_ms": 114.95499999728054
+      },
+      "preview": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 95.095,
+        "p95_ms": 127.411,
+        "p99_ms": 127.411,
+        "max_ms": 127.41125002503395
+      },
+      "query": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 87.69,
+        "p95_ms": 115.13,
+        "p99_ms": 115.13,
+        "max_ms": 115.13049999484792
+      },
+      "sdk": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 85.256,
+        "p95_ms": 106.61,
+        "p99_ms": 106.61,
+        "max_ms": 106.6102500190027
+      },
+      "traversal": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 79.348,
+        "p95_ms": 98.88,
+        "p99_ms": 98.88,
+        "max_ms": 98.87950000120327
+      }
+    },
+    "highest_read_p95_ms": 127.411,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 106.61,
+    "write_target": "PASS"
+  },
+  {
+    "run": "warmup",
+    "concurrency": 8,
+    "duration_seconds": 5.049233458994422,
+    "throughput": 7.921994561124172,
+    "requests": 40,
+    "errors": 0,
+    "p50_ms": 165.087,
+    "p95_ms": 291.832,
+    "p99_ms": 311.455,
+    "max_ms": 311.45454198122025,
+    "by_operation": {
+      "object_set": {
+        "requests": 8,
+        "errors": 0,
+        "p50_ms": 151.867,
+        "p95_ms": 212.753,
+        "p99_ms": 212.753,
+        "max_ms": 212.75304100709036
+      },
+      "preview": {
+        "requests": 8,
+        "errors": 0,
+        "p50_ms": 183.169,
+        "p95_ms": 311.455,
+        "p99_ms": 311.455,
+        "max_ms": 311.45454198122025
+      },
+      "query": {
+        "requests": 8,
+        "errors": 0,
+        "p50_ms": 141.931,
+        "p95_ms": 204.988,
+        "p99_ms": 204.988,
+        "max_ms": 204.98791697900742
+      },
+      "sdk": {
+        "requests": 8,
+        "errors": 0,
+        "p50_ms": 181.448,
+        "p95_ms": 294.837,
+        "p99_ms": 294.837,
+        "max_ms": 294.83654198702425
+      },
+      "traversal": {
+        "requests": 8,
+        "errors": 0,
+        "p50_ms": 143.961,
+        "p95_ms": 216.89,
+        "p99_ms": 216.89,
+        "max_ms": 216.88995801378042
+      }
+    },
+    "highest_read_p95_ms": 311.455,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 294.837,
+    "write_target": "PASS"
+  },
+  {
+    "run": "isolated-1",
+    "concurrency": 1,
+    "duration_seconds": 20.066722250019666,
+    "throughput": 0.9966749801393399,
+    "requests": 20,
+    "errors": 0,
+    "p50_ms": 47.207,
+    "p95_ms": 57.402,
+    "p99_ms": 61.691,
+    "max_ms": 61.69091595802456,
+    "by_operation": {
+      "object_set": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 44.408,
+        "p95_ms": 50.214,
+        "p99_ms": 50.214,
+        "max_ms": 50.21362501429394
+      },
+      "preview": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 56.974,
+        "p95_ms": 61.691,
+        "p99_ms": 61.691,
+        "max_ms": 61.69091595802456
+      },
+      "query": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 41.81,
+        "p95_ms": 49.985,
+        "p99_ms": 49.985,
+        "max_ms": 49.984749988652766
+      },
+      "sdk": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 47.207,
+        "p95_ms": 49.0,
+        "p99_ms": 49.0,
+        "max_ms": 49.00008300319314
+      },
+      "traversal": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 46.378,
+        "p95_ms": 48.341,
+        "p99_ms": 48.341,
+        "max_ms": 48.34083397872746
+      }
+    },
+    "highest_read_p95_ms": 61.691,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 49.0,
+    "write_target": "PASS"
+  },
+  {
+    "run": "isolated-1",
+    "concurrency": 4,
+    "duration_seconds": 20.085121874988545,
+    "throughput": 3.9830477752600455,
+    "requests": 80,
+    "errors": 0,
+    "p50_ms": 83.876,
+    "p95_ms": 110.007,
+    "p99_ms": 121.634,
+    "max_ms": 121.63383298320696,
+    "by_operation": {
+      "object_set": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 78.03,
+        "p95_ms": 96.532,
+        "p99_ms": 96.532,
+        "max_ms": 96.53174999402836
+      },
+      "preview": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 92.723,
+        "p95_ms": 121.634,
+        "p99_ms": 121.634,
+        "max_ms": 121.63383298320696
+      },
+      "query": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 78.23,
+        "p95_ms": 103.543,
+        "p99_ms": 103.543,
+        "max_ms": 103.5427920287475
+      },
+      "sdk": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 89.566,
+        "p95_ms": 111.567,
+        "p99_ms": 111.567,
+        "max_ms": 111.56725004548207
+      },
+      "traversal": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 76.526,
+        "p95_ms": 120.555,
+        "p99_ms": 120.555,
+        "max_ms": 120.55520800640807
+      }
+    },
+    "highest_read_p95_ms": 121.634,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 111.567,
+    "write_target": "PASS"
+  },
+  {
+    "run": "isolated-1",
+    "concurrency": 8,
+    "duration_seconds": 20.097137707984075,
+    "throughput": 7.961332719357151,
+    "requests": 160,
+    "errors": 0,
+    "p50_ms": 162.136,
+    "p95_ms": 260.593,
+    "p99_ms": 387.829,
+    "max_ms": 405.4467079695314,
+    "by_operation": {
+      "object_set": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 152.752,
+        "p95_ms": 244.881,
+        "p99_ms": 341.831,
+        "max_ms": 341.83087502606213
+      },
+      "preview": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 185.345,
+        "p95_ms": 314.341,
+        "p99_ms": 382.052,
+        "max_ms": 382.0523749454878
+      },
+      "query": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 148.641,
+        "p95_ms": 275.488,
+        "p99_ms": 387.829,
+        "max_ms": 387.8288749838248
+      },
+      "sdk": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 173.228,
+        "p95_ms": 326.075,
+        "p99_ms": 405.447,
+        "max_ms": 405.4467079695314
+      },
+      "traversal": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 146.478,
+        "p95_ms": 238.484,
+        "p99_ms": 260.593,
+        "max_ms": 260.5927909607999
+      }
+    },
+    "highest_read_p95_ms": 314.341,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 326.075,
+    "write_target": "PASS"
+  },
+  {
+    "run": "isolated-2",
+    "concurrency": 1,
+    "duration_seconds": 20.06718962499872,
+    "throughput": 0.9966517670757934,
+    "requests": 20,
+    "errors": 0,
+    "p50_ms": 49.34,
+    "p95_ms": 58.766,
+    "p99_ms": 58.859,
+    "max_ms": 58.85908397613093,
+    "by_operation": {
+      "object_set": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 44.298,
+        "p95_ms": 56.977,
+        "p99_ms": 56.977,
+        "max_ms": 56.97737500304356
+      },
+      "preview": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 55.337,
+        "p95_ms": 58.732,
+        "p99_ms": 58.732,
+        "max_ms": 58.73162503121421
+      },
+      "query": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 42.196,
+        "p95_ms": 58.859,
+        "p99_ms": 58.859,
+        "max_ms": 58.85908397613093
+      },
+      "sdk": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 49.34,
+        "p95_ms": 58.766,
+        "p99_ms": 58.766,
+        "max_ms": 58.766125002875924
+      },
+      "traversal": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 46.451,
+        "p95_ms": 57.51,
+        "p99_ms": 57.51,
+        "max_ms": 57.50975001137704
+      }
+    },
+    "highest_read_p95_ms": 58.859,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 58.766,
+    "write_target": "PASS"
+  },
+  {
+    "run": "isolated-2",
+    "concurrency": 4,
+    "duration_seconds": 20.091153291985393,
+    "throughput": 3.9818520538546176,
+    "requests": 80,
+    "errors": 0,
+    "p50_ms": 81.952,
+    "p95_ms": 106.456,
+    "p99_ms": 112.247,
+    "max_ms": 112.24737501470372,
+    "by_operation": {
+      "object_set": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 78.94,
+        "p95_ms": 111.683,
+        "p99_ms": 111.683,
+        "max_ms": 111.6830839891918
+      },
+      "preview": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 98.056,
+        "p95_ms": 112.247,
+        "p99_ms": 112.247,
+        "max_ms": 112.24737501470372
+      },
+      "query": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 79.506,
+        "p95_ms": 105.473,
+        "p99_ms": 105.473,
+        "max_ms": 105.47279199818149
+      },
+      "sdk": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 79.332,
+        "p95_ms": 110.607,
+        "p99_ms": 110.607,
+        "max_ms": 110.60737498337403
+      },
+      "traversal": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 80.068,
+        "p95_ms": 102.753,
+        "p99_ms": 102.753,
+        "max_ms": 102.75274998275563
+      }
+    },
+    "highest_read_p95_ms": 112.247,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 110.607,
+    "write_target": "PASS"
+  },
+  {
+    "run": "isolated-2",
+    "concurrency": 8,
+    "duration_seconds": 20.09627487504622,
+    "throughput": 7.961674538930291,
+    "requests": 160,
+    "errors": 0,
+    "p50_ms": 155.404,
+    "p95_ms": 230.358,
+    "p99_ms": 273.169,
+    "max_ms": 273.9835830288939,
+    "by_operation": {
+      "object_set": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 145.776,
+        "p95_ms": 215.352,
+        "p99_ms": 273.169,
+        "max_ms": 273.1687500490807
+      },
+      "preview": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 173.92,
+        "p95_ms": 250.623,
+        "p99_ms": 251.535,
+        "max_ms": 251.5346669824794
+      },
+      "query": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 152.188,
+        "p95_ms": 230.358,
+        "p99_ms": 273.984,
+        "max_ms": 273.9835830288939
+      },
+      "sdk": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 161.418,
+        "p95_ms": 235.17,
+        "p99_ms": 251.662,
+        "max_ms": 251.66220898972824
+      },
+      "traversal": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 148.748,
+        "p95_ms": 215.689,
+        "p99_ms": 268.811,
+        "max_ms": 268.8105829874985
+      }
+    },
+    "highest_read_p95_ms": 250.623,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 235.17,
+    "write_target": "PASS"
+  },
+  {
+    "run": "isolated-3",
+    "concurrency": 1,
+    "duration_seconds": 20.068480124988127,
+    "throughput": 0.9965876775639397,
+    "requests": 20,
+    "errors": 0,
+    "p50_ms": 51.037,
+    "p95_ms": 55.833,
+    "p99_ms": 56.44,
+    "max_ms": 56.440250016748905,
+    "by_operation": {
+      "object_set": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 46.529,
+        "p95_ms": 52.581,
+        "p99_ms": 52.581,
+        "max_ms": 52.58083302760497
+      },
+      "preview": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 54.001,
+        "p95_ms": 55.833,
+        "p99_ms": 55.833,
+        "max_ms": 55.83341600140557
+      },
+      "query": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 43.471,
+        "p95_ms": 54.496,
+        "p99_ms": 54.496,
+        "max_ms": 54.49583299923688
+      },
+      "sdk": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 51.037,
+        "p95_ms": 54.071,
+        "p99_ms": 54.071,
+        "max_ms": 54.07087499042973
+      },
+      "traversal": {
+        "requests": 4,
+        "errors": 0,
+        "p50_ms": 49.184,
+        "p95_ms": 56.44,
+        "p99_ms": 56.44,
+        "max_ms": 56.440250016748905
+      }
+    },
+    "highest_read_p95_ms": 56.44,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 54.071,
+    "write_target": "PASS"
+  },
+  {
+    "run": "isolated-3",
+    "concurrency": 4,
+    "duration_seconds": 20.08986312500201,
+    "throughput": 3.9821077675954544,
+    "requests": 80,
+    "errors": 0,
+    "p50_ms": 87.454,
+    "p95_ms": 111.343,
+    "p99_ms": 120.361,
+    "max_ms": 120.36129197804257,
+    "by_operation": {
+      "object_set": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 87.454,
+        "p95_ms": 108.331,
+        "p99_ms": 108.331,
+        "max_ms": 108.33137499867007
+      },
+      "preview": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 98.938,
+        "p95_ms": 120.361,
+        "p99_ms": 120.361,
+        "max_ms": 120.36129197804257
+      },
+      "query": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 82.824,
+        "p95_ms": 104.056,
+        "p99_ms": 104.056,
+        "max_ms": 104.05641701072454
+      },
+      "sdk": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 83.189,
+        "p95_ms": 116.821,
+        "p99_ms": 116.821,
+        "max_ms": 116.82116700103506
+      },
+      "traversal": {
+        "requests": 16,
+        "errors": 0,
+        "p50_ms": 85.792,
+        "p95_ms": 117.491,
+        "p99_ms": 117.491,
+        "max_ms": 117.49100004089996
+      }
+    },
+    "highest_read_p95_ms": 120.361,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 116.821,
+    "write_target": "PASS"
+  },
+  {
+    "run": "isolated-3",
+    "concurrency": 8,
+    "duration_seconds": 20.096786458976567,
+    "throughput": 7.961471866490044,
+    "requests": 160,
+    "errors": 0,
+    "p50_ms": 155.231,
+    "p95_ms": 232.705,
+    "p99_ms": 253.627,
+    "max_ms": 278.3391249831766,
+    "by_operation": {
+      "object_set": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 141.068,
+        "p95_ms": 171.482,
+        "p99_ms": 239.902,
+        "max_ms": 239.90225000306964
+      },
+      "preview": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 178.629,
+        "p95_ms": 242.648,
+        "p99_ms": 278.339,
+        "max_ms": 278.3391249831766
+      },
+      "query": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 149.435,
+        "p95_ms": 207.897,
+        "p99_ms": 227.02,
+        "max_ms": 227.01979201519862
+      },
+      "sdk": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 159.46,
+        "p95_ms": 249.796,
+        "p99_ms": 253.627,
+        "max_ms": 253.62720800330862
+      },
+      "traversal": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 138.638,
+        "p95_ms": 231.123,
+        "p99_ms": 232.812,
+        "max_ms": 232.81175002921373
+      }
+    },
+    "highest_read_p95_ms": 242.648,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 249.796,
+    "write_target": "PASS"
+  },
+  {
+    "run": "sustained",
+    "concurrency": 8,
+    "duration_seconds": 90.41146458301228,
+    "throughput": 7.9635918223504065,
+    "requests": 720,
+    "errors": 0,
+    "p50_ms": 158.705,
+    "p95_ms": 218.464,
+    "p99_ms": 250.262,
+    "max_ms": 279.425083019305,
+    "by_operation": {
+      "object_set": {
+        "requests": 144,
+        "errors": 0,
+        "p50_ms": 152.02,
+        "p95_ms": 201.828,
+        "p99_ms": 226.978,
+        "max_ms": 229.19762501260266
+      },
+      "preview": {
+        "requests": 144,
+        "errors": 0,
+        "p50_ms": 175.866,
+        "p95_ms": 236.41,
+        "p99_ms": 257.35,
+        "max_ms": 279.425083019305
+      },
+      "query": {
+        "requests": 144,
+        "errors": 0,
+        "p50_ms": 152.208,
+        "p95_ms": 208.715,
+        "p99_ms": 225.973,
+        "max_ms": 232.91712498757988
+      },
+      "sdk": {
+        "requests": 144,
+        "errors": 0,
+        "p50_ms": 160.169,
+        "p95_ms": 231.143,
+        "p99_ms": 262.691,
+        "max_ms": 272.63404201949015
+      },
+      "traversal": {
+        "requests": 144,
+        "errors": 0,
+        "p50_ms": 151.258,
+        "p95_ms": 218.117,
+        "p99_ms": 228.416,
+        "max_ms": 233.6483749677427
+      }
+    },
+    "highest_read_p95_ms": 236.41,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 231.143,
+    "write_target": "PASS"
+  },
+  {
+    "run": "contention",
+    "concurrency": 8,
+    "duration_seconds": 20.134208542003762,
+    "throughput": 7.946674420611557,
+    "requests": 160,
+    "errors": 0,
+    "p50_ms": 166.564,
+    "p95_ms": 298.293,
+    "p99_ms": 369.252,
+    "max_ms": 379.32491599349305,
+    "by_operation": {
+      "object_set": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 156.926,
+        "p95_ms": 354.722,
+        "p99_ms": 369.252,
+        "max_ms": 369.25204197177663
+      },
+      "preview": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 194.283,
+        "p95_ms": 303.778,
+        "p99_ms": 307.43,
+        "max_ms": 307.42983298841864
+      },
+      "query": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 161.061,
+        "p95_ms": 242.805,
+        "p99_ms": 379.325,
+        "max_ms": 379.32491599349305
+      },
+      "sdk": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 160.657,
+        "p95_ms": 251.577,
+        "p99_ms": 320.774,
+        "max_ms": 320.7739170175046
+      },
+      "traversal": {
+        "requests": 32,
+        "errors": 0,
+        "p50_ms": 161.488,
+        "p95_ms": 345.004,
+        "p99_ms": 367.22,
+        "max_ms": 367.21979203866795
+      }
+    },
+    "highest_read_p95_ms": 354.722,
+    "read_target": "PASS",
+    "highest_write_p95_ms": 251.577,
+    "write_target": "PASS"
+  }
+]

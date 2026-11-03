@@ -1,0 +1,8 @@
+/usr/bin/java
+/usr/bin/keytool
+Keystore type: JKS
+Keystore provider: SUN
+Your keystore contains 118 entries
+comodoecccertificationauthority, Oct 31, 2026, trustedCertEntry, 
+comodorsacertificationauthority, Oct 31, 2026, trustedCertEntry, 
+emsignrootca-g1, Oct 31, 2026, trustedCertEntry, 

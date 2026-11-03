@@ -1,0 +1,31 @@
+{
+  "result": "PASS",
+  "authorization": "User explicitly permitted developer service restarts; containers/volumes preserved",
+  "containers": [
+    {
+      "container": "/csh-foundry-studio-1",
+      "same_container_id": true,
+      "running": true
+    },
+    {
+      "container": "/csh-foundry-api-1",
+      "same_container_id": true,
+      "running": true
+    },
+    {
+      "container": "/csh-foundry-postgres-1",
+      "same_container_id": true,
+      "running": true
+    },
+    {
+      "container": "/foundry-keycloak",
+      "same_container_id": true,
+      "running": true
+    },
+    {
+      "container": "/foundry-keycloak-tls",
+      "same_container_id": true,
+      "running": true
+    }
+  ]
+}

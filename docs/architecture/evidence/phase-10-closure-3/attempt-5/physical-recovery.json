@@ -1,0 +1,608 @@
+{
+  "image_id": "sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1",
+  "server_version": "17.11 (Debian 17.11-1.pgdg13+2)",
+  "target_name": "foundry_accept_cc3e0755",
+  "target_lsn": "0/5027C40",
+  "archived_wal": "000000010000000000000005",
+  "archiver_success_failure_counts": "6:0",
+  "restored_records": [
+    "PITR-before",
+    "PITR-target"
+  ],
+  "databases": {
+    "foundry": {
+      "action_audit_events": {
+        "rows": 3,
+        "hash": "a35cb963871fc969c44f9d5d26ef7b4c"
+      },
+      "action_executions": {
+        "rows": 3,
+        "hash": "36e7daee9531420821714a80563e5fc0"
+      },
+      "alembic_version": {
+        "rows": 1,
+        "hash": "7a128e33a6d8196d64ab04396cb1d7bb"
+      },
+      "authorization_audit": {
+        "rows": 6056,
+        "hash": "e77f0674e560d229512a138cd1b643e6"
+      },
+      "browser_state": {
+        "rows": 4,
+        "hash": "72d00c8ec70716c395eff0823a039cc1"
+      },
+      "edit_overlays": {
+        "rows": 215,
+        "hash": "56da9de0ece407f68bb42d4969f1ed70"
+      },
+      "external_identities": {
+        "rows": 3,
+        "hash": "a20f47ea5c00bb9dc15ba8f2ba1632cd"
+      },
+      "ingestion_diagnostics": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "ingestion_mappings": {
+        "rows": 8,
+        "hash": "3d258aa8f1874f96a8aa28bde05e96f4"
+      },
+      "ingestion_runs": {
+        "rows": 71,
+        "hash": "bbc1b1cf6772f96361f5a4f563cd7dc5"
+      },
+      "ingestion_sources": {
+        "rows": 8,
+        "hash": "c4ea54aa5b1ea74cd37f44303528a6f5"
+      },
+      "ingestion_stage": {
+        "rows": 126,
+        "hash": "dcc0bd40463beb5314e7abcf1d7bb224"
+      },
+      "link_type_definitions": {
+        "rows": 6,
+        "hash": "71ad2423885f147ada5929fd6d95347e"
+      },
+      "object_links": {
+        "rows": 70,
+        "hash": "796984ba1d0c7aff3f4354bfce75a640"
+      },
+      "object_type_definitions": {
+        "rows": 8,
+        "hash": "88ede8ce5a11231572804a26b966b66b"
+      },
+      "objects": {
+        "rows": 65,
+        "hash": "f8d70e7dd4f24c21e93e2f1687cfd01d"
+      },
+      "ontologies": {
+        "rows": 1,
+        "hash": "bba6ab96f2773c7b1248736e9f32bac3"
+      },
+      "ontology_branch_merges": {
+        "rows": 1,
+        "hash": "91dce15522bd80f354aaab0b3e93b869"
+      },
+      "ontology_branch_revisions": {
+        "rows": 5,
+        "hash": "34458581f41bccfee2d5875afd0a9cae"
+      },
+      "ontology_branches": {
+        "rows": 2,
+        "hash": "2a3ffeb98110b813f2f98be47c7e7dfb"
+      },
+      "ontology_imports": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "ontology_versions": {
+        "rows": 2,
+        "hash": "ed9bcd48dc590fb022b5da10786d16ae"
+      },
+      "ontology_vocabulary_bindings": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "outbox_events": {
+        "rows": 3,
+        "hash": "b78aabf56a55efcae85f66e476891353"
+      },
+      "principals": {
+        "rows": 3,
+        "hash": "d883a27d6f2de5f1ccc2aff4559af2c5"
+      },
+      "reconciliation_conflicts": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "request_budgets": {
+        "rows": 1,
+        "hash": "b9e4b49700d21e4e6ac9c7b68b1bcc48"
+      },
+      "role_assignments": {
+        "rows": 3,
+        "hash": "92ea6e010bb5339bb1fdc9d7756fbb16"
+      },
+      "schema_activations": {
+        "rows": 1,
+        "hash": "08310b5e4af8008bd9e95b50e50fc06e"
+      },
+      "schema_migration_plans": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "sdk_artifacts": {
+        "rows": 2,
+        "hash": "a34d4498e52598129390242772f10f18"
+      },
+      "security_policy_bindings": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "security_policy_versions": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "security_roles": {
+        "rows": 12,
+        "hash": "cdd81fca3d290c1dd0b44bdbc20098da"
+      },
+      "security_state": {
+        "rows": 1,
+        "hash": "4a6132a182203cb5da70ac45b632ffa4"
+      },
+      "semantic_approvals": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "semantic_artifacts": {
+        "rows": 19,
+        "hash": "7fbc9eaf884d34197a48e068ed1ef961"
+      },
+      "semantic_derived_facts": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "semantic_jobs": {
+        "rows": 14,
+        "hash": "5f26991dca456c46d3604bccd43a8f45"
+      },
+      "source_link_state": {
+        "rows": 70,
+        "hash": "7968bcfb20a036349436363350402c43"
+      },
+      "source_object_identities": {
+        "rows": 63,
+        "hash": "2fbf9a2e8270637803dee23f0a21e536"
+      },
+      "tenant_memberships": {
+        "rows": 3,
+        "hash": "5de6d14ee816a610aba6f53dfcca42e8"
+      },
+      "tenant_resource_usage": {
+        "rows": 1,
+        "hash": "c2d8a59573e0146c9ac30470233e8adb"
+      },
+      "tenants": {
+        "rows": 1,
+        "hash": "3e73214261f7ce509f47259d708716c1"
+      },
+      "webhook_attempts": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "worker_delegations": {
+        "rows": 2,
+        "hash": "733ce2abd9204c92ce37c2eb38107868"
+      }
+    },
+    "keycloak": {
+      "admin_event_entity": {
+        "rows": 1,
+        "hash": "32edd9f47edece0dcf12aea9bdb3bd6e"
+      },
+      "associated_policy": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "auth_session": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "authentication_execution": {
+        "rows": 106,
+        "hash": "02fbb08c5cabe36762fb63cfbfc1e5d2"
+      },
+      "authentication_flow": {
+        "rows": 40,
+        "hash": "1cbb64d46023c24dd09666c3eadc52a4"
+      },
+      "authenticator_config": {
+        "rows": 8,
+        "hash": "468d50311b0a4772f43bc6e52a8d624b"
+      },
+      "authenticator_config_entry": {
+        "rows": 8,
+        "hash": "a348add7dbc26f44ec6b7c6a50fca825"
+      },
+      "broker_link": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "client": {
+        "rows": 15,
+        "hash": "d347a03dc11b6c260bc9bb1c67aaa378"
+      },
+      "client_attributes": {
+        "rows": 30,
+        "hash": "bc3e0660b462197b739ee2fc9059bd5a"
+      },
+      "client_auth_flow_bindings": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "client_initial_access": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "client_node_registrations": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "client_scope": {
+        "rows": 30,
+        "hash": "5bd9520e225a6e1fee907eee0efc13d0"
+      },
+      "client_scope_attributes": {
+        "rows": 66,
+        "hash": "40c697dad5a2e045fb0f0bf04282d6b0"
+      },
+      "client_scope_client": {
+        "rows": 135,
+        "hash": "e94763cb2d0666d3b0abbcc25db4ee63"
+      },
+      "client_scope_role_mapping": {
+        "rows": 2,
+        "hash": "e297f5a8f7e2ee983712c8a5cbb463ab"
+      },
+      "cluster_event": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "component": {
+        "rows": 29,
+        "hash": "50aa65f6c0783a63a7a925890bbb0f9a"
+      },
+      "component_config": {
+        "rows": 75,
+        "hash": "cab750e1000f86205a05057cba94f3af"
+      },
+      "composite_role": {
+        "rows": 88,
+        "hash": "ba1bab824e7cc92cbe5ce1244a50fefa"
+      },
+      "credential": {
+        "rows": 2,
+        "hash": "d181eef273108a4c8820f947c0c27edd"
+      },
+      "databasechangelog": {
+        "rows": 237,
+        "hash": "59df14e2d71867d3864cad1893efc58e"
+      },
+      "databasechangeloglock": {
+        "rows": 2,
+        "hash": "37aeadbc929be98c4146bc26a6d13e77"
+      },
+      "default_client_scope": {
+        "rows": 28,
+        "hash": "07c7812a9db28301fbbb0f7e7731fd57"
+      },
+      "event_entity": {
+        "rows": 54,
+        "hash": "d3312d7b3a466820c790e2fef173746b"
+      },
+      "fed_issued_ver_credential": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "fed_user_attribute": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "fed_user_consent": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "fed_user_consent_cl_scope": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "fed_user_credential": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "fed_user_group_membership": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "fed_user_required_action": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "fed_user_role_mapping": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "fed_user_ver_credential": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "federated_identity": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "federated_user": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "group_attribute": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "group_role_mapping": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "identity_provider": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "identity_provider_config": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "identity_provider_mapper": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "idp_mapper_config": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "issued_ver_credential": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "jgroups_ping": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "keycloak_group": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "keycloak_role": {
+        "rows": 90,
+        "hash": "a1bf3067bdb2d037f85f7480a97687a4"
+      },
+      "login_failure": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "migration_model": {
+        "rows": 1,
+        "hash": "e4d407e067ad4e86d31a5f33e821dbbe"
+      },
+      "offline_client_session": {
+        "rows": 5,
+        "hash": "022e2962c73e99a8676014b097329402"
+      },
+      "offline_user_session": {
+        "rows": 5,
+        "hash": "bd9ab29cc4c10cfffd0650d480215b59"
+      },
+      "org": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "org_domain": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "org_identity_provider": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "org_invitation": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "outbox_entry": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "policy_config": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "protocol_mapper": {
+        "rows": 78,
+        "hash": "09b43abc693b6fa702a3b647fb9957e9"
+      },
+      "protocol_mapper_config": {
+        "rows": 440,
+        "hash": "b266671a050425e99e3677316959da2f"
+      },
+      "realm": {
+        "rows": 2,
+        "hash": "8595821e49208b47589cd522a63bb791"
+      },
+      "realm_attribute": {
+        "rows": 76,
+        "hash": "0ebb9fcb9ec31ebfe273b702c257ca00"
+      },
+      "realm_default_groups": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "realm_enabled_event_types": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "realm_events_listeners": {
+        "rows": 2,
+        "hash": "e2c12a264b0015dd76c21c1e2097d1ab"
+      },
+      "realm_localizations": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "realm_required_credential": {
+        "rows": 2,
+        "hash": "7cfc2284c160a8c2e9f4b6c9acf3bbd9"
+      },
+      "realm_smtp_config": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "realm_supported_locales": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "redirect_uris": {
+        "rows": 7,
+        "hash": "bf98d929025e3eb711247f91f05a797d"
+      },
+      "required_action_config": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "required_action_provider": {
+        "rows": 28,
+        "hash": "469eaf6aab9e0f2fd3917cc5a44b33ee"
+      },
+      "resource_attribute": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "resource_policy": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "resource_scope": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "resource_server": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "resource_server_perm_ticket": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "resource_server_policy": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "resource_server_resource": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "resource_server_scope": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "resource_uris": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "revoked_token": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "role_attribute": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "root_auth_session": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "scope_mapping": {
+        "rows": 4,
+        "hash": "ca081b8ae1a20b2fe45e49aafaa183e3"
+      },
+      "scope_policy": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "server_config": {
+        "rows": 2,
+        "hash": "487e77209b102f526e4ea23279e0066d"
+      },
+      "single_use_object": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "user_attribute": {
+        "rows": 1,
+        "hash": "cded99700041edc366e20fa39629adbe"
+      },
+      "user_consent": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "user_consent_client_scope": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "user_entity": {
+        "rows": 3,
+        "hash": "58275047d17f83d3ea87009edaec9ada"
+      },
+      "user_federation_config": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "user_federation_mapper": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "user_federation_mapper_config": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "user_federation_provider": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "user_group_membership": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "user_required_action": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "user_role_mapping": {
+        "rows": 3,
+        "hash": "bb801cb4e54d21ce48e5cd68560677d1"
+      },
+      "user_ver_credential": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      "web_origins": {
+        "rows": 3,
+        "hash": "850fdf3176361bc280a719a88001f068"
+      },
+      "workflow_state": {
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      }
+    }
+  },
+  "seconds": 87.545,
+  "scope": "Same-host disposable profile, actual governed records and full public-table checksums in foundry/keycloak; no target/off-host/RPO/RTO certification"
+}

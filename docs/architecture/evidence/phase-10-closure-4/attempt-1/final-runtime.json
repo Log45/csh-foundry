@@ -1,0 +1,146 @@
+[
+  {
+    "name": "/foundry-accept-27eff73c-api-1",
+    "image": "sha256:0ae9f5b2e0c98982cc5d284300539ad9da1ccfdedeab9ad84cc964cd6c3e11f8",
+    "command": [
+      "uvicorn",
+      "ontology_platform.main:create_app",
+      "--factory",
+      "--host",
+      "0.0.0.0",
+      "--no-proxy-headers",
+      "--no-access-log",
+      "--limit-concurrency",
+      "64",
+      "--timeout-keep-alive",
+      "5",
+      "--timeout-graceful-shutdown",
+      "30"
+    ],
+    "settings": {
+      "FOUNDRY_DIAGNOSTIC_TIMING": "true"
+    },
+    "memory": 1073741824,
+    "nano_cpus": 2000000000,
+    "networks": [
+      "foundry-accept-27eff73c_data",
+      "foundry-accept-27eff73c_front"
+    ]
+  },
+  {
+    "name": "/foundry-accept-27eff73c-ingestion-worker-1",
+    "image": "sha256:0ae9f5b2e0c98982cc5d284300539ad9da1ccfdedeab9ad84cc964cd6c3e11f8",
+    "command": [
+      "python",
+      "-m",
+      "ontology_platform.jobs.supervisor",
+      "--kind",
+      "ingestion",
+      "--ontology",
+      "manufacturing"
+    ],
+    "settings": {},
+    "memory": 1073741824,
+    "nano_cpus": 2000000000,
+    "networks": [
+      "foundry-accept-27eff73c_data",
+      "foundry-accept-27eff73c_front"
+    ]
+  },
+  {
+    "name": "/foundry-accept-27eff73c-ingress-1",
+    "image": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+    "command": [
+      "nginx",
+      "-g",
+      "daemon off;"
+    ],
+    "settings": {},
+    "memory": 268435456,
+    "nano_cpus": 1000000000,
+    "networks": [
+      "foundry-accept-27eff73c_egress",
+      "foundry-accept-27eff73c_front",
+      "foundry-accept-27eff73c_identity"
+    ]
+  },
+  {
+    "name": "/foundry-accept-27eff73c-keycloak-1",
+    "image": "sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332",
+    "command": null,
+    "settings": {
+      "KC_DB_POOL_INITIAL_SIZE": "2",
+      "KC_DB_POOL_MIN_SIZE": "2",
+      "KC_DB_POOL_MAX_SIZE": "10"
+    },
+    "memory": 1073741824,
+    "nano_cpus": 2000000000,
+    "networks": [
+      "foundry-accept-27eff73c_data",
+      "foundry-accept-27eff73c_egress",
+      "foundry-accept-27eff73c_identity"
+    ]
+  },
+  {
+    "name": "/foundry-accept-27eff73c-postgres-1",
+    "image": "sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1",
+    "command": [
+      "postgres",
+      "-c",
+      "wal_level=replica",
+      "-c",
+      "archive_mode=on",
+      "-c",
+      "archive_command=test ! -f /archive/%f && cp %p /archive/%f",
+      "-c",
+      "archive_timeout=60",
+      "-c",
+      "max_connections=100"
+    ],
+    "settings": {},
+    "memory": 2147483648,
+    "nano_cpus": 2000000000,
+    "networks": [
+      "foundry-accept-27eff73c_acceptance",
+      "foundry-accept-27eff73c_data"
+    ]
+  },
+  {
+    "name": "/foundry-accept-27eff73c-semantic-worker-1",
+    "image": "sha256:b621bb7806776edf8d9ea54c1783f489126a6637e90206f7301432120dd2c591",
+    "command": [
+      "python",
+      "-m",
+      "ontology_platform.jobs.supervisor",
+      "--kind",
+      "semantic",
+      "--ontology",
+      "manufacturing",
+      "--deadline",
+      "60"
+    ],
+    "settings": {},
+    "memory": 805306368,
+    "nano_cpus": 1000000000,
+    "networks": [
+      "foundry-accept-27eff73c_data",
+      "foundry-accept-27eff73c_front"
+    ]
+  },
+  {
+    "name": "/foundry-accept-27eff73c-studio-1",
+    "image": "sha256:bd32fbc1f6984642505e00395fff262df8611c522bc24f332508611806d0af6f",
+    "command": [
+      "node",
+      "studio-entry.mjs"
+    ],
+    "settings": {
+      "STUDIO_DIAGNOSTIC_TIMING": "true"
+    },
+    "memory": 1073741824,
+    "nano_cpus": 2000000000,
+    "networks": [
+      "foundry-accept-27eff73c_front"
+    ]
+  }
+]

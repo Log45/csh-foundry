@@ -52,7 +52,10 @@ def verified_identity(request: Request) -> tuple[str, str, str, datetime]:
             raise ApplicationError(
                 "authentication_required", "Bearer authentication is required", 401
             )
-        provider, claims = request.app.state.oidc.verify(token)
+        from ontology_platform.diagnostics import stage
+
+        with stage("authentication_seconds"):
+            provider, claims = request.app.state.oidc.verify(token)
         issuer, subject = provider.issuer, claims["sub"]
         method, expiry = "oidc", datetime.fromtimestamp(claims["exp"], UTC)
     elif settings.auth_mode == "test":

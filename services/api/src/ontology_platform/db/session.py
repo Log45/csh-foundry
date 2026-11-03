@@ -17,9 +17,12 @@ def clock(session: Session) -> datetime:
 
 
 def make_engine(settings: Settings, *, audit: bool = False) -> Engine:
-    return create_engine(
+    from ontology_platform.diagnostics import DiagnosticPool, instrument
+
+    engine = create_engine(
         settings.database_url.get_secret_value(),
         pool_pre_ping=True,
+        **({"poolclass": DiagnosticPool} if settings.diagnostic_timing else {}),
         hide_parameters=True,
         # Independent audit transactions must not compete with business transactions
         # that hold all ordinary connections while waiting for the same ontology lock.
@@ -37,6 +40,9 @@ def make_engine(settings: Settings, *, audit: bool = False) -> Engine:
             ),
         },
     )
+    if settings.diagnostic_timing:
+        instrument(engine, "audit" if audit else "ordinary")
+    return engine
 
 
 def require_runtime_role(sessions: sessionmaker[Session]) -> None:

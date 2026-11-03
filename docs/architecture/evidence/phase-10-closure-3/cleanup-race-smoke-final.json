@@ -1,0 +1,9 @@
+{
+  "result": "PASS",
+  "scope": "Actual --rm container and named volume cleanup using final guarded helper",
+  "details": {
+    "result": "PASS",
+    "container_removed": "a4052dbfb486fecbe38e7fcfce14d7c3fe8cc813097460ca429c061aa012a8ac",
+    "volume_removed": "foundry-accept-bb70b451-pitr-restored"
+  }
+}

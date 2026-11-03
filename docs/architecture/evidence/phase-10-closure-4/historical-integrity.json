@@ -1,0 +1,23 @@
+[
+  {
+    "directory": "phase-10-closure",
+    "result": "PASS",
+    "verified": 109,
+    "missing": [],
+    "mismatches": []
+  },
+  {
+    "directory": "phase-10-closure-2",
+    "result": "PASS",
+    "verified": 36,
+    "missing": [],
+    "mismatches": []
+  },
+  {
+    "directory": "phase-10-closure-3",
+    "result": "PASS",
+    "verified": 151,
+    "missing": [],
+    "mismatches": []
+  }
+]

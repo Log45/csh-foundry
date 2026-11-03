@@ -44,7 +44,7 @@ sys.path.insert(0, str(ROOT / "services/api/tests"))
 from test_phase1 import database, make_world  # noqa: E402
 
 ISSUER = "https://127.0.0.1/oidc"
-CERTS = ROOT / "artifacts/studio-e2e"
+CERTS = Path(os.environ.get("STUDIO_E2E_DIRECTORY", str(ROOT / "artifacts/studio-e2e")))
 
 
 def main():
@@ -102,7 +102,8 @@ def main():
 
         params = dict(request.query_params)
         if (
-            params.get("redirect_uri") != "http://127.0.0.1:3000/auth/callback"
+            params.get("redirect_uri")
+            != os.environ.get("STUDIO_ORIGIN", "http://127.0.0.1:3000") + "/auth/callback"
             or params.get("client_id") != "studio"
             or params.get("code_challenge_method") != "S256"
         ):
@@ -288,7 +289,13 @@ def main():
         )
         worker_thread = threading.Thread(target=work, daemon=True)
         worker_thread.start()
-        uvicorn.run(app, host="127.0.0.1", port=8001, log_level="warning", access_log=False)
+        uvicorn.run(
+            app,
+            host="127.0.0.1",
+            port=int(os.environ.get("STUDIO_E2E_API_PORT", "8001")),
+            log_level="warning",
+            access_log=False,
+        )
     finally:
         stop.set()
         if "worker_thread" in locals():

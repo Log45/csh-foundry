@@ -368,8 +368,8 @@ CI even when scanning fails. Image base/tool identities are pinned to reviewed d
 identities, evidence path escapes and changed evidence bytes. The release workflow expects
 `artifacts/acceptance/release-manifest.json` for the exact candidate; it does not manufacture that
 file from partial results. The evidence collection/owner review handoff must be configured before
-hosted promotion can succeed. A manifest has `source_revision`, `images` (api/studio/semantic/ingress image
-IDs), and `checks`, with one entry for every name in the script's `REQUIRED` set. Each entry contains
+hosted promotion can succeed. A manifest has `source_revision`, `images` (api/studio/semantic/ingress/postgres/keycloak image
+IDs), `supply_chain`, and `checks`, with one entry for every name in the script's `REQUIRED` set. Each entry contains
 `result: PASS`, a repository-relative `evidence` file and its `sha256`. Use distinct executed evidence
 where appropriate; hashes establish integrity, not the truth or approval of a claim. Owner review,
 required environment reviewers, off-host custody, live SSO and target certification remain separate.
@@ -393,3 +393,123 @@ The Keycloak 26.8.1 digest was refreshed from the supplier; existing developer c
 recreated. Remaining supplier-library findings still block release and require owner review.
 All nginx server blocks, including HTTP redirects and rejected hosts, explicitly select status-only
 logging. The callback-sentinel regression caught inherited URI logging before this fix.
+
+## Continuation 3: connection budget and acceptance commands
+
+The production broker now explicitly uses `KC_DB_POOL_INITIAL_SIZE=2`, `KC_DB_POOL_MIN_SIZE=2`
+and `KC_DB_POOL_MAX_SIZE=10`. The [supplier default maximum is 100](https://www.keycloak.org/server/db),
+which cannot be budgeted together with other clients against this profile's 100 connections.
+Do not change the existing developer broker to apply this template change.
+
+An example conservative budget for the documented process counts is:
+
+| Consumer | Maximum connections |
+|---|---:|
+| Two API processes: each ordinary 5+5 plus audit 2 | 24 |
+| One ingestion child plus one semantic child | 20 |
+| Optional single outbox child | 10 |
+| Keycloak | 10 |
+| Single migration process | 1 |
+| Explicitly bounded database monitoring allowance | 2 |
+| Administrative allowance | 4 |
+| PostgreSQL superuser reserved connections | 3 |
+| Total including optional outbox | 74 |
+| Remaining operational headroom at max_connections=100 | 26 |
+
+This is a process-budget example, not a measured capacity guarantee. Worker maxima count each
+child's ordinary default pool conservatively; supervisors do not add another operational datastore.
+Studio connects through API, not directly to PostgreSQL. Keep migration concurrency at one and
+bound actual monitoring/admin clients to the allowance. More replicas/workers, plugins or changed
+pool sizes require recalculation. A one-API/two-worker deployment without outbox uses a maximum
+budget of 52 including these allowances/reservations. The separate audit pool is not removed or
+unbounded; audit persistence still fails closed and survives ordinary business rollback.
+
+Run the extended fixtures only against newly generated local acceptance projects:
+
+```bash
+PATH=/opt/homebrew/opt/node/bin:$PATH uv run python scripts/accept_phase10_closure3.py \
+  --output docs/architecture/evidence/NEW_PHASE10_RUN
+PATH=/opt/homebrew/opt/node/bin:$PATH uv run python scripts/accept_phase10_operations.py \
+  --output docs/architecture/evidence/NEW_OPERATIONS_RUN
+```
+
+The first adds warm-up, three original 1/4/8-client repetitions, a 90-second eight-client sample,
+a distinct one-CPU contention sample, mixed admission and restored-application startup. Do not
+run scans, builds or regressions during its controlled latency window. The separate operations
+runner is useful for bounded fault/quota/monitoring retries without repeating a database-only PITR
+exercise. Read each assertion/result and private diagnostic path; no partial execution is a complete
+acceptance PASS. Retained-load mode checks image identities and CPU/memory bounds only, and explicitly
+records that no new measurement ran. It does not assert equivalence of all configuration values.
+
+The browser harness supports `STUDIO_E2E_PORT`, `STUDIO_E2E_API_PORT`,
+`STUDIO_E2E_REPLICA_PORT` and `STUDIO_E2E_DIRECTORY`. Check listeners before startup; never let
+readiness connect to an unrelated already-running Studio. Continuation 3 uses 13000/18001/13001
+and its own private test CA directory, retaining the signed local test provider's unprivileged 8443.
+
+The optional recovery callback can start the restored database on **only** the exact project's
+owned internal data network, with `recovered-postgres` as a distinct alias. Source applications
+are temporarily fenced and reconnected only within that disposable project. After restored login,
+metadata/object/history/SDK/authorization checks, reconnect its source applications and remove its
+restore container/volume. Developer volumes, realms and certificates are never substituted.
+
+Supply-chain manifests now require all six role names under `images` and `supply_chain`. Each
+`supply_chain[ROLE]` contains the selected `image_id`, exported `config_digest`, and `scan`/`sbom`
+records with repository-relative `evidence` and its `sha256`. Bind the platform config digest to
+the raw scanner source image ID, and the CycloneDX component version to its platform manifest
+digest. Do not equate an OCI index ID with the config digest. The verifier also reads actual
+findings and database validity; a claimed PASS or self-declared exception cannot hide high/critical
+matches. Old four-image manifests intentionally fail closed and must be regenerated from genuine
+executed six-image evidence. Hashes remain integrity checks, not named-owner approval.
+
+The scanner defaults to one locked `artifacts/.cache/grype` database cache across output folders.
+Use `--cache-dir /approved/shared/cache` to override it. Do not copy the multi-GiB cache into each
+scan/SBOM evidence directory or release archive; record the database identifier, build/source checksum
+and raw report. Automatic database freshness validation and the high threshold remain enabled.
+
+Logical quotas still exclude WAL, indexes, TOAST, audit history, object/branch history outside the
+accounted artifact rows, backup retention and temporary physical storage. Cancellation releases
+active-job slots but retains ingestion staging until the existing minimum-seven-day governed
+cleanup. Measure and alert on physical growth separately; byte-limit PASS cannot certify disk bounds.
+
+## Acceptance Closure 4 — correlated timing and bounded workloads (2026-11-03)
+
+The [executed evidence](../architecture/evidence/phase-10-closure-4/README.md) retains final runtime
+configuration, all read attempts, bounded writes/async timing, fault outcomes and security gates.
+Build reviewed API/Studio images tagged `csh-foundry-api:phase10-closure4` and
+`csh-foundry-studio:phase10-closure4` with their existing Dockerfiles. Keep the selected semantic,
+ingress, PostgreSQL and Keycloak identities recorded in images.json; they did not change here.
+
+```bash
+PATH=/opt/homebrew/opt/node/bin:$PATH uv run python scripts/accept_phase10_closure4.py \
+  --scope all --output docs/architecture/evidence/NEW_CLOSURE4_RUN
+# Focused follow-ups preserve the read workload or bounded write workload separately:
+PATH=/opt/homebrew/opt/node/bin:$PATH uv run python scripts/accept_phase10_closure4.py \
+  --scope reads --output docs/architecture/evidence/NEW_READ_RUN
+PATH=/opt/homebrew/opt/node/bin:$PATH uv run python scripts/accept_phase10_closure4.py \
+  --scope writes --output docs/architecture/evidence/NEW_WRITE_RUN
+```
+
+Use one disposable acceptance project at a time because its fixed test subnets are shared by this
+harness. Random loopback ports and new owned volumes remain mandatory. No developer `.env`, realm,
+volume or trust store is used. Private credentials/WAL/logs stay under ignored artifacts.
+
+`FOUNDRY_DIAGNOSTIC_TIMING=true` and `STUDIO_DIAGNOSTIC_TIMING=true` are optional diagnostic flags,
+default false; the harness sets them only on disposable API/BFF containers. Trace propagation joins
+the internal browser-state and governed API calls. Timings contain finite stage totals and IDs,
+not statements/parameters/tenant values/tokens. Acquisition includes pre-ping/creation/callbacks.
+The bounded sampler retains container ID/name, counters, database waits/connections/queue age and
+macOS aggregate memory-free queries; live log collection survives recreation. Raw spans are
+deduplicated on correlation. Linux hosts without `memory_pressure` cannot claim that macOS probe.
+
+Current read protocol passes; historical failures and the captured shared one-second stall remain
+retained, with causal root unresolved. No speculative query/cache/pool optimization was made.
+Final writes separate HTTP admission from server queue/execution/completion; semantic completion
+can exceed two seconds even when admission passes. These are fixture-scale engineering targets,
+not approved SLOs or production capacity. Existing 52/64/74 connection-budget examples remain.
+
+Security still blocks promotion: 274 high/two critical raw matches. Supported RHEL CA correction is
+already present in the selected Keycloak image, verified against actual Java anchors and vendor
+package advisory; no automatic scanner exception is introduced. Stable trixie libxml2 remains
+UNFIXED. A named security/release owner must obtain supported fixes or authorize a separate reviewed
+disposition process. Existing external SSO/off-host/receiver/owner/target/hosted prerequisites and
+procedures remain mandatory. No actual target deployment or external modification was performed.

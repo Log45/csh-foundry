@@ -1,0 +1,6 @@
+{
+  "free_before_bytes": 2739896320,
+  "free_after_bytes": 2739896320,
+  "removed": "Only newly downloaded artifacts/phase10-closure-3/scan/cache",
+  "retained": "All raw scans, SBOMs, previous evidence, private backups and credentials"
+}

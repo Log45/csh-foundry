@@ -1,0 +1,42 @@
+{
+  "result": "PASS",
+  "jobs": [
+    {
+      "check": "ingestion-asynchronous-completion",
+      "concurrency": 1,
+      "completion_seconds": 5.152881833026186,
+      "job_status": "COMPLETED"
+    },
+    {
+      "check": "semantic-asynchronous-completion",
+      "concurrency": 1,
+      "completion_seconds": 5.1369388330494985,
+      "job_status": "COMPLETED"
+    },
+    {
+      "check": "ingestion-asynchronous-completion",
+      "concurrency": 4,
+      "completion_seconds": 4.02436416601995,
+      "job_status": "COMPLETED"
+    },
+    {
+      "check": "semantic-asynchronous-completion",
+      "concurrency": 4,
+      "completion_seconds": 4.015987416030839,
+      "job_status": "COMPLETED"
+    },
+    {
+      "check": "ingestion-asynchronous-completion",
+      "concurrency": 8,
+      "completion_seconds": 3.983373833994847,
+      "job_status": "COMPLETED"
+    },
+    {
+      "check": "semantic-asynchronous-completion",
+      "concurrency": 8,
+      "completion_seconds": 6.1391528329695575,
+      "job_status": "COMPLETED"
+    }
+  ],
+  "scope": "Six successful terminal-state assertions. Raw attempt-1 emitter used reserved status keyword, so its result field contains COMPLETED; original raw file is retained. Future emitter uses job_status. Admission latency is separate in writes-N.json. Completion includes polling; queue age and worker CPU time are not separately measured."
+}

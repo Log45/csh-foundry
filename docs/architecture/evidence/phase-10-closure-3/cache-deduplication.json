@@ -1,0 +1,89 @@
+{
+  "result": "PASS",
+  "verified_files": 15,
+  "unique_versions": 3,
+  "removed_duplicate_files": 12,
+  "removed_duplicate_bytes": 40573624320,
+  "free_before_bytes": 63081963520,
+  "free_after_bytes": 103673470976,
+  "retained": [
+    {
+      "sha256": "fc0cd4b39c726a9772775e3057ef9e3a050a2ea34a26d58dc189a080725f35ba",
+      "path": "artifacts/.cache/grype-history/fc0cd4b39c726a9772775e3057ef9e3a050a2ea34a26d58dc189a080725f35ba/6/vulnerability.db",
+      "bytes": 3380305920
+    },
+    {
+      "sha256": "dd5e92969f6169ba33c0245da7cff6afd233a6a2b7719abfca50805d1ad010a3",
+      "path": "artifacts/.cache/grype-history/dd5e92969f6169ba33c0245da7cff6afd233a6a2b7719abfca50805d1ad010a3/6/vulnerability.db",
+      "bytes": 3379126272
+    },
+    {
+      "sha256": "be04364589905f0d82153a76da0d3a7f674efbeab32f3809a2bca68d52a0cf47",
+      "path": "artifacts/.cache/grype/6/vulnerability.db",
+      "bytes": 3381301248
+    }
+  ],
+  "removed": [
+    {
+      "path": "artifacts/api-supply-chain-final/cache/6/vulnerability.db",
+      "sha256": "fc0cd4b39c726a9772775e3057ef9e3a050a2ea34a26d58dc189a080725f35ba",
+      "bytes": 3380305920
+    },
+    {
+      "path": "artifacts/supply-chain-final/cache/6/vulnerability.db",
+      "sha256": "fc0cd4b39c726a9772775e3057ef9e3a050a2ea34a26d58dc189a080725f35ba",
+      "bytes": 3380305920
+    },
+    {
+      "path": "artifacts/phase10-closure-2/api-scan/cache/6/vulnerability.db",
+      "sha256": "be04364589905f0d82153a76da0d3a7f674efbeab32f3809a2bca68d52a0cf47",
+      "bytes": 3381301248
+    },
+    {
+      "path": "artifacts/phase10-closure/ingress-release-scan/cache/6/vulnerability.db",
+      "sha256": "be04364589905f0d82153a76da0d3a7f674efbeab32f3809a2bca68d52a0cf47",
+      "bytes": 3381301248
+    },
+    {
+      "path": "artifacts/phase10-closure/infrastructure-scan/cache/6/vulnerability.db",
+      "sha256": "be04364589905f0d82153a76da0d3a7f674efbeab32f3809a2bca68d52a0cf47",
+      "bytes": 3381301248
+    },
+    {
+      "path": "artifacts/phase10-closure/final-scan/cache/6/vulnerability.db",
+      "sha256": "be04364589905f0d82153a76da0d3a7f674efbeab32f3809a2bca68d52a0cf47",
+      "bytes": 3381301248
+    },
+    {
+      "path": "artifacts/phase10-closure/ingress-stable-scan/cache/6/vulnerability.db",
+      "sha256": "be04364589905f0d82153a76da0d3a7f674efbeab32f3809a2bca68d52a0cf47",
+      "bytes": 3381301248
+    },
+    {
+      "path": "artifacts/phase10-closure/baseline-scan/cache/6/vulnerability.db",
+      "sha256": "be04364589905f0d82153a76da0d3a7f674efbeab32f3809a2bca68d52a0cf47",
+      "bytes": 3381301248
+    },
+    {
+      "path": "artifacts/phase10-closure/release-scan/cache/6/vulnerability.db",
+      "sha256": "be04364589905f0d82153a76da0d3a7f674efbeab32f3809a2bca68d52a0cf47",
+      "bytes": 3381301248
+    },
+    {
+      "path": "artifacts/phase10-closure/rebuilt-scan/cache/6/vulnerability.db",
+      "sha256": "be04364589905f0d82153a76da0d3a7f674efbeab32f3809a2bca68d52a0cf47",
+      "bytes": 3381301248
+    },
+    {
+      "path": "artifacts/phase10-closure/ingress-final-scan/cache/6/vulnerability.db",
+      "sha256": "be04364589905f0d82153a76da0d3a7f674efbeab32f3809a2bca68d52a0cf47",
+      "bytes": 3381301248
+    },
+    {
+      "path": "artifacts/phase10-closure/remediated-infrastructure-scan/cache/6/vulnerability.db",
+      "sha256": "be04364589905f0d82153a76da0d3a7f674efbeab32f3809a2bca68d52a0cf47",
+      "bytes": 3381301248
+    }
+  ],
+  "preserved": "All scan JSON, SBOMs, application volumes, backup files and credentials"
+}

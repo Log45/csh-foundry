@@ -1,0 +1,11 @@
+{
+  "result": "BLOCKED",
+  "container_security": "FAIL",
+  "exit_code": 1,
+  "reason": "BLOCKED: Acceptance gate is not PASS: combined_deployment\n",
+  "negative_gate_validation": "PASS",
+  "promotable_archive_created": false,
+  "self_approval": "NONE AUTHORIZED",
+  "hosted_run": "NOT RUN",
+  "manifest_sha256": "64a6369c6fac6e3f6c598454023e5da5ba6a1cd0fbfa5a51d02c17bf2a94e542"
+}

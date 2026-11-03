@@ -159,13 +159,18 @@ class Telemetry:
 
 
 class RequestTelemetry:
-    def __init__(self, app: ASGIApp, telemetry: Telemetry):
+    def __init__(self, app: ASGIApp, telemetry: Telemetry, diagnostic: bool = False):
         self.app, self.telemetry = app, telemetry
+        self.diagnostic = diagnostic
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] != "http":
             await self.app(scope, receive, send)
             return
+        from ontology_platform.diagnostics import current
+
+        timing: dict[str, float] = {}
+        timing_token = current.set(timing if self.diagnostic else None)
         started = time.monotonic()
         parent = dict(scope.get("headers", [])).get(b"traceparent", b"").decode("ascii", "ignore")
         match = re.fullmatch(r"00-([0-9a-f]{32})-([0-9a-f]{16})-([0-9a-f]{2})", parent)
@@ -207,6 +212,8 @@ class RequestTelemetry:
                         "method": scope["method"],
                         "status": status,
                         "duration_seconds": round(elapsed, 6),
+                        **({"timings": timing} if self.diagnostic else {}),
                     }
                 )
             )
+            current.reset(timing_token)

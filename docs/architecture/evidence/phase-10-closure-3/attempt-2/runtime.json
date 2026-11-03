@@ -1,0 +1,143 @@
+[
+  {
+    "name": "/foundry-accept-928cec58-api-1",
+    "image": "sha256:0d90245410da20fccbb181fb647cdee9b438184213a85801e34c1993b33a2946",
+    "user": "foundry",
+    "read_only": true,
+    "memory": 1073741824,
+    "nano_cpus": 2000000000,
+    "pids": 128,
+    "tmpfs": {
+      "/tmp": "size=128m,mode=1777"
+    },
+    "cap_drop": [
+      "ALL"
+    ],
+    "security_opt": [
+      "no-new-privileges:true"
+    ],
+    "networks": [
+      "foundry-accept-928cec58_data",
+      "foundry-accept-928cec58_front"
+    ]
+  },
+  {
+    "name": "/foundry-accept-928cec58-ingestion-worker-1",
+    "image": "sha256:0d90245410da20fccbb181fb647cdee9b438184213a85801e34c1993b33a2946",
+    "user": "foundry",
+    "read_only": true,
+    "memory": 1073741824,
+    "nano_cpus": 2000000000,
+    "pids": 128,
+    "tmpfs": {
+      "/tmp": "size=128m,mode=1777"
+    },
+    "cap_drop": [
+      "ALL"
+    ],
+    "security_opt": [
+      "no-new-privileges:true"
+    ],
+    "networks": [
+      "foundry-accept-928cec58_data",
+      "foundry-accept-928cec58_front"
+    ]
+  },
+  {
+    "name": "/foundry-accept-928cec58-ingress-1",
+    "image": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+    "user": "",
+    "read_only": false,
+    "memory": 268435456,
+    "nano_cpus": 1000000000,
+    "pids": 128,
+    "tmpfs": {},
+    "cap_drop": null,
+    "security_opt": null,
+    "networks": [
+      "foundry-accept-928cec58_egress",
+      "foundry-accept-928cec58_front",
+      "foundry-accept-928cec58_identity"
+    ]
+  },
+  {
+    "name": "/foundry-accept-928cec58-keycloak-1",
+    "image": "sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332",
+    "user": "1000",
+    "read_only": false,
+    "memory": 1073741824,
+    "nano_cpus": 2000000000,
+    "pids": 256,
+    "tmpfs": {},
+    "cap_drop": [
+      "ALL"
+    ],
+    "security_opt": [
+      "no-new-privileges:true"
+    ],
+    "networks": [
+      "foundry-accept-928cec58_data",
+      "foundry-accept-928cec58_egress",
+      "foundry-accept-928cec58_identity"
+    ]
+  },
+  {
+    "name": "/foundry-accept-928cec58-postgres-1",
+    "image": "sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1",
+    "user": "",
+    "read_only": false,
+    "memory": 2147483648,
+    "nano_cpus": 2000000000,
+    "pids": null,
+    "tmpfs": {},
+    "cap_drop": null,
+    "security_opt": null,
+    "networks": [
+      "foundry-accept-928cec58_acceptance",
+      "foundry-accept-928cec58_data"
+    ]
+  },
+  {
+    "name": "/foundry-accept-928cec58-semantic-worker-1",
+    "image": "sha256:b621bb7806776edf8d9ea54c1783f489126a6637e90206f7301432120dd2c591",
+    "user": "foundry",
+    "read_only": true,
+    "memory": 805306368,
+    "nano_cpus": 1000000000,
+    "pids": 128,
+    "tmpfs": {
+      "/tmp": "size=128m,mode=1777"
+    },
+    "cap_drop": [
+      "ALL"
+    ],
+    "security_opt": [
+      "no-new-privileges:true"
+    ],
+    "networks": [
+      "foundry-accept-928cec58_data",
+      "foundry-accept-928cec58_front"
+    ]
+  },
+  {
+    "name": "/foundry-accept-928cec58-studio-1",
+    "image": "sha256:973849ffe13f980dfdb5fa4ab1215a89bf012c5d55b1390de4c5489920e87852",
+    "user": "node",
+    "read_only": true,
+    "memory": 1073741824,
+    "nano_cpus": 2000000000,
+    "pids": 128,
+    "tmpfs": {
+      "/tmp": "size=128m,mode=1777"
+    },
+    "cap_drop": [
+      "ALL"
+    ],
+    "security_opt": [
+      "no-new-privileges:true"
+    ],
+    "networks": [
+      "foundry-accept-928cec58_front"
+    ]
+  }
+]

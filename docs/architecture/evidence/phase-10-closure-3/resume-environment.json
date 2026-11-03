@@ -1,0 +1,16 @@
+{
+  "docker_info": {
+    "status": "BLOCKED",
+    "reason": "Docker daemon did not answer within eight seconds; no restart attempted"
+  },
+  "developer_http": [
+    {
+      "url": "http://127.0.0.1:3000/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8000/health/ready",
+      "status": 200
+    }
+  ]
+}

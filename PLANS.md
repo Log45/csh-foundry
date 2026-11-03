@@ -3325,3 +3325,26 @@ Container high-severity findings still block release. Do not mark local/producti
 or production certification from application regressions alone. Remaining Phase 10 acceptance,
 off-host custody, hosted controls and live provider certification are not moved into Phase 11.
 Phase 11 remains unapproved and unimplemented.
+
+### Phase 10 acceptance continuation 3 (2026-11-02)
+
+Evidence: `docs/architecture/evidence/phase-10-closure-3/README.md`. Full regression now passes
+552 tests/one strict xfail/zero skips; isolated frontend/browser and extended recovery, quota,
+identity, artifact and monitoring checks are recorded per scope. Six-image security remains FAIL;
+controlled read latency is not consistently below the provisional 500 ms target. Shared Grype
+cache replaces duplicate per-run databases, and broker connections are explicitly bounded.
+Phase 10 remains BLOCKED pending the remaining security, performance, fault, target and external
+owner gates. No migration, new semantic authority or Phase 11 implementation is authorized.
+
+### Phase 10 Acceptance Closure 4 (2026-11-03)
+
+Execute only approved Phase 10 closure. See `docs/architecture/evidence/phase-10-closure-4/README.md`.
+Final configured regression: 558 passed, one preserved strict xfail, zero skips; frontend 29 tests;
+five isolated browser tests. No migration or canonical fixture change. Optional correlated timing
+and bounded write/fault validation are delivered. Current repeated read protocol PASS, with 3,320
+measured requests/zero errors; historical failures and a causally unresolved one-second tail remain.
+The six-image security policy remains FAIL (274 high/two critical; 32 distinct IDs). The selected
+Keycloak CA fix is already present and verified without suppressing its scanner match; PostgreSQL
+libxml2 has no selected stable fix. Implementation PASS; local/production-like acceptance BLOCKED;
+production certification NOT RUN. Close remaining Phase 10 security, diagnosis/fault/target and
+external owner gates. Do not begin Phase 11.

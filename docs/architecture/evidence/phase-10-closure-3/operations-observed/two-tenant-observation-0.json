@@ -1,0 +1,56 @@
+{
+  "tenant_index": 0,
+  "accepted": 4,
+  "active": 4,
+  "runtime_limits": "4 4",
+  "attempts": [
+    {
+      "kind": "semantic/jobs",
+      "status": 200,
+      "id": "b3fc5c1d-0255-4040-be0c-245ed9c36296",
+      "error_code": null
+    },
+    {
+      "kind": "semantic/jobs",
+      "status": 200,
+      "id": "e71bfee5-4c8f-44af-a218-b384303479e8",
+      "error_code": null
+    },
+    {
+      "kind": "semantic/jobs",
+      "status": 200,
+      "id": "faa07da6-0d40-4927-bbcc-858b79f9eb44",
+      "error_code": null
+    },
+    {
+      "kind": "ingestion/runs",
+      "status": 200,
+      "id": "301f6fc8-a9dd-4a7e-9fef-14d7a1d4e0d7",
+      "error_code": null
+    },
+    {
+      "kind": "ingestion/runs",
+      "status": 409,
+      "id": null,
+      "error_code": "constraint_conflict"
+    },
+    {
+      "kind": "ingestion/runs",
+      "status": 409,
+      "id": null,
+      "error_code": "constraint_conflict"
+    },
+    {
+      "kind": "ingestion/runs",
+      "status": 409,
+      "id": null,
+      "error_code": "constraint_conflict"
+    },
+    {
+      "kind": "ingestion/runs",
+      "status": 409,
+      "id": null,
+      "error_code": "constraint_conflict"
+    }
+  ]
+}

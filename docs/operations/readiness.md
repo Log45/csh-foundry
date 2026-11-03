@@ -62,3 +62,64 @@ Implementation complete, locally accepted, production-like accepted and producti
 separate decisions. Security and incomplete mandatory operational evidence prevent complete local
 acceptance. No open Phase 10 requirement is moved to Phase 11. The final report states exact
 commands/results, including intermediate failures and unexecuted scenarios.
+
+## Continuation 3 — 2026-11-02
+
+See the [executed matrix and failures](../architecture/evidence/phase-10-closure-3/README.md).
+Implementation is complete; local and production-like acceptance
+remain BLOCKED, and production certification is NOT RUN. No named operational owner or approval
+is invented. Existing readiness categories above retain their external/target prerequisites.
+
+New evidence: 552 Python passes/one strict xfail/zero skips, 27 frontend tests, five isolated E2E
+passes; all six selected image/config/SBOM identities bound; stricter raw release evidence gate;
+recovered application startup after PostgreSQL 17.11 PITR; deployed mixed/cross-tenant and logical
+byte quota checks; real broker/JWKS/signature/expiry/rotation and SDK interruption; real API scrape
+and local alert delivery. PostgreSQL pool exhaustion/rollback/audit semantics remain intact. The
+broker maximum is now ten connections, with a documented process/headroom budget.
+
+Security remains FAIL (274 high/two critical package matches; 32 distinct high/critical advisories),
+without a supplier-qualified remediation or owner exception. Controlled read p95 is not consistently
+below 500 ms: one isolated repetition reaches 528.441 ms. Other isolated/sustained/contention runs
+pass, with zero errors; sampled SDK p95 is below two seconds. This does not certify write-heavy or
+target capacity. Existing API/ingress spans and later SQL plans do not identify a causal bottleneck
+for the historical shared spike; no speculative optimizer/cache/index change was made.
+
+Production delivery, on-call ownership, real provider organizations, approved off-host destination,
+key custody, target hardware/data/SLOs and hosted release reviewer/provenance are still required.
+Actual outbox delivery and unexecuted deployment-level fault/monitoring cases remain NOT RUN.
+Cache maintenance is not evidence deletion: one shared advisory DB cache replaces per-output copies;
+12 verified duplicates were removed while all scan/SBOM/recovery results were retained.
+
+| External gate | Result | Required prerequisites / accountable role | Executable validation handoff |
+|---|---|---|---|
+| Entra ID | NOT RUN | Approved exact tenant/app registration, client secret, callback, consent, test accounts; identity administrator | Render with `scripts/configure_keycloak.py --entra-tenant ... --entra-client ...` into a new private realm file; follow the production runbook's approved-target import, Code/PKCE sign-in, broker access-token profile, explicit identity link, membership and revocation checks |
+| Google / Workspace | NOT RUN | Approved OAuth applications, exact callbacks/consent/test users; Workspace hosted domain/admin policy; identity administrator | Render `--google-client ...` / `--workspace-client ... --workspace-domain ...`; run real organization-allowed/denied identities through the same approved-target broker/API flow; dummy provider imports do not certify federation |
+| Off-host DR | NOT RUN | Authorized destination/restore host, encrypted base+WAL, independently held keys/config, retention and RPO/RTO; database operator | Execute the production runbook's fresh-cluster physical recovery, then broker/API/Studio startup and tenant/object/history/artifact/authority validation on that destination; record target, elapsed time and hashes |
+| Production alerts | NOT RUN | Real API/worker/DB/host/WAL/backup scrape targets, protected credentials, receiver and named acknowledgement owner; platform/DB operators | Validate rules, scrape actual target metrics, inject each approved failure, record receiver firing/acknowledgement/resolution; local API receiver mechanics cover only the stated rule |
+| Hosted release/provenance | NOT RUN | Approved repository candidate, completed exact six-image evidence manifest, environment reviewer/protection/retention configuration; security/release reviewer | Dispatch the existing reviewed release workflow at the approved revision; verify CI, SBOM/scan/evidence hashes, archive inventory/digest and hosted attestation subject/identity before the protected approval step; no automatic deployment |
+| Target capacity | NOT RUN | Dedicated target architecture/resources, approved business dataset/request mix, concurrency and SLO/RPO/RTO; platform owner and business approver | Repeat warm-up/repetitions/sustained/contention with resource/DB/queue/storage telemetry on that approved target; the fixed 63-object acceptance fixture is a smoke test, not business-capacity certification |
+| Real outbox delivery | NOT RUN | Approved egress policy and fixed receiver compatible with the existing destination guard, test credentials and deduplicating receiver; platform/security owner | Configure the existing supervisor's fixed outbox destination on the disposable approved network, perform and observe an actual send/failure/retry, check event-ID deduplication and committed-state integrity; do not bypass private-address guards for a local receiver |
+
+Roles are responsibility placeholders until named humans accept them. No external operation in this
+table has been performed or approved by this continuation, and no unexecuted workflow is PASS.
+
+## Acceptance Closure 4 — 2026-11-03
+
+The [Closure 4 matrix](../architecture/evidence/phase-10-closure-4/README.md) supplements, rather than
+relabels, historical results above. Implementation PASS; local and production-like acceptance
+BLOCKED; production certification NOT RUN. Final validation: 558 Python passes/one strict xfail/zero
+skips, 29 frontend tests and five isolated browser tests. Head stays 0017_capacity.
+
+Current final-pool read protocol PASS (3,320 measured requests, zero errors, highest read p95
+363.552 ms), but a captured 1,079 ms tail is causally unresolved. Bounded writes PASS (246 timed
+requests, final highest operation p95 296.980 ms); async queue/execution/completion are separate.
+New publication/outbox/tmpfs faults PASS at their documented scope; physical shared-disk and complete
+target fault/capacity certification remain NOT RUN. Recovery/monitoring evidence from Closure 3
+remains retained; PostgreSQL/Keycloak image identities are unchanged.
+
+Six-image policy remains FAIL: 274 high/two critical scanner matches, 32 distinct IDs. The broker's
+supported system-CA remediation is verified already present; its scanner finding is retained.
+PostgreSQL libxml2 remains UNFIXED. No risk exception or named owner is invented. External provider
+organizations/registrations, independent off-host recovery/custody, production receivers/owners,
+target hardware/workload/SLOs and hosted approval/provenance still require the prerequisites and
+operator handoff in the matrix above. No production readiness or Phase 11 authorization is inferred.

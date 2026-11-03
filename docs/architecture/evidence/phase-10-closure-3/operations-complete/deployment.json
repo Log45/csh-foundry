@@ -1,0 +1,122 @@
+{
+  "project": "foundry-accept-2e3a0a94",
+  "environment": "Disposable local Compose; test CA; loopback ports",
+  "private_evidence": "artifacts/foundry-accept-2e3a0a94",
+  "checks": [
+    {
+      "check": "production-template-configuration",
+      "result": "PASS"
+    },
+    {
+      "check": "disposable-production-wal-directory-owner-and-write-permission",
+      "result": "PASS"
+    },
+    {
+      "check": "new-cluster-owner-migration-and-runtime-grants",
+      "result": "PASS",
+      "head": "0017_capacity"
+    },
+    {
+      "check": "governed-manufacturing-schema-and-explicit-worker-delegations",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "real-jwks-only-outage-new-verifier-denial-and-recovery",
+      "result": "PASS"
+    },
+    {
+      "check": "broker-outage-login-unavailable-cached-token-bounded-and-fresh-verifier-denied",
+      "result": "PASS"
+    },
+    {
+      "check": "real-api-invalid-signing-key-denied",
+      "result": "PASS"
+    },
+    {
+      "check": "real-issuer-signed-expired-access-token-denied",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "deployed-logical-byte-saturation-concurrent-rollback-retry-independent-tenant",
+      "result": "PASS",
+      "quota_bytes": 1104240,
+      "primary_admitted": 1,
+      "primary_rejected_409": 7,
+      "secondary_admitted": 8,
+      "primary_bytes_used": 1099446,
+      "secondary_bytes_used": 151241,
+      "invalid_upload_rollback": "PASS"
+    },
+    {
+      "check": "two-deployed-tenants-shared-mixed-job-and-logical-byte-quota-isolation",
+      "result": "PASS",
+      "job_limit_per_tenant": 4,
+      "admitted_per_tenant": 4,
+      "rejected_per_tenant": 4,
+      "primary_uploads_admitted": 1,
+      "primary_uploads_rejected": 7,
+      "independent_secondary_uploads_admitted": 8,
+      "quota_bytes": 1104240,
+      "invalid_upload_rollback": "PASS",
+      "artifact_retry_no_charge": "PASS",
+      "unauthorized_ingestion_semantic_artifact_no_charge": "PASS"
+    },
+    {
+      "check": "sdk-interrupted-transaction-no-partial-artifact-retry-concurrent-integrity-isolation",
+      "result": "PASS",
+      "interrupted_status": 502,
+      "concurrent_retries": 8,
+      "unique_artifact_ids": 1,
+      "corrupt_archive_rejected": true
+    },
+    {
+      "check": "real-broker-signing-key-rotation-new-kid-overlap-bounded-refresh",
+      "result": "PASS",
+      "new_key_statuses": [
+        401,
+        401,
+        401,
+        401,
+        401,
+        401,
+        401,
+        401,
+        401,
+        401,
+        401,
+        401,
+        401,
+        200
+      ],
+      "old_key_overlap": "PASS"
+    },
+    {
+      "check": "governed-query-sql-pool-diagnostic-and-redacted-explain-analyze",
+      "result": "PASS"
+    },
+    {
+      "check": "actual-authenticated-api-scrape-real-alert-firing-local-delivery-resolution",
+      "result": "PASS"
+    },
+    {
+      "check": "two-api-concurrent-governed-actions-revision-conflicts-idempotent-replay",
+      "result": "PASS",
+      "committed": 1,
+      "conflicts_409": 7,
+      "final_revision": 2
+    },
+    {
+      "check": "additional-operations",
+      "result": "FAIL",
+      "error_type": "AssertionError"
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+[
+  {
+    "check": "Full configured Python, Ruff, format, strict mypy, migration drift",
+    "result": "PASS",
+    "passed": 558,
+    "strict_xfail": 1,
+    "skipped": 0,
+    "pytest_seconds": 293.74,
+    "evidence": "docs/architecture/evidence/phase-10-closure-4/final-validation/regression-full.txt",
+    "sha256": "6f03b8f51ab0eaed4517ab09dae029deb4b13650759b0f1cca010d466c9fc685"
+  },
+  {
+    "check": "Final focused diagnostic/release/scanner guard tests",
+    "result": "PASS",
+    "passed": 18,
+    "evidence": "docs/architecture/evidence/phase-10-closure-4/static-final.txt",
+    "sha256": "1d9d6941219064cf075fb1ceb41427e4ed92885fe46c27c3fb7e2ced324d7126"
+  },
+  {
+    "check": "Frontend",
+    "result": "PASS",
+    "passed": 29,
+    "evidence": "docs/architecture/evidence/phase-10-closure-4/frontend-tests.txt",
+    "sha256": "71862a136152344c58aa77869b3e0e65edf1b7f80a3fed59ea40ab450665cf45"
+  },
+  {
+    "check": "Frontend typecheck/format/production build",
+    "result": "PASS",
+    "evidence_files": [
+      "frontend-typecheck.txt",
+      "frontend-format.txt",
+      "frontend-build.txt",
+      "frontend-diagnostics-format.txt"
+    ]
+  },
+  {
+    "check": "Browser E2E",
+    "result": "PASS",
+    "passed": 5,
+    "evidence": "docs/architecture/evidence/phase-10-closure-4/browser.txt",
+    "sha256": "2e9de0c4176369b16c4b050d008ad2a1bee3304d8adcf36471bf1952e0c653f5"
+  },
+  {
+    "check": "OWLAPI roundtrip",
+    "result": "PASS",
+    "evidence": "docs/architecture/evidence/phase-10-closure-4/owlapi-roundtrip.txt",
+    "sha256": "62e219b1fe12f8e58da378cde0a3a7a3b2edb7a8991ee328c2bc82e331bf6920"
+  },
+  {
+    "check": "Raw pySHACL conformance",
+    "result": "FAIL",
+    "expected": "Preserved strict expected failure; normalized/negative/engine checks pass"
+  },
+  {
+    "check": "Base owl-rl CriticalMachine inference",
+    "result": "NOT SUPPORTED"
+  },
+  {
+    "check": "Prot\u00e9g\u00e9 GUI and independent proof verification",
+    "result": "NOT RUN"
+  },
+  {
+    "check": "Migrations",
+    "result": "PASS",
+    "head": "0017_capacity",
+    "new_migrations": []
+  },
+  {
+    "check": "Container high/critical policy",
+    "result": "FAIL",
+    "high_matches": 274,
+    "critical_matches": 2,
+    "distinct_high_critical": 32
+  },
+  {
+    "check": "Release evidence verifier",
+    "result": "BLOCKED",
+    "evidence": "docs/architecture/evidence/phase-10-closure-4/release-gate-result.json",
+    "sha256": "8cea01da94a872a1ddb162aadef8b473735245086949913497c7d1da6a7089b3"
+  },
+  {
+    "check": "Controlled read protocol",
+    "result": "PASS",
+    "requests": 3320,
+    "errors": 0,
+    "highest_read_p95_ms": 363.552
+  },
+  {
+    "check": "Bounded writes",
+    "result": "PASS",
+    "requests": 246,
+    "unexpected_errors": 0,
+    "highest_operation_p95_ms": 296.98
+  },
+  {
+    "check": "Latency causal root",
+    "result": "INCONCLUSIVE",
+    "cause": "UNRESOLVED"
+  },
+  {
+    "check": "External SSO/off-host DR/production custody/receivers/owners/target SLO-capacity/hosted provenance",
+    "result": "NOT RUN"
+  }
+]

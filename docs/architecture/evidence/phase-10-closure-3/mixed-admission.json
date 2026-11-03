@@ -1,0 +1,26 @@
+[
+  {
+    "concurrency": 2,
+    "accepted": 20,
+    "rejected_409": 8,
+    "semantic_accepted": 4,
+    "final_active": 0,
+    "repeated_cancel": "PASS"
+  },
+  {
+    "concurrency": 8,
+    "accepted": 20,
+    "rejected_409": 8,
+    "semantic_accepted": 4,
+    "final_active": 0,
+    "repeated_cancel": "PASS"
+  },
+  {
+    "concurrency": 12,
+    "accepted": 20,
+    "rejected_409": 8,
+    "semantic_accepted": 4,
+    "final_active": 0,
+    "repeated_cancel": "PASS"
+  }
+]

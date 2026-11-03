@@ -1,0 +1,17 @@
+{
+  "container_identities": "PASS; original five containers preserved",
+  "http": [
+    {
+      "url": "http://127.0.0.1:3000/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8000/health/ready",
+      "status": 200
+    },
+    {
+      "url": "https://keycloak.localhost/realms/foundry/.well-known/openid-configuration",
+      "error_type": "ConnectError"
+    }
+  ]
+}

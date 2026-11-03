@@ -83,3 +83,55 @@ targets pass; representative target capacity and comprehensive fault certificati
 
 See `docs/architecture/evidence/phase-10-closure-2/` and the appended report. Existing local Studio,
 Keycloak, credentials and databases were preserved. Overall acceptance remains BLOCKED.
+
+## Acceptance continuation 3 — 2026-11-02
+
+- [x] Full configured regression: 552 passed, one strict xfail, zero skips; frontend 27 tests,
+  typecheck/format/build; five isolated durable browser E2E tests; fixture hashes/OWLAPI roundtrip.
+- [x] All six selected images rescanned with raw SBOM/scan archives and real image/config/SBOM binding.
+- [x] Release verifier reads actual six-image findings; negative integrity/identity/exception tests.
+- [x] Shared locked Grype cache; fifteen files hashed, twelve duplicate DB files removed; 37.8 GiB
+  reclaimed without deleting scan evidence, backups or credentials.
+- [x] Warm-up, three original 1/4/8-client samples, 90-second sustained run and separate contention.
+- [ ] Consistent 500 ms read target: FAIL, isolated repetition peaks 391.657/528.441/283.601 ms;
+  sampled SDK write p95 PASS only; representative mixed/write-heavy capacity NOT RUN.
+- [x] Real mixed admission at 2/8/12 clients; independent deployed two-tenant admission and logical
+  byte saturation/replay/cancellation/authorization checks; staging rollback/cleanup PostgreSQL tests.
+- [x] Bounded ordinary/audit exhaustion/recovery/shutdown tests; broker pool capped at ten with
+  explicit connection-budget/headroom example.
+- [x] PITR extended to recovered Keycloak/API/Studio login, readiness, objects, metadata, history,
+  SDK and authorization checks; 46/101 table hashes match the target.
+- [x] Deployed JWKS/broker/invalid-key/expired-token faults; actual signing-key rotation/overlap;
+  interrupted SDK publication, retry, concurrent generation, tamper/tenant retrieval checks.
+- [x] Real authenticated API scrape, unchanged outage rule firing, local receiver delivery/resolution.
+- [ ] Complete target-level fault/capacity/host-WAL-backup-worker monitoring and actual outbox delivery.
+- [ ] Security promotion gate remains FAIL: 274 high/two critical matches; no approved exception.
+- [ ] Live providers, off-host DR/custody, production alert receiver/owners, hosted approval/provenance.
+
+See `docs/architecture/evidence/phase-10-closure-3/README.md` for exact per-scope status and retained
+failed attempts. Existing developer containers/data were restored after the user-authorized Docker
+restart. No migration or Phase 11 work was introduced.
+
+- [x] Final integrated profile: 58 passing assertions/50 distinct checks; two API governance races
+  and shared admission, two Studio sessions/restarts, restored application and real API alerts.
+- [x] Exact own-resource cleanup audit: fifteen projects absent; six orphan restore volumes removed,
+  asynchronous cleanup race fixed, ownership/control-error guards and actual removal smoke pass.
+
+## Acceptance Closure 4 — 2026-11-03
+
+- [x] Preserve starting uncommitted work, previous evidence and developer services/data/keys/trust.
+- [x] Review all 32 distinct advisories; retain six fresh SBOM/scan/hash bindings and vendor snapshots.
+- [x] Verify already-present Keycloak system-CA correction; retain scanner critical finding.
+- [ ] Security policy remains FAIL: 274 high/two critical; libxml2 UNFIXED; no approved exception.
+- [x] Final broker cap ten verified; unchanged ordinary/audit and PostgreSQL budgets.
+- [x] Correlated API/BFF/SQL/curl/ingress timing and corrected bounded resource/span retention.
+- [x] Current read protocol PASS: 3,320 measured mixed requests, zero errors, highest read p95 363.552 ms.
+- [ ] Shared-tail causal root remains UNRESOLVED; historical target failures preserved.
+- [x] 246 timed writes; final highest operation p95 296.980 ms; queue/worker/total async timing separated.
+- [x] Concurrent publication, real outbox post-effect process loss/retry/dedup and bounded tmpfs recovery.
+- [x] 558 Python passes/one strict xfail/zero skips; 29 frontend tests; five isolated browser passes.
+- [ ] Complete representative target fault/capacity and external certification gates.
+
+See [Closure 4 evidence](../architecture/evidence/phase-10-closure-4/README.md). No migration, security
+waiver, developer restart or Phase 11 work. Implementation PASS; local/production-like BLOCKED;
+production certification NOT RUN. Original failed probe/resource-attribution attempts remain retained.

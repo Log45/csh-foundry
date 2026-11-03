@@ -1,0 +1,274 @@
+[
+  {
+    "advisory": "CVE-2025-69720",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2025-69720",
+    "http_status": 200,
+    "sha256": "3542be519daaef8f60a0fd662f4a6129a238f59ef9b86155869d49cfd2b3af78",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2025-69720.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-102010",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-102010",
+    "http_status": 200,
+    "sha256": "4dfe5f35a8a136a6101c66bf6b6231f8a7de500b77f8c50a08f25c6deeeb07ea",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-102010.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-107161",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-107161",
+    "http_status": 200,
+    "sha256": "2337846e60a58f50c7b67cbc07bb1621c5ba170891a674e0fd32a30929169c96",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-107161.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-107778",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-107778",
+    "http_status": 200,
+    "sha256": "f615a637d23eb128e6e681ae90f4759c9491bd6dd99a47b74806c546a3a4b4a7",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-107778.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-119373",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-119373",
+    "http_status": 200,
+    "sha256": "f56d5f58bb7d282c94ffd9ff818b435ed9884114b11c1efbd7eb74f63e6e195f",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-119373.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-119374",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-119374",
+    "http_status": 200,
+    "sha256": "95152e5f51a1b9c1a7cfbe81a2930944eecd3f56dffc48fa77656d6ba6e41c61",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-119374.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-119379",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-119379",
+    "http_status": 200,
+    "sha256": "db006ce3cce06e0099712f11d9e5b7cdf8bd28a8c9cc47101bd288e201268f33",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-119379.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-119586",
+    "url": "https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-119586.json",
+    "result": "PASS retrieval",
+    "error_type": "HTTPError",
+    "initial_attempt": {
+      "advisory": "CVE-2026-119586",
+      "url": "https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-119586.json",
+      "result": "BLOCKED retrieval",
+      "error_type": "HTTPError"
+    },
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-119586.json",
+    "sha256": "af42a4f26c65bcd16cac7fc7ea46d9806efe3e9f2ea8ed75e38dd2afc81d58a6",
+    "fallback": "curl with same authoritative URL; prior failed urllib retrieval retained",
+    "http_status": 200
+  },
+  {
+    "advisory": "CVE-2026-19499",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-19499",
+    "http_status": 200,
+    "sha256": "5ae203e2503db74b024563d3a6cbac974337438d5f3db69b93cbdd0ec38aecd7",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-19499.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-24882",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-24882",
+    "http_status": 200,
+    "sha256": "5cf2a806fe036455c546a8c0bf3fd196daa703b62813fa8731addde435b32307",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-24882.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-5435",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-5435",
+    "http_status": 200,
+    "sha256": "2361f3d31bc16c0ed30e5f79e4398e73155b117f7c2097c4208f9d756cdd0959",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-5435.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-54369",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-54369",
+    "http_status": 200,
+    "sha256": "4677cdb2b848eca7bc76f57dd54e5d01e309f438bba58d892550db432fbde5ca",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-54369.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-54370",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-54370",
+    "http_status": 200,
+    "sha256": "36c932e9051decbe74a402bbe4df1e60f52a17c39cab2785b83901467b36758e",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-54370.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-6653",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-6653",
+    "http_status": 200,
+    "sha256": "e2c617f15c21210bf4b14e3dfba7349a56e335e2cc0cec5a9e5365de711389e7",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-6653.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-74860",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-74860",
+    "http_status": 200,
+    "sha256": "a80a16c47eb20f15cc86ac053379cd571ad9c36e7497e42497100eaa3e71250f",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-74860.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-76642",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-76642",
+    "http_status": 200,
+    "sha256": "fd40eb589f4edd1f5b2df060db1d418501f7138459069481c60471abe1efde24",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-76642.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-78408",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-78408",
+    "http_status": 200,
+    "sha256": "c2ce37b05cca7f05768d22c20645c174592a837fb20423fa7f106dc4e6e0d104",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-78408.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-78409",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-78409",
+    "http_status": 200,
+    "sha256": "7762ce7d10558ca03e3fcc3995b97e7a24d13ab4b1d6cdd3e4bf9ff7d357ba48",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-78409.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-78410",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-78410",
+    "http_status": 200,
+    "sha256": "370b52136365d440004d915421bd2b2529393511c802bdc04f3e3a873241621b",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-78410.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-82560",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-82560",
+    "http_status": 200,
+    "sha256": "b143fb7f152ce34bbaa86ef1d0424b51f41422ec9664e1af3829c8bfb7daf953",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-82560.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-84243",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-84243",
+    "http_status": 200,
+    "sha256": "98865d37ee29c5c0734e80b8389d5a071afe6b2edd358bb63d1ea47cf7ac7b47",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-84243.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-85091",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-85091",
+    "http_status": 200,
+    "sha256": "8820eea887fbcad21905959c1002c39d34ec6c00aff80160a17710ed6443d2db",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-85091.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-86138",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-86138",
+    "http_status": 200,
+    "sha256": "c86d07e496ea97c2804988c4eae5bf897b2b34992ea4f9dbef3f3ade063d4d6e",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-86138.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-86139",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-86139",
+    "http_status": 200,
+    "sha256": "96aef4e01c0fb97663ff4ec0d62b0b8d424dfea21f46d9b0e2fa39ec7f2578f9",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-86139.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-86140",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-86140",
+    "http_status": 200,
+    "sha256": "8759571590f26cf4204a2aaa4431f8fda4280a59299ba951a909af51e8bd7834",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-86140.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-86142",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-86142",
+    "http_status": 200,
+    "sha256": "2b9554ece094dd3e1b5a81b15d4d304b184a26977cff1ad7c55f71a8c685bbf3",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-86142.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-86143",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-86143",
+    "http_status": 200,
+    "sha256": "3493d4fc46e33bd9917872a2fd2b09bb788333f293077d3807b33cc125bde710",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-86143.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-86144",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-86144",
+    "http_status": 200,
+    "sha256": "cf9c6bfedbc6d70d05a2e4a4fe9fe5f13caf7852176d072a578b62f6352bf548",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-86144.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-91403",
+    "url": "https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-91403.json",
+    "result": "PASS retrieval",
+    "error_type": "HTTPError",
+    "initial_attempt": {
+      "advisory": "CVE-2026-91403",
+      "url": "https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-91403.json",
+      "result": "BLOCKED retrieval",
+      "error_type": "HTTPError"
+    },
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-91403.json",
+    "sha256": "b2cd49eb6f1099e5d0794be8b3859128154385295a46511917d0ad669e92b9e9",
+    "fallback": "curl with same authoritative URL; prior failed urllib retrieval retained",
+    "http_status": 200
+  },
+  {
+    "advisory": "CVE-2026-9538",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-9538",
+    "http_status": 200,
+    "sha256": "7ef5d867262210dcfd0f600ea409fd1aa470b38d8d2464d6ba885ab275a7fd57",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-9538.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "CVE-2026-95619",
+    "url": "https://security-tracker.debian.org/tracker/CVE-2026-95619",
+    "http_status": 200,
+    "sha256": "7faa4eb8e8873eb30dd30fea4202dbb4882cffc42a24f70cd31da2049363eaf1",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-95619.html",
+    "result": "PASS retrieval"
+  },
+  {
+    "advisory": "GHSA-xxph-c9ww-hj94",
+    "url": "https://api.github.com/advisories/GHSA-xxph-c9ww-hj94",
+    "http_status": 200,
+    "sha256": "0aafcd55e82a783038b69bf3cfa2f8d06ced3db45cfa8fbc60e43c76ef8fd0f0",
+    "snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/GHSA-xxph-c9ww-hj94.json",
+    "result": "PASS retrieval"
+  }
+]

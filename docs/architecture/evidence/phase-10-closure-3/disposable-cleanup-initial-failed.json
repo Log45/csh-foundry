@@ -1,0 +1,53 @@
+{
+  "result": "FAIL",
+  "own_projects_checked": [
+    "foundry-accept-144c5f25",
+    "foundry-accept-2e3a0a94",
+    "foundry-accept-4fb9a0ad",
+    "foundry-accept-613cb32d",
+    "foundry-accept-78b1dd1d",
+    "foundry-accept-792c8e15",
+    "foundry-accept-7c143788",
+    "foundry-accept-7d64d743",
+    "foundry-accept-866da46c",
+    "foundry-accept-928cec58",
+    "foundry-accept-a54d9df0",
+    "foundry-accept-b2175e4a",
+    "foundry-accept-c3ece540",
+    "foundry-accept-cc3e0755",
+    "foundry-accept-d8def550"
+  ],
+  "remaining_resources": [
+    {
+      "project": "foundry-accept-144c5f25",
+      "kind": "restore-volume",
+      "name": "foundry-accept-144c5f25-pitr-restored"
+    },
+    {
+      "project": "foundry-accept-4fb9a0ad",
+      "kind": "restore-volume",
+      "name": "foundry-accept-4fb9a0ad-pitr-restored"
+    },
+    {
+      "project": "foundry-accept-7d64d743",
+      "kind": "restore-volume",
+      "name": "foundry-accept-7d64d743-pitr-restored"
+    },
+    {
+      "project": "foundry-accept-928cec58",
+      "kind": "restore-volume",
+      "name": "foundry-accept-928cec58-pitr-restored"
+    },
+    {
+      "project": "foundry-accept-a54d9df0",
+      "kind": "restore-volume",
+      "name": "foundry-accept-a54d9df0-pitr-restored"
+    },
+    {
+      "project": "foundry-accept-cc3e0755",
+      "kind": "restore-volume",
+      "name": "foundry-accept-cc3e0755-pitr-restored"
+    }
+  ],
+  "scope": "Only projects recorded by this continuation; unrelated developer resources not pruned"
+}

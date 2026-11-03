@@ -1,0 +1,40 @@
+{
+  "result": "PASS",
+  "projects": [
+    {
+      "project": "foundry-accept-27eff73c",
+      "remaining_resources": {
+        "containers": [],
+        "volumes": [],
+        "networks": []
+      }
+    },
+    {
+      "project": "foundry-accept-6b3dffcc",
+      "remaining_resources": {
+        "containers": [],
+        "volumes": [],
+        "networks": []
+      }
+    },
+    {
+      "project": "foundry-accept-7c60c2bf",
+      "remaining_resources": {
+        "containers": [],
+        "volumes": [],
+        "networks": []
+      }
+    },
+    {
+      "project": "foundry-accept-983ac327",
+      "remaining_resources": {
+        "containers": [],
+        "volumes": [],
+        "networks": []
+      }
+    }
+  ],
+  "remaining_probe_containers": [],
+  "remaining_regression_containers": [],
+  "scope": "Read-only exact own-label/name audit; no prune, reset or unrelated deletion"
+}

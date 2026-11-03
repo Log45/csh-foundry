@@ -1,0 +1,67 @@
+[0000]  WARN unable to get filesystem cache at /.cache/syft: unable to create directory at '/.cache/syft': mkdir /.cache: read-only file system
+[0019] ERROR discovered vulnerabilities at or above the severity threshold
+[0000]  WARN unable to get filesystem cache at /.cache/syft: unable to create directory at '/.cache/syft': mkdir /.cache: read-only file system
+[0018] ERROR discovered vulnerabilities at or above the severity threshold
+[0000]  WARN unable to get filesystem cache at /.cache/syft: unable to create directory at '/.cache/syft': mkdir /.cache: read-only file system
+[0015] ERROR discovered vulnerabilities at or above the severity threshold
+[0000]  WARN unable to get filesystem cache at /.cache/syft: unable to create directory at '/.cache/syft': mkdir /.cache: read-only file system
+[0000]  WARN unable to get filesystem cache at /.cache/syft: unable to create directory at '/.cache/syft': mkdir /.cache: read-only file system
+[0014] ERROR discovered vulnerabilities at or above the severity threshold
+[0000]  WARN unable to get filesystem cache at /.cache/syft: unable to create directory at '/.cache/syft': mkdir /.cache: read-only file system
+[0012] ERROR discovered vulnerabilities at or above the severity threshold
+{
+  "image-0": {
+    "image": "csh-foundry-api:phase10-closure",
+    "image_id": "sha256:0d90245410da20fccbb181fb647cdee9b438184213a85801e34c1993b33a2946",
+    "config_digest": "sha256:f122764117f056c235531d967a9340751a142336bafe82fa942fdf47d7406170",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL"
+  },
+  "image-1": {
+    "image": "csh-foundry-studio:phase10-closure",
+    "image_id": "sha256:973849ffe13f980dfdb5fa4ab1215a89bf012c5d55b1390de4c5489920e87852",
+    "config_digest": "sha256:74b1f2ca429b92c000022da6e1f3a34c1405d079ed006a0a673f1d8cca08984c",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL"
+  },
+  "image-2": {
+    "image": "csh-foundry-semantic:phase10-closure",
+    "image_id": "sha256:b621bb7806776edf8d9ea54c1783f489126a6637e90206f7301432120dd2c591",
+    "config_digest": "sha256:8de2f7ceeb1404383eb74ae49c6095aa66db45c6b57fd466c68cec8a5272405f",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL"
+  },
+  "image-3": {
+    "image": "csh-foundry-ingress:phase10-closure",
+    "image_id": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+    "config_digest": "sha256:e145129f21be32c3795a8d3a39e169ff9e6d799568ddfd2db56fd0804c0b37ef",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "PASS"
+  },
+  "image-4": {
+    "image": "postgres:17.11-trixie@sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1",
+    "image_id": "sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1",
+    "config_digest": "sha256:bbdfc26f27f4b2fecdc289b63295a0228cab33657a7b859afe54dc78d184dd1d",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL"
+  },
+  "image-5": {
+    "image": "quay.io/keycloak/keycloak:26.8.1@sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332",
+    "image_id": "sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332",
+    "config_digest": "sha256:24959b9b2ff0ec6bd9445588d3b488b84dffbe06e6a6ccb50e3d074f7ec581dd",
+    "scanner": "anchore/grype@sha256:621d56d1d68106b787022c81546f7e0a36202a25d1239f0c20195fab8c16f7ea",
+    "sbom_tool": "anchore/syft@sha256:4cc92b64ca74ffca4c94d4c8fcc01f217731375300be14d0b6eeb2e82eaa110a",
+    "sbom": "PASS",
+    "vulnerabilities": "FAIL"
+  }
+}

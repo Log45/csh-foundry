@@ -1,0 +1,62 @@
+[
+  {
+    "advisory": "CVE-2026-6653",
+    "severity": "Critical",
+    "images": {
+      "postgres:17.11-trixie": [
+        {
+          "package": "libxml2",
+          "installed_version": "2.12.7+dfsg+really2.9.14-2.1+deb13u3",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "PostgreSQL XML support retains the native parser. No arbitrary SQL/XML API is exposed; credentialed SQL/native parsing remains reachable. No removal or stable backport is certified by this assessment.",
+    "supported_remediation": "UNFIXED for selected stable trixie package; Debian no-DSA is not a platform risk acceptance. Do not substitute sid libxml2 or change libc/collations.",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-6653.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-91403",
+    "severity": "Critical",
+    "images": {
+      "quay.io/keycloak/keycloak:26.8.1": [
+        {
+          "package": "java-21-openjdk-headless",
+          "installed_version": "1:21.0.13.0.9-1.2.el9",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "java-21-openjdk",
+          "origin": "rpm",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "REMEDIATED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "Raw scanner critical match retained; scanner versions Java RPM rather than corrective system CA package; no gate exemption",
+    "runtime_prerequisites": "JSSE outbound TLS interception via compromised CA trust, including broker upstream federation. Supported RHEL CA-package correction is present and both implicated default Java trust anchors are absent; custom trust stores and live federation remain separate certification checks.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-91403.json",
+    "backport_status": "System ca-certificates 2026.2.92_v9.0.319-90.3.el9_8 equals Red Hat RHSA-2026:88459 corrective package; both implicated root subjects absent in actual default Java store",
+    "change_applied_this_iteration": false,
+    "evidence": [
+      "vendor/redhat-ca.json",
+      "vendor/redhat-critical.json",
+      "keycloak-trust-verification.json"
+    ]
+  }
+]

@@ -54,8 +54,8 @@ class Acceptance:
             args, cwd=ROOT, env=self.env, text=True, stderr=subprocess.STDOUT, **kwargs
         )
 
-    def dc(self, *args: str) -> str:
-        return self.run(self.compose + list(args))
+    def dc(self, *args: str, **kwargs: Any) -> str:
+        return self.run(self.compose + list(args), **kwargs)
 
     def record(self, name: str, status: str = "PASS", **details: Any) -> None:
         self.results.append({"check": name, "result": status, **details})
@@ -374,6 +374,11 @@ networks:
             self.ingress_port = self.dc("port", "ingress", "443").strip().rsplit(":", 1)[1]
         port = self.ingress_port
         headers = kwargs.pop("headers", {})
+        diagnostic = getattr(self, "diagnostic_requests", False)
+        if diagnostic:
+            headers["traceparent"] = (
+                "00-" + secrets.token_hex(16) + "-" + secrets.token_hex(8) + "-01"
+            )
         if cookies := kwargs.pop("cookies", None):
             headers["Cookie"] = cookies
         body = None
@@ -407,7 +412,7 @@ networks:
             "-o",
             str(response_file),
             "-w",
-            "%{http_code}",
+            "%{json}" if diagnostic else "%{http_code}",
             f"https://{host}:{port}{path}",
         ]
         for name, value in headers.items():
@@ -415,7 +420,33 @@ networks:
         if body is not None:
             args += ["--data-binary", "@-"]
         try:
-            status = int(self.run(args, input=body.decode() if body else None))
+            transport_started = time.monotonic()
+            epoch_started = time.time()
+            raw = self.run(args, input=body.decode() if body else None)
+            if diagnostic:
+                transport = json.loads(raw)
+                # Explicit allowlist: curl JSON also contains headers/URLs, which stay private.
+                self.request_local.timing = {
+                    "trace_id": headers["traceparent"].split("-")[1],
+                    "start_epoch": epoch_started,
+                    "end_epoch": time.time(),
+                    "transport_wall_seconds": time.monotonic() - transport_started,
+                    **{
+                        key: transport[key]
+                        for key in (
+                            "time_namelookup",
+                            "time_connect",
+                            "time_appconnect",
+                            "time_pretransfer",
+                            "time_starttransfer",
+                            "time_total",
+                            "http_code",
+                        )
+                    },
+                }
+                status = int(transport["http_code"])
+            else:
+                status = int(raw)
             pairs = [
                 line.split(": ", 1) for line in header_file.read_text().splitlines() if ": " in line
             ]
@@ -871,7 +902,13 @@ for(const [settings,status] of cases){
             "independently-installed-python-built-typescript-sdks-real-https-queries-actions-replay-unauthorized-cross-tenant-denials"
         )
 
-    def load(self) -> None:
+    def load(
+        self,
+        *,
+        concurrencies: tuple[int, ...] = (1, 4, 8),
+        iterations: int = 20,
+        filename: str = "deployed-load.json",
+    ) -> list[dict[str, Any]]:
         import math
         import statistics
         from concurrent.futures import ThreadPoolExecutor
@@ -901,12 +938,12 @@ for(const [settings,status] of cases){
             ("sdk", "POST", prefix + "/sdk/generate", {"version": "1.0.0", "language": "python"}),
         ]
         measurements = []
-        for concurrency in (1, 4, 8):
+        for concurrency in concurrencies:
             started = time.monotonic()
 
             def client(index: int) -> list[dict]:
                 samples = []
-                for iteration in range(20):
+                for iteration in range(iterations):
                     name, method, path, body = cases[(iteration + index) % len(cases)]
                     stamp = time.monotonic()
                     try:
@@ -915,7 +952,18 @@ for(const [settings,status] of cases){
                     except Exception:
                         status = "FAIL"
                     samples.append(
-                        {"operation": name, "seconds": time.monotonic() - stamp, "result": status}
+                        {
+                            "operation": name,
+                            "seconds": time.monotonic() - stamp,
+                            "result": status,
+                            "client": index,
+                            "iteration": iteration,
+                            **(
+                                getattr(self.request_local, "timing", {})
+                                if getattr(self, "diagnostic_requests", False)
+                                else {}
+                            ),
+                        }
                     )
                     time.sleep(max(0, 1 - (time.monotonic() - stamp)))
                 return samples
@@ -938,12 +986,13 @@ for(const [settings,status] of cases){
                 }
             )
         self.dc("--profile", "workers", "ps", "--format", "json")
-        (self.output / "deployed-load.json").write_text(
+        (self.output / filename).write_text(
             json.dumps(
                 {
                     "measurements": measurements,
                     "scope": (
-                        "60 seconds total, 20 seconds per concurrency, paced <=8 requests/s "
+                        f"{iterations} iterations/client at {concurrencies} clients; "
+                        "paced <=1 request/s/client "
                         "through HTTPS Studio BFF; fixture scale; curl/client overhead included; "
                         "not saturation or approved capacity certification"
                     ),
@@ -964,9 +1013,12 @@ for(const [settings,status] of cases){
         )
         assert all(m["errors"] == 0 for m in measurements), measurements
         self.record(
-            "paced-deployed-https-load-1-4-8-clients",
+            "paced-deployed-https-load",
+            evidence=filename,
             requests=sum(m["requests"] for m in measurements),
         )
+
+        return measurements
 
     def rotate_credentials(self) -> None:
         import psycopg
@@ -1483,6 +1535,10 @@ for(const [settings,status] of cases){
                 archive=self.root / "wal",
                 private=self.root,
                 commit_record=commit_record,
+                verify_application=getattr(self, "verify_recovered_application", None),
+                recovery_network=self.project + "_data"
+                if hasattr(self, "verify_recovered_application")
+                else None,
             )
             (self.output / "physical-recovery.json").write_text(json.dumps(result, indent=2) + "\n")
             self.record(

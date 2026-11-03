@@ -1,3 +1,4 @@
+import { diagnosticRequest } from "@/lib/diagnostics";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import {
@@ -10,6 +11,9 @@ import {
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
+  return diagnosticRequest(request, () => handle(request));
+}
+async function handle(request: Request) {
   try {
     const value = await browserSession(
       (await cookies()).get("foundry-session")?.value,

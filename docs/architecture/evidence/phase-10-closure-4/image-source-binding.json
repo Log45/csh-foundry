@@ -1,0 +1,13 @@
+{
+  "result": "PASS",
+  "image": "csh-foundry-api:phase10-closure4",
+  "source_sha256": {
+    "services/api/src/ontology_platform/config.py": "6a2781f81c5b4c1f901997c1fbab87636f3e38652c2ae3eecbffb1f957c1f4be",
+    "services/api/src/ontology_platform/diagnostics.py": "180a007cefa001a129aea1d80b413dc409f52ecaf02bec77f8036d4cbe7ed03f",
+    "services/api/src/ontology_platform/db/session.py": "b0af607e7a2049bedab65de69a6f4216c90e7cce7826751ce5dfb2f42547a2a0",
+    "services/api/src/ontology_platform/dependencies.py": "fa0e10e4e466307c98bc37c495562285aab2834a3d1726fc761a077f4771c276",
+    "services/api/src/ontology_platform/main.py": "302e668334ff6394ebfa0d0461b4ec2b273644824b2d822e5461cda066d8463b",
+    "services/api/src/ontology_platform/operations.py": "42473b95dd6dad706eed688f07e04e4283dc1ce46631b9d76867e7c540a9d73d"
+  },
+  "scope": "Actual production API source files inside selected immutable image; Studio is compiled and bound by build/digest evidence"
+}

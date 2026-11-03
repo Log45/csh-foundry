@@ -622,3 +622,201 @@ provisional read-latency misses, remaining deployed byte/cross-tenant/fault scen
 capacity, named owners, off-host custody/recovery, production monitoring delivery, hosted release
 approval/provenance and live provider certification remain explicit Phase 10 requirements. No
 production approval or risk waiver is inferred, and Phase 11 remains unapproved.
+
+## Acceptance continuation 3 — 2026-11-02
+
+Phase 10 remains **BLOCKED**; Phase 11 is not approved. Baseline revision was
+`86bf658eb8cca52b1e9c6a5cc82f98dc5961c618` with a clean working tree: earlier acceptance work was
+already included. No existing change was reset. PostgreSQL remains authoritative; no new database,
+semantic authority, Rust component, domain mutation bypass or migration was introduced. Head is
+still `0017_capacity`. Existing authorization/audit, canonical fixtures and transaction semantics
+are retained.
+
+The [continuation evidence and exact validation matrix](../architecture/evidence/phase-10-closure-3/README.md)
+retain commands, raw samples, failures, image identities, SBOM/scanner archives and hashes. This
+report does not replace earlier evidence. The final Python rerun passes **552 tests, one preserved
+strict expected failure, zero skips** (389.59 seconds), including all configured fixture, real
+PostgreSQL, branching, SDK, ingestion, security and pinned semantic integrations. Ruff check/format,
+strict mypy and Alembic drift pass. Frontend: 27 tests, typecheck, formatting and production build
+PASS. Browser E2E: five durable-session tests PASS on isolated Studio 13000/13001 and API 18001.
+OWLAPI 4.5.29 roundtrip PASS, with the known explicit xsd:date declaration addition; no GUI assertion.
+Raw pySHACL mismatch remains strict xfail and base owl-rl inference remains NOT SUPPORTED.
+
+Security: fresh initial and final scans cover the same six selected image identities, retain all
+severities and succeed in SBOM generation. They reproduce **274 high/2 critical matches, 32 distinct
+high/critical advisory IDs**. API/Studio/semantic have 60/59/60 high; PostgreSQL 92 high/1 critical;
+Keycloak 3 high/1 critical; ingress zero high/critical. No new supplier/package vulnerability was
+remediated or waived. The [disposition](../operations/vulnerability-disposition.md) adds source,
+package/runtime prerequisites, distribution caveats, supported alternative assessment and Red Hat's
+system-CA-store distinction. Java trust-store inspection is not a reviewed VEX exemption.
+
+Release evidence now binds all six selected roles, hashes actual scan/SBOM bytes, distinguishes
+Docker index/config/manifest identities, rejects actual high/critical matches and invalid databases,
+and rejects self-declared exceptions. Export resolves an image identity before saving it. Tests
+cover missing/changed evidence, paths, identity mismatches, empty SBOMs, high/critical matches,
+unauthorized exceptions and immutable export. Five verification image builds pass (API ARM64/amd64,
+Studio, semantic amd64, ingress); their new tags are explicitly **unselected**, not promoted or
+represented as vulnerability remediations. The six selected images' final raw scan bindings pass.
+Hosted release/provenance/approval and creation of a promotable release archive remain NOT RUN.
+
+Cache correction: each old evidence directory had owned a separate multi-GiB Grype database.
+Fifteen files were hashed; there were three distinct versions and twelve byte-identical duplicates.
+Only duplicates were removed, reclaiming **40,573,624,320 bytes**. Current scans use one shared,
+locked, automatically refreshed `artifacts/.cache/grype`; two distinct historical versions remain.
+Tests ensure separate output directories reuse the same cache. Scan/SBOM evidence, backups,
+credentials and application volumes were preserved.
+
+Performance: warm-up plus three complete original 1/4/8-client samples, a 90-second eight-client
+sample and separate one-CPU contention sample executed without simultaneous builds/scans/full
+regressions. The measured samples total **1,660 requests, zero errors** (plus 65 warm-up requests).
+Highest read/preview/traversal p95 by isolated repetition: **391.657 / 528.441 / 283.601 ms**.
+Sustained: **336.732 ms**; separate contention: **384.885 ms**. The provisional 500 ms target is not
+consistently met. The earlier 556.513 ms result remains in closure-2. Sampled SDK p95 is below two
+seconds (maximum 364.044 ms); this does not establish write-heavy/governed-action capacity.
+
+The failing repetition contains one shared iteration across all eight clients; existing API and
+nginx durations also rise. Later governed SQL diagnostics execute forty real query/traversal
+requests: maximum service times about 64.607/63.390 ms; ordinary SQL statement counts ten each;
+idle pool checkout median 0.291 ms; the captured EXPLAIN ANALYZE plan executes in 0.177 ms. These
+later sequential measurements do not causally explain the earlier end-to-end spike. No speculative
+index, cache, audit removal or larger pool was introduced. Target hardware, full per-stage latency
+correlation and representative sustained mixed/write-heavy capacity remain required.
+
+Connection budget: the API's bounded two-connection audit pool is unchanged. PostgreSQL-backed
+tests exercise ordinary and audit exhaustion, recovery/shutdown, business rollback with persisted
+audit and audit failure abort. Keycloak's supplier maximum default of 100 conflicted with the
+cluster's own 100-connection maximum; the production template now explicitly caps it at ten,
+initial/minimum two. The runbook budgets two APIs (24), ingestion/semantic/outbox children (30),
+broker (10), migration (1), monitoring (2), administration (4) and reserved (3): **74**, leaving 26
+headroom. This is an explicit sizing example, not a capacity promise; more processes require resizing.
+
+Admission and bytes: deployed mixed submission at 2/8/12 clients passes: twenty admitted/eight
+HTTP 409 each, four semantic admissions, repeated cancellation and zero final active jobs. Real
+PostgreSQL/ASGI cross-tenant tests also pass. Later deployed two-tenant checks independently admit
+four/reject four per tenant, preserve replay/cancellation and reject unauthorized worker requests.
+A valid approximately 1.1-MiB logical-byte quota admits one/rejects seven concurrent primary uploads,
+while eight secondary uploads succeed independently. Invalid uploads and retries do not consume
+extra bytes. Separate real-PostgreSQL tests verify staging quota rollback, failed-job release,
+cancelled staging retention, governed cleanup after seven days and reconnect accounting. Physical
+WAL/index/TOAST/audit/history/backup/temp growth is not bounded by logical quotas.
+
+Recovery now extends the real PostgreSQL 17.11 named-target drill to **restored Keycloak, API and
+Studio startup**. All 46 Foundry/101 Keycloak public-table hashes match the target; post-target
+records are excluded. Restored login/identity, readiness, ontology metadata, operational objects,
+branch history, SDK retrieval and unauthenticated denial pass. Only the exact owned internal data
+network may be used for application recovery; database-only recovery keeps network-none isolation.
+Source applications are restored afterward. This is same-host recovery, not off-host DR or measured
+business-approved RPO/RTO.
+
+Deployment faults add actual JWKS-only unavailability, broker outage, cached-key behavior within
+its TTL, incorrect signing key, genuinely expired issuer-signed token and real generated-RSA signing
+rotation with overlap/refresh. SDK generation is interrupted at an observed SQL publication wait by
+actual API SIGKILL: no partial artifact remains; retry succeeds, eight concurrent retries return one
+artifact, tampered/cross-tenant/missing retrieval is denied. Actual authenticated API scraping,
+unchanged two-minute outage rule, disposable receiver delivery and resolution pass. Broader host,
+WAL, backup and worker alert ownership/integration remain NOT RUN. Existing worker crash/checkpoint,
+queued delegation revocation, credential rotation, API rollback and session/ingress assertions pass
+in the scoped deployment evidence. The exact final replica and overall assessment are listed in
+the evidence matrix; a partial run is never counted as a complete combined-profile PASS.
+
+Several new fixture attempts failed and remain retained: edge-budget exhaustion, recovery network
+mode, secret write permissions, stdin forwarding, sub-MiB quota selection, oversized padding upload,
+stale source-registration fingerprint, restricted pg_stat_activity visibility and an incorrect
+409 expectation for the existing branch-staleness **412** contract. None was resolved by weakening
+authorization, schema, quota, transport, rate, audit or correctness assertions. Corrected paths are
+retested in scoped disposable environments; unexecuted paths are explicitly marked.
+
+Docker control later stopped responding while developer HTTP services remained available. The user
+freed storage and explicitly authorized restarts. Docker Desktop was restarted without reset/prune;
+the same five developer container IDs were restored, with unchanged volumes/credentials/keys.
+Studio/API/trusted Keycloak discovery return 200; read-only developer DB checks retain one
+manufacturing object and `0017_capacity`. Browser password entry remains NOT RUN. No production or
+external infrastructure/provider resource was changed. Generated private credentials stay ignored.
+
+Four decisions remain separate: implementation complete PASS (required platform functionality and
+continuation tooling delivered); local acceptance BLOCKED (security and inconsistent read target,
+plus any matrix gaps); production-like acceptance BLOCKED (representative target capacity/security/
+recovery incomplete); production certification NOT RUN (live Entra/Google/Workspace, off-host target,
+production receiver/on-call owner, target infrastructure and hosted approval/provenance absent).
+Continue Phase 10: obtain supported supplier fixes or an authorized disposition process, resolve the
+remaining latency/capacity/fault evidence and owner-led external gates. Do not begin Phase 11.
+
+Final integrated deployment: **58 PASS assertions / 50 distinct checks**, zero failures, in
+`phase-10-closure-3/combined-final/`. Two real API replicas exercise eight object creates, action
+CAS (one commit/seven 409 conflicts plus replay), branch CAS (one merge/three stale 412 conflicts),
+shared four-job admission and rollback audit. Two Studio replicas pass restart/shared logout and
+session-store outage. Recovered application startup and real API alert delivery pass in this same
+profile. Post-run cleanup initially found six own restore volumes; the asynchronous removal race
+was corrected, exact orphans removed, and all fifteen own projects audited absent. Final guarded
+cleanup passes an actual Docker smoke and focused tests. Failed attempts remain retained.
+
+No security finding was remediated by these changes; six-image gate remains FAIL. No migration was
+added. Files and hashes are listed in the evidence inventory. Architecture remains PostgreSQL-led,
+with separate semantic reasoning and governed mutations. The next work remains Phase 10 closure.
+
+## Acceptance Closure 4 — 2026-11-03
+
+Starting revision `86bf658eb8cca52b1e9c6a5cc82f98dc5961c618` already had substantial uncommitted
+Closure 3 work. It was preserved. [Evidence and exact inventory](../architecture/evidence/phase-10-closure-4/README.md)
+retain baseline/final status, every measured attempt, source/image/SBOM/scan bindings and hashes.
+No migration was created: `0017_capacity`. Developer container IDs/images/start times/mounts are
+unchanged; Studio/API/trusted Keycloak discovery return 200; the one existing manufacturing object
+is retained. No deployment, provider configuration, backup, certificate trust or developer restart
+was performed.
+
+Implemented: opt-in request-scoped SQL/acquisition/JWT timing and BFF session/backend timing with
+trace propagation; bounded role-attributed resource/event/span collection; repeatable read/write
+scopes; representative governed writes, asynchronous queue/execution/completion timing; concurrent
+publication, actual outbox post-effect process-loss recovery and bounded tmpfs failure/recovery.
+API/Studio diagnostic images were rebuilt/scanned/started/tested. The other four selected images
+are unchanged. All six SBOMs/hash/platform identity checks pass. No authorization/audit/transaction
+shortcut, pool-size change, speculative optimizer, new datastore, semantic authority or Rust component
+was introduced. Existing operational decisions remain intact; ADR 0034 needs no new decision.
+
+Security: 32 distinct advisory reviews and vendor snapshots; **274 high/two critical raw matches**
+remain. New package fixes applied: zero. **CVE-2026-6653 UNFIXED** in selected stable trixie libxml2.
+**CVE-2026-91403 REMEDIATED already in the selected supplier image**: its system CA package matches
+Red Hat's corrective advisory and both compromised root subjects are absent from actual Java trust.
+The scanner's Java-package version finding remains blocking, requiring reviewed vendor/disposition
+evidence; no risk exception is approved. Guava's upstream fix is not bundled by the selected
+supported broker; no unsupported JAR/distribution substitution was made. Container gate FAIL;
+release verifier BLOCKED, without a promotable archive or hosted approval.
+
+[All controlled read results](../architecture/evidence/phase-10-closure-4/read-performance.md):
+3,320 measured mixed read/SDK requests, zero errors, six isolated repetitions plus two sustained
+and two separately controlled contention samples. Highest read p95 363.552 ms: **PASS for this
+protocol/final ten-connection broker cap**. Historical failures are unchanged. The
+[root-cause report](../architecture/evidence/phase-10-closure-4/root-cause-analysis.md) captures a
+1,078.535 ms shared tail stall, including TLS/BFF/API and SQL-call wall timing. Its causal root
+remains UNRESOLVED; later corrected role-attributed sampling does not reproduce that stall.
+No application performance correction was justified or applied. GC/off-CPU/server-statement timing
+and per-pool live utilization remain diagnostic limits.
+
+[Writes](../architecture/evidence/phase-10-closure-4/write-performance.md): 246 timed synchronous/
+admission requests across two 1/4/8-client object cohorts, zero unexpected errors. Final highest
+operation p95 296.980 ms, HTTP target PASS. All six final async jobs complete; server total maxima
+2.711996 s ingestion and 5.655450 s semantic, separately measuring queue and worker execution.
+Admission is not completion. The final primary-write window samples at most 22 connections, zero
+lock waiters, WAL growth 680,628 bytes and allocated DB growth 671,744 bytes. Two-API races preserve
+action CAS/replay (one commit/seven 409), merge CAS (one commit/three 412) and quota rejection/recovery.
+Pool budget stays ordinary 5+5/audit two per process, broker ten, PG 100: conservative 52/64/74
+connections for one API/two APIs/optional outbox including allowances. No saturation certification.
+
+Final configured regression: **558 passed, one strict expected failure, zero skips**, 293.74 s;
+Ruff/format/strict mypy/Alembic drift PASS. Frontend 29 tests/typecheck/format/build PASS; five
+isolated durable E2E PASS. OWLAPI 4.5.29 roundtrip PASS. Raw pySHACL conformance remains strict xfail;
+base owl-rl inference remains NOT SUPPORTED. Final focused diagnostics/release/scanner guards: 18 PASS.
+[Fault evidence](../architecture/evidence/phase-10-closure-4/fault-coverage.md) preserves the original
+failed cold-cache temp probe and both passing bounded retries. Initial resource-identity/log-retention
+gaps are documented, corrected and rerun without erasing first-attempt evidence.
+
+| Assessment | Status | Remaining requirement |
+|---|---|---|
+| Implementation | PASS | Required functionality and regressions retained |
+| Local acceptance | BLOCKED | Raw security failure; remaining causal/fault diagnostic limits |
+| Production-like acceptance | BLOCKED | Security and representative target workload/failure-domain evidence |
+| Production certification | NOT RUN | Live external SSO, off-host recovery/key custody, owners/production alerts, target SLOs/hardware, hosted reviewer/provenance verification |
+
+Next work is only unresolved Phase 10 closure: supported vendor fixes/reviewed disposition, a
+causally attributable shared-stall capture, remaining safe target faults and operator-led external
+certification. Phase 11 is not approved. No unresolved vulnerability has been accepted.

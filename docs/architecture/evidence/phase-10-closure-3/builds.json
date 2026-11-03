@@ -1,0 +1,83 @@
+[
+  {
+    "role": "api",
+    "result": "PASS",
+    "command": [
+      "docker",
+      "build",
+      "-t",
+      "csh-foundry-api:phase10-closure3-verify",
+      "-f",
+      "infrastructure/docker/api.Dockerfile",
+      "."
+    ],
+    "selected_for_deployment": false,
+    "image_id": "sha256:3c294851b16fbc00d9a13cee82974fbc75cdcd3bf55e08634334103bc348a075"
+  },
+  {
+    "role": "studio",
+    "result": "PASS",
+    "command": [
+      "docker",
+      "build",
+      "-t",
+      "csh-foundry-studio:phase10-closure3-verify",
+      "-f",
+      "infrastructure/docker/studio.Dockerfile",
+      "."
+    ],
+    "selected_for_deployment": false,
+    "image_id": "sha256:f00921be2d1130c6d23f08eae1b92b4fc3851fee54ae7fffd61bcb6e5f9dd768"
+  },
+  {
+    "role": "api-amd64",
+    "result": "PASS",
+    "command": [
+      "docker",
+      "build",
+      "--platform",
+      "linux/amd64",
+      "-t",
+      "csh-foundry-api:phase10-closure3-verify-amd64",
+      "-f",
+      "infrastructure/docker/api.Dockerfile",
+      "."
+    ],
+    "selected_for_deployment": false,
+    "image_id": "sha256:595e3404a9e6730e3e68f323126111850ae70aaab40bdf9f3a938c4ea29fc4f5"
+  },
+  {
+    "role": "semantic",
+    "result": "PASS",
+    "command": [
+      "docker",
+      "build",
+      "--platform",
+      "linux/amd64",
+      "--build-arg",
+      "BASE_IMAGE=csh-foundry-api:phase10-closure3-verify-amd64",
+      "-t",
+      "csh-foundry-semantic:phase10-closure3-verify",
+      "-f",
+      "infrastructure/docker/semantic.Dockerfile",
+      "."
+    ],
+    "selected_for_deployment": false,
+    "image_id": "sha256:560c8963da2d92d9238a645ac1c5fd207d9a2857d0500e4347e8b0de4ba76af7"
+  },
+  {
+    "role": "ingress",
+    "result": "PASS",
+    "command": [
+      "docker",
+      "build",
+      "-t",
+      "csh-foundry-ingress:phase10-closure3-verify",
+      "-f",
+      "infrastructure/docker/ingress.Dockerfile",
+      "."
+    ],
+    "selected_for_deployment": false,
+    "image_id": "sha256:b5d4978c1b230a2781c60e1eb256cff7bb9bcb3689fe9cf472c3948144ce705c"
+  }
+]

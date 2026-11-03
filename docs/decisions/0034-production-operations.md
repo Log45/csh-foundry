@@ -69,3 +69,24 @@ business rollback, and failed audit persistence still aborts the mutation. Defau
 capacity becomes 12 per process; operators must include both pools in PostgreSQL sizing. Single-job
 worker children keep their existing pool and sequential audit behavior. No database migration is
 needed. Regression checks exercise concurrent mutations with a one-connection business pool.
+
+## Continuation 3 — bounded broker connections and recoverable acceptance
+
+Keycloak's documented default maximum is 100 database connections, which alone equals this
+profile's PostgreSQL maximum. Explicitly configure initial/minimum two and maximum ten broker
+connections. This changes only the production template; existing developer identities, keys and
+persistent stores are not recreated. Count broker, API ordinary/audit pools, worker children and
+operator tooling together. The cap is a connection budget, not a throughput certification.
+
+The optional restored-application drill starts the restored cluster on the exact owned internal
+Compose data network, with a distinct recovery alias. A `none` network cannot subsequently join
+an application network. Keep network-none isolation for the database-only path. Validate network
+name, ownership and internal status before use; never substitute a developer or public network.
+The application drill preserves both restricted-role and TLS/issuer validation and tests a restored
+broker/API/Studio instead of inferring availability from table checksums.
+
+Supply-chain identity has two layers: the selected Docker image/index identity and the exported
+platform config/manifest identities. Record and verify both rather than equating a multi-platform
+index digest with a scanner config digest. Keep one shared, locked, refreshable vulnerability database
+cache outside per-run evidence. Raw scans/SBOMs and their database identifiers remain the evidence;
+copying a multi-GiB advisory cache into every output directory adds no acceptance assurance.

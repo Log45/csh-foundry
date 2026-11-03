@@ -1,0 +1,7 @@
+csh-foundry-studio-1	csh-foundry-studio	127.0.0.1:3000->3000/tcp
+csh-foundry-api-1	csh-foundry-api	127.0.0.1:8000->8000/tcp
+foundry-keycloak	foundry-keycloak-recovered:20261029	127.0.0.1:8080->8080/tcp
+foundry-keycloak-tls	1c3e02f39229	127.0.0.1:443->443/tcp
+csh-foundry-postgres-1	postgres:17.6-bookworm	127.0.0.1:55432->5432/tcp
+language_app_db	postgres:18	0.0.0.0:5433->5432/tcp, [::]:5433->5432/tcp
+language_app_neo4j	neo4j:5	0.0.0.0:7474->7474/tcp, [::]:7474->7474/tcp, 0.0.0.0:7687->7687/tcp, [::]:7687->7687/tcp

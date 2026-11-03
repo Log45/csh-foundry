@@ -1,0 +1,101 @@
+{
+  "containers": [
+    {
+      "BlockIO": "0B / 0B",
+      "CPUPerc": "0.44%",
+      "Container": "f81a35cd36ec010c2db7cc1c1ddb54003868359cdfaf60e320e01e0be93ce925",
+      "ID": "f81a35cd36ec",
+      "MemPerc": "12.22%",
+      "MemUsage": "125.1MiB / 1GiB",
+      "Name": "foundry-accept-27eff73c-api-1",
+      "NetIO": "7.51MB / 3.18MB",
+      "PIDs": "14"
+    },
+    {
+      "BlockIO": "11.7MB / 0B",
+      "CPUPerc": "2.16%",
+      "Container": "8747a2f2797cd846b064dd3ca3e80526b0e9559bc522ade7197ecc6f2be0ee87",
+      "ID": "8747a2f2797c",
+      "MemPerc": "2.21%",
+      "MemUsage": "22.61MiB / 1GiB",
+      "Name": "foundry-accept-27eff73c-ingestion-worker-1",
+      "NetIO": "7.01MB / 1.99MB",
+      "PIDs": "2"
+    },
+    {
+      "BlockIO": "11.3MB / 20.5kB",
+      "CPUPerc": "0.61%",
+      "Container": "b735c410999e0ac4bbab4a9b9e86d33b7339860bd40c62eb9bf294a1ecb8f0a4",
+      "ID": "b735c410999e",
+      "MemPerc": "8.09%",
+      "MemUsage": "20.72MiB / 256MiB",
+      "Name": "foundry-accept-27eff73c-ingress-1",
+      "NetIO": "2.61MB / 3.16MB",
+      "PIDs": "11"
+    },
+    {
+      "BlockIO": "250MB / 179MB",
+      "CPUPerc": "0.60%",
+      "Container": "8f1ebda75c4aeb6f768da0d08f4f4809e0268daab456171278dcf5b2bd5faa27",
+      "ID": "8f1ebda75c4a",
+      "MemPerc": "60.84%",
+      "MemUsage": "623MiB / 1GiB",
+      "Name": "foundry-accept-27eff73c-keycloak-1",
+      "NetIO": "5.17MB / 2.84MB",
+      "PIDs": "49"
+    },
+    {
+      "BlockIO": "430kB / 117MB",
+      "CPUPerc": "1.80%",
+      "Container": "ff4d5b22c1d73609a4ddcd218de5576882fbfa73a59f3832b4e5e6f40f53c68e",
+      "ID": "ff4d5b22c1d7",
+      "MemPerc": "5.04%",
+      "MemUsage": "103.1MiB / 2GiB",
+      "Name": "foundry-accept-27eff73c-postgres-1",
+      "NetIO": "8.03MB / 23.1MB",
+      "PIDs": "20"
+    },
+    {
+      "BlockIO": "63.5MB / 0B",
+      "CPUPerc": "0.00%",
+      "Container": "bddd285e77fa1774ffc4abde42b8c1c62e278ca4a90a5a9eb24f3ea2d1371046",
+      "ID": "bddd285e77fa",
+      "MemPerc": "8.07%",
+      "MemUsage": "61.99MiB / 768MiB",
+      "Name": "foundry-accept-27eff73c-semantic-worker-1",
+      "NetIO": "541kB / 283kB",
+      "PIDs": "2"
+    },
+    {
+      "BlockIO": "4.1kB / 0B",
+      "CPUPerc": "0.62%",
+      "Container": "1a933742bb77fb4407e0d1d80d1831e3ac62151268c70c3f5a85b5d14d8a71f9",
+      "ID": "1a933742bb77",
+      "MemPerc": "8.34%",
+      "MemUsage": "85.39MiB / 1GiB",
+      "Name": "foundry-accept-27eff73c-studio-1",
+      "NetIO": "1.23MB / 1.2MB",
+      "PIDs": "12"
+    }
+  ],
+  "postgres_settings": {
+    "max_connections": "100",
+    "max_worker_processes": "8",
+    "reserved_connections": "0",
+    "shared_buffers": "16384",
+    "superuser_reserved_connections": "3",
+    "work_mem": "4096"
+  },
+  "database": {
+    "numbackends": 9,
+    "xact_commit": 2891,
+    "xact_rollback": 391,
+    "temp_bytes": 0,
+    "deadlocks": 0
+  },
+  "usage": {
+    "db_bytes": 11474611,
+    "wal_bytes": "21749208",
+    "lock_waiters": 0
+  }
+}

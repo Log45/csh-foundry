@@ -1,0 +1,27 @@
+{
+  "/csh-foundry-studio-1": {
+    "id": "cd499ad5797e4c49395b2189fdddc6094f2530f41b71408a7edaeeae1b51c9e2",
+    "started": "2026-11-02T21:06:52.241807922Z",
+    "status": "running"
+  },
+  "/csh-foundry-api-1": {
+    "id": "f57363325f7c80612d084e6b640435165573fb9e389b0c9da30ac9b2b18a7291",
+    "started": "2026-11-02T20:17:33.407656844Z",
+    "status": "running"
+  },
+  "/csh-foundry-postgres-1": {
+    "id": "019d58d4155d39ab5cd8e493077521c19eeb94349af861639b9da5ceca1f8a89",
+    "started": "2026-10-30T02:49:00.777764428Z",
+    "status": "running"
+  },
+  "/foundry-keycloak": {
+    "id": "352ae233e8cb29856593440399e330387a43311119ed74367441d961ebabfa33",
+    "started": "2026-11-02T20:12:56.998403299Z",
+    "status": "running"
+  },
+  "/foundry-keycloak-tls": {
+    "id": "026ca27afa2b1072402a06de5f77f2da3e8eac2330d08eedf6f0c6a4c22f5662",
+    "started": "2026-11-02T20:12:56.609726841Z",
+    "status": "running"
+  }
+}

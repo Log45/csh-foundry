@@ -43,6 +43,7 @@ class Settings(BaseSettings):
     request_limit_per_minute: int = 120
     tenant_storage_limit_bytes: int = 268435456
     tenant_pending_job_limit: int = 20
+    diagnostic_timing: bool = False
     database_pool_size: int = 5
     database_pool_overflow: int = 5
 

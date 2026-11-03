@@ -1,0 +1,27 @@
+[
+  {
+    "check": "regression-migrate",
+    "command": [
+      "uv",
+      "run",
+      "alembic",
+      "upgrade",
+      "head"
+    ],
+    "result": "PASS",
+    "exit_code": 0,
+    "seconds": 0.9728070420096628
+  },
+  {
+    "check": "regression-full",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/validate_phase0.py"
+    ],
+    "result": "PASS",
+    "exit_code": 0,
+    "seconds": 300.48491791600827
+  }
+]

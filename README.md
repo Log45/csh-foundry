@@ -287,3 +287,27 @@ Final checks include **529 Python passes + one preserved strict xfail**, **27 fr
 The latest paced sample has zero errors but misses the provisional read-latency target. The
 patched ingress image passes scanning; retained application-base high findings and supplier
 PostgreSQL/Keycloak critical findings still block promotion. No production certification is claimed.
+
+Phase 10 continuation 3 records 549 Python passes/one strict xfail, 27 frontend tests and five
+isolated browser passes, with extended restored-application, quota, identity/artifact fault and
+real-API monitoring evidence. Acceptance remains **BLOCKED** by container findings and inconsistent
+provisional read latency. See the [continuation matrix](docs/architecture/evidence/phase-10-closure-3/README.md)
+and [report](docs/development/phase-10-report.md). Grype now uses one shared locked cache; twelve
+verified duplicate databases were removed. No Phase 11 work was started.
+
+## Phase 10 Acceptance Closure 4 — 2026-11-03
+
+[Closure 4 evidence](docs/architecture/evidence/phase-10-closure-4/README.md) records **558 Python
+passes/one strict xfail/zero skips**, **29 frontend tests**, five isolated E2E passes and unchanged
+`0017_capacity`. Optional correlated API/BFF/SQL timing, bounded resource sampling and write/fault
+coverage preserve existing authorization, audit, transactions and developer services. All 3,320
+measured read/SDK requests meet the current protocol's p95 targets; 246 timed writes have zero
+unexpected errors. A captured 1,079 ms tail stall remains causally unresolved. No speculative
+performance optimization was applied.
+
+The six-image policy still **FAILS: 274 high/two critical matches across 32 distinct advisories**.
+The Keycloak system-CA correction is verified already present; its scanner finding is retained.
+PostgreSQL libxml2 remains UNFIXED. No new package vulnerability was patched or risk accepted.
+Implementation PASS; local/production-like acceptance BLOCKED; production certification NOT RUN.
+Remaining work is Phase 10 security disposition, causal/fault/target evidence and external operator
+certification. Phase 11 remains unapproved.

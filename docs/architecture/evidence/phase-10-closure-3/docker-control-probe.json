@@ -1,0 +1,12 @@
+{
+  "/Users/log/.docker/run/docker.sock": {
+    "exit": 28,
+    "response": "",
+    "error": "curl: (28) Operation timed out after 4002 milliseconds with 0 bytes received\n"
+  },
+  "/var/run/docker.sock": {
+    "exit": 28,
+    "response": "",
+    "error": "curl: (28) Operation timed out after 4006 milliseconds with 0 bytes received\n"
+  }
+}

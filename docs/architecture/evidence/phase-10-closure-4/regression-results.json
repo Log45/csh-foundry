@@ -1,0 +1,78 @@
+[
+  {
+    "check": "regression-migrate",
+    "command": [
+      "uv",
+      "run",
+      "alembic",
+      "upgrade",
+      "head"
+    ],
+    "result": "PASS",
+    "exit_code": 0,
+    "seconds": 1.309074208023958
+  },
+  {
+    "check": "regression-full",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/validate_phase0.py"
+    ],
+    "result": "PASS",
+    "exit_code": 0,
+    "seconds": 326.35321033297805
+  },
+  {
+    "check": "frontend-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "typecheck",
+      "--prefix",
+      "apps/studio"
+    ],
+    "result": "PASS",
+    "exit_code": 0,
+    "seconds": 1.6652807079954073
+  },
+  {
+    "check": "frontend-format",
+    "command": [
+      "npm",
+      "run",
+      "format:check",
+      "--prefix",
+      "apps/studio"
+    ],
+    "result": "PASS",
+    "exit_code": 0,
+    "seconds": 0.6811846250202507
+  },
+  {
+    "check": "frontend-build",
+    "command": [
+      "npm",
+      "run",
+      "build",
+      "--prefix",
+      "apps/studio"
+    ],
+    "result": "PASS",
+    "exit_code": 0,
+    "seconds": 13.950608875020407
+  },
+  {
+    "check": "browser",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/test_studio.py"
+    ],
+    "result": "PASS",
+    "exit_code": 0,
+    "seconds": 28.589378708973527
+  }
+]

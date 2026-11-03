@@ -43,6 +43,7 @@ def test_production_profile_resolves_runtime_mounts_and_security_dependencies():
             ],
             env=env,
             text=True,
+            timeout=15,
         )
     )
     services = config["services"]
@@ -55,6 +56,10 @@ def test_production_profile_resolves_runtime_mounts_and_security_dependencies():
         assert "ports" not in service
     assert services["api"]["depends_on"]["keycloak"]["condition"] == "service_healthy"
     assert services["keycloak"]["healthcheck"]["test"][0] == "CMD"
+    broker_pool = services["keycloak"]["environment"]
+    assert int(broker_pool["KC_DB_POOL_MIN_SIZE"]) == 2
+    assert int(broker_pool["KC_DB_POOL_INITIAL_SIZE"]) == 2
+    assert int(broker_pool["KC_DB_POOL_MAX_SIZE"]) == 10
     for name in ("api", "ingestion-worker"):
         assert any(
             v["target"] == "/run/secrets/FOUNDRY_INGESTION_CATALOG_JSON"

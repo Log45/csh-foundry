@@ -1,3 +1,4 @@
+import { diagnosticFetch } from "./diagnostics";
 // Server-only module: import only from route handlers. Never export tokens to components.
 import { randomBytes, createHash, timingSafeEqual } from "node:crypto";
 import { createLocalJWKSet, jwtVerify, type JSONWebKeySet } from "jose";
@@ -162,7 +163,8 @@ async function stateRequest(
   body?: { data: object; expires: number; revision?: number },
 ) {
   config();
-  const response = await fetch(
+  const response = await diagnosticFetch(
+    "session_headers_ms",
     `${config().api}/internal/browser-state/${kind}/${digest(id)}`,
     {
       method,
@@ -523,18 +525,22 @@ export async function backend(
 ) {
   if (!allowed(path, method))
     throw new BoundaryError(400, "unsupported_operation");
-  const response = await fetch(config().api + path, {
-    method,
-    headers: {
-      Authorization: `Bearer ${value.token}`,
-      ...(tenant ? { "X-Tenant-ID": tenant } : {}),
-      ...(body === undefined ? {} : { "content-type": "application/json" }),
+  const response = await diagnosticFetch(
+    "backend_headers_ms",
+    config().api + path,
+    {
+      method,
+      headers: {
+        Authorization: `Bearer ${value.token}`,
+        ...(tenant ? { "X-Tenant-ID": tenant } : {}),
+        ...(body === undefined ? {} : { "content-type": "application/json" }),
+      },
+      body: body === undefined ? undefined : JSON.stringify(body),
+      cache: "no-store",
+      redirect: "error",
+      signal: AbortSignal.timeout(45000),
     },
-    body: body === undefined ? undefined : JSON.stringify(body),
-    cache: "no-store",
-    redirect: "error",
-    signal: AbortSignal.timeout(45000),
-  });
+  );
   const text = await bounded(response);
   if (!response.ok) {
     // Return only the backend's sanitized structured error, never transport details or tokens.

@@ -1,0 +1,71 @@
+[
+  {
+    "name": "/csh-foundry-studio-1",
+    "id": "cd499ad5797e4c49395b2189fdddc6094f2530f41b71408a7edaeeae1b51c9e2",
+    "image": "sha256:c4d10ffc3877d9cf7c9869055f7d8c1b51945d9438f3aeda04e29f89b7b11653",
+    "started_at": "2026-11-03T02:25:29.373077585Z",
+    "mounts": [
+      {
+        "destination": "/etc/foundry/certs",
+        "type": "bind",
+        "source_sha256": "dec6818685757a1ef23038455f19146382d08f96790883f9579cbb29c38e54a4"
+      }
+    ]
+  },
+  {
+    "name": "/csh-foundry-api-1",
+    "id": "f57363325f7c80612d084e6b640435165573fb9e389b0c9da30ac9b2b18a7291",
+    "image": "sha256:70e208b210e1403cd19eee2d5d52df9bbfb990bf59dd612e1dff310fa3d837d6",
+    "started_at": "2026-11-03T02:25:29.567769418Z",
+    "mounts": [
+      {
+        "destination": "/etc/foundry/certs",
+        "type": "bind",
+        "source_sha256": "dec6818685757a1ef23038455f19146382d08f96790883f9579cbb29c38e54a4"
+      }
+    ]
+  },
+  {
+    "name": "/foundry-keycloak",
+    "id": "352ae233e8cb29856593440399e330387a43311119ed74367441d961ebabfa33",
+    "image": "sha256:a41669d51f416e8332a75ec97dc32400d488d05f29c95d9d6102951decff0d0d",
+    "started_at": "2026-11-03T02:24:28.100799334Z",
+    "mounts": []
+  },
+  {
+    "name": "/foundry-keycloak-tls",
+    "id": "026ca27afa2b1072402a06de5f77f2da3e8eac2330d08eedf6f0c6a4c22f5662",
+    "image": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+    "started_at": "2026-11-03T02:27:32.412283336Z",
+    "mounts": [
+      {
+        "destination": "/certs/issuer-key.pem",
+        "type": "bind",
+        "source_sha256": "737c52d2ec0b72d544650ef25e88f477d1c9e606630460a27f9dc643cb65c7c6"
+      },
+      {
+        "destination": "/certs/issuer.pem",
+        "type": "bind",
+        "source_sha256": "27497cef62ebc2c999bea7f7341dc2c7fd75c0f8dac0098630858fa4dac9c078"
+      },
+      {
+        "destination": "/etc/nginx/nginx.conf",
+        "type": "bind",
+        "source_sha256": "f04f646b7f0caf314521f206d8fd421d43d254710381034d6eebac1cfe2ee963"
+      }
+    ]
+  },
+  {
+    "name": "/csh-foundry-postgres-1",
+    "id": "019d58d4155d39ab5cd8e493077521c19eeb94349af861639b9da5ceca1f8a89",
+    "image": "sha256:f3bd19c606e442c3d7bdfa8002e03fe260a1023351e0ea4598032022b68dd6e3",
+    "started_at": "2026-11-03T02:25:29.758547293Z",
+    "mounts": [
+      {
+        "destination": "/var/lib/postgresql/data",
+        "type": "volume",
+        "source_sha256": "26ef77007a5207de84624192f0af1cf1a0d41859dbff5e77a294910ab5f441fc"
+      }
+    ]
+  }
+]

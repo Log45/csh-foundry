@@ -142,7 +142,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.browser_store = BrowserStore(app.state.sessions, configuration)
     app.state.telemetry = Telemetry()
     app.add_middleware(TransportBounds)
-    app.add_middleware(RequestTelemetry, telemetry=app.state.telemetry)
+    app.add_middleware(
+        RequestTelemetry, telemetry=app.state.telemetry, diagnostic=configuration.diagnostic_timing
+    )
     app.state.authorizer = (
         PlatformAuthorizer(
             app.state.sessions,

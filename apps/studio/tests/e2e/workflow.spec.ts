@@ -212,7 +212,7 @@ test("CSRF and unauthenticated proxy requests fail closed", async ({
   expect(unauth.status()).toBe(401);
   await login(page);
   const csrf = await page.request.post("/bff", {
-    headers: { origin: "http://127.0.0.1:3000" },
+    headers: { origin: process.env.STUDIO_ORIGIN || "http://127.0.0.1:3000" },
     data: { path: "/api/v1/ontologies", method: "GET" },
   });
   expect(csrf.status()).toBe(403);
@@ -445,7 +445,7 @@ if (process.env.STUDIO_E2E_REPLICA_PORT) {
       ).toBe(session.csrf);
       const logout = await page.request.post("/auth/logout", {
         headers: {
-          Origin: "http://127.0.0.1:3000",
+          Origin: process.env.STUDIO_ORIGIN || "http://127.0.0.1:3000",
           "x-csrf-token": session.csrf,
         },
         data: {},

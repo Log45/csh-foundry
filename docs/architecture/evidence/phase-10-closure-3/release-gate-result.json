@@ -1,0 +1,7 @@
+{
+  "result": "BLOCKED",
+  "exit_code": 1,
+  "expected_negative_gate": "PASS",
+  "reason": "BLOCKED: Acceptance gate is not PASS: container_security",
+  "promotable_archive_created": false
+}

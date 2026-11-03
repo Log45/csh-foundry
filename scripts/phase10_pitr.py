@@ -72,6 +72,73 @@ def snapshot(container: str, database: str) -> dict[str, Any]:
     return result
 
 
+def validate_recovery_network(info: dict[str, Any], project: str) -> None:
+    if (
+        info.get("Name") != project + "_data"
+        or not info.get("Internal")
+        or (info.get("Labels") or {}).get("com.docker.compose.project") != project
+    ):
+        raise ValueError(
+            "Recovery application network must be this disposable internal data network"
+        )
+
+
+def missing_resource(probe: subprocess.CompletedProcess[Any]) -> bool:
+    if probe.returncode == 0:
+        return False
+    error = probe.stderr
+    if isinstance(error, bytes):
+        error = error.decode(errors="replace")
+    if any(
+        message in (error or "").lower()
+        for message in ("no such object", "no such container", "no such volume")
+    ):
+        return True
+    raise RuntimeError("Docker control failure is not proof of resource cleanup")
+
+
+def cleanup_restore(restored: str | None, volume: str | None, private: Path) -> None:
+    project = private.name
+    if not re.fullmatch(r"foundry-accept-[0-9a-f]{8}", project):
+        raise ValueError("Only disposable acceptance restore resources may be removed")
+    if volume is not None and volume != project + "-pitr-restored":
+        raise ValueError("Restore volume does not belong to this disposable project")
+    if restored:
+        probe = subprocess.run(["docker", "inspect", restored], capture_output=True, text=True)
+        if not missing_resource(probe):
+            info = json.loads(probe.stdout)[0]
+            if info["Name"] != "/" + project + "-pitr":
+                raise ValueError("Refusing to remove a non-restore container")
+            (private / "pitr-postgres.log").write_text(docker("logs", restored))
+            subprocess.run(["docker", "stop", restored], capture_output=True, check=False)
+            # --rm deletion is asynchronous after stop; explicitly wait for removal.
+            subprocess.run(["docker", "rm", "-f", restored], capture_output=True, check=False)
+            for _ in range(20):
+                if missing_resource(
+                    subprocess.run(["docker", "inspect", restored], capture_output=True)
+                ):
+                    break
+                time.sleep(0.2)
+            else:
+                raise RuntimeError("Disposable restore container cleanup did not complete")
+    if volume:
+        for _ in range(20):
+            removed = subprocess.run(["docker", "volume", "rm", volume], capture_output=True)
+            if removed.returncode == 0 or missing_resource(
+                subprocess.run(["docker", "volume", "inspect", volume], capture_output=True)
+            ):
+                break
+            time.sleep(0.2)
+        else:
+            raise RuntimeError("Disposable restore volume cleanup did not complete")
+    (private / "pitr-cleanup.json").write_text(
+        json.dumps(
+            {"result": "PASS", "container_removed": restored, "volume_removed": volume}, indent=2
+        )
+        + "\n"
+    )
+
+
 def physical_recovery(
     *,
     source: str,
@@ -79,7 +146,13 @@ def physical_recovery(
     archive: Path,
     private: Path,
     commit_record: Callable[[str], None],
+    verify_application: Callable[[str], None] | None = None,
+    recovery_network: str | None = None,
 ) -> dict[str, Any]:
+    if recovery_network is not None:
+        validate_recovery_network(
+            json.loads(docker("network", "inspect", recovery_network))[0], project
+        )
     info = prepare_archive(source, project, archive)
     image = info["Image"]  # Exact source image, not a mutable tag or a different PG build.
     volume: str | None = None
@@ -189,7 +262,8 @@ def physical_recovery(
             "--rm",
             "-d",
             "--network",
-            "none",
+            recovery_network or "none",
+            *(["--network-alias", "recovered-postgres"] if recovery_network else []),
             "--name",
             project + "-pitr",
             "-v",
@@ -233,6 +307,8 @@ def physical_recovery(
         assert (
             sql(restored, "foundry", "SELECT version_num FROM alembic_version") == "0017_capacity"
         )
+        if verify_application is not None:
+            verify_application(restored)
         stat = sql(
             source, "foundry", "SELECT archived_count||':'||failed_count FROM pg_stat_archiver"
         )
@@ -250,8 +326,4 @@ def physical_recovery(
             "checksums in foundry/keycloak; no target/off-host/RPO/RTO certification",
         }
     finally:
-        if restored:
-            (private / "pitr-postgres.log").write_text(docker("logs", restored))
-            subprocess.run(["docker", "stop", restored], capture_output=True, check=False)
-        if volume:
-            subprocess.run(["docker", "volume", "rm", volume], capture_output=True, check=False)
+        cleanup_restore(restored, volume, private)

@@ -1,0 +1,10 @@
+Executed from apps/studio with PATH=/opt/homebrew/opt/node/bin:$PATH:
+npm run format:check && npm run typecheck && npm test && npm run build
+Exit status: 0
+Prettier: all matched files use Prettier code style.
+TypeScript: tsc --noEmit completed successfully.
+Vitest v5.0.5: 3 files passed; 27 tests passed; duration 1.02s.
+Next.js 16.4.3 webpack production build: compiled successfully in 2.1s;
+TypeScript finished in 1756ms; static pages 3/3; all routes rendered dynamically.
+Warning retained: Next.js ignored /Users/log/package-lock.json outside this repository.
+This is a summary of the executed terminal result, not a hosted CI run.

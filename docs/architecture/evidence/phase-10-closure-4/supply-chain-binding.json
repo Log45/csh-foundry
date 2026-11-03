@@ -1,0 +1,149 @@
+{
+  "result": "PASS integrity/identity only; security gate FAIL",
+  "images": [
+    {
+      "role": "api",
+      "result": "PASS",
+      "image_id": "sha256:0ae9f5b2e0c98982cc5d284300539ad9da1ccfdedeab9ad84cc964cd6c3e11f8",
+      "config_digest": "sha256:fdfdae38b7fcefc5f271c01573c54ac47219833c986bde2b938e07fc7025db83",
+      "manifest_digest": "sha256:7098360e36397adf9ebf137185a28d7667191dc18dec5e02e7f383f307dd7f52",
+      "scan": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-0.vulnerabilities.json",
+        "sha256": "b514c9c756cad32034beeb4204361148e30b308bda32857bb6f5e64489aa8c4f"
+      },
+      "sbom": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-0.sbom.json",
+        "sha256": "05d32747af366c2a446345b351fe56afa29188a70eea6edef6c959ad0a4a30e2"
+      },
+      "scan_timestamp": "2026-11-03T13:35:41.520827551Z",
+      "scanner_version": "0.121.0",
+      "database": {
+        "schemaVersion": "v6.1.10",
+        "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-03T00:19:54Z_1793686847.tar.zst?checksum=sha256%3Aab581eb337614de4e5f2f1f944ae78992d98242387632c235b406a51dd4d9cd1",
+        "built": "2026-11-03T06:20:47Z",
+        "path": "/cache/6/vulnerability.db",
+        "valid": true
+      }
+    },
+    {
+      "role": "studio",
+      "result": "PASS",
+      "image_id": "sha256:bd32fbc1f6984642505e00395fff262df8611c522bc24f332508611806d0af6f",
+      "config_digest": "sha256:81fbc0b261eb3840fa5fd4341801b46960045202ad14f5f0ea8fdbe68bbdfd9c",
+      "manifest_digest": "sha256:1f1e46f10cbfff06d30ad1d4fae5f7aeac0ab4fa98c5e3232200c4e8963e8986",
+      "scan": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-1.vulnerabilities.json",
+        "sha256": "1b7f9a9016582ea762a105ecd3d4484dfe33da879ee6ce8e54a070deadd73d4f"
+      },
+      "sbom": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-1.sbom.json",
+        "sha256": "ac0048bf4db34b41a8ab356b3b524756dade1547573e1befd8a4467092abf823"
+      },
+      "scan_timestamp": "2026-11-03T13:36:02.84305763Z",
+      "scanner_version": "0.121.0",
+      "database": {
+        "schemaVersion": "v6.1.10",
+        "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-03T00:19:54Z_1793686847.tar.zst?checksum=sha256%3Aab581eb337614de4e5f2f1f944ae78992d98242387632c235b406a51dd4d9cd1",
+        "built": "2026-11-03T06:20:47Z",
+        "path": "/cache/6/vulnerability.db",
+        "valid": true
+      }
+    },
+    {
+      "role": "semantic",
+      "result": "PASS",
+      "image_id": "sha256:b621bb7806776edf8d9ea54c1783f489126a6637e90206f7301432120dd2c591",
+      "config_digest": "sha256:8de2f7ceeb1404383eb74ae49c6095aa66db45c6b57fd466c68cec8a5272405f",
+      "manifest_digest": "sha256:35fc80b57846bf9128b496b308effabd931563da2f9e2d5a3d521fc2975a31c9",
+      "scan": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-2.vulnerabilities.json",
+        "sha256": "262982ce7736df25ec0799ade6f68b32c5d09f2b047a471e1aaa6c8803de51e6"
+      },
+      "sbom": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-2.sbom.json",
+        "sha256": "0a06e6be2876bcab529e7b965e20562860849fa96413902866dfa5207b8f3e71"
+      },
+      "scan_timestamp": "2026-11-03T13:36:24.371303667Z",
+      "scanner_version": "0.121.0",
+      "database": {
+        "schemaVersion": "v6.1.10",
+        "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-03T00:19:54Z_1793686847.tar.zst?checksum=sha256%3Aab581eb337614de4e5f2f1f944ae78992d98242387632c235b406a51dd4d9cd1",
+        "built": "2026-11-03T06:20:47Z",
+        "path": "/cache/6/vulnerability.db",
+        "valid": true
+      }
+    },
+    {
+      "role": "ingress",
+      "result": "PASS",
+      "image_id": "sha256:1c3e02f39229fa57026861cf81136e7bc9ec835116b8accd26666fbe6147e3a1",
+      "config_digest": "sha256:e145129f21be32c3795a8d3a39e169ff9e6d799568ddfd2db56fd0804c0b37ef",
+      "manifest_digest": "sha256:eadd01696910146b816e631faaab6fea0b6c2ff107fa36d4a7613774130ff19f",
+      "scan": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-3.vulnerabilities.json",
+        "sha256": "144ffd0f7181e2707a66f905344a0241785cae31dad9b7e2c3668f8eec274001"
+      },
+      "sbom": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-3.sbom.json",
+        "sha256": "1939154b7f92cff827a6a197e6cbb0a8aaf85949904eb28512850263d4d137f3"
+      },
+      "scan_timestamp": "2026-11-03T13:36:39.932162925Z",
+      "scanner_version": "0.121.0",
+      "database": {
+        "schemaVersion": "v6.1.10",
+        "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-03T00:19:54Z_1793686847.tar.zst?checksum=sha256%3Aab581eb337614de4e5f2f1f944ae78992d98242387632c235b406a51dd4d9cd1",
+        "built": "2026-11-03T06:20:47Z",
+        "path": "/cache/6/vulnerability.db",
+        "valid": true
+      }
+    },
+    {
+      "role": "postgres",
+      "result": "PASS",
+      "image_id": "sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1",
+      "config_digest": "sha256:bbdfc26f27f4b2fecdc289b63295a0228cab33657a7b859afe54dc78d184dd1d",
+      "manifest_digest": "sha256:f197a3ecdfdd8c04613b0c16ea1a8c0b2b168666e03036bfd3a9a579062a9da8",
+      "scan": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-4.vulnerabilities.json",
+        "sha256": "e3fb1ab7ca3d41afe773451ccf6633891b0772860d7108186ac16abe4fecce9d"
+      },
+      "sbom": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-4.sbom.json",
+        "sha256": "64b6fc4d9ff604c011f5021ab8bc47cc07bcbb921ef5e2e9f45b4c09f72b3bf4"
+      },
+      "scan_timestamp": "2026-11-03T13:37:01.819824338Z",
+      "scanner_version": "0.121.0",
+      "database": {
+        "schemaVersion": "v6.1.10",
+        "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-03T00:19:54Z_1793686847.tar.zst?checksum=sha256%3Aab581eb337614de4e5f2f1f944ae78992d98242387632c235b406a51dd4d9cd1",
+        "built": "2026-11-03T06:20:47Z",
+        "path": "/cache/6/vulnerability.db",
+        "valid": true
+      }
+    },
+    {
+      "role": "keycloak",
+      "result": "PASS",
+      "image_id": "sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332",
+      "config_digest": "sha256:24959b9b2ff0ec6bd9445588d3b488b84dffbe06e6a6ccb50e3d074f7ec581dd",
+      "manifest_digest": "sha256:f75a9942db4924d6dbc9bfdea74c496aedf48456d7d4cc2d4dd4604fe9d735d2",
+      "scan": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-5.vulnerabilities.json",
+        "sha256": "18652b453b671743755c4102ba8c81d25f141bacbb825997647daa72ffc34f68"
+      },
+      "sbom": {
+        "evidence": "artifacts/phase10-closure-4/scan/image-5.sbom.json",
+        "sha256": "e369c825a3d16ba56945d85f9a60e6be87b6887535bda815025f0a135a93bf69"
+      },
+      "scan_timestamp": "2026-11-03T13:37:24.818898334Z",
+      "scanner_version": "0.121.0",
+      "database": {
+        "schemaVersion": "v6.1.10",
+        "from": "https://grype.anchore.io/databases/v6/vulnerability-db_v6.1.10_2026-11-03T00:19:54Z_1793686847.tar.zst?checksum=sha256%3Aab581eb337614de4e5f2f1f944ae78992d98242387632c235b406a51dd4d9cd1",
+        "built": "2026-11-03T06:20:47Z",
+        "path": "/cache/6/vulnerability.db",
+        "valid": true
+      }
+    }
+  ]
+}

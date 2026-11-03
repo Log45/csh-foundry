@@ -1,0 +1,61 @@
+PASS production-template-configuration
+PASS disposable-production-wal-directory-owner-and-write-permission
+No new upgrade operations detected.
+PASS new-cluster-owner-migration-and-runtime-grants
+PASS complete-production-profile-core-startup
+/Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+PASS governed-manufacturing-schema-and-explicit-worker-delegations
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS deployed-ingestion-sigkill-durable-checkpoint-lease-reclaim-idempotent-final-state
+PASS production-ingestion-worker-63-objects-70-links-query-traversal-action-idempotency-concurrency
+PASS production-sdk-generation-download-integrity-python
+PASS production-sdk-generation-download-integrity-typescript
+PASS production-branch-conflict-resolved-merge-provenance-draft-publication-separate-activation
+PASS production-semantic-supervised-validation
+PASS production-semantic-supervised-reasoning
+PASS semantic-and-schema-development-did-not-mutate-operational-objects
+PASS actual-runtime-semantic-container-limits-and-network-configuration
+PASS actual-runtime-database-privilege-check
+PASS semantic-nonroot-readonly-tmpfs-cgroup-enforcement-no-direct-egress
+PASS independently-installed-python-built-typescript-sdks-real-https-queries-actions-replay-unauthorized-cross-tenant-denials
+PASS retained-controlled-load-runtime-identities-match
+PASS deployed-active-session-role-and-membership-revocation-before-jwt-expiry
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS deployed-worker-oidc-client-secret-rotation-old-secret-rejected
+PASS deployed-worker-reacquires-rotated-credential-queued-delegation-revocation-idempotent-continuation
+PASS deployed-api-studio-internal-credential-maintenance-rotation-session-continuity
+PASS deployed-database-credential-maintenance-rotation-old-login-rejected-session-continuity
+PASS deployed-encrypted-logical-restore-all-domain-identity-history-session-checksums
+PASS deployed-concurrent-job-admission-limit-rollback-and-cancel-release
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS mixed-ingestion-semantic-deployed-shared-quota
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS recovered-keycloak-api-studio-startup-login-metadata-objects-history-sdk-auth
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS complete-profile-postgresql-17-physical-wal-pitr-foundry-and-keycloak
+PASS same-schema-api-outage-rollback-to-previous-image-session-data-sdk-history
+PASS deployed-session-key-overlap-and-unsupported-ciphertext-rejection
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+PASS deployed-http-redirect-unknown-host-untrusted-cert-forged-origin-fixed-callback-hsts-csrf-body-limit-redacted-logs
+PASS real-jwks-only-outage-new-verifier-denial-and-recovery
+PASS broker-outage-login-unavailable-cached-token-bounded-and-fresh-verifier-denied
+PASS real-api-invalid-signing-key-denied
+PASS real-issuer-signed-expired-access-token-denied
+PASS https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie
+FAIL acceptance-execution
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_closure3.py", line 521, in <module>
+    main()
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_closure3.py", line 517, in main
+    acceptance.execute()
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10.py", line 1715, in execute
+    self.faults()
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_closure3.py", line 241, in faults
+    OperationsAcceptance.authentication_faults(self)
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_operations.py", line 195, in authentication_faults
+    OperationsAcceptance.deployed_capacity(self)
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_operations.py", line 283, in deployed_capacity
+    assert response.status_code == 200
+AssertionError

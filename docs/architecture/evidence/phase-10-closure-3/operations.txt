@@ -1,0 +1,30 @@
+PASS production-template-configuration
+PASS disposable-production-wal-directory-owner-and-write-permission
+No new upgrade operations detected.
+PASS new-cluster-owner-migration-and-runtime-grants
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_operations.py", line 663, in <module>
+    raise
+^^
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_operations.py", line 659, in main
+    (self.root / "failure.txt").write_text(
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10_operations.py", line 592, in execute
+    headers={"Authorization": "Bearer " + old, "X-Tenant-ID": str(self.tenant)},
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10.py", line 58, in dc
+    return self.run(self.compose + list(args), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/log/Documents/code/csh-foundry/scripts/accept_phase10.py", line 53, in run
+    return subprocess.check_output(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 550, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 1196, in communicate
+    stdout = self.stdout.read()
+             ^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

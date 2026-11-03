@@ -1,0 +1,3675 @@
+[
+  {
+    "advisory": "CVE-2026-82560",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "perl-base",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "perl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "perl-base",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "perl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "perl-base",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "perl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "libperl5.40",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "perl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "perl",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "perl-base",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "perl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "perl-modules-5.40",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "perl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "No platform Perl/POD/tar execution found; malicious input to Perl library required. Package-origin match is not proof the specific module is installed; review required.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-82560.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-9538",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "perl-base",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "perl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "perl-base",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "perl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "perl-base",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "perl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "libperl5.40",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "perl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "perl",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "perl-base",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "perl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "perl-modules-5.40",
+          "installed_version": "5.40.1-6+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "perl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "No platform Perl/POD/tar execution found; malicious input to Perl library required. Package-origin match is not proof the specific module is installed; review required.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-9538.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-85091",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "zlib1g",
+          "installed_version": "1:1.3.dfsg+really1.3.1-1+b1",
+          "available_fix": {
+            "versions": [],
+            "state": "not-fixed"
+          },
+          "upstream": "zlib",
+          "origin": "deb",
+          "distribution_security_status": "not-fixed"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "zlib1g",
+          "installed_version": "1:1.3.dfsg+really1.3.1-1+b1",
+          "available_fix": {
+            "versions": [],
+            "state": "not-fixed"
+          },
+          "upstream": "zlib",
+          "origin": "deb",
+          "distribution_security_status": "not-fixed"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "zlib1g",
+          "installed_version": "1:1.3.dfsg+really1.3.1-1+b1",
+          "available_fix": {
+            "versions": [],
+            "state": "not-fixed"
+          },
+          "upstream": "zlib",
+          "origin": "deb",
+          "distribution_security_status": "not-fixed"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "zlib1g",
+          "installed_version": "1:1.3.dfsg+really1.3.1-1+b1",
+          "available_fix": {
+            "versions": [],
+            "state": "not-fixed"
+          },
+          "upstream": "zlib",
+          "origin": "deb",
+          "distribution_security_status": "not-fixed"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Native compression library remains reachable. Advisory concerns nonblocking gzwrite/gzprintf sequences; no such direct application call found, but transitive native reachability remains unproven.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-85091.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2025-69720",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "libncursesw6",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libtinfo6",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "ncurses-base",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "ncurses-bin",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "libtinfo6",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "ncurses-base",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "ncurses-bin",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "libncursesw6",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libtinfo6",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "ncurses-base",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "ncurses-bin",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "libncursesw6",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libtinfo6",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "ncurses-base",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "ncurses-bin",
+          "installed_version": "6.5+20250216-2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "ncurses",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Terminal database/infocmp processing required; no endpoint intentionally invokes infocmp. Native dependency reachability not exhaustively proven.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2025-69720.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-95619",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "gcc-14-base",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libgcc-s1",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libstdc++6",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "gcc-14-base",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libgcc-s1",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libstdc++6",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "gcc-14-base",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libgcc-s1",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libstdc++6",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "gcc-14-base",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libgcc-s1",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libstdc++6",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "libstdc++ remains a native runtime dependency. Large aligned allocation or affected priority-queue operation required; native call graph not exhaustively reviewed.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-95619.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-102010",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "gcc-14-base",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libgcc-s1",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libstdc++6",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "gcc-14-base",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libgcc-s1",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libstdc++6",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "gcc-14-base",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libgcc-s1",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libstdc++6",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "gcc-14-base",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libgcc-s1",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libstdc++6",
+          "installed_version": "14.2.0-19",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gcc-14",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "libstdc++ remains a native runtime dependency. Large aligned allocation or affected priority-queue operation required; native call graph not exhaustively reviewed.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-102010.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-19499",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "libc-bin",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc6",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "libc-bin",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc6",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "libc-bin",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc6",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "libc-bin",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc-l10n",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc6",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "locales",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-19499.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-84243",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "libc-bin",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc6",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "libc-bin",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc6",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "libc-bin",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc6",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "libc-bin",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc-l10n",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc6",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "locales",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-84243.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-5435",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "libc-bin",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc6",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "libc-bin",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc6",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "libc-bin",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc6",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "libc-bin",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc-l10n",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libc6",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "locales",
+          "installed_version": "2.41-12+deb13u4",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "glibc",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Core runtime library remains reachable. Specific locale/format/DNS-printing code paths required; fixed environment and read-only runtime reduce exposure but do not eliminate risk.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-5435.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-76642",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Mount/namespace operations require local privileges and attacker-controlled paths. Production cap_drop ALL, nonroot and no-new-privileges constrain escalation; no risk acceptance implied.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-76642.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-78408",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Mount/namespace operations require local privileges and attacker-controlled paths. Production cap_drop ALL, nonroot and no-new-privileges constrain escalation; no risk acceptance implied.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-78408.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-119374",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "libsqlite3-0",
+          "installed_version": "3.46.1-7+deb13u2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "sqlite3",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "libsqlite3-0",
+          "installed_version": "3.46.1-7+deb13u2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "sqlite3",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "libsqlite3-0",
+          "installed_version": "3.46.1-7+deb13u2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "sqlite3",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "libsqlite3-0",
+          "installed_version": "3.46.1-7+deb13u2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "sqlite3",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Crafted FTS5 data/queries or session changesets required. PostgreSQL is the only operational datastore; no SQLite ingestion exposed. Native dependencies still require review.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-119374.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-119379",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "libsqlite3-0",
+          "installed_version": "3.46.1-7+deb13u2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "sqlite3",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "libsqlite3-0",
+          "installed_version": "3.46.1-7+deb13u2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "sqlite3",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "libsqlite3-0",
+          "installed_version": "3.46.1-7+deb13u2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "sqlite3",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "libsqlite3-0",
+          "installed_version": "3.46.1-7+deb13u2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "sqlite3",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Crafted FTS5 data/queries or session changesets required. PostgreSQL is the only operational datastore; no SQLite ingestion exposed. Native dependencies still require review.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-119379.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-78409",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Mount/namespace operations require local privileges and attacker-controlled paths. Production cap_drop ALL, nonroot and no-new-privileges constrain escalation; no risk acceptance implied.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-78409.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-78410",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "bsdutils",
+          "installed_version": "1:2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libblkid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "liblastlog2-2",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libmount1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsmartcols1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libuuid1",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "login",
+          "installed_version": "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "mount",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "util-linux",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "util-linux",
+          "installed_version": "2.41.5-0+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Mount/namespace operations require local privileges and attacker-controlled paths. Production cap_drop ALL, nonroot and no-new-privileges constrain escalation; no risk acceptance implied.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-78410.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-54369",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "libacl1",
+          "installed_version": "2.3.2-2+b1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "acl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "libacl1",
+          "installed_version": "2.3.2-2+b1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "acl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "libacl1",
+          "installed_version": "2.3.2-2+b1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "acl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "libacl1",
+          "installed_version": "2.3.2-2+b1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "acl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Privileged ACL/path operations over attacker-controlled paths required. Nonroot and read-only runtime constrain exposure; library retained by maintained base.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-54369.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-119373",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "libsqlite3-0",
+          "installed_version": "3.46.1-7+deb13u2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "sqlite3",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "libsqlite3-0",
+          "installed_version": "3.46.1-7+deb13u2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "sqlite3",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "libsqlite3-0",
+          "installed_version": "3.46.1-7+deb13u2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "sqlite3",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "libsqlite3-0",
+          "installed_version": "3.46.1-7+deb13u2",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "sqlite3",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "quay.io/keycloak/keycloak:26.8.1": [
+        {
+          "package": "sqlite-libs",
+          "installed_version": "3.34.1-11.el9_8",
+          "available_fix": {
+            "versions": [],
+            "state": "not-fixed"
+          },
+          "upstream": "sqlite",
+          "origin": "rpm",
+          "distribution_security_status": "not-fixed"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Crafted FTS5 data/queries or session changesets required. PostgreSQL is the only operational datastore; no SQLite ingestion exposed. Native dependencies still require review.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-119373.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-54370",
+    "severity": "High",
+    "images": {
+      "csh-foundry-api:phase10-closure4": [
+        {
+          "package": "libacl1",
+          "installed_version": "2.3.2-2+b1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "acl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-studio:phase10-closure4": [
+        {
+          "package": "libacl1",
+          "installed_version": "2.3.2-2+b1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "acl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "csh-foundry-semantic:phase10-closure": [
+        {
+          "package": "libacl1",
+          "installed_version": "2.3.2-2+b1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "acl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ],
+      "postgres:17.11-trixie": [
+        {
+          "package": "libacl1",
+          "installed_version": "2.3.2-2+b1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "acl",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Privileged ACL/path operations over attacker-controlled paths required. Nonroot and read-only runtime constrain exposure; library retained by maintained base.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-54370.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-74860",
+    "severity": "High",
+    "images": {
+      "postgres:17.11-trixie": [
+        {
+          "package": "libxml2",
+          "installed_version": "2.12.7+dfsg+really2.9.14-2.1+deb13u3",
+          "available_fix": {
+            "versions": [],
+            "state": "not-fixed"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "not-fixed"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "PostgreSQL XML support retains the native parser. No arbitrary SQL/XML API is exposed; credentialed SQL/native parsing remains reachable. No removal or stable backport is certified by this assessment.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-74860.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-24882",
+    "severity": "High",
+    "images": {
+      "postgres:17.11-trixie": [
+        {
+          "package": "dirmngr",
+          "installed_version": "2.4.7-21+deb13u1+b5",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gnupg2",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "gnupg",
+          "installed_version": "2.4.7-21+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gnupg2",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "gnupg-l10n",
+          "installed_version": "2.4.7-21+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gnupg2",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "gpg",
+          "installed_version": "2.4.7-21+deb13u1+b5",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gnupg2",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "gpg-agent",
+          "installed_version": "2.4.7-21+deb13u1+b5",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gnupg2",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "gpgconf",
+          "installed_version": "2.4.7-21+deb13u1+b5",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gnupg2",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "gpgsm",
+          "installed_version": "2.4.7-21+deb13u1+b5",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "gnupg2",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "The affected TPM-backed decryption daemon requires TPM keys/commands. No TPM device or GnuPG service is exposed by this profile. Supplier packages remain; a source-package match is not proof every vulnerable binary is present.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-24882.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-6653",
+    "severity": "Critical",
+    "images": {
+      "postgres:17.11-trixie": [
+        {
+          "package": "libxml2",
+          "installed_version": "2.12.7+dfsg+really2.9.14-2.1+deb13u3",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "PostgreSQL XML support retains the native parser. No arbitrary SQL/XML API is exposed; credentialed SQL/native parsing remains reachable. No removal or stable backport is certified by this assessment.",
+    "supported_remediation": "UNFIXED for selected stable trixie package; Debian no-DSA is not a platform risk acceptance. Do not substitute sid libxml2 or change libc/collations.",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-6653.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-107778",
+    "severity": "High",
+    "images": {
+      "postgres:17.11-trixie": [
+        {
+          "package": "libgssapi-krb5-2",
+          "installed_version": "1.21.3-5+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "krb5",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libk5crypto3",
+          "installed_version": "1.21.3-5+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "krb5",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libkrb5-3",
+          "installed_version": "1.21.3-5+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "krb5",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libkrb5support0",
+          "installed_version": "1.21.3-5+deb13u1",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "krb5",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "GSS-API forwarded credential decoding requires Kerberos context. This profile supplies no Kerberos keytab or GSS authentication rule. Native library remains installed; no platform-wide exploitability exemption is asserted.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-107778.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-107161",
+    "severity": "High",
+    "images": {
+      "postgres:17.11-trixie": [
+        {
+          "package": "libsasl2-2",
+          "installed_version": "2.1.28+dfsg1-9",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "cyrus-sasl2",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        },
+        {
+          "package": "libsasl2-modules-db",
+          "installed_version": "2.1.28+dfsg1-9",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "cyrus-sasl2",
+          "origin": "deb",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "DIGEST-MD5 client challenge handling is affected. This profile uses PostgreSQL password authentication and configures no LDAP/DIGEST-MD5 connection. Libraries remain in the supplier image; transitive reachability is not exhaustively excluded.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-107161.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-86143",
+    "severity": "High",
+    "images": {
+      "postgres:17.11-trixie": [
+        {
+          "package": "libxml2",
+          "installed_version": "2.12.7+dfsg+really2.9.14-2.1+deb13u3",
+          "available_fix": {
+            "versions": [],
+            "state": "not-fixed"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "not-fixed"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "PostgreSQL XML support retains the native parser. No arbitrary SQL/XML API is exposed; credentialed SQL/native parsing remains reachable. No removal or stable backport is certified by this assessment.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-86143.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-86144",
+    "severity": "High",
+    "images": {
+      "postgres:17.11-trixie": [
+        {
+          "package": "libxml2",
+          "installed_version": "2.12.7+dfsg+really2.9.14-2.1+deb13u3",
+          "available_fix": {
+            "versions": [],
+            "state": "not-fixed"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "not-fixed"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "PostgreSQL XML support retains the native parser. No arbitrary SQL/XML API is exposed; credentialed SQL/native parsing remains reachable. No removal or stable backport is certified by this assessment.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-86144.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-86139",
+    "severity": "High",
+    "images": {
+      "postgres:17.11-trixie": [
+        {
+          "package": "libxml2",
+          "installed_version": "2.12.7+dfsg+really2.9.14-2.1+deb13u3",
+          "available_fix": {
+            "versions": [],
+            "state": "not-fixed"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "not-fixed"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "PostgreSQL XML support retains the native parser. No arbitrary SQL/XML API is exposed; credentialed SQL/native parsing remains reachable. No removal or stable backport is certified by this assessment.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-86139.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-86140",
+    "severity": "High",
+    "images": {
+      "postgres:17.11-trixie": [
+        {
+          "package": "libxml2",
+          "installed_version": "2.12.7+dfsg+really2.9.14-2.1+deb13u3",
+          "available_fix": {
+            "versions": [],
+            "state": "not-fixed"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "not-fixed"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "PostgreSQL XML support retains the native parser. No arbitrary SQL/XML API is exposed; credentialed SQL/native parsing remains reachable. No removal or stable backport is certified by this assessment.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-86140.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-86142",
+    "severity": "High",
+    "images": {
+      "postgres:17.11-trixie": [
+        {
+          "package": "libxml2",
+          "installed_version": "2.12.7+dfsg+really2.9.14-2.1+deb13u3",
+          "available_fix": {
+            "versions": [],
+            "state": "not-fixed"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "not-fixed"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "PostgreSQL XML support retains the native parser. No arbitrary SQL/XML API is exposed; credentialed SQL/native parsing remains reachable. No removal or stable backport is certified by this assessment.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-86142.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-86138",
+    "severity": "High",
+    "images": {
+      "postgres:17.11-trixie": [
+        {
+          "package": "libxml2",
+          "installed_version": "2.12.7+dfsg+really2.9.14-2.1+deb13u3",
+          "available_fix": {
+            "versions": [],
+            "state": "not-fixed"
+          },
+          "upstream": "",
+          "origin": "deb",
+          "distribution_security_status": "not-fixed"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "PostgreSQL XML support retains the native parser. No arbitrary SQL/XML API is exposed; credentialed SQL/native parsing remains reachable. No removal or stable backport is certified by this assessment.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-86138.html",
+    "backport_status": "No supported trixie fix identified in current vendor snapshot; no scanner exemption"
+  },
+  {
+    "advisory": "CVE-2026-119586",
+    "severity": "High",
+    "images": {
+      "quay.io/keycloak/keycloak:26.8.1": [
+        {
+          "package": "sqlite-libs",
+          "installed_version": "3.34.1-11.el9_8",
+          "available_fix": {
+            "versions": [],
+            "state": "not-fixed"
+          },
+          "upstream": "sqlite",
+          "origin": "rpm",
+          "distribution_security_status": "not-fixed"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Crafted sqlite_schema.sql dot commands emitted by the SQLite CLI .recover and piped/reimported into sqlite3. The selected image contains sqlite-libs; PATH and standard CLI paths are absent (keycloak-sqlite-cli.txt). Source-package applicability discrepancy requires vendor review; raw high match retained without exemption.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-119586.json",
+    "backport_status": "No supplier fixed sqlite-libs version identified in selected UBI9 broker"
+  },
+  {
+    "advisory": "CVE-2026-91403",
+    "severity": "Critical",
+    "images": {
+      "quay.io/keycloak/keycloak:26.8.1": [
+        {
+          "package": "java-21-openjdk-headless",
+          "installed_version": "1:21.0.13.0.9-1.2.el9",
+          "available_fix": {
+            "versions": [],
+            "state": "wont-fix"
+          },
+          "upstream": "java-21-openjdk",
+          "origin": "rpm",
+          "distribution_security_status": "wont-fix"
+        }
+      ]
+    },
+    "status": "REMEDIATED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "Raw scanner critical match retained; scanner versions Java RPM rather than corrective system CA package; no gate exemption",
+    "runtime_prerequisites": "JSSE outbound TLS interception via compromised CA trust, including broker upstream federation. Supported RHEL CA-package correction is present and both implicated default Java trust anchors are absent; custom trust stores and live federation remain separate certification checks.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/CVE-2026-91403.json",
+    "backport_status": "System ca-certificates 2026.2.92_v9.0.319-90.3.el9_8 equals Red Hat RHSA-2026:88459 corrective package; both implicated root subjects absent in actual default Java store",
+    "change_applied_this_iteration": false,
+    "evidence": [
+      "vendor/redhat-ca.json",
+      "vendor/redhat-critical.json",
+      "keycloak-trust-verification.json"
+    ]
+  },
+  {
+    "advisory": "GHSA-xxph-c9ww-hj94",
+    "severity": "High",
+    "images": {
+      "quay.io/keycloak/keycloak:26.8.1": [
+        {
+          "package": "guava",
+          "installed_version": "33.6.0-jre",
+          "available_fix": {
+            "versions": [
+              "33.7.2"
+            ],
+            "state": "fixed",
+            "available": [
+              {
+                "version": "33.7.2",
+                "date": "2026-10-27",
+                "kind": "first-observed"
+              }
+            ]
+          },
+          "upstream": "",
+          "origin": "java-archive",
+          "distribution_security_status": "fixed"
+        }
+      ]
+    },
+    "status": "UNFIXED",
+    "required_owner": "Security/release owner (unassigned)",
+    "required_approval": "No exception authorized; vendor fix or separate explicit security disposition required",
+    "residual_exposure": "BLOCKED pending upstream fix or explicitly authorized security-owner risk disposition",
+    "runtime_prerequisites": "Attacker-controlled Java serialization reaching CompactHashMap/CompactHashSet/MapMakerInternalMap deserialization can trigger excessive allocation. Affected bundled Guava is confirmed; a complete Keycloak deserialization call graph is not certified. No reachability waiver.",
+    "supported_remediation": "Supported supplier build or stable distribution backport; no arbitrary library substitution",
+    "vendor_snapshot": "docs/architecture/evidence/phase-10-closure-4/vendor/GHSA-xxph-c9ww-hj94.json",
+    "backport_status": "Guava 33.7.2 fixes upstream; current maintained Keycloak 26.8.1 bundles 33.6.0-jre"
+  }
+]

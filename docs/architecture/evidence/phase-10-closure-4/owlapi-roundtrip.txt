@@ -1,0 +1,9 @@
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.github.benmanes.caffeine.cache.UnsafeAccess (file:/Users/log/.m2/repository/com/github/ben-manes/caffeine/caffeine/2.9.3/caffeine-2.9.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.github.benmanes.caffeine.cache.UnsafeAccess
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+NOTE OWLAPI serialization adds Declaration(Datatype(xsd:date)); no axioms removed
+PASS OWLAPI 4.5.29: 5 classes, 13 data properties, 6 object properties, 4 keys, 3 inverses, 1 equivalent class; RDF/XML roundtrip with explicit xsd:date declaration

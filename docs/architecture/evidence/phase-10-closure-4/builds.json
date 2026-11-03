@@ -1,0 +1,26 @@
+[
+  {
+    "role": "api",
+    "result": "PASS",
+    "image": "csh-foundry-api:phase10-closure4",
+    "image_id": "sha256:0ae9f5b2e0c98982cc5d284300539ad9da1ccfdedeab9ad84cc964cd6c3e11f8",
+    "log": {
+      "evidence": "docs/architecture/evidence/phase-10-closure-4/build-api.txt",
+      "sha256": "fb0bef3c4dbcdbb1fccac7b11a5586ba772001243912e074d7c87b8d3e4c05b0"
+    },
+    "source_state": "Uncommitted Closure 4 runtime changes; image-source-binding.json and source-files.json",
+    "selected": true
+  },
+  {
+    "role": "studio",
+    "result": "PASS",
+    "image": "csh-foundry-studio:phase10-closure4",
+    "image_id": "sha256:bd32fbc1f6984642505e00395fff262df8611c522bc24f332508611806d0af6f",
+    "log": {
+      "evidence": "docs/architecture/evidence/phase-10-closure-4/build-studio.txt",
+      "sha256": "921ed35bab91538d2d808129da74c2a3ddde83ba23e85e7543c08cea7228b506"
+    },
+    "source_state": "Uncommitted Closure 4 runtime changes; image-source-binding.json and source-files.json",
+    "selected": true
+  }
+]

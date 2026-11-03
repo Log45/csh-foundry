@@ -1,0 +1,167 @@
+[
+  {
+    "run": "repeat-1",
+    "concurrency": 1,
+    "requests": 20,
+    "errors": 0,
+    "p95_by_operation_ms": {
+      "query": 49.985,
+      "object_set": 50.214,
+      "traversal": 48.341,
+      "preview": 61.691,
+      "sdk": 49.0
+    },
+    "read_target": "PASS",
+    "sdk_write_target": "PASS"
+  },
+  {
+    "run": "repeat-1",
+    "concurrency": 4,
+    "requests": 80,
+    "errors": 0,
+    "p95_by_operation_ms": {
+      "query": 103.543,
+      "object_set": 96.532,
+      "traversal": 120.555,
+      "preview": 121.634,
+      "sdk": 111.567
+    },
+    "read_target": "PASS",
+    "sdk_write_target": "PASS"
+  },
+  {
+    "run": "repeat-1",
+    "concurrency": 8,
+    "requests": 160,
+    "errors": 0,
+    "p95_by_operation_ms": {
+      "query": 275.488,
+      "object_set": 244.881,
+      "traversal": 238.484,
+      "preview": 314.341,
+      "sdk": 326.075
+    },
+    "read_target": "PASS",
+    "sdk_write_target": "PASS"
+  },
+  {
+    "run": "repeat-2",
+    "concurrency": 1,
+    "requests": 20,
+    "errors": 0,
+    "p95_by_operation_ms": {
+      "query": 58.859,
+      "object_set": 56.977,
+      "traversal": 57.51,
+      "preview": 58.732,
+      "sdk": 58.766
+    },
+    "read_target": "PASS",
+    "sdk_write_target": "PASS"
+  },
+  {
+    "run": "repeat-2",
+    "concurrency": 4,
+    "requests": 80,
+    "errors": 0,
+    "p95_by_operation_ms": {
+      "query": 105.473,
+      "object_set": 111.683,
+      "traversal": 102.753,
+      "preview": 112.247,
+      "sdk": 110.607
+    },
+    "read_target": "PASS",
+    "sdk_write_target": "PASS"
+  },
+  {
+    "run": "repeat-2",
+    "concurrency": 8,
+    "requests": 160,
+    "errors": 0,
+    "p95_by_operation_ms": {
+      "query": 230.358,
+      "object_set": 215.352,
+      "traversal": 215.689,
+      "preview": 250.623,
+      "sdk": 235.17
+    },
+    "read_target": "PASS",
+    "sdk_write_target": "PASS"
+  },
+  {
+    "run": "repeat-3",
+    "concurrency": 1,
+    "requests": 20,
+    "errors": 0,
+    "p95_by_operation_ms": {
+      "query": 54.496,
+      "object_set": 52.581,
+      "traversal": 56.44,
+      "preview": 55.833,
+      "sdk": 54.071
+    },
+    "read_target": "PASS",
+    "sdk_write_target": "PASS"
+  },
+  {
+    "run": "repeat-3",
+    "concurrency": 4,
+    "requests": 80,
+    "errors": 0,
+    "p95_by_operation_ms": {
+      "query": 104.056,
+      "object_set": 108.331,
+      "traversal": 117.491,
+      "preview": 120.361,
+      "sdk": 116.821
+    },
+    "read_target": "PASS",
+    "sdk_write_target": "PASS"
+  },
+  {
+    "run": "repeat-3",
+    "concurrency": 8,
+    "requests": 160,
+    "errors": 0,
+    "p95_by_operation_ms": {
+      "query": 207.897,
+      "object_set": 171.482,
+      "traversal": 231.123,
+      "preview": 242.648,
+      "sdk": 249.796
+    },
+    "read_target": "PASS",
+    "sdk_write_target": "PASS"
+  },
+  {
+    "run": "sustained",
+    "concurrency": 8,
+    "requests": 720,
+    "errors": 0,
+    "p95_by_operation_ms": {
+      "query": 208.715,
+      "object_set": 201.828,
+      "traversal": 218.117,
+      "preview": 236.41,
+      "sdk": 231.143
+    },
+    "read_target": "PASS",
+    "sdk_write_target": "PASS"
+  },
+  {
+    "run": "contention-one-cpu",
+    "concurrency": 8,
+    "requests": 160,
+    "errors": 0,
+    "p95_by_operation_ms": {
+      "query": 242.805,
+      "object_set": 354.722,
+      "traversal": 345.004,
+      "preview": 303.778,
+      "sdk": 251.577
+    },
+    "read_target": "PASS",
+    "sdk_write_target": "PASS"
+  }
+]
