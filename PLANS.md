@@ -4,7 +4,7 @@
 
 **Project status:** Phases 0–9 implemented; Phase 10 approved with Keycloak, implementation and acceptance tracked in docs/development/phase-10-report.md; Phase 11 not approved
 
-**Document version:** 1.2 (Codex-ready; provider-independent SSO roadmap)
+**Document version:** 1.4 (future platform architecture, MinIO local storage, and explicit Rust optimization milestone; existing phase authorization unchanged)
 
 **Primary language:** Python
 
@@ -26,7 +26,7 @@
 
 # 1. Project Objective
 
-Build an open-source, ontology-driven data and application platform inspired by Palantir Foundry.
+Build an open-source, extensible, project-governed data, ontology, and application platform inspired by Palantir Foundry. Support both data-first and ontology-first development, with a shared tenant-scoped operational ontology and first-class resources for datasets, media, code, pipelines, functions, applications, and automations. The long-term ambition is broad platform capability, not one-to-one replication of Foundry's apps or APIs.
 
 The platform must allow developers to:
 
@@ -53,6 +53,22 @@ The platform must allow developers to:
 11. Support applications, workflows, and AI agents that interact with the ontology.
 
 12. Scale independently where performance measurements justify additional infrastructure.
+
+13. Organize governed assets into tenant-scoped Projects, nested folders, and a unified virtual resource filesystem.
+
+14. Ingest, inspect, and version raw tabular datasets independently of any ontology.
+
+15. Transform datasets through governed Python/Polars pipelines, later adding a no-code Pipeline Builder.
+
+16. Create ontology object types either from selected dataset columns or without a backing dataset; allow ignored columns and edit-only properties.
+
+17. Register media sets for images, video, audio, PDFs, and other non-tabular assets.
+
+18. Register code repositories, reusable functions, React applications, visual applications, and automations as governed resources.
+
+19. Expose shared ontology objects, links, queries, and actions through application SDKs and future visual builders.
+
+20. Provide stable resource identity, lineage, governance, artifact storage, and execution contracts that allow additional analytics, ML, and AI applications without duplicating platform infrastructure.
 
 The project must prioritize correctness, maintainability, extensibility, and developer experience over premature optimization.
 
@@ -86,6 +102,16 @@ The project must prioritize correctness, maintainability, extensibility, and dev
 
 - Each major subsystem must expose stable interfaces and have automated tests.
 
+- Logical resource identity is independent of folder path and physical artifact location.
+
+- Projects govern resources; shared ontology permissions independently govern operational objects and actions.
+
+- Tabular datasets and media assets exist independently of ontology materialization.
+
+- Visual builders and custom code clients use the same governed platform APIs and execution semantics.
+
+- User-authored code executes only in isolated, least-privilege runtimes, never inside API request processes.
+
 - The initial deployment should be runnable locally through Docker Compose.
 
 ## 1.2 Non-goals for the initial release
@@ -100,15 +126,15 @@ Do not attempt to implement:
 
 - A distributed SQL query engine.
 
-- A full visual data pipeline builder.
+- A full visual data pipeline builder in the original MVP (now a planned later milestone).
 
-- A general-purpose distributed workflow orchestrator.
+- A general-purpose distributed workflow orchestrator in the original MVP; future automations should build incrementally on durable jobs.
 
 - Arbitrary Python execution inside the API server.
 
 - Real-time collaborative ontology editing.
 
-- Full compatibility with Palantir Foundry APIs.
+- Full compatibility with Palantir Foundry APIs or a one-to-one clone of its application catalog.
 
 - A complete multi-region distributed architecture.
 
@@ -2951,41 +2977,154 @@ Tasks:
 
 ---
 
-## Phase 11 — Optional advanced capabilities
+## Phase 11 and later — Future platform expansion (not approved)
 
-Implement only after the MVP is stable.
+The former optional-capabilities list has been replaced by the explicit, dependency-ordered **Section 23A: Future Platform Architecture**. The immediate candidate foundation is Projects, folders, stable resource identities, governance, and a first dataset vertical slice; later milestones cover artifact storage, dataset versioning, Polars transformations, dataset-to-ontology creation, media, application SDKs, functions, automations, and visual builders.
 
-Potential additions:
+**No Phase 11 implementation is authorized by this planning revision.** The existing Phase 10 security and release gates remain in force. Formal approval must specify scope and sequence before work begins.
 
-- PyO3 Rust accelerators.
+The **original Rust optimization objective remains explicitly retained** as proposed milestone K in Section 23A, subject to measured bottlenecks and Section 19 safeguards. Other long-term candidates—incremental reasoning, CDC, streaming, graph analytics, full-text/vector search, distributed materialization, cross-ontology federation, SCIM, and advanced schema environments—remain potential extensions under Section 23A's advanced ecosystem milestone.
 
-- Incremental semantic reasoning.
+---
 
-- Change data capture.
+# 23A. Future Platform Architecture — Proposed, Not Yet Authorized
 
-- Streaming ingestion.
+> **Planning status:** This section is an approved-for-discussion product direction only. It does **not** authorize Phase 11 or any implementation beyond the currently approved Phase 10 scope. Phases 0–10, their historical acceptance evidence, and existing release gates remain unchanged. Before implementation, reconcile this proposal with `AGENTS.md`, architecture decisions, current code, and the formal phase-approval process. Do not reinterpret planned capabilities as implemented.
 
-- Advanced graph analytics.
+## 23A.1 Product model and end-to-end workflows
 
-- Visual pipeline builder.
+CSH Foundry evolves into a **project-governed, ontology-centered extensible platform**, with a unified resource experience and a tenant-scoped shared operational ontology. The platform must support these equally valid workflows:
 
-- Application builder.
+```text
+DATA FIRST:
+Project → Raw Dataset → Python/Polars Transformation → Versioned Clean Dataset
+        → Create Object Type from Dataset → Select/Ignore Columns
+        → Add Edit-Only Properties → Publish/Activate → Materialize
+        → Governed Actions → SDK / React App / Future Visual App
 
-- MCP agent integration.
+ONTOLOGY FIRST:
+Project → Empty Object Type → Define Properties/Links → Publish/Activate
+        → Create Objects via Governed Actions → SDK / React App / Future Visual App
 
-- Full-text search.
+MEDIA / ADVANCED (FUTURE):
+Project → Media Set / Code Repository / Function / Model
+        → Governed Processing and Lineage → Ontology References / Applications / Automations
+```
 
-- Vector search.
+Dataset ingestion and transformations **must not require** an existing ontology. Empty object types **must not require** an artificial backing dataset. Both paths converge on the existing canonical schema, operational object store, authorization, reconciliation, and action engine.
 
-- Advanced lineage visualization.
+## 23A.2 Organization, Project, folder, and resource registry
 
-- Distributed materialization.
+- A **tenant/organization** is the primary isolation boundary. A **Project** is a governed resource-ownership and collaboration boundary within a tenant. Nested folders provide logical organization, not physical storage directories.
+- Every first-class asset has a stable opaque `resource_id`, `tenant_id`, `resource_type`, owning `project_id` (or an explicitly governed tenant-level scope), parent folder where applicable, display name, lifecycle state, creation/update metadata, and authorization bindings. Paths and display names are mutable; references and lineage use stable IDs.
+- A central resource registry supports create, list, search, browse, move, rename, archive, and authorized delete; type-specific metadata remains in dedicated modules/tables. Define safe deletion, retention, trash/restore, dependency checking, and name-collision behavior.
+- Projects support membership/roles, inheritance rules, explicit cross-Project sharing, ownership transfer, quotas, scoped credentials, audit, and policy. Project membership alone never grants unrestricted access to the shared ontology or to another Project's resources.
+- Initial resource types: `PROJECT`, `FOLDER`, `ONTOLOGY_OBJECT_TYPE`, `ONTOLOGY_LINK_TYPE`, `ONTOLOGY_ACTION`, `DATASET`, `DATASET_PIPELINE`. Reserve extensible contracts for `MEDIA_SET`, `CODE_REPOSITORY`, `FUNCTION`, `REACT_APPLICATION`, `VISUAL_APPLICATION`, `AUTOMATION`, `MODEL`, and `AI_AGENT`.
+- **Integration with existing ontology:** preserve canonical ontology IDs, published versions, branch/merge semantics, and tenant-scoped object identities. The resource registry references existing ontology entities rather than replacing them or creating duplicate schema authorities. An ontology resource may have an owning Project and explicit consuming Projects while remaining in the tenant's shared ontology namespace.
+- Resource-level access (e.g., viewing a dataset or launching an app) and ontology-level object/property/action authorization are separate and cumulative. Enforce both in backend services, jobs, and SDK calls; prevent confused-deputy access through applications, resource sharing, or workers.
+- Support stable, versioned resource URLs, dependency references, discoverability, and eventual Applications Portal without requiring separate governance infrastructure for each future app.
 
-- Cross-ontology federation.
+**Acceptance criteria:** Two Projects in one tenant can share an explicitly authorized ontology object type while keeping private datasets inaccessible; folder moves/renames do not break references; unauthorized Project/resource and ontology operations fail closed; cross-tenant access is rejected in API, worker, search, lineage, and artifact retrieval paths.
 
-- Enterprise identity lifecycle: SCIM provisioning/deprovisioning, governed group synchronization, organization-specific mandatory SSO and advanced login policies.
+## 23A.3 Artifact storage and resource versions
 
-- Fine-grained schema branching environments.
+- Separate **logical filesystem/registry** (PostgreSQL metadata and governance) from **artifact bytes** (storage backend). An S3 object key is never a resource identity or an authorization grant.
+- Define a pluggable `ArtifactStore` interface with scoped upload/download, metadata, checksums, immutable artifact/version references, bounded streaming, retention, deletion, and verification. Prefer S3-compatible durable object storage for OKD4 and hosted environments; **use MinIO as the standard S3-compatible object store in local Docker Compose development**. A filesystem-backed store may remain an optional test-only or minimal development adapter, but must not replace the MinIO integration path. Do not require S3 to operate the existing ontology-only workflows.
+- **Local MinIO Compose profile:** Add an opt-in `minio` service with a persistent named volume and a `minio-init`/`mc` initialization job. Initialize purpose-specific buckets idempotently (e.g., datasets, media, and artifacts), configure bucket access policies and least-privilege service users, and expose the S3 API and management console on configurable localhost-bound ports (commonly 9000 and 9001). Use pinned image versions/digests rather than `latest` for reproducibility; verify current MinIO image availability and supported initialization commands at implementation time.
+- **MinIO credentials:** Supply development credentials through ignored `.env`/secrets, never commit example production-like passwords or embed them in Compose command strings, policy documents, or test logs. Keep bootstrap/admin credentials distinct from API and worker credentials. Avoid granting `s3:*` to ordinary application identities; separate read-only and read/write roles by bucket/prefix and workload. Use idempotent bucket/policy/user creation and health/readiness checks; restart-safe init must not erase existing objects or users.
+- **S3 compatibility contract:** The same `ArtifactStore` API and test suite must run against local MinIO and a configurable external S3-compatible endpoint. Cover path-style addressing, endpoint URLs, TLS/CA configuration, presigned upload/download flows if used, multipart/streaming limits, checksum verification, failure recovery, and bucket/prefix authorization. Do not reuse sample credentials from unrelated Compose configurations.
+- PostgreSQL remains authoritative for ontology objects, links, metadata, permissions, transactions, jobs, and artifact references. Store bulk tabular files, media, and build/model artifacts in object storage rather than large database blobs.
+- Use immutable dataset and artifact versions; version references, checksums, producer run IDs, schema fingerprints, and lineage must be recorded. Define garbage collection only after reference/retention checks.
+- Storage access must be tenant/project-scoped and least privilege. Use short-lived scoped transfer mechanisms where justified, with authorization checked before issuing access; prevent path traversal, cross-tenant key guessing, unbounded uploads, and leaked credentials. Document encryption, backup/restore, malware/content handling policy, and lifecycle operations.
+
+**Acceptance criteria:** Versioned artifacts survive API/worker restarts and OKD pod rescheduling; failed uploads cannot publish partial versions; unauthorized downloads fail; identical logical resources remain addressable after moving folders; local and S3 backends pass shared contract tests.
+
+## 23A.4 First-class tabular datasets and lineage
+
+- Introduce logical `Dataset`, immutable `DatasetVersion`, `DatasetColumn`, `DatasetArtifact`, and version-aware lineage/dependency records. Reconcile existing `data_sources`, `data_source_versions`, `data_mappings`, and ingestion runs by migration/adapters; do not discard working ingestion semantics or rename existing entities without compatibility plans.
+- Support CSV, Parquet, and JSON/NDJSON uploads and governed PostgreSQL registrations first. Prefer Parquet for internal persisted tabular snapshots when practical; retain original bytes and provenance when required.
+- Provide schema inference with explicit corrections, column types/nullability, bounded previews, row counts where available, diagnostics, source ownership, access controls, and immutable dataset versions.
+- Datasets are useful without ontology mappings. One dataset may feed multiple pipelines and object types; the same pipeline may consume multiple authorized datasets. Lineage connects input dataset versions → transformation definition/version/run → output versions → ontology binding/materialization.
+- Version references are explicit: pin a version or use a documented governed advancement policy; never silently change an active ontology binding because an upstream dataset was updated.
+
+**Acceptance criteria:** Upload and preview a raw manufacturing dataset without an ontology; create an immutable cleaned version; inspect lineage and authorized history; reuse one dataset in two downstream consumers; preserve old versions and block cross-Project leakage.
+
+## 23A.5 Python/Polars transformation pipelines and future visual builder
+
+- Add versioned pipeline definitions, typed input/output contracts, DAG dependencies, execution runs, status, logs, bounded errors, retry/idempotency, cancellation, and immutable output publication. Reuse existing durable-job infrastructure where appropriate.
+- Support controlled Polars expressions and **isolated Python/Polars code steps**. Never execute arbitrary user-authored code inside FastAPI, Next.js BFF, or unrestricted shared application workers.
+- Isolated execution requires non-root arbitrary-UID compatibility on OKD4, resource/time limits, scoped temporary storage, restricted network/egress, no ambient platform credentials, approved dependency/environment policy, and tenant-aware scheduling/quotas. A non-root UID alone is not sufficient sandboxing for hostile code; select and threat-model stronger isolation before exposing execution to untrusted tenants.
+- Define a shared versioned pipeline intermediate representation so the future visual Pipeline Builder compiles to the **same** transformation and execution engine as code-based pipelines; no second incompatible data-processing backend.
+- Record deterministic input versions, code/definition digest, environment/dependency versions, output schema, run metrics, provenance, and lineage. Prevent partial output promotion on failed runs.
+
+**Acceptance criteria:** A user uploads `machines.csv`, normalizes/derives columns with Polars, produces an independently browsable cleaned dataset, retries safely, and observes versioned lineage; unauthorized or failed code runs cannot access other Projects or publish partial results.
+
+## 23A.6 Dataset-to-ontology and empty-ontology authoring
+
+- Ontology Manager offers **Create from Dataset** and **Create Empty Object Type**. Both create ordinary canonical draft definitions using the existing publish/activate process.
+- For dataset-backed creation, show every source column with inferred type and an explicit include/ignore choice; support property renaming, validated type conversion, optionality, defaults, primary-key selection, and new properties absent from the dataset.
+- Define **source-backed** versus **edit-only** properties as explicit mapping/ownership semantics. Edit-only properties have no source column mapping and must never be overwritten by ingestion. Source-backed editable properties use the existing deterministic reconciliation policy; `edit_wins` is **not** equivalent to edit-only.
+- Require stable non-null unique source keys for materialized identity; reject row-position identity and ambiguous duplicates. Show a prepublication mapping and materialization preview, validation errors, deletion policy, and ownership/reconciliation summary.
+- Draft/publish/activate remains governed. Mapping changes and dataset version updates require explicit validation and compatible migration/materialization behavior; no automatic mutation of active schemas from inferred source drift.
+- Empty object types can start with zero operational objects and be populated by authorized create actions without an invented dataset. Preserve direct governed CRUD compatibility where already supported.
+- Maintain existing source state → edit overlay → resolved object behavior, immutable schema versions, object/link identity, and transaction guarantees.
+
+**Acceptance criteria:** From a cleaned dataset, include `machineId`, `machineName`, `operationalStatus`, `temperatureCelsius`; ignore an extra column; add edit-only `operatorNotes`; materialize by `machineId`; execute an authorized edit action; refresh source and verify `operatorNotes` persists. Independently create an empty `MaintenanceRequest` type and create its first object through an action.
+
+## 23A.7 Media Sets and non-tabular resources
+
+- Add `MediaSet` and immutable `MediaAsset`/version metadata for images, video, audio, PDFs, and other binaries, including MIME/type validation, checksums, bounded previews/metadata extraction, access controls, retention, and provenance.
+- Store media bytes in artifact storage; reference assets from datasets or ontology objects through governed stable resource/asset IDs rather than embedding large files in object JSONB.
+- Processing (OCR, transcription, embeddings, computer vision, document extraction) is **future optional capability** executed through governed isolated jobs, not a prerequisite for initial Media Sets. Derived datasets/assets retain lineage to originals.
+
+**Acceptance criteria:** Upload an authorized image and PDF into a Project Media Set, restrict another Project's access, attach a stable media reference to an ontology object through an authorized operation, and preserve provenance after renaming the asset.
+
+## 23A.8 Code, functions, automations, and applications
+
+- Treat code repositories, reusable functions, React applications, visual applications, and automations as resource types with stable IDs, ownership, versions, dependencies, governance, and discoverability. Do not build an entire Git hosting service by default; begin with governed references/imports to existing Git providers and version-pinned build artifacts.
+- Reuse the existing declarative action engine for business mutations. Add a guided Action Builder that generates canonical actions; applications, functions, automations, and agents must not bypass action permissions, preconditions, audit, and idempotency.
+- Extend generated Python/TypeScript SDKs with application-focused auth and typed query/action ergonomics. Future React bindings may offer query hooks, mutation hooks, pagination, and cache invalidation; do not embed client secrets or grant access through SDK generation.
+- A Developer Console eventually manages application registration, scoped OAuth/OIDC configuration, authorized ontology dependencies, SDK generation, and deployable starter applications.
+- Future Workshop-like visual applications use a versioned declarative page/widget/action model and the **same** governed APIs as React apps. Build a renderer before a complex visual editor; do not create an independent mutation/query authority.
+- Future automations orchestrate approved triggers (schedule, event, dataset publication, action/outbox event), durable retries, permissions, quotas, human approval where required, and safe external side effects. Reuse the transactional outbox and job foundations; do not claim cross-system atomicity.
+- Models, analytics, AI agents, MCP integrations, and other Foundry-inspired applications remain extensible future resource families. Introduce their specific runtimes only when there is an approved use case and threat model.
+
+**Acceptance criteria:** A registered React application uses a generated SDK to query authorized objects and execute an audited action; Project permissions alone do not reveal restricted object properties; a future visual application executes the same action contract; automated execution is attributable and governed.
+
+## 23A.9 Shared execution and operational platform
+
+- Introduce a logical execution control plane for pipeline, function, automation, model, and AI jobs: request → authenticate/authorize → resolve resource versions → apply quotas/policy → schedule isolated runtime → record results/artifacts/logs/audit.
+- Keep the implementation modular in the existing FastAPI/PostgreSQL/job architecture until measured requirements justify separate services. Isolate **untrusted code** separately even if the control plane remains modular.
+- Preserve provider-independent OIDC identity, PostgreSQL-backed tenant membership/RBAC/ABAC, existing BFF session protections, Open Ontologies semantic authority, and source/edit reconciliation.
+- Maintain OKD4 restricted SCC compatibility: application and job containers non-root and arbitrary-UID capable, no privileged SCC/`anyuid`, no privilege escalation, no required root-owned writable directories, no low privileged ports. Apply least privilege to artifact and execution credentials.
+- Preserve Docker Compose for local/self-hosted operation, and portable deployment configuration for externally managed PostgreSQL, S3-compatible object storage, and OIDC providers. Do not make hosted infrastructure mandatory for the original ontology-only local workflow.
+- Apply consistent resource IDs, audit, search/discovery, dependency graph, versioning, quotas, lifecycle, and retention across resource families; do not reimplement these separately in every UI app.
+
+## 23A.10 Proposed future delivery sequence and approval gates
+
+The following are **proposed milestones, not approved phase numbers or instructions to begin implementation**. The previous generic “Phase 11 optional advanced capabilities” bucket is superseded for planning by this dependency-ordered sequence. Assign/approve numbered phases only through a separate roadmap decision.
+
+| Order | Proposed milestone | Deliverable and measurable exit |
+|---|---|---|
+| A | Project/resource foundation | Projects, folders, stable IDs, resource browsing, project-scoped RBAC, existing ontology resource adapters, and a small dataset vertical slice |
+| B | Artifact storage | Durable pluggable storage, immutable artifacts, **MinIO + idempotent init in local Compose**, external S3-compatible OKD profile, access control, upload/download, retention |
+| C | Dataset platform | Independent raw datasets, versioned schema/preview, PostgreSQL registrations, provenance and basic lineage |
+| D | Transformation pipelines | Versioned Polars/Python pipeline runs in isolated execution, immutable outputs, retries, lineage |
+| E | Dataset-to-ontology creation | Column selection/ignore, source-backed/edit-only properties, key validation, governed materialization; preserve empty ontology flow |
+| F | Application SDK and developer experience | React-focused SDK integration, application registration, scoped auth, starter application, Action Builder improvements |
+| G | Media Sets and functions/automations | Non-tabular assets, governed reusable logic, event/scheduled orchestration as separately approved vertical slices |
+| H | Visual Pipeline Builder | No-code DAG editor compiling to the existing pipeline representation |
+| I | Workshop-like application builder | Declarative app schema, runtime renderer, visual editor, app publication |
+| J | Advanced ecosystem | Rich lineage/analytics, ML/model registry, agent/MCP tooling, additional connectors, streaming, CDC, search, scale-out as demand justifies |
+| K | **Rust performance optimization (explicit, conditional)** | Profile Python/Polars/PostgreSQL baselines; prototype targeted Rust/PyO3 accelerators only for demonstrated bottlenecks; verify functional parity, benchmark improvements, packaging, and rollback |
+
+### Explicit Rust optimization track (preserved from original Phase 11)
+
+The original Phase 11 Rust optimization objective **remains relevant to the final product** and is retained as milestone **K** above, not removed or presumed implemented. Section 19 remains the authoritative original technical guidance. Candidate hotspots include large-scale object materialization, graph/relationship processing, expensive parsing/validation, and CPU-bound operations shown by representative profiling to be inadequately served by PostgreSQL, Polars, and Python. Polars already uses Rust internally: do not assume a custom Rust rewrite will improve its kernels. Rust extensions are optional, incremental, and must retain Python fallbacks where feasible. Require before/after benchmarks on realistic workloads, correctness/property tests, memory and concurrency checks, cross-platform build/release compatibility (including OKD4 arbitrary UID), and documented maintenance cost. Optimization may be authorized earlier than milestone K when measurements justify it, but it is never an automatic dependency of the dataset or ontology features.
+
+**First end-to-end product acceptance:** In a governed Project, upload a raw CSV → clean with Polars → save a versioned dataset → create an ontology object type from selected columns plus edit-only properties → publish/activate/materialize → execute a governed action → query and act through a React SDK application. Separately demonstrate an empty object type populated by a create action. Cross-Project and cross-tenant negative tests are mandatory.
+
+**Phase-authorization rule:** Phase 10 security/remediation, operator certification, and existing acceptance statuses remain untouched. Planning these milestones does not override “Phase 11 not approved.” A future authorization must explicitly state which milestone, migrations, infrastructure dependencies, security review, and tests are in scope. Preserve existing fixture vocabulary, `0017_capacity` baseline, existing user data, release policy, and historical evidence.
 
 ---
 
