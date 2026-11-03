@@ -1,0 +1,40 @@
+{
+  "container_security": "FAIL",
+  "release": "BLOCKED",
+  "baseline": {
+    "revision": "0127f805a0bbb773b5da38b0d062fba7ae7b129b",
+    "high": 251,
+    "critical": 2,
+    "distinct_high_critical": 31,
+    "source": "../phase-10-security-closure/README.md"
+  },
+  "okd_application_images": {
+    "high": 167,
+    "critical": 0,
+    "roles": {
+      "api": 56,
+      "studio": 55,
+      "semantic": 56
+    },
+    "result": "FAIL raw high findings retained"
+  },
+  "optional_compose_ingress": {
+    "high": 0,
+    "critical": 0,
+    "result": "PASS fresh minimized unprivileged image scan",
+    "initial_supplier_image": {
+      "high": 39,
+      "critical": 15,
+      "result": "FAIL retained initial scan"
+    },
+    "remediation": "Supported removal of unused curl/modules and Alpine stable updates; no suppression"
+  },
+  "external_postgres_keycloak": "NOT CERTIFIED; not excluded from security responsibilities",
+  "existing_critical_findings": [
+    "CVE-2026-6653 PostgreSQL vendor-dependent UNFIXED",
+    "CVE-2026-91403 Keycloak technically remediated; independent authorization still absent"
+  ],
+  "exceptions": "NONE AUTHORIZED",
+  "production_authorizer": "NOT CONFIGURED; advisory dispositions remain rejected",
+  "raw_scan_sbom_binding": "supply-chain-binding.json"
+}

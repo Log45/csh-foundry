@@ -564,3 +564,22 @@ TLS, rotations and rollback. Final isolated browser E2E **five PASS**; an earlie
 retains one stale activation-header failure despite successful activation. Its cause remains
 unresolved and is recorded as an intermittent validation limitation, not erased by the passing
 rerun. Final security/release/recovery focused suite: **55 PASS**. No assertions/timeouts changed.
+
+## OKD4 portability continuation
+
+Use [the OKD4 guide](okd4-deployment.md) for application-only Kubernetes deployment with external
+PostgreSQL/Keycloak. The existing Compose topology is preserved, with a coordinated ingress image
+and port update: the new unprivileged nginx listens on 8080/8443, mapped to host 80/443. Rebuild
+and select it together with the updated Compose template; historical ingress images listening on
+80/443 cannot be mixed with that template. API/Studio/workers use an explicit OIDC backchannel
+socket port 8443 inside Compose; public issuer identity and TLS/signature checks remain unchanged.
+TLS private keys must be readable by supplemental group10001 (e.g. root:10001 mode0440), with
+traversable parent directories; there is no runtime root ownership fix. Test-only generated keys
+may use different permissions inside their private disposable directories.
+
+`scripts/test_nonroot_containers.py` tests two unknown UID/GID pairs with read-only roots and
+no capabilities. `scripts/accept_okd4_local.py --candidate-images FILE --output NEW_DIRECTORY`
+runs the isolated combined profile; `--scope replicas` checks two ingestion workers and two API
+replicas. Put Node>=22 on PATH first. These runners preserve previous outputs and never certify
+actual Kubernetes routing/admission. Complete exact candidate supply-chain/security gates and
+independent target approval before any publication or deployment.

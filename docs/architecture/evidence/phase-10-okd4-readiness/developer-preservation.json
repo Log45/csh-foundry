@@ -1,0 +1,25 @@
+{
+  "historical_private_file_category_counts_observed": {
+    "key_files": 72,
+    "certificate_files": 53,
+    "realm_exports": 48,
+    "backup_files": 30
+  },
+  "user_roadmap_commit": "dfdda5f3c0307a3e694b52cb332445c797221373",
+  "starting_revision": "0127f805a0bbb773b5da38b0d062fba7ae7b129b",
+  "PLANS.md": "User commit retained; no agent edits; new future architecture unimplemented",
+  "development_resources": "No existing container stopped/replaced; no existing volume/database/realm/key/credential/backup changed",
+  "historical_evidence": "Preserved; new evidence directory only",
+  "test_resources": "Uniquely named isolated projects/database schemas; cleanup confined to owned resources",
+  "final_running_containers": [
+    "csh-foundry-studio-1 csh-foundry-studio",
+    "csh-foundry-api-1 csh-foundry-api",
+    "foundry-keycloak foundry-keycloak-recovered:20261029",
+    "foundry-keycloak-tls 1c3e02f39229",
+    "csh-foundry-postgres-1 postgres:17.6-bookworm",
+    "language_app_db postgres:18",
+    "language_app_neo4j neo4j:5"
+  ],
+  "original_names_preserved": true,
+  "owned_test_containers_remaining": []
+}

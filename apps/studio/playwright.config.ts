@@ -6,7 +6,7 @@ export default defineConfig({
   use: {
     baseURL: process.env.STUDIO_ORIGIN || "http://127.0.0.1:3000",
     ignoreHTTPSErrors: true,
-    trace: "retain-on-failure",
+    trace: process.env.STUDIO_E2E_TRACE === "true" ? "on" : "retain-on-failure",
     screenshot: "only-on-failure",
   },
   reporter: "list",

@@ -171,3 +171,18 @@ rerun. Final security/release/recovery focused suite: **55 PASS**. No assertions
 Aggregate regression acceptance remains BLOCKED pending review/remediation of the retained
 intermittent browser activation-header failure. Final passing executions do not erase that FAIL.
 The release verifier also blocks the actual raw high/critical findings and unauthorized dispositions.
+
+### OKD4 continuation (2026-11-03)
+
+- [x] Portable base, OKD Route and self-hosted overlays; external PostgreSQL and Keycloak references.
+- [x] Arbitrary UID/GID runtime tests, restricted contexts, read-only roots and scoped temporary paths.
+- [x] Dedicated migration credentials/Job, advisory serialization and explicit rollout ordering tests.
+- [x] Source-backed storage audit: PostgreSQL artifacts retained; shared file sources documented; no S3.
+- [x] Studio refresh race regression/fix, health routes and bounded concurrent browser evidence.
+- [x] Deployment guide, administrator request, deployment-specific BOM and fail-closed profile verifier.
+- [ ] Actual target SCC admission, external service/security assurances and production-like certification.
+- [ ] Independent security/release approval; raw application high findings still block acceptance.
+
+See [the evidence matrix](../architecture/evidence/phase-10-okd4-readiness/README.md) for executed
+counts, combined deployment/replica results, failures and NOT RUN checks. Earlier evidence and
+roadmap authorization are unchanged; no Phase 11 work was implemented.

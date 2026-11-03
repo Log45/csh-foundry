@@ -1,0 +1,11 @@
+{
+  "result": "PASS local verified TLS fixture",
+  "reference": "PostgreSQL17.11 disposable named container/network and generated CA; no developer DB reused",
+  "tls": "PASS actual pg_stat_ssl; verify-full certificate hostname and CA",
+  "wrong_password": "PASS rejection",
+  "invalid_ca": "PASS rejection",
+  "unavailable": "PASS bounded failure",
+  "pool_role_permissions": "See real PostgreSQL regression/combined checks",
+  "migration_arbitrary_uid": "PASS UID1001230001 GID1001230002; read-only root no capabilities; verified TLS; Alembic drift check",
+  "organization_service": "NOT RUN endpoint/credentials/CA/approval not supplied"
+}

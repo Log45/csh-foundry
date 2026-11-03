@@ -322,3 +322,20 @@ def test_invalid_operator_ca_bundle_fails_closed(tmp_path):
     bad.write_text("not a certificate")
     with pytest.raises(ssl.SSLError):
         OIDCVerifier((), ca_bundle=bad)
+
+
+def test_explicit_compose_backchannel_preserves_issuer_and_signed_claim_checks(idp):
+    private, state, verifier = idp
+    verifier.backchannel_port = 8443
+    assert verifier.verify(token(private))[1]["sub"] == "alice"
+    assert all(httpx.URL(url).port == 8443 for url in state["requests"])
+    with pytest.raises(ApplicationError):
+        verifier.verify(token(private, claims={"iss": "https://identity.example:8443/realm"}))
+    with pytest.raises(ValueError, match="configured issuer"):
+        verifier.document("https://attacker.example/keys")
+
+
+@pytest.mark.parametrize("port", [0, 443, 1023, 65536])
+def test_backchannel_rejects_privileged_or_invalid_port(port):
+    with pytest.raises(ValueError, match="unprivileged"):
+        OIDCVerifier((), backchannel_port=port)

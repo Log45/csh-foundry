@@ -10,7 +10,7 @@ COPY --from=build /app /app
 # Container mounts are managed by the host; no runtime mount command is required.
 RUN apt-get purge -y mount && apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN groupadd --gid 10001 foundry && useradd --uid 10001 --gid 10001 --create-home foundry
-ENV PATH=/app/.venv/bin:$PATH PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
-USER foundry
+ENV PATH=/app/.venv/bin:$PATH PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 HOME=/tmp TMPDIR=/tmp PYTHONNOUSERSITE=1
+USER 10001:10001
 EXPOSE 8000
 CMD ["uvicorn", "ontology_platform.main:create_app", "--factory", "--host", "0.0.0.0", "--no-proxy-headers", "--no-access-log", "--limit-concurrency", "64", "--timeout-keep-alive", "5", "--timeout-graceful-shutdown", "30"]

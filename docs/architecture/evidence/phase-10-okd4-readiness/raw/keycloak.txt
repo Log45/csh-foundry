@@ -1,0 +1,5 @@
+PASS pinned Keycloak imports Entra/Google/Workspace provider configurations
+PASS pinned Keycloak rejects missing PKCE
+PASS Code/PKCE exchange, nonce, RFC 9068, API audience, client_id, issuer, signature
+PASS ID-token rejection, single-use authorization code, no refresh-token issuance
+NOT RUN live Microsoft/Google/Workspace: provider credentials and organizations unavailable

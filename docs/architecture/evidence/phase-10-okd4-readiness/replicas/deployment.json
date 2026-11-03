@@ -1,0 +1,38 @@
+{
+  "project": "foundry-accept-70ed6306",
+  "environment": "Disposable local Compose; test CA; loopback ports",
+  "private_evidence": "artifacts/foundry-accept-70ed6306",
+  "checks": [
+    {
+      "check": "production-template-configuration",
+      "result": "PASS"
+    },
+    {
+      "check": "disposable-production-wal-directory-owner-and-write-permission",
+      "result": "PASS"
+    },
+    {
+      "check": "new-cluster-owner-migration-and-runtime-grants",
+      "result": "PASS",
+      "head": "0017_capacity"
+    },
+    {
+      "check": "governed-manufacturing-schema-and-explicit-worker-delegations",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "two-arbitrary-uid-ingestion-workers-shared-db-no-duplicate-claim",
+      "result": "COMPLETED",
+      "workers": 2
+    },
+    {
+      "check": "replica-validation",
+      "result": "FAIL",
+      "error_type": "AttributeError"
+    }
+  ]
+}

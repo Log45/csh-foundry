@@ -1,0 +1,275 @@
+{
+  "source_revision": "dfdda5f3c0307a3e694b52cb332445c797221373",
+  "environment": {
+    "host": "macOS ARM64, Docker Desktop",
+    "node_path": "/opt/homebrew/opt/node@25/bin prepended for frontend/browser/SDK checks",
+    "database": "Generated disposable PostgreSQL17.11 TLS CA/credentials and isolated network; values retained only in ignored private environment.json",
+    "semantic": "Pinned Open Ontologies2.1.0; macOS host binary and linux/amd64 image"
+  },
+  "full_regression": {
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "/tmp/foundry-okd-local.py"
+    ],
+    "runner_source": "artifacts/phase10-okd4/confirmed/local-runner.py",
+    "sha256": "199c2b20fab4b437f47a74abc762865144afefa736018b5e45bce93e4f280135",
+    "child_commands": {
+      "postgres-tls": {
+        "command": [
+          "uv",
+          "run",
+          "python",
+          "scripts/test_external_postgres.py"
+        ],
+        "exit_code": 0
+      },
+      "python": {
+        "command": [
+          "uv",
+          "run",
+          "pytest",
+          "-ra",
+          "--tb=short"
+        ],
+        "exit_code": 0
+      },
+      "lint": {
+        "command": [
+          "uv",
+          "run",
+          "ruff",
+          "check",
+          "."
+        ],
+        "exit_code": 0
+      },
+      "format": {
+        "command": [
+          "uv",
+          "run",
+          "ruff",
+          "format",
+          "--check",
+          "."
+        ],
+        "exit_code": 0
+      },
+      "mypy": {
+        "command": [
+          "uv",
+          "run",
+          "mypy"
+        ],
+        "exit_code": 0
+      },
+      "frontend": {
+        "command": [
+          "npm",
+          "test"
+        ],
+        "exit_code": 0
+      },
+      "typecheck": {
+        "command": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "exit_code": 0
+      },
+      "frontend-format": {
+        "command": [
+          "npm",
+          "run",
+          "format:check"
+        ],
+        "exit_code": 0
+      },
+      "migrations": {
+        "command": [
+          "uv",
+          "run",
+          "python",
+          "scripts/migrate_kubernetes.py"
+        ],
+        "exit_code": 0
+      }
+    }
+  },
+  "browser": {
+    "environment": {
+      "STUDIO_E2E_DURABLE": "true",
+      "STUDIO_E2E_PORT": "3330 then3340",
+      "STUDIO_E2E_API_PORT": "8330 then8340",
+      "STUDIO_E2E_REPLICA_PORT": "3331 then3341",
+      "STUDIO_E2E_TRACE": "true on second run",
+      "STUDIO_E2E_DIRECTORY": "isolated private path per run"
+    },
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/test_studio.py"
+    ],
+    "concurrency": "Each run overlapped pytest; one Playwright worker; assertions/timeouts unchanged"
+  },
+  "containers": [
+    [
+      "docker",
+      "build",
+      "-f",
+      "infrastructure/docker/api.Dockerfile",
+      "-t",
+      "csh-foundry-api:phase10-okd4",
+      "."
+    ],
+    [
+      "docker",
+      "build",
+      "--platform",
+      "linux/amd64",
+      "-f",
+      "infrastructure/docker/api.Dockerfile",
+      "-t",
+      "csh-foundry-api:phase10-okd4-amd64",
+      "."
+    ],
+    [
+      "docker",
+      "build",
+      "--platform",
+      "linux/amd64",
+      "--build-arg",
+      "BASE_IMAGE=csh-foundry-api:phase10-okd4-amd64",
+      "-f",
+      "infrastructure/docker/semantic.Dockerfile",
+      "-t",
+      "csh-foundry-semantic:phase10-okd4",
+      "."
+    ],
+    [
+      "docker",
+      "build",
+      "-f",
+      "infrastructure/docker/studio.Dockerfile",
+      "-t",
+      "csh-foundry-studio:phase10-okd4",
+      "."
+    ],
+    [
+      "docker",
+      "build",
+      "-f",
+      "infrastructure/docker/ingress.Dockerfile",
+      "-t",
+      "csh-foundry-ingress:phase10-okd4",
+      "."
+    ]
+  ],
+  "runtime": [
+    [
+      "uv",
+      "run",
+      "python",
+      "scripts/test_nonroot_containers.py",
+      "--output",
+      "docs/architecture/evidence/phase-10-okd4-readiness/non-root-validation.json"
+    ],
+    [
+      "uv",
+      "run",
+      "python",
+      "scripts/test_ingress.py"
+    ],
+    [
+      "uv",
+      "run",
+      "python",
+      "scripts/test_keycloak.py"
+    ]
+  ],
+  "combined": {
+    "node_path": "Node25 prepended",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/accept_okd4_local.py",
+      "--candidate-images",
+      "docs/architecture/evidence/phase-10-okd4-readiness/images.json",
+      "--output",
+      "docs/architecture/evidence/phase-10-okd4-readiness/release-candidate"
+    ]
+  },
+  "replicas": {
+    "node_path": "Node25 prepended",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/accept_okd4_local.py",
+      "--scope",
+      "replicas",
+      "--candidate-images",
+      "docs/architecture/evidence/phase-10-okd4-readiness/images.json",
+      "--output",
+      "docs/architecture/evidence/phase-10-okd4-readiness/replicas-selected"
+    ]
+  },
+  "scans": [
+    [
+      "uv",
+      "run",
+      "python",
+      "scripts/scan_images.py",
+      "csh-foundry-api:phase10-okd4",
+      "csh-foundry-studio:phase10-okd4",
+      "csh-foundry-semantic:phase10-okd4",
+      "--output",
+      "artifacts/phase10-okd4/scan-final"
+    ],
+    [
+      "uv",
+      "run",
+      "python",
+      "scripts/scan_images.py",
+      "csh-foundry-ingress:phase10-okd4",
+      "--output",
+      "artifacts/phase10-okd4/scan-ingress-final"
+    ]
+  ],
+  "schema": [
+    "artifacts/phase10-okd4/bin/kubeconform",
+    "-strict",
+    "-summary",
+    "-skip",
+    "Route",
+    "artifacts/phase10-okd4/okd-final.yaml",
+    "artifacts/phase10-okd4/self-hosted-final.yaml",
+    "artifacts/phase10-okd4/migration-final.yaml"
+  ],
+  "owlapi": [
+    "mvn",
+    "-q",
+    "-f",
+    "integrations/protege/pom.xml",
+    "compile",
+    "exec:java",
+    "-Dexec.args=/Users/log/Documents/code/csh-foundry/fixtures/manufacturing.ttl /Users/log/Documents/code/csh-foundry/artifacts/phase10-okd4/manufacturing.owl"
+  ],
+  "migration_container": {
+    "command": "docker run --rm --network OWNED_TEST_NETWORK --user 1001230001:1001230002 --read-only --cap-drop=ALL --security-opt=no-new-privileges:true --tmpfs /tmp:rw,size=128m,mode=1777 -v PRIVATE_CERT:/run/trust/postgres-ca.pem:ro -e FOUNDRY_DATABASE_URL -e FOUNDRY_DATABASE_TLS_REQUIRED=true csh-foundry-api:phase10-okd4 python scripts/migrate_kubernetes.py",
+    "private_values": "Network and env injected from private fixture, not recorded as credentials"
+  },
+  "release": "release-gate-result.json includes actual argv/exit/output",
+  "not_executed": [
+    "Registry publication",
+    "Organizational deployment",
+    "Kubernetes/OKD apply/server dry-run",
+    "Actual SCC admission",
+    "Live organization SSO",
+    "Production certification"
+  ]
+}

@@ -339,3 +339,17 @@ TLS, rotations and rollback. Final isolated browser E2E **five PASS**; an earlie
 retains one stale activation-header failure despite successful activation. Its cause remains
 unresolved and is recorded as an intermittent validation limitation, not erased by the passing
 rerun. Final security/release/recovery focused suite: **55 PASS**. No assertions/timeouts changed.
+
+## Phase 10 OKD4 deployment profile
+
+The [OKD4 deployment guide](docs/operations/okd4-deployment.md) provides portable Kustomize resources,
+restricted security contexts, arbitrary-UID application images, external PostgreSQL/Keycloak
+configuration, Routes and explicit migration ordering. Studio retains its Next.js BFF server;
+OKD needs no nginx. [The storage audit](docs/architecture/storage-audit.md) finds no current S3
+requirement; registered file sources still require shared read-only storage.
+
+See the [administrator request](docs/operations/okd4-infrastructure-request.md) and
+[readiness evidence](docs/architecture/evidence/phase-10-okd4-readiness/README.md) for exact validation,
+image identities and remaining gates. The application image security gate remains FAIL and release
+remains BLOCKED. Local container tests do not establish OKD SCC admission or production certification.
+The user’s future roadmap in PLANS.md is preserved; Phase 11 remains unapproved.

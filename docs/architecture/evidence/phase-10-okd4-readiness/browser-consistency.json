@@ -1,0 +1,270 @@
+{
+  "mechanism": "Reproduced: workspace useTask busy guard drops an activation refresh; stale same-tenant reads could overwrite current ontology state",
+  "fix": "Activation awaits direct refresh; monotonically numbered reads discard out-of-order completions; tenant guard retained",
+  "before": "FAIL deterministic test; expected 3 API calls, received2",
+  "after": "PASS deterministic test",
+  "bounded_browser_runs": [
+    "final-latest/browser-concurrent-1.txt:5PASS",
+    "final-latest/browser-concurrent-2.txt:5PASS with trace, under concurrent full regression"
+  ],
+  "historical_failure": "Retained, not rewritten. Reproduced mechanism is a plausible cause, not proof that it was the sole cause of the prior incident. Two bounded successful runs do not certify every concurrency pattern.",
+  "traces": [
+    {
+      "private_path": "apps/studio/test-results/workflow-verified-browser-reference-workflow/trace.zip",
+      "sha256": "aaa3a1fe71b39560c07ac81ed45cea25d242e4940aa236063d7351be034c65a6",
+      "size_bytes": 2810583
+    },
+    {
+      "private_path": "apps/studio/test-results/workflow-schema-branching--693d3-ge-and-private-SDK-download/trace.zip",
+      "sha256": "b2d44afba58ebadf77e4a1e8ae5c1ab57cb6d9b25e623ce5f176bb2c211490ce",
+      "size_bytes": 1871996
+    },
+    {
+      "private_path": "apps/studio/test-results/workflow-CSRF-and-unauthenticated-proxy-requests-fail-closed/trace.zip",
+      "sha256": "bda84b3980170d48c094338117d23d2f4f07ff794579eeed11cd362e6491b1e6",
+      "size_bytes": 417803
+    },
+    {
+      "private_path": "apps/studio/test-results/workflow-durable-sessions--a54b7-ogout-revokes-every-replica/trace.zip",
+      "sha256": "b88a62ccaf8452c7e9c9a6cd25a282d9f9c55987d0abbcb1e07dc45b0239ca8e",
+      "size_bytes": 388358
+    },
+    {
+      "private_path": "apps/studio/test-results/workflow-native-authoring--1b3b2--isolation-and-session-loss/trace.zip",
+      "sha256": "56000adb60ff5744ba014317d0e8fa886ffccf6f3c1dae2079b6572b8d999e01",
+      "size_bytes": 1163409
+    }
+  ],
+  "safe_activation_attachments": [
+    {
+      "requests": [
+        {
+          "path": "/api/v1/ontologies?limit=100&offset=0",
+          "method": "GET",
+          "status": 200,
+          "timing": {
+            "startTime": 1793731546117.9321,
+            "domainLookupStart": -1,
+            "domainLookupEnd": -1,
+            "connectStart": -1,
+            "secureConnectionStart": -1,
+            "connectEnd": -1,
+            "requestStart": 0.206,
+            "responseStart": 37.273,
+            "responseEnd": 39.195
+          },
+          "ontology_versions": [
+            {
+              "id": "manufacturing",
+              "active_version": null
+            }
+          ]
+        },
+        {
+          "path": "/api/v1/ontologies/manufacturing/branches?limit=50&offset=0",
+          "method": "GET",
+          "status": 200,
+          "timing": {
+            "startTime": 1793731546162.834,
+            "domainLookupStart": -1,
+            "domainLookupEnd": -1,
+            "connectStart": -1,
+            "secureConnectionStart": -1,
+            "connectEnd": -1,
+            "requestStart": 0.232,
+            "responseStart": 86.264,
+            "responseEnd": 88.985
+          },
+          "ontology_versions": []
+        },
+        {
+          "path": "/api/v1/ontologies/manufacturing/versions?limit=100&offset=0",
+          "method": "GET",
+          "status": 200,
+          "timing": {
+            "startTime": 1793731546163.171,
+            "domainLookupStart": -1,
+            "domainLookupEnd": -1,
+            "connectStart": -1,
+            "secureConnectionStart": -1,
+            "connectEnd": -1,
+            "requestStart": 0.162,
+            "responseStart": 90.877,
+            "responseEnd": 92.988
+          },
+          "ontology_versions": [
+            {}
+          ]
+        },
+        {
+          "path": "/api/v1/ontologies/manufacturing/sdk/artifacts?limit=50&offset=0",
+          "method": "GET",
+          "status": 200,
+          "timing": {
+            "startTime": 1793731546162.909,
+            "domainLookupStart": -1,
+            "domainLookupEnd": -1,
+            "connectStart": -1,
+            "secureConnectionStart": -1,
+            "connectEnd": -1,
+            "requestStart": 0.211,
+            "responseStart": 92.042,
+            "responseEnd": 94.183
+          },
+          "ontology_versions": []
+        },
+        {
+          "path": "/api/v1/ontologies/manufacturing/versions/1.0.0/validate",
+          "method": "POST",
+          "status": 200,
+          "timing": {
+            "startTime": 1793731546317.13,
+            "domainLookupStart": -1,
+            "domainLookupEnd": -1,
+            "connectStart": -1,
+            "secureConnectionStart": -1,
+            "connectEnd": -1,
+            "requestStart": 0.257,
+            "responseStart": 46.369,
+            "responseEnd": 50.652
+          }
+        },
+        {
+          "path": "/api/v1/ontologies/manufacturing/versions/1.0.0/publish",
+          "method": "POST",
+          "status": 200,
+          "timing": {
+            "startTime": 1793731546470.723,
+            "domainLookupStart": -1,
+            "domainLookupEnd": -1,
+            "connectStart": -1,
+            "secureConnectionStart": -1,
+            "connectEnd": -1,
+            "requestStart": 0.208,
+            "responseStart": 48.818,
+            "responseEnd": 52.896
+          },
+          "version": "1.0.0"
+        },
+        {
+          "path": "/api/v1/ontologies/manufacturing/versions?limit=100&offset=0",
+          "method": "GET",
+          "status": 200,
+          "timing": {
+            "startTime": 1793731546522.085,
+            "domainLookupStart": -1,
+            "domainLookupEnd": -1,
+            "connectStart": -1,
+            "secureConnectionStart": -1,
+            "connectEnd": -1,
+            "requestStart": 0.218,
+            "responseStart": 27.981,
+            "responseEnd": 29.756
+          },
+          "ontology_versions": [
+            {}
+          ]
+        },
+        {
+          "path": "/api/v1/ontologies?limit=100&offset=0",
+          "method": "GET",
+          "status": 200,
+          "timing": {
+            "startTime": 1793731546552.248,
+            "domainLookupStart": -1,
+            "domainLookupEnd": -1,
+            "connectStart": -1,
+            "secureConnectionStart": -1,
+            "connectEnd": -1,
+            "requestStart": 0.195,
+            "responseStart": 25.227,
+            "responseEnd": 26.718
+          },
+          "ontology_versions": [
+            {
+              "id": "manufacturing",
+              "active_version": null
+            }
+          ]
+        },
+        {
+          "path": "/api/v1/ontologies/manufacturing/versions/1.0.0/activate",
+          "method": "POST",
+          "status": 200,
+          "timing": {
+            "startTime": 1793731546611.169,
+            "domainLookupStart": -1,
+            "domainLookupEnd": -1,
+            "connectStart": -1,
+            "secureConnectionStart": -1,
+            "connectEnd": -1,
+            "requestStart": 0.183,
+            "responseStart": 37.044,
+            "responseEnd": 39.545
+          },
+          "active_version": "1.0.0"
+        },
+        {
+          "path": "/api/v1/ontologies/manufacturing/versions?limit=100&offset=0",
+          "method": "GET",
+          "status": 200,
+          "timing": {
+            "startTime": 1793731546650.0728,
+            "domainLookupStart": -1,
+            "domainLookupEnd": -1,
+            "connectStart": -1,
+            "secureConnectionStart": -1,
+            "connectEnd": -1,
+            "requestStart": 0.213,
+            "responseStart": 25.289,
+            "responseEnd": 26.608
+          },
+          "ontology_versions": [
+            {}
+          ]
+        },
+        {
+          "path": "/api/v1/ontologies?limit=100&offset=0",
+          "method": "GET",
+          "status": 200,
+          "timing": {
+            "startTime": 1793731546677.26,
+            "domainLookupStart": -1,
+            "domainLookupEnd": -1,
+            "connectStart": -1,
+            "secureConnectionStart": -1,
+            "connectEnd": -1,
+            "requestStart": 0.19,
+            "responseStart": 19.634,
+            "responseEnd": 20.877
+          },
+          "ontology_versions": [
+            {
+              "id": "manufacturing",
+              "active_version": "1.0.0"
+            }
+          ]
+        },
+        {
+          "path": "/api/v1/ontologies/manufacturing/versions/1.0.0",
+          "method": "GET",
+          "status": 200,
+          "timing": {
+            "startTime": 1793731546699.827,
+            "domainLookupStart": -1,
+            "domainLookupEnd": -1,
+            "connectStart": -1,
+            "secureConnectionStart": -1,
+            "connectEnd": -1,
+            "requestStart": 0.14,
+            "responseStart": 24.822,
+            "responseEnd": 26.01
+          },
+          "version": "1.0.0"
+        }
+      ],
+      "header": "Active 1.0.0"
+    }
+  ],
+  "private_trace_warning": "Trace includes credentials/callbacks and stays ignored; only safe timing/version attachment is public"
+}

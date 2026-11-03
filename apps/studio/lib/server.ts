@@ -303,6 +303,20 @@ export async function input(request: Request) {
   >;
 }
 async function document(url: string, options: RequestInit = {}) {
+  const port = process.env.STUDIO_OIDC_BACKCHANNEL_PORT;
+  if (port) {
+    const target = new URL(url);
+    if (
+      !/^\d+$/.test(port) ||
+      Number(port) < 1024 ||
+      Number(port) > 65535 ||
+      target.protocol !== "https:" ||
+      target.origin !== new URL(config().issuer).origin
+    )
+      throw new BoundaryError(503, "invalid_oidc_backchannel");
+    target.port = port;
+    url = target.href;
+  }
   const result = await fetch(url, {
     ...options,
     redirect: "error",

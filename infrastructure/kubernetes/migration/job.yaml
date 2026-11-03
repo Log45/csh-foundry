@@ -1,0 +1,70 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: foundry-migrate
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 600
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/part-of: foundry
+        app.kubernetes.io/name: migration
+    spec:
+      serviceAccountName: foundry
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      terminationGracePeriodSeconds: 45
+      containers:
+      - name: migration
+        image: example.invalid/foundry/api@sha256:0000000000000000000000000000000000000000000000000000000000000000
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+        envFrom:
+        - configMapRef:
+            name: foundry-config
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: '1'
+            memory: 768Mi
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: credentials
+          mountPath: /run/secrets
+          readOnly: true
+        - name: trust
+          mountPath: /run/trust
+          readOnly: true
+        command:
+        - python
+        - scripts/migrate_kubernetes.py
+        env:
+        - name: FOUNDRY_PROCESS_ROLE
+          value: worker
+      volumes:
+      - name: tmp
+        emptyDir:
+          sizeLimit: 128Mi
+      - name: credentials
+        secret:
+          secretName: foundry-migration
+          defaultMode: 288
+      - name: trust
+        secret:
+          secretName: foundry-trust
+          defaultMode: 292
+      restartPolicy: Never

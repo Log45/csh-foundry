@@ -5,6 +5,7 @@ x-api-environment: &api-environment
   FOUNDRY_PUBLIC_ORIGIN: https://${STUDIO_HOST:?Set STUDIO_HOST}
   FOUNDRY_ALLOWED_HOSTS: '["api","${API_HOST:?Set API_HOST}"]'
   FOUNDRY_AUTH_MODE: oidc
+  FOUNDRY_OIDC_BACKCHANNEL_PORT: "8443"
   FOUNDRY_OIDC_PROVIDERS: '[{"id":"keycloak","issuer":"https://${IDENTITY_HOST:?Set IDENTITY_HOST}/realms/${KEYCLOAK_REALM:-foundry}","audience":"foundry-api","clients":["studio","worker"],"algorithms":["RS256"]}]'
   FOUNDRY_SECRETS_DIRECTORY: /run/secrets
 
@@ -86,6 +87,7 @@ services:
       STUDIO_INTERNAL_HTTP: "true"
       STUDIO_OIDC_ISSUER: https://${IDENTITY_HOST}/realms/${KEYCLOAK_REALM:-foundry}
       STUDIO_OIDC_CLIENT_ID: studio
+      STUDIO_OIDC_BACKCHANNEL_PORT: "8443"
       STUDIO_API_AUDIENCE: foundry-api
       STUDIO_STATE_SECRET_FILE: /run/secrets/FOUNDRY_BROWSER_STATE_SECRET
       STUDIO_BROKER_LOGOUT: "true"
@@ -152,7 +154,13 @@ services:
       API_HOST: ${API_HOST}
       IDENTITY_HOST: ${IDENTITY_HOST}
       NGINX_ENVSUBST_FILTER: STUDIO_HOST|API_HOST|IDENTITY_HOST
-    ports: ["80:80", "443:443"]
+    ports: ["80:8080", "443:8443"]
+    user: "101:101"
+    group_add: ["10001"]
+    read_only: true
+    tmpfs: ["/tmp:size=32m,mode=1777"]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
     volumes:
       - ./nginx.conf.template:/etc/nginx/templates/default.conf.template:ro
       - ${TLS_DIRECTORY:?Set private TLS_DIRECTORY}:/etc/nginx/tls:ro

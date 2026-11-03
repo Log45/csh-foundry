@@ -159,3 +159,14 @@ rerun. Final security/release/recovery focused suite: **55 PASS**. No assertions
 Aggregate regression acceptance remains BLOCKED pending review/remediation of the retained
 intermittent browser activation-header failure. Final passing executions do not erase that FAIL.
 The release verifier also blocks the actual raw high/critical findings and unauthorized dispositions.
+
+## OKD4 application-only profile — 2026-11-03
+
+The [OKD evidence](../architecture/evidence/phase-10-okd4-readiness/README.md) covers new manifests,
+arbitrary-UID images, external-infrastructure configuration, migration ordering, storage audit
+and Studio consistency. See [deployment instructions](okd4-deployment.md). No organizational target
+was used; actual SCC admission/server dry-run, live external identity/DB, cross-node storage,
+capacity and operational ownership remain unexecuted prerequisites. Local security acceptance
+and release remain BLOCKED by raw application-image high findings. External infrastructure
+has separate security/compatibility responsibilities, not an automatic exemption. Production
+certification remains NOT RUN. Continue Phase 10 only.

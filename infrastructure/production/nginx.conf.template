@@ -1,23 +1,23 @@
-error_log /dev/null crit;
+error_log /dev/stderr crit;
 log_format foundry_status escape=json '{"event":"ingress_status","status":$status,"duration":$request_time}';
 resolver 127.0.0.11 valid=5s ipv6=off;
 limit_req_zone $binary_remote_addr zone=browser:10m rate=10r/s;
 limit_req_zone $binary_remote_addr zone=login:10m rate=2r/s;
 limit_conn_zone $binary_remote_addr zone=connections:10m;
 server {
-    listen 80 default_server;
+    listen 8080 default_server;
     server_name _;
     access_log /dev/stdout foundry_status;
     return 444;
 }
 server {
-    listen 80;
+    listen 8080;
     server_name ${STUDIO_HOST} ${API_HOST} ${IDENTITY_HOST};
     access_log /dev/stdout foundry_status;
     return 308 https://$host$request_uri;
 }
 server {
-    listen 443 ssl default_server;
+    listen 8443 ssl default_server;
     server_name _;
     access_log /dev/stdout foundry_status;
     ssl_certificate /etc/nginx/tls/fullchain.pem;
@@ -25,7 +25,7 @@ server {
     return 444;
 }
 server {
-    listen 443 ssl;
+    listen 8443 ssl;
     server_name ${STUDIO_HOST};
     ssl_certificate /etc/nginx/tls/fullchain.pem;
     ssl_certificate_key /etc/nginx/tls/key.pem;
@@ -56,7 +56,7 @@ server {
     }
 }
 server {
-    listen 443 ssl;
+    listen 8443 ssl;
     server_name ${API_HOST};
     ssl_certificate /etc/nginx/tls/fullchain.pem;
     ssl_certificate_key /etc/nginx/tls/key.pem;
@@ -84,7 +84,7 @@ server {
     }
 }
 server {
-    listen 443 ssl;
+    listen 8443 ssl;
     server_name ${IDENTITY_HOST};
     ssl_certificate /etc/nginx/tls/fullchain.pem;
     ssl_certificate_key /etc/nginx/tls/key.pem;

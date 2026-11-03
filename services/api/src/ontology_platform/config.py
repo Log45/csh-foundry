@@ -2,7 +2,7 @@ import os
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
-from urllib.parse import urlsplit
+from urllib.parse import parse_qs, urlsplit
 from uuid import UUID
 
 from pydantic import Field, SecretStr, model_validator
@@ -16,9 +16,11 @@ class Settings(BaseSettings):
         env_prefix="FOUNDRY_", env_file=".env", extra="ignore", env_ignore_empty=True
     )
     database_url: SecretStr
+    database_tls_required: bool = False
     database_schema: str = Field(default="public", pattern=r"^[a-z][a-z0-9_]{0,62}$")
     auth_mode: Literal["disabled", "local", "test", "oidc"] = "disabled"
     oidc_providers: tuple[Provider, ...] = ()
+    oidc_backchannel_port: int | None = Field(default=None, ge=1024, le=65535)
     oidc_ca_bundle: Path | None = None
     test_issuer: str | None = None
     test_subject: str | None = None
@@ -88,6 +90,10 @@ class Settings(BaseSettings):
             database = urlsplit(self.database_url.get_secret_value())
             if not database.username or not database.password or not database.hostname:
                 raise ValueError("Production requires explicit database credentials")
+        if self.database_tls_required:
+            query = parse_qs(urlsplit(self.database_url.get_secret_value()).query)
+            if query.get("sslmode") != ["verify-full"] or not query.get("sslrootcert"):
+                raise ValueError("External database requires verify-full and an explicit CA")
         if self.auth_mode == "oidc":
             if self.trusted_local_identity or not self.oidc_providers:
                 raise ValueError("OIDC mode requires trusted providers and forbids local identity")

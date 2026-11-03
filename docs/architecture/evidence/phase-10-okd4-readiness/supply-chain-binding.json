@@ -1,0 +1,79 @@
+{
+  "api": {
+    "image_id": "sha256:293585428a908cf37a46b219acef8c11a33ab1498dc82013e83e1318636b476d",
+    "scan_manifest_digest": "sha256:959e662edcfeae73ab69b99b65a8bd0b8e6842aa1f0ce60b2b1cc950c21c6fbe",
+    "config_digest": "sha256:f40fb90f8eed054b33a6c370eacd775ee8546db013723746e4f90353f191d121",
+    "counts": {
+      "High": 56,
+      "Medium": 72,
+      "Negligible": 46,
+      "Low": 13
+    },
+    "scan": {
+      "evidence": "artifacts/phase10-okd4/scan-final/image-0.vulnerabilities.json",
+      "sha256": "51661200abc639cadcb2c01e34e90373c79fcf5509a46f385bbf2b75c031830d"
+    },
+    "sbom": {
+      "evidence": "artifacts/phase10-okd4/scan-final/image-0.sbom.json",
+      "sha256": "b066752afc5d4e056d36ca4d59b12a8a944091c6fb95195a045a3b118ed779b2"
+    },
+    "sbom_manifest_digest": "sha256:959e662edcfeae73ab69b99b65a8bd0b8e6842aa1f0ce60b2b1cc950c21c6fbe"
+  },
+  "studio": {
+    "image_id": "sha256:47a5c81e4ede7704a1483455ae20165adfa0a61b53690fcab25f9ecc786767b6",
+    "scan_manifest_digest": "sha256:fabc9e6230feab9ef92c04c3f05e9ceef4f5c0be78905a752242f97f5e032209",
+    "config_digest": "sha256:de6594ea8f5d5749843dafd7f2d9ac9b836a6bebdc03c1b5751f21899360029a",
+    "counts": {
+      "High": 55,
+      "Negligible": 45,
+      "Medium": 61,
+      "Low": 11
+    },
+    "scan": {
+      "evidence": "artifacts/phase10-okd4/scan-final/image-1.vulnerabilities.json",
+      "sha256": "bbb36cb483c3c47a9a33ed5226e3590b16a3a7d80cd107276bdf2d4b68e1e555"
+    },
+    "sbom": {
+      "evidence": "artifacts/phase10-okd4/scan-final/image-1.sbom.json",
+      "sha256": "4c57ec3aeafdf6d64c35fe9dcacc6acc3be2c3b04fcd56a1fe5d98d5b6ff4934"
+    },
+    "sbom_manifest_digest": "sha256:fabc9e6230feab9ef92c04c3f05e9ceef4f5c0be78905a752242f97f5e032209"
+  },
+  "semantic": {
+    "image_id": "sha256:738213e21782b05e64199f9f13c8e505f512d66c176657daf2593037f46dfe31",
+    "scan_manifest_digest": "sha256:6afe1978de66a7353512d0d01f01edd2730aecbf49773ced46da4f0b2c1324a2",
+    "config_digest": "sha256:a131f595ef4b28ecdbc22ca8d3974d7d73dd527e3eca428c6570f0fb7228f649",
+    "counts": {
+      "High": 56,
+      "Medium": 72,
+      "Negligible": 46,
+      "Low": 13
+    },
+    "scan": {
+      "evidence": "artifacts/phase10-okd4/scan-final/image-2.vulnerabilities.json",
+      "sha256": "7a5fd445bee59fec90f03491132ac37e3ce872e149224e2d7654fc21c38aba4a"
+    },
+    "sbom": {
+      "evidence": "artifacts/phase10-okd4/scan-final/image-2.sbom.json",
+      "sha256": "ec9c9c413004a2d0d2bceb1aab04c144ae853625c7074bd1d6941e95ec4e9eff"
+    },
+    "sbom_manifest_digest": "sha256:6afe1978de66a7353512d0d01f01edd2730aecbf49773ced46da4f0b2c1324a2"
+  },
+  "ingress": {
+    "image_id": "sha256:a1097524d49e8627972b0f0433c79b1f89389e1b6628289dea186715ae02b556",
+    "scan_manifest_digest": "sha256:1aa514fe8e118977056ebd309184b6a5dbceca1edb0a6238470c0e4c5807c2d8",
+    "config_digest": "sha256:5a319a0bfb9a90208af89569fffb4b7db1e1ec9e95263760eef2ab44b562d8bf",
+    "counts": {
+      "Medium": 3
+    },
+    "scan": {
+      "evidence": "artifacts/phase10-okd4/scan-ingress-final/image-0.vulnerabilities.json",
+      "sha256": "59ddc78ace7c321348039604f706b22dd276846689573248ef354d0c919dfcf0"
+    },
+    "sbom": {
+      "evidence": "artifacts/phase10-okd4/scan-ingress-final/image-0.sbom.json",
+      "sha256": "c14e48dc2be57c4bf93252f0adabb9f2ad03fe3c7beeeb64f0ce10262e11ce7c"
+    },
+    "sbom_manifest_digest": "sha256:1aa514fe8e118977056ebd309184b6a5dbceca1edb0a6238470c0e4c5807c2d8"
+  }
+}

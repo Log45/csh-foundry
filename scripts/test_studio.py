@@ -25,6 +25,7 @@ for port in (studio_port, api_port, 8443) + (
     (replica_port,) if os.environ.get("STUDIO_E2E_DURABLE") == "true" else ()
 ):
     with socket.socket() as probe:
+        probe.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         probe.bind(("127.0.0.1", port))
 log.mkdir(parents=True, exist_ok=True)
 env = os.environ | {

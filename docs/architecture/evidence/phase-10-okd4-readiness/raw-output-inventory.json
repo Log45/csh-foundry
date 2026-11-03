@@ -1,0 +1,122 @@
+[
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/browser-race-after.txt",
+    "sha256": "d653cd4942c8f4ba396522bce8753b71eaebe9b24962caa31b91f1ec9efc0d5a",
+    "bytes": 302
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/browser-race-reproduction.txt",
+    "sha256": "0f16aa8f7d63d2791d0ddceed3dc74f6cd6d3476a06d48b23278269771b418a1",
+    "bytes": 1218
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-frontend-format.txt",
+    "sha256": "860908890ed2b318a76d8d975c507e8bcaa6292e80a099f63f3fb24910b6e83f",
+    "bytes": 322
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-frontend.txt",
+    "sha256": "efcbe78ea251d5383a3aca988ad6f69563d2e4b386635596f4afe070686c8170",
+    "bytes": 272
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-migrations.txt",
+    "sha256": "43d345b67ace77ab8c4cbf575a3baddf66e8623cf7d1e0b78e602b1d641ecf50",
+    "bytes": 36
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-mypy.txt",
+    "sha256": "092e5eb1e45e241cfabcc8c61bcc544108ae075fc01d13940b2b24013bbd1e3a",
+    "bytes": 44
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-postgres-tls.txt",
+    "sha256": "85918ac504a83e9da96dd0b6ad3445b58f8da1f0cdf350fab1d331f3d8ff2060",
+    "bytes": 141
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-python.txt",
+    "sha256": "25b685909a30a042ab42e3a01707e5f452f554191fb34f380f2464febe3b4a50",
+    "bytes": 5117
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-typecheck.txt",
+    "sha256": "ae996df9a92118788970c0f4c7ea8034223d5545bbf4b305949c35c85ad3abcc",
+    "bytes": 51
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/final-latest-browser-concurrent-1.txt",
+    "sha256": "1be6c91d48086ccd333c0dd6ac56ace5d2e16b40296c9e8d861cf60ef62f2a3f",
+    "bytes": 6566
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/final-latest-browser-concurrent-2.txt",
+    "sha256": "3b75b4f455c830724c68c545c97ae829b1519873d2c720b970d88b78e5d6b237",
+    "bytes": 825
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/focused-latest.txt",
+    "sha256": "7ed849ee0983fea37afc381b9f858d11d68ee7074d6799a90499a68ea49deaa3",
+    "bytes": 179
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/format-final.txt",
+    "sha256": "d8cc52b50ca13fedc6693fcd96fb5f6d82b81aeec14f6c97b4f905d167fdbd96",
+    "bytes": 28
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/ingress-final.txt",
+    "sha256": "d6cc9d9dfb1982bed9058d43d697ea3b70eec56eb753e9a0c4df064ba09bc842",
+    "bytes": 1355
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/ingress-log-redaction-final.txt",
+    "sha256": "d96423b7403ee43636da2a6ed080b0edad24a005b0f9e20b00fbed629b948332",
+    "bytes": 399
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/keycloak.txt",
+    "sha256": "2b149b61873879a40e034910fe09fd19c5954b46c53c200636bf5b13f3c01d25",
+    "bytes": 377
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/kubeconform.txt",
+    "sha256": "917d37ffb4716dab42455f027c248faebe7d2d091e3a8654e9620dff912a7e78",
+    "bytes": 86
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/lint-final.txt",
+    "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "bytes": 19
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/migration-nonroot.txt",
+    "sha256": "43d345b67ace77ab8c4cbf575a3baddf66e8623cf7d1e0b78e602b1d641ecf50",
+    "bytes": 36
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/non-root-selected.txt",
+    "sha256": "5c7975499d5f38c5563203c143b2b92c0a023375c22ee03d380aa658a5d70022",
+    "bytes": 60
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/postgres-tls.txt",
+    "sha256": "85918ac504a83e9da96dd0b6ad3445b58f8da1f0cdf350fab1d331f3d8ff2060",
+    "bytes": 141
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/protege.txt",
+    "sha256": "62e219b1fe12f8e58da378cde0a3a7a3b2edb7a8991ee328c2bc82e331bf6920",
+    "bytes": 912
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/release-candidate.txt",
+    "sha256": "0f18a7b70c7eb9ddbc4715f3c77f416d46fd88a397e0c67e10d4e014da238e83",
+    "bytes": 3125
+  },
+  {
+    "file": "docs/architecture/evidence/phase-10-okd4-readiness/raw/replicas-selected.txt",
+    "sha256": "06c6e423b47c20bfcd708155f01994482bc20f5308e4ed5a9aa1ec4ce7f650c0",
+    "bytes": 920
+  }
+]

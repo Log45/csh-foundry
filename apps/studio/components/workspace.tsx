@@ -57,12 +57,15 @@ export function Workspace() {
   }
   const tenantRef = useRef(session?.tenant);
   tenantRef.current = session?.tenant;
+  const ontologyRead = useRef(0);
   async function loadOntologies() {
+    const read = ++ontologyRead.current;
     const selectedTenant = session?.tenant;
     const list = await api<Ontology[]>(
       `/api/v1/ontologies?limit=100&offset=${offset}`,
     );
-    if (tenantRef.current !== selectedTenant) return;
+    if (tenantRef.current !== selectedTenant || read !== ontologyRead.current)
+      return;
     setOntologies(list);
     setId((current) =>
       list.some((o) => o.id === current) ? current : (list[0]?.id ?? ""),
@@ -339,7 +342,7 @@ export function Workspace() {
                 id={id}
                 tenant={session.tenant}
                 can={can}
-                refresh={() => void task.run(loadOntologies)}
+                refresh={loadOntologies}
               />
             )}
             {tab !== "manager" && !active && (

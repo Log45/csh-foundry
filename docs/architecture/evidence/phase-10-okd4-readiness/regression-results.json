@@ -1,0 +1,48 @@
+{
+  "python": {
+    "result": "PASS",
+    "passed": 625,
+    "strict_xfail": 1,
+    "skipped": 0,
+    "command": "uv run pytest -ra --tb=short",
+    "environment": "Disposable PostgreSQL17.11 with verify-full TLS; pinned host Open Ontologies; Node25"
+  },
+  "frontend": {
+    "result": "PASS",
+    "passed": 33
+  },
+  "browser": {
+    "result": "PASS bounded concurrent executions",
+    "runs": 2,
+    "passed_per_run": 5,
+    "strict_assertions_and_timeouts": "Unchanged"
+  },
+  "ruff": "PASS",
+  "python_format": "PASS",
+  "strict_mypy": "PASS 98 source files",
+  "typecheck": "PASS",
+  "frontend_format": "PASS",
+  "production_build": "PASS host standalone build and final image build",
+  "migration_drift": "PASS 0017_capacity unchanged",
+  "focused_release_kubernetes_oidc": "PASS 91 focused tests; additional migration/ordering cases included in625 full passes",
+  "raw_pyshacl": "Expected strict XFAIL retained; normalized and pinned-engine checks pass",
+  "attempts": [
+    {
+      "result": "FAIL setup",
+      "python": "603passed1failed1xfail: public schema not initially migrated",
+      "browser": "NOT RUN refused occupied developer port3000"
+    },
+    {
+      "result": "PASS intermediate regression",
+      "python": "604passed1xfail; before final backchannel additions"
+    },
+    {
+      "result": "FAIL test fixture signature",
+      "python": "620passed1failed1xfail: verifier mock did not yet accept backchannel_port; fixed without changing security assertions"
+    },
+    {
+      "result": "PASS final regression",
+      "python": "625passed1xfail0skips"
+    }
+  ]
+}

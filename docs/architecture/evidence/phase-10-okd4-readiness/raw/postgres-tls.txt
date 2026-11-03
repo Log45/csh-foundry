@@ -1,0 +1,4 @@
+PASS rejected wrong-password
+PASS rejected invalid-ca
+PASS rejected unavailable
+PASS PostgreSQL verified TLS and bounded connection failures

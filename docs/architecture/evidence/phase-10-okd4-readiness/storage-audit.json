@@ -1,0 +1,11 @@
+{
+  "result": "PASS source audit",
+  "report": "docs/architecture/storage-audit.md",
+  "durable_backend": "PostgreSQL",
+  "temporary": "Semantic scratch, heartbeat, Next cache in /tmp",
+  "external_files": "Registered CSV/Parquet require shared read-only source claim; PostgreSQL connectors need none",
+  "s3_required": false,
+  "s3_implemented": false,
+  "s3_conditional_requirements": "NOT APPLICABLE",
+  "pod_lifecycle_validation": "NOT RUN Kubernetes; local worker replacement and DB-backed persistence covered separately"
+}

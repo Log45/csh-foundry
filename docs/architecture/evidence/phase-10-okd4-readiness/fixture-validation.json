@@ -1,0 +1,17 @@
+{
+  "policy": "fixtures/VALIDATION.md read and applicable checks executed; strict expected failure retained",
+  "checks": {
+    "Turtle parsing": "PASS pytest fixture suite",
+    "CSV identity and FK checks": "PASS pytest fixture suite",
+    "SHACL conformance": "PASS normalized pySHACL negatives and pinned Open Ontologies; raw mismatch strict XFAIL retained",
+    "OWL reasoning": "PASS pinned owl-rl-ext; base owl-rl CriticalMachine limitation NOT SUPPORTED as previously documented",
+    "PostgreSQL integration": "PASS real disposable17.11, TLS, migrations, constraints/recovery",
+    "FastAPI object queries": "PASS real DB regression and combined HTTPS workflow",
+    "Actions and reconciliation": "PASS transactions/conflicts/idempotency/audit/recovery",
+    "Polars ingestion": "PASS canonical63 objects/70 links and crash recovery",
+    "Authorization": "PASS cross-tenant/security/session/delegation/role denial checks",
+    "Protege import/export": "PASS supported API subset and actual OWLAPI4.5.29 RDF/XML roundtrip",
+    "Manual Protege/WebProtege UI": "NOT RUN no interactive authoring environment exercised",
+    "Independent Lean proof verification": "NOT RUN unchanged external tool limitation"
+  }
+}

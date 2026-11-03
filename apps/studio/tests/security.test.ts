@@ -225,3 +225,24 @@ it("rejects cross-origin discovery and unconfigured authentication", async () =>
   vi.stubEnv("STUDIO_OIDC_ISSUER", "");
   expect(() => config()).toThrow();
 });
+
+it("uses an explicit backchannel socket without changing public issuer or browser authorization", async () => {
+  vi.stubEnv("STUDIO_OIDC_BACKCHANNEL_PORT", "8443");
+  const fetch = vi.fn().mockResolvedValue(
+    Response.json({
+      issuer: config().issuer,
+      code_challenge_methods_supported: ["S256"],
+      authorization_endpoint: config().issuer + "/authorize",
+      token_endpoint: config().issuer + "/token",
+      jwks_uri: config().issuer + "/keys",
+    }),
+  );
+  vi.stubGlobal("fetch", fetch);
+  const result = await authorization(beginLogin());
+  expect(fetch.mock.calls[0][0]).toContain("https://identity.example:8443/");
+  expect(result.href).toContain("https://identity.example/realm/authorize");
+  vi.stubEnv("STUDIO_OIDC_BACKCHANNEL_PORT", "443");
+  await expect(authorization(beginLogin())).rejects.toThrow(
+    "invalid_oidc_backchannel",
+  );
+});

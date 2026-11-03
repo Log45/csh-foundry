@@ -41,7 +41,11 @@ def worker_context(
         raise ApplicationError(
             "worker_identity_required", "Verified service credentials and tenant required", 401
         )
-    verifier = OIDCVerifier(settings.oidc_providers, ca_bundle=settings.oidc_ca_bundle)
+    verifier = OIDCVerifier(
+        settings.oidc_providers,
+        ca_bundle=settings.oidc_ca_bundle,
+        backchannel_port=settings.oidc_backchannel_port,
+    )
     try:
         if settings.worker_client_secret is not None:
             provider = next(

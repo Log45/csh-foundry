@@ -883,3 +883,38 @@ rerun. Final security/release/recovery focused suite: **55 PASS**. No assertions
 Aggregate regression acceptance remains BLOCKED pending review/remediation of the retained
 intermittent browser activation-header failure. Final passing executions do not erase that FAIL.
 The release verifier also blocks the actual raw high/critical findings and unauthorized dispositions.
+
+## Phase 10 OKD4 deployment readiness — 2026-11-03
+
+Added an application-only portable Kubernetes base, OKD Route overlay, self-hosted fsGroup profile,
+optional existing shared source claim, external database/identity configuration, restricted
+security contexts, probes, resource budgets and explicit migration-before-rollout tooling.
+API, supervised ingestion/outbox, semantic, Studio and migration workloads use the existing
+application/services and PostgreSQL transactions; no additional operational datastore or S3 backend.
+The optional Compose nginx now derives from a maintained unprivileged pinned image, serves
+8080/8443 and renders configuration in `/tmp`; supported Alpine minimization/updates remove the
+supplier image’s fixable findings. A Compose-only OIDC backchannel changes the connection port
+without changing issuer identity, discovery-origin checks, signatures, audience or TLS verification.
+
+The activation investigation reproduced a dropped refresh under the workspace busy guard. Manager
+now awaits the refresh directly; request generations reject stale completions. A deterministic
+before/after test and two bounded concurrent five-test browser runs support the correction.
+Historical failure evidence remains; sole causation of that earlier occurrence is not proven.
+Studio also has process-local liveness and bounded API-backed readiness.
+
+Regression: **625 Python passes, one strict expected failure, zero skips; 33 frontend passes**.
+Ruff, Python/frontend formatting, strict mypy, typecheck, standalone production build and migration
+drift pass. Eight image/unknown-UID/unrelated-GID runs pass with read-only roots/no capabilities;
+the migration command also passes arbitrary-UID execution over verified PostgreSQL TLS.
+Kustomize renders all profiles; 34 standard resources pass strict schema validation, one Route
+has source/local-contract checks but full schema/server validation NOT RUN. Actual Kubernetes/OKD
+admission, cross-node volumes and organizational PostgreSQL/Keycloak certification are NOT RUN.
+No new migration; head remains `0017_capacity`. No deployment, image publication or risk exception.
+
+The [complete evidence and changed-file inventory](../architecture/evidence/phase-10-okd4-readiness/README.md)
+separately report combined selected-image recovery/rollback, replicas, validation attempts, security
+and readiness assessments. The selected OKD application subtotal remains **167 high/zero critical**;
+optional Compose nginx’s fresh scan is **zero high/critical**. Existing PostgreSQL/Keycloak critical
+findings and independent approval requirements remain unchanged; external ownership is not a waiver.
+Local acceptance/release remain BLOCKED and production certification NOT RUN. Complete remaining
+Phase 10 supplier/approval/target/operational checks; do not begin the preserved future roadmap.

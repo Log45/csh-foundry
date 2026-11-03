@@ -129,7 +129,7 @@ class Acceptance:
                 serialization.NoEncryption(),
             )
         )
-        (self.root / "tls/key.pem").chmod(0o600)
+        (self.root / "tls/key.pem").chmod(0o644)  # Disposable test key only.
         realm = realm_configuration(self.issuer, self.origin)
         self.login_password = secrets.token_urlsafe(32)
         realm["users"] = [
@@ -176,7 +176,7 @@ class Acceptance:
     networks: !override [data, acceptance]
     ports: ["127.0.0.1::5432"]
   ingress:
-    ports: !override ["127.0.0.1::443", "127.0.0.1::80"]
+    ports: !override ["127.0.0.1::8443", "127.0.0.1::8080"]
     networks:
       front:
         ipv4_address: 172.29.100.2
@@ -408,7 +408,7 @@ networks:
         from urllib.parse import urlencode
 
         if not hasattr(self, "ingress_port"):
-            self.ingress_port = self.dc("port", "ingress", "443").strip().rsplit(":", 1)[1]
+            self.ingress_port = self.dc("port", "ingress", "8443").strip().rsplit(":", 1)[1]
         port = self.ingress_port
         headers = kwargs.pop("headers", {})
         diagnostic = getattr(self, "diagnostic_requests", False)
@@ -907,7 +907,7 @@ print(json.dumps(values))
                 str(self.root / "typescript-sdk/tsconfig.json"),
             ]
         )
-        port = self.dc("port", "ingress", "443").strip().rsplit(":", 1)[1]
+        port = self.dc("port", "ingress", "8443").strip().rsplit(":", 1)[1]
         sdk_env = self.env | {
             "SDK_URL": f"https://api.accept.test:{port}",
             "SDK_TOKEN": token,
@@ -1272,8 +1272,8 @@ for(const [settings,status] of cases){
     def ingress_negatives(self) -> None:
         from urllib.parse import parse_qs
 
-        port = self.dc("port", "ingress", "443").strip().rsplit(":", 1)[1]
-        plain = self.dc("port", "ingress", "80").strip().rsplit(":", 1)[1]
+        port = self.dc("port", "ingress", "8443").strip().rsplit(":", 1)[1]
+        plain = self.dc("port", "ingress", "8080").strip().rsplit(":", 1)[1]
         value = self.run(
             [
                 "curl",

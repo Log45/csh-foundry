@@ -1,0 +1,46 @@
+{
+  "combined_attempts": [
+    {
+      "directory": "combined",
+      "result": "FAIL",
+      "reason": "Compose OIDC backchannel still used443 after unprivileged proxy moved8443; corrected without altering issuer/TLS contracts"
+    },
+    {
+      "directory": "combined-final",
+      "result": "FAIL",
+      "reason": "Local shell selected Node16; independently installed TS SDK requires Node>=22; preflight added"
+    },
+    {
+      "directory": "exact-candidate",
+      "result": "NOT RUN downstream checks",
+      "reason": "Agent interrupted the duplicate old-Node attempt before SDK stage; owned resources cleaned"
+    },
+    {
+      "directory": "release-candidate",
+      "result": "PASS",
+      "checks": 39,
+      "distinct_checks": 36
+    }
+  ],
+  "non_root_initial": "Initial harness incorrectly required exit0 for intentional SIGTERM exits; corrected against Next.js source. Initial semantic Polars under AMD64 emulation timed out; actual semantic engine tested separately. Initial nginx probe config lacked required temp paths; corrected. Failures retained.",
+  "baseline": "baseline.json",
+  "roadmap_update": "dfdda5f user commit preserved",
+  "replica_attempts": [
+    {
+      "directory": "replicas",
+      "result": "FAIL harness reuse",
+      "reason": "Missing worker_token helper on subclass; worker job actually completed, but result field was incorrectly COMPLETED instead of PASS. Original record retained."
+    },
+    {
+      "directory": "replicas-confirmed",
+      "result": "NOT RUN downstream",
+      "reason": "Interrupted to correct the result-field label before continuing; owned resources cleaned."
+    },
+    {
+      "directory": "replicas-selected",
+      "result": "PASS",
+      "checks": 9
+    }
+  ],
+  "late_nginx_logging": "Critical-only stderr retains prior confidentiality threshold; deterministic refused-upstream callback test checks both stdout/stderr. Initial DNS-only test timed out; corrected test uses a refused loopback port instead of DNS."
+}

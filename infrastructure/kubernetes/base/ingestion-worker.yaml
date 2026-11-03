@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingestion-worker
+  labels:
+    app.kubernetes.io/part-of: foundry
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ingestion-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/part-of: foundry
+        app.kubernetes.io/name: ingestion-worker
+    spec:
+      serviceAccountName: foundry
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      terminationGracePeriodSeconds: 45
+      containers:
+      - name: ingestion-worker
+        image: example.invalid/foundry/api@sha256:0000000000000000000000000000000000000000000000000000000000000000
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+        envFrom:
+        - configMapRef:
+            name: foundry-config
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: '1'
+            memory: 768Mi
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: credentials
+          mountPath: /run/secrets
+          readOnly: true
+        - name: trust
+          mountPath: /run/trust
+          readOnly: true
+        command:
+        - python
+        - -m
+        - ontology_platform.jobs.supervisor
+        - --kind
+        - ingestion
+        - --ontology
+        - manufacturing
+        - --deadline
+        - '120'
+        env:
+        - name: FOUNDRY_PROCESS_ROLE
+          value: worker
+        - name: FOUNDRY_INGESTION_CATALOG_JSON
+          valueFrom:
+            secretKeyRef:
+              name: foundry-catalog
+              key: catalog.json
+        startupProbe:
+          exec: &id001
+            command:
+            - python
+            - -c
+            - import time,pathlib; assert time.time()-pathlib.Path('/tmp/foundry-worker-heartbeat').stat().st_mtime<240
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 12
+        livenessProbe: &id002
+          exec: *id001
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe: *id002
+      volumes:
+      - name: tmp
+        emptyDir:
+          sizeLimit: 128Mi
+      - name: credentials
+        secret:
+          secretName: foundry-worker
+          defaultMode: 288
+      - name: trust
+        secret:
+          secretName: foundry-trust
+          defaultMode: 292

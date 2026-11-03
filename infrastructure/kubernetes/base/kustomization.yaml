@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- service-account.yaml
+- configmap.yaml
+- network-policies.yaml
+- api.yaml
+- api-service.yaml
+- studio.yaml
+- studio-service.yaml
+- ingestion-worker.yaml
+- semantic-worker.yaml
+- outbox-worker.yaml

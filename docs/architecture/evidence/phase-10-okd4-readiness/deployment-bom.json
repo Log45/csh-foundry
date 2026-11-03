@@ -1,0 +1,42 @@
+{
+  "profile": "okd",
+  "application_owned_images": {
+    "api": "sha256:293585428a908cf37a46b219acef8c11a33ab1498dc82013e83e1318636b476d",
+    "studio": "sha256:47a5c81e4ede7704a1483455ae20165adfa0a61b53690fcab25f9ecc786767b6",
+    "semantic": "sha256:738213e21782b05e64199f9f13c8e505f512d66c176657daf2593037f46dfe31"
+  },
+  "optional_infrastructure_images": {
+    "compose_ingress": "sha256:a1097524d49e8627972b0f0433c79b1f89389e1b6628289dea186715ae02b556"
+  },
+  "excluded_from_okd": [
+    "postgres image",
+    "keycloak image",
+    "ingress image",
+    "S3/MinIO"
+  ],
+  "external_services": {
+    "postgres": {
+      "owner": "Organization database administrator (unassigned)",
+      "validated_reference_version": "17.11",
+      "target_version": "NOT PROVIDED",
+      "maintenance_responsibility": "Organization",
+      "tls": "verify-full with supplied CA and hostname",
+      "authentication": "Separate runtime DML and migration owner roles",
+      "compatibility": "PASS disposable TLS fixture; organization NOT RUN",
+      "operational_assurances": "Backup/PITR/RPO/RTO/patching/security approval required"
+    },
+    "keycloak": {
+      "owner": "Organization identity administrator (unassigned)",
+      "validated_reference_version": "26.8.1",
+      "target_version": "NOT PROVIDED",
+      "maintenance_responsibility": "Organization",
+      "tls": "HTTPS 443 with CA/hostname verification",
+      "authentication": "PKCE public Studio and confidential worker; exact RFC9068 tokens",
+      "compatibility": "PASS disposable broker contract; organization NOT RUN",
+      "operational_assurances": "Key lifecycle/subject binding/patching/upstream SSO/security approval required"
+    }
+  },
+  "registry_publication": "NOT RUN; no authorization",
+  "scc_admission": "NOT RUN; no cluster context",
+  "production_approval": "NOT PROVIDED"
+}

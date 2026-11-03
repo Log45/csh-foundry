@@ -1,0 +1,29 @@
+{
+  "result": "BLOCKED",
+  "exit_code": 1,
+  "output": "BLOCKED: Acceptance gate is not PASS: container_security\n",
+  "command": [
+    "uv",
+    "run",
+    "python",
+    "scripts/verify_release_evidence.py",
+    "/Users/log/Documents/code/csh-foundry/docs/architecture/evidence/phase-10-okd4-readiness/release-gate-input.json",
+    "--revision",
+    "dfdda5f3c0307a3e694b52cb332445c797221373",
+    "--image",
+    "api=sha256:293585428a908cf37a46b219acef8c11a33ab1498dc82013e83e1318636b476d",
+    "--image",
+    "studio=sha256:47a5c81e4ede7704a1483455ae20165adfa0a61b53690fcab25f9ecc786767b6",
+    "--image",
+    "semantic=sha256:738213e21782b05e64199f9f13c8e505f512d66c176657daf2593037f46dfe31",
+    "--image",
+    "ingress=sha256:a1097524d49e8627972b0f0433c79b1f89389e1b6628289dea186715ae02b556",
+    "--image",
+    "postgres=sha256:246ee6bd8302cb470031cc521bc72aed563bfed97062d49a73abaf5e97183ccd",
+    "--image",
+    "keycloak=sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332"
+  ],
+  "okd_profile": "BLOCKED: raw app high findings and missing target service/configuration/security assurances; external compatibility not certified",
+  "exceptions": "NONE",
+  "focused_fail_closed_tests": "test_release_evidence.py executed in625 full passes; high findings, missing services/profile/config/secret identities rejected"
+}

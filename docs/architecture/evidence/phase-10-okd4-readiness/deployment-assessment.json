@@ -1,0 +1,46 @@
+{
+  "implementation": "PASS",
+  "local_acceptance": "BLOCKED",
+  "production_like_acceptance": "BLOCKED",
+  "production_certification": "NOT RUN",
+  "combined": {
+    "result": "PASS",
+    "assertions": 39,
+    "distinct_checks": 36,
+    "evidence": "release-candidate/deployment.json"
+  },
+  "replicas": {
+    "result": "PASS",
+    "checks": 9,
+    "evidence": "replicas-selected/deployment.json"
+  },
+  "actual_kubernetes_okd": "NOT RUN no cluster context supplied",
+  "blockers": [
+    {
+      "type": "security remediation dependency",
+      "detail": "167 raw application high findings; no exception approved. Prior PostgreSQL/Keycloak critical findings retain their dispositions; external service owners must provide security assurances."
+    },
+    {
+      "type": "independent approval dependency",
+      "detail": "Risk/release/target authorization, image publication and production approval absent; no trust root installed."
+    },
+    {
+      "type": "external infrastructure prerequisite",
+      "detail": "Actual OKD version, namespace/SCC ranges, registry, external DB/Keycloak endpoints/CA/client settings, source claim, CNI/Route TLS and named operational ownership not supplied."
+    },
+    {
+      "type": "deployment compatibility issue",
+      "detail": "Pinned semantic Linux ARM64 binary not available; use AMD64 semantic nodes. Internal HTTP hops require organizational policy approval or separately reviewed service TLS."
+    },
+    {
+      "type": "unexecuted validation requirement",
+      "detail": "Actual server schema/SCC admission, pod rescheduling/cross-node source claim, network enforcement, live organizational SSO, off-host DR, target capacity and production monitoring/handoff not executed."
+    }
+  ],
+  "application_defect": "Reproduced Studio refresh race corrected; historical occurrence retained without claiming sole causation. No failing final application regression.",
+  "migrations": {
+    "new": [],
+    "head": "0017_capacity"
+  },
+  "next_phase": "Continue remaining Phase10 security/approval/OKD operational validation only; Phase11 not authorized"
+}

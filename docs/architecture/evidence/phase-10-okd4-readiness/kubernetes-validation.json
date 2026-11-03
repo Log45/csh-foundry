@@ -1,0 +1,22 @@
+{
+  "kustomize": "PASS base16 / OKD18 / self-hosted16 / migration1 resources",
+  "command": "kubectl kustomize infrastructure/kubernetes/{base,overlays/okd,overlays/self-hosted,migration}",
+  "contract_tests": "See confirmed regression and test_kubernetes.py including negative privilege, selectors, TLS and migration ordering tests",
+  "schema": {
+    "tool": "kubeconform v0.7.0",
+    "command": "artifacts/phase10-okd4/bin/kubeconform -strict -summary -skip Route artifacts/phase10-okd4/{okd-final,self-hosted-final,migration-final}.yaml",
+    "valid": 34,
+    "invalid": 0,
+    "errors": 0,
+    "skipped_route": 1,
+    "route_source": "https://github.com/openshift/api/blob/master/route/v1/types.go",
+    "route_fields": "PASS source inspection/local contract",
+    "route_full_schema": "NOT RUN"
+  },
+  "server_dry_run": "NOT RUN no configured cluster context",
+  "okd_scc": "NOT RUN no suitable authorized cluster",
+  "pod_restart_multi_node_network_policy": "NOT RUN actual cluster",
+  "readiness_probes": "API Host=api; local liveness independent; Studio readiness bounded API call",
+  "migration_head": "0017_capacity",
+  "new_migrations": []
+}

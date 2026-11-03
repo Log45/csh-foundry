@@ -237,7 +237,7 @@ export function Manager({
   id: string;
   tenant: string;
   can: (p: string) => boolean;
-  refresh: () => void;
+  refresh: () => Promise<void>;
 }) {
   const [versions, setVersions] = useState<Version[]>([]),
     [version, selectVersion] = useState(""),
@@ -307,7 +307,7 @@ export function Manager({
     setResult(output);
     if (operation !== "validate") {
       await load();
-      refresh();
+      await refresh();
     }
   }
   return (

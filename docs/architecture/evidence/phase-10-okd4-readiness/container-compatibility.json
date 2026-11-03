@@ -1,0 +1,29 @@
+{
+  "result": "PASS local selected images",
+  "unknown_uid_gid_pairs": [
+    [
+      1001230001,
+      1001230002
+    ],
+    [
+      1004560001,
+      1004560002
+    ]
+  ],
+  "groups": "Nonzero unrelated GIDs; no group0 required in eight image runs; Compose supplemental10001 for private mounted files",
+  "image_runs": 8,
+  "roles": [
+    "api (shared by ingestion/outbox and migration)",
+    "studio",
+    "semantic",
+    "optional Compose ingress"
+  ],
+  "migration": "PASS additional arbitrary-UID verified-TLS migration/drift invocation",
+  "workers": "PASS two ingestion processes and crash/lease recovery in full deployment",
+  "two_api_replicas": "PASS concurrent writes/actions/branch merges/admission and audit rollback",
+  "studio_shutdown": "Expected143 after graceful SIGTERM per installed Next source; no SIGKILL",
+  "semantic_platform": "linux/amd64 emulated on ARM64 Docker Desktop; pinned Linux ARM64 installer NOT SUPPORTED",
+  "actual_okd_scc": "NOT RUN",
+  "image_source_binding": "application-source-binding.json",
+  "late_config_check": "Final Compose critical-only stderr logging separately passed deterministic failed-callback/redaction test; combined application run preceded this log-level tightening"
+}

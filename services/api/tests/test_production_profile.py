@@ -66,7 +66,7 @@ def test_production_profile_resolves_runtime_mounts_and_security_dependencies():
             v["target"] == "/run/secrets/FOUNDRY_INGESTION_CATALOG_JSON"
             for v in services[name]["volumes"]
         )
-    assert {p["target"] for p in services["ingress"]["ports"]} == {80, 443}
+    assert {p["target"] for p in services["ingress"]["ports"]} == {8080, 8443}
     privileged = {"postgres_password", "keycloak_password", "keycloak_admin_password"}
     for name in ("api", "studio", "ingestion-worker", "semantic-worker"):
         assert not privileged.intersection(s["source"] for s in services[name]["secrets"])

@@ -1,0 +1,12 @@
+{
+  "result": "PASS disposable 26.8.1 contract",
+  "commands": [
+    "uv run python scripts/test_keycloak.py",
+    "scripts/accept_okd4_local.py exact-candidate run"
+  ],
+  "code_pkce_signature_audience_issuer_nonce_replay_id_token_rejection": "PASS standalone disposable contract; see keycloak.txt",
+  "direct_organization_keycloak": "SUPPORTED CONTRACT; actual realm NOT RUN",
+  "dedicated_broker_required": "Only if organization cannot meet documented contract; not deployed by default",
+  "live_upstream_federation": "NOT RUN external credentials/organization unavailable",
+  "authorization": "Issuer/sub platform bindings, PostgreSQL tenant membership and delegation preserved"
+}

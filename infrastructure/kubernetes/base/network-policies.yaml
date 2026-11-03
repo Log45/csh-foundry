@@ -1,0 +1,237 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: foundry-default-deny
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: foundry
+  policyTypes:
+  - Ingress
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: api
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: api
+  policyTypes:
+  - Ingress
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: openshift-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  - to:
+    - ipBlock:
+        cidr: 192.0.2.10/32
+    ports:
+    - protocol: TCP
+      port: 5432
+  - to:
+    - ipBlock:
+        cidr: 192.0.2.20/32
+    ports:
+    - protocol: TCP
+      port: 443
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: studio
+    ports:
+    - protocol: TCP
+      port: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: studio
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: studio
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: openshift-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: api
+    ports:
+    - protocol: TCP
+      port: 8000
+  - to:
+    - ipBlock:
+        cidr: 192.0.2.20/32
+    ports:
+    - protocol: TCP
+      port: 443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingestion-worker
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: ingestion-worker
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: openshift-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  - to:
+    - ipBlock:
+        cidr: 192.0.2.10/32
+    ports:
+    - protocol: TCP
+      port: 5432
+  - to:
+    - ipBlock:
+        cidr: 192.0.2.20/32
+    ports:
+    - protocol: TCP
+      port: 443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: semantic-worker
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: semantic-worker
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: openshift-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  - to:
+    - ipBlock:
+        cidr: 192.0.2.10/32
+    ports:
+    - protocol: TCP
+      port: 5432
+  - to:
+    - ipBlock:
+        cidr: 192.0.2.20/32
+    ports:
+    - protocol: TCP
+      port: 443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: outbox-worker
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: outbox-worker
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: openshift-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  - to:
+    - ipBlock:
+        cidr: 192.0.2.10/32
+    ports:
+    - protocol: TCP
+      port: 5432
+  - to:
+    - ipBlock:
+        cidr: 192.0.2.20/32
+    ports:
+    - protocol: TCP
+      port: 443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: migration
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: migration
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: openshift-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  - to:
+    - ipBlock:
+        cidr: 192.0.2.10/32
+    ports:
+    - protocol: TCP
+      port: 5432
+  - to:
+    - ipBlock:
+        cidr: 192.0.2.20/32
+    ports:
+    - protocol: TCP
+      port: 443

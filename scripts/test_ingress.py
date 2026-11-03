@@ -20,6 +20,7 @@ def main() -> None:
     container = None
     with tempfile.TemporaryDirectory(prefix="foundry-ingress-") as directory:
         root = Path(directory)
+        root.chmod(0o755)
         key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
         name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "Isolated ingress test")])
         now = datetime.now(UTC)
@@ -46,7 +47,7 @@ def main() -> None:
                 serialization.NoEncryption(),
             )
         )
-        (root / "key.pem").chmod(0o600)
+        (root / "key.pem").chmod(0o644)  # Disposable test key, directory removed on exit.
         template = Path("infrastructure/production/nginx.conf.template").read_text()
         for variable, value in (
             ("STUDIO_HOST", "studio.example.org"),
@@ -54,6 +55,8 @@ def main() -> None:
             ("IDENTITY_HOST", "identity.example.org"),
         ):
             template = template.replace("${" + variable + "}", value)
+        # The callback log test needs a deterministic refused upstream, not a DNS timeout.
+        template = template.replace("http://studio:3000", "http://127.0.0.1:3000")
         (root / "default.conf").write_text(template)
         try:
             container = subprocess.check_output(
@@ -63,26 +66,26 @@ def main() -> None:
                     "--rm",
                     "-d",
                     "-p",
-                    "127.0.0.1::443",
+                    "127.0.0.1::8443",
                     "-p",
-                    "127.0.0.1::80",
+                    "127.0.0.1::8080",
                     "-v",
                     f"{root}:/etc/nginx/tls:ro",
                     "-v",
-                    f"{root / 'default.conf'}:/etc/nginx/conf.d/default.conf:ro",
+                    f"{root / 'default.conf'}:/etc/nginx/templates/default.conf.template:ro",
                     os.environ.get(
-                        "FOUNDRY_INGRESS_TEST_IMAGE", "csh-foundry-ingress:phase10-closure"
+                        "FOUNDRY_INGRESS_TEST_IMAGE", "csh-foundry-ingress:phase10-okd4"
                     ),
                 ],
                 text=True,
             ).strip()
             subprocess.run(["docker", "exec", container, "nginx", "-t"], check=True)
             binding = subprocess.check_output(
-                ["docker", "port", container, "443"], text=True
+                ["docker", "port", container, "8443"], text=True
             ).strip()
             base = "https://127.0.0.1:" + binding.rsplit(":", 1)[1]
             plain_binding = subprocess.check_output(
-                ["docker", "port", container, "80"], text=True
+                ["docker", "port", container, "8080"], text=True
             ).strip()
             marker = "disposable-callback-log-sentinel"
             redirect = httpx.get(
@@ -128,6 +131,12 @@ def main() -> None:
                     ).status_code
                     == 404
                 )
+                failed_callback = client.get(
+                    base + "/auth/callback?code=" + marker,
+                    headers={"Host": "studio.example.org"},
+                    timeout=10,
+                )
+                assert failed_callback.status_code in (502, 504)
                 try:
                     client.get(base + "/?code=" + marker, headers={"Host": "attacker.example"})
                 except httpx.RemoteProtocolError:
@@ -140,7 +149,10 @@ def main() -> None:
                 pass
             else:
                 raise AssertionError("Untrusted certificate accepted")
-            logs = subprocess.check_output(["docker", "logs", container], text=True)
+            output = subprocess.run(
+                ["docker", "logs", container], capture_output=True, text=True, check=True
+            )
+            logs = output.stdout + output.stderr
             assert marker not in logs
             assert '"event":"ingress_status"' in logs
             print("PASS HTTP redirects and default-host logs omit callback/query values")

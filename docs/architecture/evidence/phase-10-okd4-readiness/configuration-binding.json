@@ -1,0 +1,21 @@
+{
+  "rendered_profiles": {
+    "okd": {
+      "private_path": "artifacts/phase10-okd4/okd-final.yaml",
+      "sha256": "c431414b27dbb1332c6eeeb9e71860931bfdc86ef6d719306b781ce63b09fe48"
+    },
+    "self-hosted": {
+      "private_path": "artifacts/phase10-okd4/self-hosted-final.yaml",
+      "sha256": "0e7cf557c3b26986dd6f326f8cfde54427c98b76c3d7602ac266a23a589a0740"
+    },
+    "migration": {
+      "private_path": "artifacts/phase10-okd4/migration-final.yaml",
+      "sha256": "7a947f9fe077d45d5076235fdfb13ca0f7344bac5bf43e7d2f83d6ee8abf9852"
+    }
+  },
+  "target_configmap_secret_uid_resource_versions": "NOT RUN target objects do not exist; identities required before release",
+  "secret_values": "Never included",
+  "source_revision": "dfdda5f3c0307a3e694b52cb332445c797221373",
+  "source_working_tree": "Uncommitted implementation; changed-files.json hashes bind actual files",
+  "actual_deployment": "NOT RUN; examples retain placeholders until authorized site configuration"
+}

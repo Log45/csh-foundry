@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 
 REQUIRED = frozenset(
@@ -41,12 +42,80 @@ def evidence_bytes(root: Path, record: dict) -> bytes:
     return raw
 
 
-def verify(manifest: Path, root: Path, revision: str, images: dict[str, str]) -> None:
+def verify(
+    manifest: Path,
+    root: Path,
+    revision: str,
+    images: dict[str, str],
+    *,
+    profile: str = "compose",
+    external_services: dict[str, str] | None = None,
+    deployment_sha256: str | None = None,
+) -> None:
     data = json.loads(manifest.read_text())
     if data.get("source_revision") != revision or data.get("images") != images:
         raise ValueError("Evidence source revision or image identities do not match release")
-    if set(images) != IMAGE_ROLES:
-        raise ValueError("All six selected image identities required")
+    roles = IMAGE_ROLES if profile == "compose" else frozenset({"api", "studio", "semantic"})
+    if profile not in {"compose", "okd", "self-hosted-kubernetes"}:
+        raise ValueError("Unknown deployment profile")
+    if data.get("deployment_profile", "compose") != profile:
+        raise ValueError("Deployment profile mismatch")
+    if set(images) != roles:
+        raise ValueError("All selected image identities required for deployment profile")
+    if profile != "compose":
+        if not external_services or set(external_services) != {"postgres", "keycloak"}:
+            raise ValueError("Explicit external PostgreSQL and Keycloak identities required")
+        if not deployment_sha256 or not re.fullmatch(r"[a-f0-9]{64}", deployment_sha256):
+            raise ValueError("Exact deployment configuration hash required")
+        deployment = evidence_bytes(root, data["deployment_configuration"])
+        if hashlib.sha256(deployment).hexdigest() != deployment_sha256:
+            raise ValueError("Deployment configuration mismatch")
+        binding = json.loads(deployment)
+        if not binding.get("rendered_manifest_sha256") or not binding.get(
+            "configuration_identities"
+        ):
+            raise ValueError("Rendered manifests and Secret/ConfigMap identities required")
+        rendered = evidence_bytes(root, binding["rendered_manifest"])
+        if hashlib.sha256(rendered).hexdigest() != binding["rendered_manifest_sha256"]:
+            raise ValueError("Rendered deployment integrity mismatch")
+        if not all(identity in rendered.decode() for identity in images.values()):
+            raise ValueError("Deployment does not contain selected images")
+        identities = binding["configuration_identities"]
+        if (
+            not isinstance(identities, list)
+            or not all(
+                all(item.get(k) for k in ("kind", "name", "uid", "resource_version"))
+                for item in identities
+            )
+            or not {"Secret", "ConfigMap"} <= {item["kind"] for item in identities}
+        ):
+            raise ValueError("Secret/ConfigMap object identities incomplete")
+        services = data.get("external_services", {})
+        if set(services) != {"postgres", "keycloak"}:
+            raise ValueError("Missing external infrastructure assessment")
+        for role, identity in external_services.items():
+            item = services[role]
+            if item.get("identity") != identity:
+                raise ValueError("External service identity mismatch")
+            assurance = json.loads(evidence_bytes(root, item))
+            if assurance.get("identity") != identity or assurance.get("result") != "PASS":
+                raise ValueError("External compatibility/security assurance not PASS")
+            if not all(
+                assurance.get(k)
+                for k in (
+                    "owner",
+                    "version",
+                    "maintenance_responsibility",
+                    "tls",
+                    "authentication",
+                    "compatibility_evidence",
+                    "security_approval_evidence",
+                    "operational_assurances",
+                )
+            ):
+                raise ValueError("External service assurances incomplete")
+            for name in ("compatibility_evidence", "security_approval_evidence"):
+                evidence_bytes(root, assurance[name])
     # Hosted build provenance signs artifacts; it is not advisory-risk approval.
     # No independently administered disposition trust provider is configured.
     if data.get("dispositions"):
@@ -60,9 +129,9 @@ def verify(manifest: Path, root: Path, revision: str, images: dict[str, str]) ->
             raise ValueError("Acceptance gate is not PASS: " + name)
         evidence_bytes(root, check)
     inventory = data.get("supply_chain", {})
-    if set(inventory) != IMAGE_ROLES:
-        raise ValueError("Missing six-image supply-chain evidence")
-    for role in sorted(IMAGE_ROLES):
+    if set(inventory) != roles:
+        raise ValueError("Missing selected-profile supply-chain evidence")
+    for role in sorted(roles):
         item = inventory[role]
         if item.get("image_id") != images[role]:
             raise ValueError("Supply-chain image identity mismatch: " + role)
@@ -91,12 +160,30 @@ def main() -> None:
     parser.add_argument("manifest", type=Path)
     parser.add_argument("--revision", required=True)
     parser.add_argument("--image", action="append", required=True, help="ROLE=immutable image ID")
+    parser.add_argument(
+        "--profile", choices=("compose", "okd", "self-hosted-kubernetes"), default="compose"
+    )
+    parser.add_argument(
+        "--service", action="append", default=[], help="ROLE=external service identity"
+    )
+    parser.add_argument("--deployment-sha256")
     args = parser.parse_args()
     try:
         images = dict(value.split("=", 1) for value in args.image)
-        if set(images) != IMAGE_ROLES:
-            raise ValueError("All six selected image identities required")
-        verify(args.manifest, Path(__file__).resolve().parents[1], args.revision, images)
+        if len(images) != len(args.image):
+            raise ValueError("Duplicate image role")
+        services = dict(value.split("=", 1) for value in args.service)
+        if len(services) != len(args.service):
+            raise ValueError("Duplicate external service role")
+        verify(
+            args.manifest,
+            Path(__file__).resolve().parents[1],
+            args.revision,
+            images,
+            profile=args.profile,
+            external_services=services,
+            deployment_sha256=args.deployment_sha256,
+        )
     except (ValueError, KeyError, OSError, TypeError) as error:
         raise SystemExit("BLOCKED: " + str(error)) from None
     print(

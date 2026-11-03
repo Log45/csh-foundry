@@ -1,0 +1,59 @@
+{
+  "project": "foundry-accept-2853d75c",
+  "environment": "Disposable local Compose; test CA; loopback ports",
+  "private_evidence": "artifacts/foundry-accept-2853d75c",
+  "checks": [
+    {
+      "check": "production-template-configuration",
+      "result": "PASS"
+    },
+    {
+      "check": "disposable-production-wal-directory-owner-and-write-permission",
+      "result": "PASS"
+    },
+    {
+      "check": "new-cluster-owner-migration-and-runtime-grants",
+      "result": "PASS",
+      "head": "0017_capacity"
+    },
+    {
+      "check": "governed-manufacturing-schema-and-explicit-worker-delegations",
+      "result": "PASS"
+    },
+    {
+      "check": "https-keycloak-code-pkce-studio-session-callback-replay-and-secure-cookie",
+      "result": "PASS"
+    },
+    {
+      "check": "two-arbitrary-uid-ingestion-workers-shared-db-no-duplicate-claim",
+      "result": "PASS",
+      "workers": 2,
+      "job_status": "COMPLETED"
+    },
+    {
+      "check": "two-api-concurrent-governed-actions-revision-conflicts-idempotent-replay",
+      "result": "PASS",
+      "committed": 1,
+      "conflicts_409": 7,
+      "final_revision": 2
+    },
+    {
+      "check": "two-api-concurrent-branch-merges-stale-preview-and-provenance",
+      "result": "PASS",
+      "committed": 1,
+      "stale_preconditions_412": 3,
+      "final_revision": 2
+    },
+    {
+      "check": "two-real-api-replicas-concurrent-writes-audit-rollback-shared-admission-recovery",
+      "result": "PASS",
+      "writes": 8,
+      "submitted": 8,
+      "admitted": 4,
+      "rejected_409": 4,
+      "final_active": 0,
+      "maximum_api_connections": 24,
+      "broker_pool_max": 10
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+[
+  {
+    "role": "api",
+    "uid": 1001230001,
+    "gid": 1001230002,
+    "exit_code": 0,
+    "stdout": "{\"uid\": 1001230001, \"gid\": 1001230002, \"groups\": [1001230002], \"operations\": \"native Polars, SDK ZIPs, API HTTP/SIGTERM, supervisor interruption, temporary writes and immutable path rejection\"}\n",
+    "stderr": ""
+  },
+  {
+    "role": "semantic",
+    "uid": 1001230001,
+    "gid": 1001230002,
+    "exit_code": 0,
+    "stdout": "{\"uid\": 1001230001, \"gid\": 1001230002, \"groups\": [1001230002], \"operations\": \"semantic SHACL/reasoning, temporary writes and immutable path rejection\"}\n",
+    "stderr": ""
+  },
+  {
+    "role": "studio",
+    "uid": 1001230001,
+    "gid": 1001230002,
+    "exit_code": 143,
+    "http": "PASS",
+    "shutdown_seconds": 0.123
+  },
+  {
+    "role": "ingress",
+    "uid": 1001230001,
+    "gid": 1001230002,
+    "exit_code": 0,
+    "http": "PASS",
+    "shutdown_seconds": 0.22
+  },
+  {
+    "role": "api",
+    "uid": 1004560001,
+    "gid": 1004560002,
+    "exit_code": 0,
+    "stdout": "{\"uid\": 1004560001, \"gid\": 1004560002, \"groups\": [1004560002], \"operations\": \"native Polars, SDK ZIPs, API HTTP/SIGTERM, supervisor interruption, temporary writes and immutable path rejection\"}\n",
+    "stderr": ""
+  },
+  {
+    "role": "semantic",
+    "uid": 1004560001,
+    "gid": 1004560002,
+    "exit_code": 0,
+    "stdout": "{\"uid\": 1004560001, \"gid\": 1004560002, \"groups\": [1004560002], \"operations\": \"semantic SHACL/reasoning, temporary writes and immutable path rejection\"}\n",
+    "stderr": ""
+  },
+  {
+    "role": "studio",
+    "uid": 1004560001,
+    "gid": 1004560002,
+    "exit_code": 143,
+    "http": "PASS",
+    "shutdown_seconds": 0.284
+  },
+  {
+    "role": "ingress",
+    "uid": 1004560001,
+    "gid": 1004560002,
+    "exit_code": 0,
+    "http": "PASS",
+    "shutdown_seconds": 0.198
+  }
+]

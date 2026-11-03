@@ -1,0 +1,101 @@
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test
+
+
+Running 5 tests using 1 worker
+
+(node:68951) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/workflow.spec.ts:47:1 › verified browser reference workflow (5.8s)
+(node:69120) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 tests/e2e/workflow.spec.ts:237:1 › CSRF and unauthenticated proxy requests fail closed (891ms)
+  ✓  3 tests/e2e/workflow.spec.ts:252:1 › native authoring, OWL diagnostics, tenant isolation and session loss (2.6s)
+  ✘  4 tests/e2e/workflow.spec.ts:336:1 › schema branching, resolved merge and private SDK download (5.7s)
+(node:69208) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 tests/e2e/workflow.spec.ts:437:3 › durable sessions survive replica restart and logout revokes every replica (2.3s)
+
+
+  1) tests/e2e/workflow.spec.ts:47:1 › verified browser reference workflow ─────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByLabel('Tenant', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByLabel('Tenant', { exact: true }) with timeout 5000ms
+      - waiting for getByLabel('Tenant', { exact: true })
+
+
+      33 |     .getByRole("button", { name: "Sign in with OpenID Connect" })
+      34 |     .click();
+    > 35 |   await expect(page.getByLabel("Tenant", { exact: true })).toBeVisible();
+         |                                                            ^
+      36 |   const option = page
+      37 |     .getByLabel("Tenant", { exact: true })
+      38 |     .locator("option")
+        at login (/Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/workflow.spec.ts:35:60)
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/workflow.spec.ts:74:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/workflow-verified-browser-reference-workflow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/workflow-verified-browser-reference-workflow/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/workflow-verified-browser-reference-workflow/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/workflow-verified-browser-reference-workflow/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/e2e/workflow.spec.ts:336:1 › schema branching, resolved merge and private SDK download ──
+
+    Error: expect(locator).not.toHaveValue(expected) failed
+
+    Locator:  getByRole('heading', { name: 'Schema branches and SDKs' }).locator('..').getByLabel('Published SDK / branch base version')
+    Expected: not ""
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "not toHaveValue" getByRole('heading', { name: 'Schema branches and SDKs' }).locator('..').getByLabel('Published SDK / branch base version') with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'Schema branches and SDKs' }).locator('..').getByLabel('Published SDK / branch base version')
+        14 × locator resolved to <select id="_r_6_">…</select>
+           - unexpected value ""
+
+
+      344 |   await expect(
+      345 |     development.getByLabel("Published SDK / branch base version"),
+    > 346 |   ).not.toHaveValue("");
+          |         ^
+      347 |   for (const name of ["browser-source", "browser-target"]) {
+      348 |     await development.getByLabel("New branch name").fill(name);
+      349 |     await development
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/workflow.spec.ts:346:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/workflow-schema-branching--693d3-ge-and-private-SDK-download/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/workflow-schema-branching--693d3-ge-and-private-SDK-download/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/workflow-schema-branching--693d3-ge-and-private-SDK-download/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/workflow-schema-branching--693d3-ge-and-private-SDK-download/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests/e2e/workflow.spec.ts:47:1 › verified browser reference workflow ──────────────────────────
+    tests/e2e/workflow.spec.ts:336:1 › schema branching, resolved merge and private SDK download ───
+  3 passed (19.6s)

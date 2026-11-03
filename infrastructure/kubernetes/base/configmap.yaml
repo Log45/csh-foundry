@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: foundry-config
+data:
+  FOUNDRY_ENVIRONMENT: production
+  FOUNDRY_AUTH_MODE: oidc
+  FOUNDRY_PUBLIC_ORIGIN: https://studio.example.test
+  FOUNDRY_ALLOWED_HOSTS: '["api","api.foundry.svc","127.0.0.1"]'
+  FOUNDRY_OIDC_PROVIDERS: '[{"id":"keycloak","issuer":"https://identity.example.test/realms/foundry","audience":"foundry-api","clients":["studio","worker"],"algorithms":["RS256"]}]'
+  FOUNDRY_SECRETS_DIRECTORY: /run/secrets
+  FOUNDRY_DATABASE_TLS_REQUIRED: 'true'
+  FOUNDRY_OIDC_CA_BUNDLE: /run/trust/oidc-ca.pem
+  FOUNDRY_DATABASE_POOL_SIZE: '3'
+  FOUNDRY_DATABASE_POOL_OVERFLOW: '0'
+  FOUNDRY_WORKER_PROVIDER_ID: keycloak
+  FOUNDRY_WORKER_TENANT_ID: 00000000-0000-0000-0000-000000000001
+  FOUNDRY_WORKER_SUBJECT_ID: REPLACE_WITH_PROVISIONED_SUBJECT
+  STUDIO_ENVIRONMENT: production
+  STUDIO_ORIGIN: https://studio.example.test
+  STUDIO_API_ORIGIN: http://api:8000
+  STUDIO_INTERNAL_HTTP: 'true'
+  STUDIO_OIDC_ISSUER: https://identity.example.test/realms/foundry
+  STUDIO_OIDC_CLIENT_ID: studio
+  STUDIO_API_AUDIENCE: foundry-api
+  STUDIO_BROKER_LOGOUT: 'true'
+  STUDIO_STATE_SECRET_FILE: /run/secrets/FOUNDRY_BROWSER_STATE_SECRET
+  NODE_EXTRA_CA_CERTS: /run/trust/oidc-ca.pem
+  HOME: /tmp
+  TMPDIR: /tmp

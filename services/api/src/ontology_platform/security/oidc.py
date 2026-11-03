@@ -57,7 +57,11 @@ class OIDCVerifier:
         *,
         client: httpx.Client | None = None,
         ca_bundle: Path | None = None,
+        backchannel_port: int | None = None,
     ):
+        if backchannel_port is not None and not 1024 <= backchannel_port <= 65535:
+            raise ValueError("Backchannel requires an unprivileged port")
+        self.backchannel_port = backchannel_port
         self.providers = providers
         if client is not None and ca_bundle is not None:
             raise ValueError("Custom transport and CA bundle must be configured separately")
@@ -75,6 +79,15 @@ class OIDCVerifier:
         self.lock = threading.Lock()
 
     def document(self, url: str, *, form: dict[str, str] | None = None) -> dict[str, Any]:
+        # Explicit Compose backchannel changes only the socket port. The configured issuer,
+        # discovery/JWKS origin checks and TLS hostname/CA verification remain authoritative.
+        if self.backchannel_port is not None:
+            target = httpx.URL(url)
+            if target.scheme != "https" or not any(
+                httpx.URL(p.issuer).netloc == target.netloc for p in self.providers
+            ):
+                raise ValueError("Backchannel target is not a configured issuer origin")
+            url = str(target.copy_with(port=self.backchannel_port))
         started = time.monotonic()
         content = bytearray()
         with self.client.stream(

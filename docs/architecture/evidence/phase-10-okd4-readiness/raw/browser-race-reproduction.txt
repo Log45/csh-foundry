@@ -1,0 +1,30 @@
+
+> @foundry/studio@0.8.0 test
+> vitest run --run tests/workspace-consistency.test.tsx
+
+
+ RUN  v5.0.5 /Users/log/Documents/code/csh-foundry/apps/studio
+
+ ❯ tests/workspace-consistency.test.tsx (1 test | 1 failed) 110ms
+   × keeps the newest ontology read when an older request completes after activation 109ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/workspace-consistency.test.tsx > keeps the newest ontology read when an older request completes after activation
+AssertionError: expected "vi.fn()" to be called 3 times, but got 2 times
+ ❯ tests/workspace-consistency.test.tsx:54:21
+     52|   fireEvent.click(screen.getByRole("button", { name: "Refresh ontology…
+     53|   fireEvent.click(screen.getByRole("button", { name: "Refresh ontology…
+     54|   expect(mocks.api).toHaveBeenCalledTimes(3);
+       |                     ^
+     55|   mocks.api.mockResolvedValue({ definition: { version: "1.0.0" } });
+     56|   await act(async () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  13:31:30
+   Duration  982ms (environment 69%, import 14%, tests 13%, transform 4%)
+

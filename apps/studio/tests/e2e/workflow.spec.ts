@@ -44,7 +44,32 @@ async function login(page: Page) {
     page.getByRole("heading", { name: "manufacturing", exact: true }),
   ).toBeVisible();
 }
-test("verified browser reference workflow", async ({ page, context }) => {
+test("verified browser reference workflow", async ({
+  page,
+  context,
+}, testInfo) => {
+  const timing: object[] = [];
+  page.on("response", async (response) => {
+    if (!response.url().endsWith("/bff")) return;
+    const request = response.request();
+    const body = request.postDataJSON();
+    if (!body?.path?.includes("/ontologies")) return;
+    const payload = await response.json().catch(() => ({}));
+    timing.push({
+      path: body.path,
+      method: body.method,
+      status: response.status(),
+      timing: request.timing(),
+      active_version: payload.active_version,
+      version: payload.definition?.version,
+      ontology_versions: Array.isArray(payload)
+        ? payload.map((item) => ({
+            id: item.id,
+            active_version: item.active_version,
+          }))
+        : undefined,
+    });
+  });
   page.on("dialog", (dialog) => dialog.accept());
   await login(page);
   const cookies = await context.cookies();
@@ -65,6 +90,13 @@ test("verified browser reference workflow", async ({ page, context }) => {
     .getByRole("button", { name: "Activate schema", exact: true })
     .click();
   await expect(page.getByText("Active 1.0.0", { exact: true })).toBeVisible();
+  await testInfo.attach("activation-consistency", {
+    body: JSON.stringify({
+      requests: timing,
+      header: await page.locator("header .badge").innerText(),
+    }),
+    contentType: "application/json",
+  });
   await page.getByRole("button", { name: "Ingestion", exact: true }).click();
   const schema = JSON.parse(
     fs.readFileSync(

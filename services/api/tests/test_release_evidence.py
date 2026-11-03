@@ -215,3 +215,121 @@ def test_release_raw_supply_chain_cannot_be_bypassed(tmp_path, mutation):
     manifest.write_text(json.dumps(data))
     with pytest.raises((ValueError, KeyError)):
         module.verify(manifest, tmp_path, "candidate", images)
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "none",
+        "missing-service",
+        "wrong-service",
+        "failed-service",
+        "missing-approval",
+        "wrong-config",
+        "missing-secret-identity",
+        "wrong-profile",
+        "missing-image",
+        "high-finding",
+        "failed-gate",
+        "missing-rendered",
+    ],
+)
+def test_external_profile_cannot_drop_infrastructure_or_image_gates(tmp_path, mutation):
+    from hashlib import sha256
+
+    def record(name, value):
+        path = tmp_path / name
+        path.write_text(json.dumps(value))
+        return {"evidence": name, "sha256": sha256(path.read_bytes()).hexdigest()}
+
+    images = {
+        role: "sha256:" + str(i + 1) * 64 for i, role in enumerate(("api", "studio", "semantic"))
+    }
+    artifact = record("check.json", {"executed": True})
+    data = {
+        "source_revision": "candidate",
+        "images": images,
+        "deployment_profile": "okd",
+        "checks": {name: artifact | {"result": "PASS"} for name in module.REQUIRED},
+        "supply_chain": {},
+        "external_services": {},
+    }
+    for role, identity in images.items():
+        data["supply_chain"][role] = {
+            "image_id": identity,
+            "config_digest": identity,
+            "scan": record(
+                role + "-scan.json",
+                {
+                    "source": {"target": {"imageID": identity, "manifestDigest": identity}},
+                    "descriptor": {"db": {"status": {"valid": True}}},
+                    "matches": [{"vulnerability": {"severity": "High"}}]
+                    if mutation == "high-finding"
+                    else [],
+                },
+            ),
+            "sbom": record(
+                role + "-sbom.json",
+                {
+                    "bomFormat": "CycloneDX",
+                    "metadata": {"component": {"version": identity}},
+                    "components": ["runtime"],
+                },
+            ),
+        }
+    services = {"postgres": "db.example:5432/foundry", "keycloak": "https://id.example/realms/f"}
+    for role, identity in services.items():
+        assurance = {
+            "identity": identity,
+            "result": "PASS",
+            "owner": "external-team",
+            "version": "reviewed",
+            "maintenance_responsibility": "external-team",
+            "tls": "verified",
+            "authentication": "reviewed",
+            "compatibility_evidence": artifact,
+            "security_approval_evidence": artifact,
+            "operational_assurances": "reviewed",
+        }
+        if mutation == "failed-service":
+            assurance["result"] = "NOT RUN"
+        if mutation == "missing-approval":
+            del assurance["security_approval_evidence"]
+        data["external_services"][role] = record(role + ".json", assurance) | {"identity": identity}
+    rendered = record("rendered.json", images)
+    binding = {
+        "rendered_manifest": rendered,
+        "rendered_manifest_sha256": rendered["sha256"],
+        "configuration_identities": [
+            {"kind": kind, "name": kind, "uid": "object-uid", "resource_version": "1"}
+            for kind in ("Secret", "ConfigMap")
+        ],
+    }
+    if mutation == "missing-secret-identity":
+        binding["configuration_identities"] = []
+    if mutation == "missing-rendered":
+        del binding["rendered_manifest"]
+    configuration = record("config.json", binding)
+    data["deployment_configuration"] = configuration
+    if mutation == "missing-service":
+        del data["external_services"]["postgres"]
+    if mutation == "wrong-service":
+        services["postgres"] = "different-database"
+    if mutation == "wrong-profile":
+        data["deployment_profile"] = "compose"
+    if mutation == "missing-image":
+        images.pop("api")
+    if mutation == "failed-gate":
+        data["checks"]["container_security"] = artifact | {"result": "FAIL"}
+    manifest = tmp_path / "release.json"
+    manifest.write_text(json.dumps(data))
+    kwargs = {
+        "profile": "okd",
+        "external_services": services,
+        "deployment_sha256": "a" * 64 if mutation == "wrong-config" else configuration["sha256"],
+    }
+    if mutation == "none":
+        module.verify(manifest, tmp_path, "candidate", images, **kwargs)
+    else:
+        with pytest.raises((ValueError, KeyError)):
+            module.verify(manifest, tmp_path, "candidate", images, **kwargs)

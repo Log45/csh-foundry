@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+patches:
+- target:
+    kind: Deployment
+    name: api|ingestion-worker
+  patch: |-
+    - op: add
+      path: /spec/template/spec/volumes/-
+      value:
+        name: sources
+        persistentVolumeClaim:
+          claimName: foundry-sources
+          readOnly: true
+    - op: add
+      path: /spec/template/spec/containers/0/volumeMounts/-
+      value:
+        name: sources
+        mountPath: /data/ingestion
+        readOnly: true

@@ -1,0 +1,688 @@
+{
+  "starting_revision": "0127f805a0bbb773b5da38b0d062fba7ae7b129b",
+  "current_base_revision": "dfdda5f3c0307a3e694b52cb332445c797221373",
+  "user_roadmap": "PLANS.md user commit preserved; not modified by agent",
+  "new_migrations": [],
+  "counts": {
+    "modified": 31,
+    "created": 104
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "change": "modified",
+      "sha256": "960a320aa5c5a29818a69cd0316be3feb4dc1611e86fa7341d33fc41d51e65fd"
+    },
+    {
+      "path": "apps/studio/components/workspace.tsx",
+      "change": "modified",
+      "sha256": "b52f6a2a4a575d9d28514d77c3b2cb2febbf7207210236a5d11d48457a5282ee"
+    },
+    {
+      "path": "apps/studio/features/manager.tsx",
+      "change": "modified",
+      "sha256": "6db860c195d6c7e35024043c8d0eda9fe1d3834df9721a44f8a612eba31a6ef7"
+    },
+    {
+      "path": "apps/studio/lib/server.ts",
+      "change": "modified",
+      "sha256": "afc0c45a2109001476b03c57efaa5aacc8d8f03f2ff763e42146e70bf75a4370"
+    },
+    {
+      "path": "apps/studio/playwright.config.ts",
+      "change": "modified",
+      "sha256": "1b38ab44dddd6c2c2f4a981943153f2411715848cda0b00cfbfb877bfad1e3f4"
+    },
+    {
+      "path": "apps/studio/tests/e2e/workflow.spec.ts",
+      "change": "modified",
+      "sha256": "742c29a7006e121c726c50f5e48de50f878104446c95b9992c485ba00b1215d2"
+    },
+    {
+      "path": "apps/studio/tests/security.test.ts",
+      "change": "modified",
+      "sha256": "f859e825f9bc1e5e60f6637f4c770e9ced67fe7f676aa80a7d7f424cd84034c5"
+    },
+    {
+      "path": "docs/development/phase-10-checklist.md",
+      "change": "modified",
+      "sha256": "beaaca64cf0f3797a7a14e44e1b244d2aa5c602762020cbc5d8a2d6104a1a23d"
+    },
+    {
+      "path": "docs/development/phase-10-report.md",
+      "change": "modified",
+      "sha256": "f135ca21e8611feeb0af640a0d9a363db5c5a2ed91bd72c595edfcbfcea5596d"
+    },
+    {
+      "path": "docs/operations/production.md",
+      "change": "modified",
+      "sha256": "528e71d7f9ca6da2707a083df92b27e9f9db3de712476c310e3e9278aaac7f26"
+    },
+    {
+      "path": "docs/operations/readiness.md",
+      "change": "modified",
+      "sha256": "cf9daffb816e4e79038de1b3f15f844a4be9f5f2e3a53b7a4602c8279ec0dbd1"
+    },
+    {
+      "path": "infrastructure/docker/api.Dockerfile",
+      "change": "modified",
+      "sha256": "babbb31d895edfdd22dbb5d8fd7aba0081395bdbf161d839b4acedb5ca17d8ab"
+    },
+    {
+      "path": "infrastructure/docker/ingress.Dockerfile",
+      "change": "modified",
+      "sha256": "dbe10fa4e63675f0180b8d0d96bb76f0fa17b59dfc154f6e802a47c4dfa42380"
+    },
+    {
+      "path": "infrastructure/docker/semantic.Dockerfile",
+      "change": "modified",
+      "sha256": "7ee803666a67f4f84f29db596986b088a8662125ca35941f898854218e62e961"
+    },
+    {
+      "path": "infrastructure/docker/studio.Dockerfile",
+      "change": "modified",
+      "sha256": "5e06c57dbe5f800d2ce7a0ce70641acf5f08b108285d20c33d6647bcf9d4bc8e"
+    },
+    {
+      "path": "infrastructure/production/compose.yaml",
+      "change": "modified",
+      "sha256": "2d5dde8e950794b4a2cc6d6dab379e357cca28cc7e60cdc3b031174499cb239d"
+    },
+    {
+      "path": "infrastructure/production/nginx.conf.template",
+      "change": "modified",
+      "sha256": "ffd24d912b51978efd3825873cff37c0cd2b5dd74cc325733a184f1b33e985a2"
+    },
+    {
+      "path": "pyproject.toml",
+      "change": "modified",
+      "sha256": "14362523aeded0b5d14d5a7c8de302972bad412b9e73b25e76d2b6316e21fddf"
+    },
+    {
+      "path": "scripts/accept_phase10.py",
+      "change": "modified",
+      "sha256": "37ebed0c74e5ebb3924957a4a28d2c1eaf45cd16de4202eec870ce75cbf1ee59"
+    },
+    {
+      "path": "scripts/test_ingress.py",
+      "change": "modified",
+      "sha256": "7cc822ff5d955dbb21709b2b405f5e7c988d3a8516507514ac276955265b9384"
+    },
+    {
+      "path": "scripts/test_studio.py",
+      "change": "modified",
+      "sha256": "7342305a18540384c37f255278aef85bbac7dbf6dfc4d8902a3372a678283d7c"
+    },
+    {
+      "path": "scripts/verify_release_evidence.py",
+      "change": "modified",
+      "sha256": "5b5e61bb50003159a56809eb07f886c6eb938204a633e2ee62118b116e0e1060"
+    },
+    {
+      "path": "services/api/src/ontology_platform/config.py",
+      "change": "modified",
+      "sha256": "094fcd4a3c2dd42767ccbb5b4517316598c0354be50c96f776cd0ba0bfde2b61"
+    },
+    {
+      "path": "services/api/src/ontology_platform/main.py",
+      "change": "modified",
+      "sha256": "9125fcc7ff1dda58f6126c514f4311cd869ccb2b7eb915ce6276da3c160068c4"
+    },
+    {
+      "path": "services/api/src/ontology_platform/security/oidc.py",
+      "change": "modified",
+      "sha256": "c843101a445923170eba9004a7db5510190b0ebe36e034175518041bf6584b63"
+    },
+    {
+      "path": "services/api/src/ontology_platform/security/workers.py",
+      "change": "modified",
+      "sha256": "9b78f7d3a735cb6d714b1732bbfa6121802daab2503afa7c17eafa040c2d681c"
+    },
+    {
+      "path": "services/api/tests/test_production_profile.py",
+      "change": "modified",
+      "sha256": "2ecab46663096a02ccb1914157adad5be8f051430dc0736b1f2bb602321070f1"
+    },
+    {
+      "path": "services/api/tests/test_release_evidence.py",
+      "change": "modified",
+      "sha256": "38c6ae769229f8f08944a2ee6a3306877d2a4976edba5ebec04d9ad4bf47b483"
+    },
+    {
+      "path": "services/api/tests/test_security_oidc.py",
+      "change": "modified",
+      "sha256": "5708139c9552fcdad24e1f2a63b72cf99a6a6f3a84439fb881e090528431398b"
+    },
+    {
+      "path": "services/api/tests/test_security_workflows.py",
+      "change": "modified",
+      "sha256": "29acd1613de1b6a68e1f29b72b29b0af55dca5975a02379a236fd15d6170a15f"
+    },
+    {
+      "path": "uv.lock",
+      "change": "modified",
+      "sha256": "c3ae55b2fdc8fefb1459fd07491186f4c25fd69433d6c5c8117cb42ad39109f2"
+    },
+    {
+      "path": "apps/studio/app/health/live/route.ts",
+      "change": "created",
+      "sha256": "fca37069b9e2bd10daf53fe38fc22ab6195a4e21b26caee401fa87c4614bbeec"
+    },
+    {
+      "path": "apps/studio/app/health/ready/route.ts",
+      "change": "created",
+      "sha256": "4be36febd258019dab8c48bb5f9b55df3c1bf0add25e6617c7d546ad69a75d30"
+    },
+    {
+      "path": "apps/studio/tests/health.test.ts",
+      "change": "created",
+      "sha256": "ee7d6e4d1aac022c94b6bdd04aef396d90905131221f4ca0c7fba02389191bfb"
+    },
+    {
+      "path": "apps/studio/tests/workspace-consistency.test.tsx",
+      "change": "created",
+      "sha256": "6b71cf46acdd0b7bd3f438edbe2063000500144daa7146901480ade60a0fce72"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/README.md",
+      "change": "created",
+      "sha256": "76eaca1f46be478c6460fc16cb0a96a26b57e132890d015d6f04f44dc4ee5975"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/SHA256SUMS",
+      "change": "created",
+      "sha256": null
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/application-source-binding.json",
+      "change": "created",
+      "sha256": "f3b2315add79a7d67aea078f2647abb52cb133d9116804d2e9be44e657ba22f0"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/baseline.json",
+      "change": "created",
+      "sha256": "618e033c9e7832927c923cecdfae6b0b58d52f38912de05369f74e3831f4805b"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/browser-consistency.json",
+      "change": "created",
+      "sha256": "a79be9e36c840f46216eb9bc6b7092f5a07f779edd154ee9a877122f5aaa0830"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/changed-files.json",
+      "change": "created",
+      "sha256": null
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/combined-final/candidate-images.json",
+      "change": "created",
+      "sha256": "578cb28fc41b629039f22b9599edc91fb6c1ade126828e208069355dfa15bdc8"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/combined-final/deployment.json",
+      "change": "created",
+      "sha256": "a471390d7eed00639cf7680110086f674f09e16556a212be9f59b07232f1a313"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/combined-final/runtime.json",
+      "change": "created",
+      "sha256": "c1e81706a43faaca3e5ddcda9f02a395681365bcb78820d6fdab843f319dbdd7"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/combined/candidate-images.json",
+      "change": "created",
+      "sha256": "1a63833f8aa93056a64cff9d3b78eb94bbd0a17ab2d3681a080febe87c4eac0a"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/combined/deployment.json",
+      "change": "created",
+      "sha256": "279ab8dd3db72292c86ada470da812f0d98baab1de7163d19442e052673d0671"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/commands.json",
+      "change": "created",
+      "sha256": "494f62e882ec5f4980a74e81b58f031e19ea79f4691dc3ee9f0c37949c8c9843"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/configuration-binding.json",
+      "change": "created",
+      "sha256": "c9a5dd34656043c72b1314d5558ab50219056a3968fdd6e95bf12e5376f62f1c"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/container-compatibility.json",
+      "change": "created",
+      "sha256": "3c269d5b59b0021b6f8b38b2f125e079096c794b6f80e4ea13c4f9be198d70e4"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/deployment-assessment.json",
+      "change": "created",
+      "sha256": "61ff3e083646452529f578b1180a854a1c45357a72d98a9f91f38a77b1eeedfa"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/deployment-bom.json",
+      "change": "created",
+      "sha256": "b755c9adf53ce0e901a4b3e7e4d88d6f0c6acc8b89e77897738f44a224c5a720"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/developer-preservation.json",
+      "change": "created",
+      "sha256": "7786b50fb03870f8b4052893ab6708e3e9f68df4ec7250b7db13feff8555157b"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/exact-candidate/candidate-images.json",
+      "change": "created",
+      "sha256": "b2747e0b98bbeda6772636173d589844c8543bd82953401de6dbba1a2f8a437d"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/exact-candidate/deployment.json",
+      "change": "created",
+      "sha256": "7bcef29eda4eadab8df8fb683659bae4df1c19a35aa1d8d5f9b4ea24f7be0d76"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/execution-attempts.json",
+      "change": "created",
+      "sha256": "4dbb79bb64c06ebe9d13de8bd6f2ffa028eb25874ac7080a64e26ee8de645fda"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/fixture-validation.json",
+      "change": "created",
+      "sha256": "cc9430b2a15e8a9de824e79316d9941e97d73f358f648d474b1ce38e856b5e04"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/images-initial.json",
+      "change": "created",
+      "sha256": "578cb28fc41b629039f22b9599edc91fb6c1ade126828e208069355dfa15bdc8"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/images.json",
+      "change": "created",
+      "sha256": "b2747e0b98bbeda6772636173d589844c8543bd82953401de6dbba1a2f8a437d"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/keycloak-integration.json",
+      "change": "created",
+      "sha256": "64ddb4915d548a11232d2b29465e972cc2c8d92d5dc969b489fd14661e5810ef"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/kubernetes-validation.json",
+      "change": "created",
+      "sha256": "892e8594ed0009a2d72827c035306509c4926c5008197b3713fe9d6105c58bd1"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/non-root-initial.json",
+      "change": "created",
+      "sha256": "7f771df17bb7328ff108b8f84f3d6a4cfc9229daa833205a637142e1c04c7e50"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/non-root-validation.json",
+      "change": "created",
+      "sha256": "9c4ccfcf9b468a47c279f56e9957449832bcf5684d2eba602358eeebb3986a14"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/postgres-integration.json",
+      "change": "created",
+      "sha256": "14648306c181b5517fa3610e749b24e1a6643c25431f91630631be1f8fa56fba"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw-output-inventory.json",
+      "change": "created",
+      "sha256": "71a3a5bd57371730be11b757f68fe8fa45ceb17c614df709ba2c570414f43899"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/browser-race-after.txt",
+      "change": "created",
+      "sha256": "d653cd4942c8f4ba396522bce8753b71eaebe9b24962caa31b91f1ec9efc0d5a"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/browser-race-reproduction.txt",
+      "change": "created",
+      "sha256": "0f16aa8f7d63d2791d0ddceed3dc74f6cd6d3476a06d48b23278269771b418a1"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-frontend-format.txt",
+      "change": "created",
+      "sha256": "860908890ed2b318a76d8d975c507e8bcaa6292e80a099f63f3fb24910b6e83f"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-frontend.txt",
+      "change": "created",
+      "sha256": "efcbe78ea251d5383a3aca988ad6f69563d2e4b386635596f4afe070686c8170"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-migrations.txt",
+      "change": "created",
+      "sha256": "43d345b67ace77ab8c4cbf575a3baddf66e8623cf7d1e0b78e602b1d641ecf50"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-mypy.txt",
+      "change": "created",
+      "sha256": "092e5eb1e45e241cfabcc8c61bcc544108ae075fc01d13940b2b24013bbd1e3a"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-postgres-tls.txt",
+      "change": "created",
+      "sha256": "85918ac504a83e9da96dd0b6ad3445b58f8da1f0cdf350fab1d331f3d8ff2060"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-python.txt",
+      "change": "created",
+      "sha256": "25b685909a30a042ab42e3a01707e5f452f554191fb34f380f2464febe3b4a50"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/confirmed-typecheck.txt",
+      "change": "created",
+      "sha256": "ae996df9a92118788970c0f4c7ea8034223d5545bbf4b305949c35c85ad3abcc"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/final-latest-browser-concurrent-1.txt",
+      "change": "created",
+      "sha256": "1be6c91d48086ccd333c0dd6ac56ace5d2e16b40296c9e8d861cf60ef62f2a3f"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/final-latest-browser-concurrent-2.txt",
+      "change": "created",
+      "sha256": "3b75b4f455c830724c68c545c97ae829b1519873d2c720b970d88b78e5d6b237"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/focused-latest.txt",
+      "change": "created",
+      "sha256": "7ed849ee0983fea37afc381b9f858d11d68ee7074d6799a90499a68ea49deaa3"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/format-final.txt",
+      "change": "created",
+      "sha256": "d8cc52b50ca13fedc6693fcd96fb5f6d82b81aeec14f6c97b4f905d167fdbd96"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/ingress-final.txt",
+      "change": "created",
+      "sha256": "d6cc9d9dfb1982bed9058d43d697ea3b70eec56eb753e9a0c4df064ba09bc842"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/ingress-log-redaction-final.txt",
+      "change": "created",
+      "sha256": "d96423b7403ee43636da2a6ed080b0edad24a005b0f9e20b00fbed629b948332"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/keycloak.txt",
+      "change": "created",
+      "sha256": "2b149b61873879a40e034910fe09fd19c5954b46c53c200636bf5b13f3c01d25"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/kubeconform.txt",
+      "change": "created",
+      "sha256": "917d37ffb4716dab42455f027c248faebe7d2d091e3a8654e9620dff912a7e78"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/lint-final.txt",
+      "change": "created",
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/migration-nonroot.txt",
+      "change": "created",
+      "sha256": "43d345b67ace77ab8c4cbf575a3baddf66e8623cf7d1e0b78e602b1d641ecf50"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/non-root-selected.txt",
+      "change": "created",
+      "sha256": "5c7975499d5f38c5563203c143b2b92c0a023375c22ee03d380aa658a5d70022"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/postgres-tls.txt",
+      "change": "created",
+      "sha256": "85918ac504a83e9da96dd0b6ad3445b58f8da1f0cdf350fab1d331f3d8ff2060"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/protege.txt",
+      "change": "created",
+      "sha256": "62e219b1fe12f8e58da378cde0a3a7a3b2edb7a8991ee328c2bc82e331bf6920"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/release-candidate.txt",
+      "change": "created",
+      "sha256": "0f18a7b70c7eb9ddbc4715f3c77f416d46fd88a397e0c67e10d4e014da238e83"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/raw/replicas-selected.txt",
+      "change": "created",
+      "sha256": "06c6e423b47c20bfcd708155f01994482bc20f5308e4ed5a9aa1ec4ce7f650c0"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/regression-results.json",
+      "change": "created",
+      "sha256": "f0dc663197872cc4fd1fd023476eeaad6a619e76b5b9d7a5e9e72f1542b6bec2"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/release-candidate/admission.json",
+      "change": "created",
+      "sha256": "034724b446c7beec15ff411d8b3b9a9fc1e9fae155084d8363bec82e93b56eb1"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/release-candidate/candidate-images.json",
+      "change": "created",
+      "sha256": "b2747e0b98bbeda6772636173d589844c8543bd82953401de6dbba1a2f8a437d"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/release-candidate/deployed-load.json",
+      "change": "created",
+      "sha256": "8327b5417523301cb4882d92acfab45381c4909e771f13b9883ff82985225ded"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/release-candidate/deployment.json",
+      "change": "created",
+      "sha256": "6360a8c100d5d51ff8c3d98c8810e689da53cbd7a11595cfd2356a3173a63748"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/release-candidate/physical-recovery.json",
+      "change": "created",
+      "sha256": "5aa140efd5a12ee9b2c4068496f02e79179a781554ca1e86392edf382190906f"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/release-candidate/runtime.json",
+      "change": "created",
+      "sha256": "66ee984ea05c23875bc5f2d741d8d88009d1d9825bae630ad347cb89a8f0016e"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/release-gate-input.json",
+      "change": "created",
+      "sha256": "1f95014c589ef314b56e5d4f5480df24528d3e8e8a295107e39ffb2bb07aa88e"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/release-gate-result.json",
+      "change": "created",
+      "sha256": "00a583d04ee6b1baa073209aa4335392decb063baa326dd0d55721815a931e9a"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/replicas-confirmed/candidate-images.json",
+      "change": "created",
+      "sha256": "b2747e0b98bbeda6772636173d589844c8543bd82953401de6dbba1a2f8a437d"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/replicas-confirmed/deployment.json",
+      "change": "created",
+      "sha256": "e25428234f809f30c40c07d0b6fdbffa44133c295db5a0dd62009de35242b1a0"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/replicas-selected/candidate-images.json",
+      "change": "created",
+      "sha256": "b2747e0b98bbeda6772636173d589844c8543bd82953401de6dbba1a2f8a437d"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/replicas-selected/deployment.json",
+      "change": "created",
+      "sha256": "264fa3aaf8b5e4700530b74d00895a72cc410bf742a60f888e8c1660d980814d"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/replicas/candidate-images.json",
+      "change": "created",
+      "sha256": "b2747e0b98bbeda6772636173d589844c8543bd82953401de6dbba1a2f8a437d"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/replicas/deployment.json",
+      "change": "created",
+      "sha256": "80ada3ac1f58115f0b93e028aedd891b6fdb477328b351a4222dac3b8b3ed6ec"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/security-assessment.json",
+      "change": "created",
+      "sha256": "0996f2b0396b1f0175908dd6ac5bdb9d11ec8c399f91d39cdb187569fdc9946b"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/storage-audit.json",
+      "change": "created",
+      "sha256": "ec145b7b241669afdbd84d670adfa7ded952b075c6cabf0eba3127eb12c409cc"
+    },
+    {
+      "path": "docs/architecture/evidence/phase-10-okd4-readiness/supply-chain-binding.json",
+      "change": "created",
+      "sha256": "48bb3241a4261209908535a6fe1446d48296c3501a0ae3a47b109a82d2865d26"
+    },
+    {
+      "path": "docs/architecture/storage-audit.md",
+      "change": "created",
+      "sha256": "63e51f40e58df4c27ef04b1e040feead38893f6955d6b796d1647d4daf2d7d97"
+    },
+    {
+      "path": "docs/decisions/0035-portable-restricted-deployment.md",
+      "change": "created",
+      "sha256": "830d1d1111021f1681fdac727904aea6201275695e8ed62ebe602eba1d9586ed"
+    },
+    {
+      "path": "docs/operations/okd4-deployment.md",
+      "change": "created",
+      "sha256": "995727436337e90c201bdcde17f40f026e9495443b4c41eaed0cb7c00155c34b"
+    },
+    {
+      "path": "docs/operations/okd4-infrastructure-request.md",
+      "change": "created",
+      "sha256": "f129b7cf0257678f1e07d4d9aaa9c968526ad40bdcd8cb1125e905f9077c059b"
+    },
+    {
+      "path": "infrastructure/kubernetes/base/api-service.yaml",
+      "change": "created",
+      "sha256": "14477d78f4e10c040c1a38427f16ad9826701bfc21da7139c89931e60fa9ab4e"
+    },
+    {
+      "path": "infrastructure/kubernetes/base/api.yaml",
+      "change": "created",
+      "sha256": "e2d3ea1ab63a9f7fd372fb7df560718b00d4728d96b985b36b3cd7f91f1a4131"
+    },
+    {
+      "path": "infrastructure/kubernetes/base/configmap.yaml",
+      "change": "created",
+      "sha256": "6d1c45b914179014d93ff0cfc4df1680b59137af28be1cee75da4bc244e94c27"
+    },
+    {
+      "path": "infrastructure/kubernetes/base/ingestion-worker.yaml",
+      "change": "created",
+      "sha256": "c171bdc8bb4abc521772bdb9623b969cc425c2d39bf1607f2f9e15268faefe43"
+    },
+    {
+      "path": "infrastructure/kubernetes/base/kustomization.yaml",
+      "change": "created",
+      "sha256": "b8e8749cb7759c754591dc7f6e4022d5235866938084610e61f22190ae00f65a"
+    },
+    {
+      "path": "infrastructure/kubernetes/base/network-policies.yaml",
+      "change": "created",
+      "sha256": "d408e47b17636ab22d4d000f352bd4b1522e1ce1b132a5ba80d52fa674d8a31d"
+    },
+    {
+      "path": "infrastructure/kubernetes/base/outbox-worker.yaml",
+      "change": "created",
+      "sha256": "4ae0bcaae6363a6d59f5e83893b0b7f7b5af25b74b3b7afd5d833887c4eabf0c"
+    },
+    {
+      "path": "infrastructure/kubernetes/base/semantic-worker.yaml",
+      "change": "created",
+      "sha256": "41538d586acb33b06625b16275dece27ee48957ec144c714bb4dbab15976a703"
+    },
+    {
+      "path": "infrastructure/kubernetes/base/service-account.yaml",
+      "change": "created",
+      "sha256": "90344f0a90c1495be12310fd9318ca353a1d450895a56c7c70cf3b122889e8da"
+    },
+    {
+      "path": "infrastructure/kubernetes/base/studio-service.yaml",
+      "change": "created",
+      "sha256": "cdb5d3ee831dd9d2f4a8b2a44ea7086e918897d5ceb522e551f56776f47c2a5f"
+    },
+    {
+      "path": "infrastructure/kubernetes/base/studio.yaml",
+      "change": "created",
+      "sha256": "e7419b4c6132f2d8a38e390d5d4cd13de1fd470ea53b98ef3fa9a68023dac10b"
+    },
+    {
+      "path": "infrastructure/kubernetes/components/file-sources/kustomization.yaml",
+      "change": "created",
+      "sha256": "dc63d00ab89d353c6f1a6499ccef81c369ad88d4b1cdb75b0a8d8db030ddd7f2"
+    },
+    {
+      "path": "infrastructure/kubernetes/migration/job.yaml",
+      "change": "created",
+      "sha256": "129797930a93f8e746d5b46f84e0431132cb2197b7a1135a8a4e75bb34dee31c"
+    },
+    {
+      "path": "infrastructure/kubernetes/migration/kustomization.yaml",
+      "change": "created",
+      "sha256": "c732f144eac5aea7e5af099ee710af3739944cae1f998f0ffd0fda1eb6f16633"
+    },
+    {
+      "path": "infrastructure/kubernetes/overlays/okd/kustomization.yaml",
+      "change": "created",
+      "sha256": "22301d7ab5c6ba2fbc1e10dcbc884794664f0285bae73a0b6c389ec172eaae6a"
+    },
+    {
+      "path": "infrastructure/kubernetes/overlays/okd/route.yaml",
+      "change": "created",
+      "sha256": "798562aa02ed771e7801313b12e383ea221dab9e34991473c345f02ccac464b1"
+    },
+    {
+      "path": "infrastructure/kubernetes/overlays/okd/router-policy.yaml",
+      "change": "created",
+      "sha256": "aa7ddaa8e8d9dba1081f6c33e8302b58090ab268cb6257efabcdace815087bf2"
+    },
+    {
+      "path": "infrastructure/kubernetes/overlays/self-hosted/kustomization.yaml",
+      "change": "created",
+      "sha256": "84fcb645741a4149401214290803974ea36ddbfe56447012ee2fee12d51b9bde"
+    },
+    {
+      "path": "scripts/accept_okd4_local.py",
+      "change": "created",
+      "sha256": "c7aad3946493da5274e3dcfff92bd85f5abc9029a5a59df9a5dd90a4e12a99b1"
+    },
+    {
+      "path": "scripts/migrate_kubernetes.py",
+      "change": "created",
+      "sha256": "941d431fca06f72f6c234da01274045fbecb3e2b5640198ee51272bee1cd6774"
+    },
+    {
+      "path": "scripts/rollout_kubernetes.py",
+      "change": "created",
+      "sha256": "f76211266d8abc14a8ec9257a4f82a1f496cf9d7fb118e44b235275706c61d88"
+    },
+    {
+      "path": "scripts/test_external_postgres.py",
+      "change": "created",
+      "sha256": "e2765bffbab73f86e33271d3fcc8c41062902e9ccf75e222525e953737451e2e"
+    },
+    {
+      "path": "scripts/test_nonroot_containers.py",
+      "change": "created",
+      "sha256": "bb9713036c0a886a2e808a67387e02df7c6296a71ecceb0c501644e8c9365e6f"
+    },
+    {
+      "path": "scripts/validate_kubernetes.py",
+      "change": "created",
+      "sha256": "006272dfcdfbfa759a6e05812b30a38e3e46511d9c0daa07aa4b43a541f68fa8"
+    },
+    {
+      "path": "services/api/tests/test_kubernetes.py",
+      "change": "created",
+      "sha256": "e104b4c4732952fbccc558bd89c171610e74c0f6689cc766df116413420a71f9"
+    }
+  ],
+  "self_hash_note": "Inventory and checksum self-references have null hashes; SHA256SUMS covers inventory bytes."
+}
