@@ -380,3 +380,12 @@ pinned `.external/open-ontologies` binary; unavailable integration prerequisites
 Current authorization supersedes the historical Phase 11-unapproved statements above. Phase 10
 engineering is closed; deferred release gates remain mandatory under PLANS.md Section 23B.
 Production remains **BLOCKED / NOT PRODUCTION-CERTIFIED**. Phase 12 needs separate authorization.
+
+## Phase 12: immutable generic artifacts
+
+Authorized Phase 12 adds Project-governed generic artifact resources, immutable verified versions,
+an optional S3-compatible store and opt-in local MinIO. PostgreSQL remains authoritative; no
+dataset catalog or Phase 13 features are included. Ontology-only workflows keep storage disabled.
+See [artifact API](docs/api/artifacts.md), [storage setup and recovery](docs/development/artifact-storage.md),
+[ADR 0037](docs/decisions/0037-immutable-artifact-storage.md) and
+[validation report](docs/development/phase-12-report.md). Production remains blocked under Section 23B.

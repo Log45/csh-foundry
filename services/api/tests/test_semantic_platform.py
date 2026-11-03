@@ -46,8 +46,8 @@ pytestmark = pytest.mark.integration
 
 
 @pytest.fixture
-def database():
-    yield from pg_database.__wrapped__()
+def database(request):
+    yield from pg_database.__wrapped__(request)
 
 
 @pytest.fixture
@@ -375,6 +375,7 @@ def test_tenant_principal_and_inputs(semantic):
         )
 
 
+@pytest.mark.pre_artifact
 def test_migration_constraints_immutability_and_preservation(semantic):
     world, service, worker = semantic
     compiled, asserted, _ = inputs(semantic)

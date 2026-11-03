@@ -56,7 +56,7 @@ def migrate(engine, target="head", downgrade=False):
 
 
 @pytest.fixture
-def database():
+def database(request, target="head"):
     url = os.environ.get("TEST_DATABASE_URL")
     if not url:
         pytest.skip("NOT RUN: set TEST_DATABASE_URL to a real disposable PostgreSQL database")
@@ -68,13 +68,21 @@ def database():
         url, connect_args={"options": f"-c search_path={schema} -c statement_timeout=5000"}
     )
     try:
-        migrate(engine)
+        if request is not None and request.node.get_closest_marker("pre_artifact"):
+            target = "0018_projects"
+        migrate(engine, target)
         yield engine, sessionmaker(engine, expire_on_commit=False), url
     finally:
         engine.dispose()
         with admin.begin() as connection:
             connection.execute(text(f'DROP SCHEMA "{schema}" CASCADE'))
         admin.dispose()
+
+
+@pytest.fixture
+def historical_database():
+    # Exercise historical rollback on an unused pre-artifact schema; 0019 is forward-only.
+    yield from database.__wrapped__(None, "0018_projects")
 
 
 @dataclass
@@ -574,11 +582,11 @@ def test_manufacturing_63_objects_70_forward_links_and_inverse_navigation(world,
     } == {"MCH-001", "MCH-007", "MCH-013", "MCH-019"}
 
 
-def test_migration_upgrade_downgrade(database):
-    engine, _, _ = database
+def test_migration_upgrade_downgrade(historical_database):
+    engine, _, _ = historical_database
     migrate(engine, "0001_tenants", downgrade=True)
     assert set(inspect(engine).get_table_names()) == {"tenants", "alembic_version"}
-    migrate(engine)
+    migrate(engine, "0018_projects")
     assert "object_links" in inspect(engine).get_table_names()
     migrate(engine, "base", downgrade=True)
     assert inspect(engine).get_table_names() == ["alembic_version"]

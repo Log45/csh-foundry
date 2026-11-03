@@ -40,7 +40,7 @@ def measure(name, function):
     return value
 
 
-fixture = database.__wrapped__()
+fixture = database.__wrapped__(None)
 try:
     w = make_world(next(fixture))
     data = w.definition.model_dump(mode="json")

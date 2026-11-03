@@ -1,3 +1,4 @@
+import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Annotated
@@ -15,6 +16,9 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 from ontology_platform.actions.limits import ActionPayloadLimit
 from ontology_platform.actions.routes import router as action_router
 from ontology_platform.api.v1.routes import router
+from ontology_platform.artifacts.config import StorageSettings
+from ontology_platform.artifacts.routes import router as artifact_router
+from ontology_platform.artifacts.s3 import S3ArtifactStore
 from ontology_platform.branching.routes import router as branch_router
 from ontology_platform.config import Settings, get_settings
 from ontology_platform.db.governance import SCHEMA_REVISION
@@ -91,6 +95,24 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.include_router(router)
     app.include_router(project_router)
+    app.include_router(artifact_router)
+    app.add_middleware(
+        ActionPayloadLimit,
+        paths=("/artifacts",),
+        code="artifact_payload_too_large",
+        message="Artifact metadata exceeds 64 KiB",
+    )
+    artifact_settings = StorageSettings(_secrets_dir=os.environ.get("FOUNDRY_SECRETS_DIRECTORY"))
+    if (
+        configuration.environment == "production"
+        and artifact_settings.backend == "s3"
+        and artifact_settings.development_http
+    ):
+        raise ValueError("Production artifact storage requires TLS")
+    app.state.artifact_settings = artifact_settings
+    app.state.artifact_store = (
+        S3ArtifactStore(artifact_settings) if artifact_settings.backend == "s3" else None
+    )
     app.add_middleware(
         ActionPayloadLimit,
         paths=("/projects", "/resources"),

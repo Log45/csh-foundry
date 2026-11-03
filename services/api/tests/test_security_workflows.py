@@ -39,8 +39,8 @@ ISSUER = "https://identity.example/realm"
 
 
 @pytest.fixture
-def database():
-    yield from database_fixture.__wrapped__()
+def database(request):
+    yield from database_fixture.__wrapped__(request)
 
 
 def secure(w):

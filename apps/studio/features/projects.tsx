@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
+import { ArtifactPanel, CreateArtifactPanel } from "./artifacts";
+
 import type { Client } from "@/lib/api";
 import type { components } from "@/lib/api-schema";
 import { Field, Notice, Task, useTask } from "@/components/ui";
@@ -203,11 +205,9 @@ function ProjectBrowser({
         api<Folder[]>(
           `${url}/folders?limit=50&offset=${folderOffset}${folder ? `&parent_id=${folder}` : ""}`,
         ),
-        can("schema:read")
-          ? api<Resource[]>(
-              `${url}/resources?limit=50&offset=${resourceOffset}&search=${encodeURIComponent(search)}&shared=${shared}${folder ? `&folder_id=${folder}` : ""}`,
-            )
-          : Promise.resolve([]),
+        api<Resource[]>(
+          `${url}/resources?limit=50&offset=${resourceOffset}&search=${encodeURIComponent(search)}&shared=${shared}${folder ? `&folder_id=${folder}` : ""}`,
+        ),
         api<Member[]>(`${url}/members?limit=50&offset=${memberOffset}`),
       ]);
       if (valid) {
@@ -333,6 +333,14 @@ function ProjectBrowser({
         </form>
       )}
       <h3>Resources</h3>
+      {writable && (
+        <CreateArtifactPanel
+          api={api}
+          project={project.id}
+          folder={folder ?? null}
+          reload={reload}
+        />
+      )}
       {!can("schema:read") && (
         <Notice>
           Schema read permission is also required to discover ontology
@@ -370,9 +378,17 @@ function ProjectBrowser({
             {r.entity_id}
           </p>
           <p>{r.description}</p>
-          <button onClick={() => open(r.ontology_id)}>
-            Open ontology in Manager
-          </button>
+          {r.resource_type === "ARTIFACT" ? (
+            <ArtifactPanel
+              api={api}
+              artifact={r.id}
+              writable={r.project_id === project.id && writable}
+            />
+          ) : (
+            <button onClick={() => r.ontology_id && open(r.ontology_id)}>
+              Open ontology in Manager
+            </button>
+          )}
           {r.project_id === project.id && writable && (
             <AssetEdit
               key={`${r.id}-${r.revision}`}

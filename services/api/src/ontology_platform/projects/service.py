@@ -554,7 +554,8 @@ class ProjectService(GovernedService):
         )
         if row is None:
             raise missing("Resource")
-        self.authorizer.require(p, "schema:read", f"{p.tenant_id}/{row.ontology_id}")
+        if row.resource_type != "ARTIFACT":
+            self.authorizer.require(p, "schema:read", f"{p.tenant_id}/{row.ontology_id}")
         return row
 
     def get_resource(self, p: Principal, key: UUID) -> ResourceView:
@@ -577,7 +578,7 @@ class ProjectService(GovernedService):
         with self.scope(p) as s:
             row, _ = self.project(s, p, project)
             # Schema discovery is independent of Project grants, including empty pages.
-            self.authorizer.require(p, "schema:read", f"{p.tenant_id}/projects/{project}")
+            # Ontology discovery requires schema authority; artifact discovery does not.
             if row.state != "ACTIVE":
                 return []
             if folder:
@@ -595,6 +596,13 @@ class ProjectService(GovernedService):
                     Resource.name.contains(search, autoescape=True),
                 )
             )
+            # Apply ontology permission before pagination to avoid private counts/holes.
+            try:
+                self.authorizer.require(p, "schema:read", f"{p.tenant_id}/projects/{project}")
+            except ApplicationError as exc:
+                if exc.status_code != 403:
+                    raise
+                query = query.where(Resource.resource_type == "ARTIFACT")
             if shared:
                 query = query.where(
                     exists(
@@ -611,7 +619,8 @@ class ProjectService(GovernedService):
                 s.scalars(query.order_by(Resource.name, Resource.id).offset(offset).limit(limit))
             )
             for item in rows:
-                self.authorizer.require(p, "schema:read", f"{p.tenant_id}/{item.ontology_id}")
+                if item.resource_type != "ARTIFACT":
+                    self.authorizer.require(p, "schema:read", f"{p.tenant_id}/{item.ontology_id}")
             return [ResourceView.model_validate(item) for item in rows]
 
     def update_resource(

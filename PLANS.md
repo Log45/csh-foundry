@@ -3016,7 +3016,7 @@ Tasks:
 
 # 23A. Future Platform Architecture — Approved Direction, Phased Implementation
 
-> **Current authorization:** The architecture below is the approved long-term direction. **Only Phase 11 / milestone A is authorized for implementation now.** Milestones B–L remain planned and require explicit future approval. This supersedes the historical 'Phase 11 not approved' instructions recorded in the 2026-11-02/03 Phase 10 evidence; preserve those records as contemporaneous history, not current instructions. Reconcile implementation with `AGENTS.md`, current code, architecture decisions, and current migrations; planned features are not implemented features.
+> **Current authorization:** The architecture below is the approved long-term direction. **Phase 11 / milestone A and Phase 12 / milestone B are authorized.** Milestones C–L remain planned and require explicit future approval. Phase 12 authorization is recorded in the 2026-11-03 addendum below. This supersedes the historical 'Phase 11 not approved' instructions recorded in the 2026-11-02/03 Phase 10 evidence; preserve those records as contemporaneous history, not current instructions. Reconcile implementation with `AGENTS.md`, current code, architecture decisions, and current migrations; planned features are not implemented features.
 
 ## 23A.1 Product model and end-to-end workflows
 
@@ -3148,12 +3148,12 @@ Dataset ingestion and transformations **must not require** an existing ontology.
 
 ## 23A.10 Approved direction, milestone mapping, and approval gates
 
-The following is the **approved architectural direction**. **Milestone A is authorized as Phase 11 only**, with the narrower scope and acceptance criteria specified above. B–L are not authorized; their phase numbers are proposed sequencing labels, not permission to begin implementation. Assign/approve each later numbered phase by a separate decision. The former generic “Phase 11 optional advanced capabilities” bucket is superseded.
+The following is the **approved architectural direction**. **Milestone A is authorized as Phase 11 and milestone B as Phase 12**, with their separately approved scopes. C–L are not authorized; their phase numbers are proposed sequencing labels, not permission to begin implementation. Assign/approve each later numbered phase by a separate decision. The former generic “Phase 11 optional advanced capabilities” bucket is superseded.
 
 | Order | Proposed milestone | Deliverable and measurable exit |
 |---|---|---|
 | A / Phase 11 **AUTHORIZED** | Project/resource foundation | Projects, folders, stable IDs, resource browsing, project-scoped RBAC, and existing ontology resource adapters; **no dataset upload or dataset vertical slice** |
-| B | Artifact storage | Durable pluggable storage, immutable artifacts, **MinIO + idempotent init in local Compose**, external S3-compatible OKD profile, access control, upload/download, retention |
+| B / Phase 12 **AUTHORIZED** | Artifact storage | Durable pluggable storage, immutable artifacts, **MinIO + idempotent init in local Compose**, external S3-compatible OKD profile, access control, upload/download, retention |
 | C | Dataset platform | Independent raw datasets, versioned schema/preview, PostgreSQL registrations, provenance and basic lineage |
 | D | Transformation pipelines | Versioned Polars/Python pipeline runs in isolated execution, immutable outputs, retries, lineage |
 | E | Dataset-to-ontology creation | Column selection/ignore, source-backed/edit-only properties, key validation, governed materialization; preserve empty ontology flow |
@@ -3175,7 +3175,7 @@ The original Phase 11 Rust optimization objective **remains relevant to the fina
 
 **First end-to-end product acceptance:** In a governed Project, upload a raw CSV → clean with Polars → save a versioned dataset → create an ontology object type from selected columns plus edit-only properties → publish/activate/materialize → execute a governed action → query and act through a React SDK application. Separately demonstrate an empty object type populated by a create action. Cross-Project and cross-tenant negative tests are mandatory.
 
-**Phase-authorization rule (current):** Phase 11 / milestone A is authorized only as scoped above. Later milestones require separate approval. Phase 10 historical acceptance statuses remain unchanged; unresolved production gates are deferred to Section 23B, not waived. Preserve existing fixture vocabulary, the historical `0017_capacity` baseline (new Phase 11 migrations may advance it), existing user data, production release policy, and historical evidence.
+**Phase-authorization rule (current):** Phase 11 / milestone A and Phase 12 / milestone B are authorized only as separately scoped. Phase 13 / milestone C and later milestones require separate approval. Phase 10 historical acceptance statuses remain unchanged; unresolved production gates are deferred to Section 23B, not waived. Preserve existing fixture vocabulary, the historical `0017_capacity` baseline (new Phase 11 migrations may advance it), existing user data, production release policy, and historical evidence.
 
 ---
 
@@ -3601,4 +3601,16 @@ This dated decision **supersedes prior Phase 10-only / Phase 11-not-approved ins
 - **Active implementation authorization:** **Phase 11 only**, defined above as Projects, folders, resource registry, authorization/governance, existing ontology resource adapters and Studio Project navigation. Do not implement datasets, MinIO, transformations, React app hosting, Spark, Rust, or the rest of the platform under this authorization.
 - **Next dependency sequence (future approvals required):** Phase 12 artifact storage (MinIO local / external S3); Phase 13 dataset catalog/upload/versioning; Phase 14 Polars engine-neutral pipelines; Phase 15 dataset-to-ontology; Phase 16 React application SDK/developer experience; later media/functions, visual builders and advanced capabilities. Spark and Rust remain conditional future milestones L and K. Phase numbers beyond 16 are not assigned here.
 - **Baseline:** Preserve current source, existing data, historical `0017_capacity` migration reference, canonical fixtures, identity/authorization model and existing Phase 10 evidence. Confirm the actual repository migration head before creating Phase 11 migrations. Keep ordinary regression and security-critical checks mandatory.
-- **Agent stop rule:** Complete and report Phase 11 only; request a new approval before starting Phase 12. Do not run production release or organizational cluster mutation without explicit separate authorization.
+- **Agent stop rule:** Complete and report Phase 12 only; request a new approval before starting Phase 13. Do not run production release or organizational cluster mutation without explicit separate authorization.
+
+
+## Phase 12 authorization addendum — 2026-11-03
+
+The user's explicit Phase 12 implementation request authorizes Section 23A milestone B only,
+superseding the earlier Phase 11-only stop rule for this milestone. This authorizes generic governed
+artifact storage, immutable versions, optional local MinIO and external S3 configuration, Studio
+integration and development validation. [ADR 0037](docs/decisions/0037-immutable-artifact-storage.md)
+and the [Phase 12 report](docs/development/phase-12-report.md) record actual implementation and
+acceptance evidence. Phase 13/milestone C and subsequent milestones remain unapproved. Section 23B
+production gates are unchanged and production release remains BLOCKED. Historical reports retain
+their original authorization and validation status.

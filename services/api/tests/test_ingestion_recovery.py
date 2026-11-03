@@ -182,6 +182,7 @@ def test_retention_purges_only_terminal_staging(ingestion):
     assert result.staging_purged_at and result.created == 6
 
 
+@pytest.mark.pre_artifact
 def test_phase3_upgrade_and_downgrade_preserve_objects(ingestion):
     from test_phase1 import machine
 

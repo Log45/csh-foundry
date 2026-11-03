@@ -1379,9 +1379,9 @@ class Resource(Base):
     description: Mapped[str] = mapped_column(Text, default="")
     state: Mapped[str] = mapped_column(String(20), default="ACTIVE")
     revision: Mapped[int] = mapped_column(default=1)
-    ontology_id: Mapped[str] = mapped_column(Text)
-    schema_version: Mapped[str] = mapped_column(Text)
-    entity_id: Mapped[str] = mapped_column(Text)
+    ontology_id: Mapped[str | None] = mapped_column(Text)
+    schema_version: Mapped[str | None] = mapped_column(Text)
+    entity_id: Mapped[str | None] = mapped_column(Text)
     created_by: Mapped[str] = mapped_column(Text)
     updated_by: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
@@ -1411,8 +1411,14 @@ class Resource(Base):
         ),
         CheckConstraint(
             "resource_type IN ('ONTOLOGY_OBJECT_TYPE','ONTOLOGY_LINK_TYPE',"
-            "'ONTOLOGY_ACTION','ONTOLOGY_VERSION')",
+            "'ONTOLOGY_ACTION','ONTOLOGY_VERSION','ARTIFACT')",
             name="ck_resource_type",
+        ),
+        CheckConstraint(
+            "(resource_type = 'ARTIFACT' AND ontology_id IS NULL AND schema_version IS NULL "
+            "AND entity_id IS NULL) OR (resource_type <> 'ARTIFACT' AND ontology_id IS NOT NULL "
+            "AND schema_version IS NOT NULL AND entity_id IS NOT NULL)",
+            name="ck_resource_authority_kind",
         ),
         CheckConstraint("state IN ('ACTIVE','ARCHIVED')", name="ck_resource_state"),
         CheckConstraint("revision > 0", name="ck_resource_revision"),
@@ -1441,4 +1447,39 @@ class ResourceShare(Base):
             ["tenant_id", "resource_id"], ["platform_resources.tenant_id", "platform_resources.id"]
         ),
         ForeignKeyConstraint(["tenant_id", "project_id"], ["projects.tenant_id", "projects.id"]),
+    )
+
+
+class ArtifactVersion(Base):
+    __tablename__ = "artifact_versions"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    artifact_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    sequence: Mapped[int]
+    backend: Mapped[str] = mapped_column(String(20))
+    bucket: Mapped[str] = mapped_column(Text)
+    object_key: Mapped[str] = mapped_column(Text)
+    size: Mapped[int] = mapped_column(BigInteger)
+    checksum: Mapped[str] = mapped_column(String(64))
+    media_type: Mapped[str] = mapped_column(String(100), default="application/octet-stream")
+    filename: Mapped[str] = mapped_column(String(200))
+    state: Mapped[str] = mapped_column(String(20), default="PENDING")
+    created_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    committed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    provenance: Mapped[dict[str, JsonValue]] = mapped_column(JSONB, default=dict)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "artifact_id"], ["platform_resources.tenant_id", "platform_resources.id"]
+        ),
+        UniqueConstraint("tenant_id", "artifact_id", "sequence", name="uq_artifact_sequence"),
+        UniqueConstraint("backend", "bucket", "object_key", name="uq_artifact_object"),
+        CheckConstraint("sequence > 0 AND size >= 0", name="ck_artifact_size_sequence"),
+        CheckConstraint("checksum ~ '^[a-f0-9]{64}$'", name="ck_artifact_checksum"),
+        CheckConstraint(
+            "state IN ('PENDING','COMMITTED','FAILED','DELETED')", name="ck_artifact_state"
+        ),
+        CheckConstraint(
+            "(state = 'COMMITTED') = (committed_at IS NOT NULL)", name="ck_artifact_commit"
+        ),
     )

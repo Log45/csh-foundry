@@ -28,7 +28,7 @@ from test_actions import world as action_world  # noqa: E402
 from test_phase1 import database  # noqa: E402
 
 os.environ.setdefault("TEST_DATABASE_URL", get_settings().database_url.get_secret_value())
-fixture = database.__wrapped__()
+fixture = database.__wrapped__(None)
 engine, sessions, url = next(fixture)
 try:
     world = action_world.__wrapped__((engine, sessions, url))

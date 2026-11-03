@@ -42,6 +42,31 @@ class TransportBounds:
         if scope["type"] != "http":
             await self.app(scope, receive, send)
             return
+        # Artifact byte routes enforce their own streamed size and integrity bounds. Keep
+        # metadata/ontology buffering unchanged; never buffer file bodies in middleware.
+        if scope.get("method") in {"GET", "PUT"} and re.fullmatch(
+            r"/api/v1/artifacts/[0-9a-fA-F-]{36}/versions/[0-9a-fA-F-]{36}/content",
+            scope.get("path", ""),
+        ):
+            started = False
+
+            async def stream_send(message: Message) -> None:
+                nonlocal started
+                if message["type"] == "http.response.start":
+                    started = True
+                await send(message)
+
+            try:
+                async with asyncio.timeout(self.deadline):
+                    await self.app(scope, receive, stream_send)
+            except TimeoutError:
+                if started:
+                    raise  # Truncate the transfer; never append a JSON error to artifact bytes.
+                await JSONResponse(
+                    {"error": {"code": "request_timeout", "message": "Request deadline exceeded"}},
+                    status_code=504,
+                )(scope, receive, send)
+            return
         request: list[bytes] = []
         size = 0
         output: list[Message] = []

@@ -22,6 +22,11 @@ services:
     profiles: ["api", "studio"]
     environment:
       FOUNDRY_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-foundry}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-foundry}
+      FOUNDRY_ARTIFACT_BACKEND: ${FOUNDRY_ARTIFACT_BACKEND:-disabled}
+      FOUNDRY_ARTIFACT_ENDPOINT: ${FOUNDRY_ARTIFACT_ENDPOINT:-http://minio:9000}
+      FOUNDRY_ARTIFACT_DEVELOPMENT_HTTP: ${FOUNDRY_ARTIFACT_DEVELOPMENT_HTTP:-true}
+      FOUNDRY_ARTIFACT_ACCESS_KEY: ${FOUNDRY_ARTIFACT_ACCESS_KEY:-${MINIO_APP_USER:-}}
+      FOUNDRY_ARTIFACT_SECRET_KEY: ${FOUNDRY_ARTIFACT_SECRET_KEY:-${MINIO_APP_PASSWORD:-}}
       FOUNDRY_AUTH_MODE: ${FOUNDRY_AUTH_MODE:-disabled}
       FOUNDRY_OIDC_PROVIDERS: ${FOUNDRY_OIDC_PROVIDERS:-[]}
       FOUNDRY_OIDC_CA_BUNDLE: ${FOUNDRY_DOCKER_OIDC_CA_BUNDLE:-}
@@ -56,5 +61,36 @@ services:
     depends_on:
       api:
         condition: service_started
+  minio:
+    image: minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+    profiles: ["minio"]
+    entrypoint: ["/bin/sh", "/init/start.sh"]
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-}
+    volumes:
+      - minio-data:/data
+      - ./minio:/init:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+  minio-init:
+    image: minio/mc@sha256:a7fe349ef4bd8521fb8497f55c6042871b2ae640607cf99d9bede5e9bdf11727
+    profiles: ["minio"]
+    entrypoint: ["/bin/sh", "/init/init.sh"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-}
+      MINIO_APP_USER: ${MINIO_APP_USER:-}
+      MINIO_APP_PASSWORD: ${MINIO_APP_PASSWORD:-}
+    volumes:
+      - ./minio:/init:ro
+    depends_on:
+      minio:
+        condition: service_healthy
 volumes:
+  minio-data:
   postgres-data:

@@ -1,0 +1,48 @@
+Phase 12 development validation, 2026-11-03
+Base revision: 6143049; working tree changes, no commit or deployment requested.
+Host: macOS arm64; Python 3.12.0; Node v25.9.0; PostgreSQL 17.6; Docker 28.3.0.
+SDK: boto3 1.43.123, botocore 1.43.123.
+
+PASS: PATH=/opt/homebrew/opt/node/bin:$PATH uv run python scripts/validate_phase12.py --full
+  Real disposable MinIO and disposable PostgreSQL schemas.
+  Repeated init; sentinel persisted across server restart.
+  651 passed, 1 xfailed, 1 warning in 425.06s.
+  Zero skips, failures or errors. Alembic: No new upgrade operations detected.
+  Strict xfail: test_raw_pyshacl_compatibility, preserved existing string-term mismatch.
+  Only generated test project volumes/schemas removed.
+
+PASS: STUDIO_E2E_PORT=3100 STUDIO_E2E_API_PORT=8101 runner --browser
+  14 artifact tests; 6 browser workflows passed in 39.0s.
+PASS: Same runner with STUDIO_E2E_DURABLE=true, replica port 3101
+  14 artifact tests; 7 browser workflows passed in 36.4s.
+  Includes replica restart/logout revocation and exact-byte download/two versions/archive.
+PASS: npm --prefix apps/studio test (supported Node PATH): 37 tests, 7 files.
+PASS: npm --prefix apps/studio run build: production Next build, binary BFF included.
+PASS: Ruff check and format (224 files), mypy (110 source files), tsc, Prettier, git diff --check.
+PASS: actual OpenAPI export and openapi-typescript generation.
+PASS: pre_artifact historical migration regression: 7 passed, 645 deselected.
+PASS: cross-service security rerun after fixture alias correction: 6 passed.
+PASS: post-review configuration error credential-redaction test: 6 passed, 8 deselected.
+PASS: post-review cleanup 404-equivalence and simulated client-disconnect coverage: 14 passed.
+PASS: missing bootstrap credentials rejected by the actual pinned MinIO startup wrapper.
+PASS: final guarded-startup storage run: 14 passed in 8.83s, repeated init and restart persistence.
+PASS: Compose external credential injection; default MinIO ports absent; digest pins and scoped policy.
+PASS: disabled-profile inventory: postgres only, no MinIO credential interpolation requirement.
+PASS: migration head 0019_artifacts; shared developer schema read-only check remains 0017_capacity.
+
+FAIL: attempted fresh Docker Hub image retrieval denied; Quay 401; legacy binary downloads 410.
+NOT RUN: fresh-host provisioning without trusted cached image archive/mirror.
+NOT RUN: live external organizational S3, OKD deployment, production certification/DR.
+NOT SUPPORTED: raw pySHACL compatibility and base owl-rl fixture inference (existing limitations).
+
+Initial failures corrected, not suppressed:
+- Seven historical rollback tests attempted to downgrade through forward-only artifact migration.
+  They now start at 0018_projects with unchanged preservation assertions.
+- A remaining direct database_fixture generator caller caused six setup errors; corrected wrapper
+  and reran all six security workflows, then the entire suite successfully.
+- Leading-dash randomized password was parsed as an mc option. Added argument terminators,
+  sanitized credential-command output and deliberately repeated real initialization with such values.
+- Browser default port 3000 was occupied: existing service untouched; used 3100/8101/3101.
+- Shell default Node 16 was unsupported: all final frontend validation used installed Node v25.9.0.
+
+Production remains BLOCKED; Phase 13 is not authorized or implemented.

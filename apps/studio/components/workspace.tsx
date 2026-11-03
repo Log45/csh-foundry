@@ -1,4 +1,5 @@
 "use client";
+import { ArtifactContext } from "@/features/artifacts";
 import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import {
   browserRequest,
@@ -337,16 +338,20 @@ export function Workspace() {
           </details>
         )}
         {tab === "projects" && session.tenant && can("project:read") && (
-          <Projects
-            key={session.tenant}
-            api={api}
-            can={can}
-            open={(ontology) => {
-              if (!navigate()) return;
-              setId(ontology);
-              setTab("manager");
-            }}
-          />
+          <ArtifactContext.Provider
+            value={{ csrf: session.csrf, tenant: session.tenant ?? "" }}
+          >
+            <Projects
+              key={session.tenant}
+              api={api}
+              can={can}
+              open={(ontology) => {
+                if (!navigate()) return;
+                setId(ontology);
+                setTab("manager");
+              }}
+            />
+          </ArtifactContext.Provider>
         )}
         {id && session.tenant && (
           <div key={`${session.tenant}-${id}-${tab}`}>

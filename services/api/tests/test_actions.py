@@ -43,8 +43,8 @@ def examples():
 
 
 @pytest.fixture
-def database():
-    yield from pg_database.__wrapped__()
+def database(request):
+    yield from pg_database.__wrapped__(request)
 
 
 @pytest.fixture
@@ -616,6 +616,7 @@ def test_source_ownership_user_edits_and_explicit_resolution(world):
         refresh(3, "RUNNING")
 
 
+@pytest.mark.pre_artifact
 def test_phase2_upgrade_preserves_operational_data(database):
     engine, sessions, url = database
     migrate(engine, "0005_query_order", downgrade=True)
@@ -873,6 +874,7 @@ def test_reconciliation_schema_change_requires_fresh_conflict(world):
     )
 
 
+@pytest.mark.pre_artifact
 def test_upgrade_preserves_phase2_objects(database):
     world = make_world(database)
     active(world)

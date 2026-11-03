@@ -38,7 +38,7 @@ from test_security_oidc import ISSUER, idp, token  # noqa: E402
 
 def main() -> None:
     os.environ.setdefault("TEST_DATABASE_URL", get_settings().database_url.get_secret_value())
-    fixture, identity = database.__wrapped__(), idp.__wrapped__()
+    fixture, identity = database.__wrapped__(None), idp.__wrapped__()
     server = None
     runtime_role = None
     with tempfile.TemporaryDirectory(prefix="foundry-load-") as directory:

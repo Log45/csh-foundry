@@ -151,3 +151,5 @@ Project/folder/resource governance routes and current lifecycle/permission contr
 in [projects.md](projects.md). Current source readiness requires migration `0018_projects`.
 Production OIDC and verified tenant selection are described in [security.md](security.md);
 the local-identity descriptions above describe the original development profile.
+
+- [Generic artifacts and immutable versions](artifacts.md) — Phase 12 Project-governed storage.

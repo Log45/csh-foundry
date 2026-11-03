@@ -557,3 +557,63 @@ test("Project workspace navigates folders and governed canonical references", as
     page.getByRole("button", { name: "Create folder", exact: true }),
   ).toHaveCount(0);
 });
+
+test("Project artifacts upload immutable versions and download exact bytes", async ({
+  page,
+}) => {
+  test.skip(
+    process.env.FOUNDRY_ARTIFACT_BACKEND !== "s3",
+    "NOT RUN: run scripts/validate_phase12.py --browser",
+  );
+  await login(page);
+  await page.getByRole("button", { name: "Projects", exact: true }).click();
+  const name = `Artifact Project ${Date.now()}`;
+  await page.getByLabel("New Project name").fill(name);
+  await page
+    .getByRole("button", { name: "Create Project", exact: true })
+    .click();
+  await page
+    .getByLabel("Project", { exact: true })
+    .selectOption({ label: `${name} (owner, ACTIVE)` });
+  await page.getByLabel("New artifact name").fill("Test file");
+  await page
+    .getByRole("button", { name: "Create artifact", exact: true })
+    .click();
+  await page.getByText("Artifact versions and files", { exact: true }).click();
+  const bytes = Buffer.from("immutable artifact bytes\n");
+  await page.getByLabel("Artifact file (up to 64 MiB)").setInputFiles({
+    name: "sample.bin",
+    mimeType: "application/octet-stream",
+    buffer: bytes,
+  });
+  await page
+    .getByRole("button", { name: "Upload new version", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Download version 1", exact: true }),
+  ).toBeVisible();
+  const download = page.waitForEvent("download");
+  await page
+    .getByRole("button", { name: "Download version 1", exact: true })
+    .click();
+  const file = await download;
+  expect(fs.readFileSync((await file.path())!)).toEqual(bytes);
+  await page
+    .getByRole("button", { name: "Upload new version", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Download version 2", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Download version 1", exact: true }),
+  ).toBeVisible();
+  await page
+    .getByText("Rename, move or archive Test file", { exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Archive asset", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Test file", exact: true }),
+  ).toHaveCount(0);
+});

@@ -35,8 +35,8 @@ SOURCE = (ROOT / "fixtures/manufacturing.ttl").read_text()
 
 
 @pytest.fixture
-def database():
-    yield from pg_database.__wrapped__()
+def database(request):
+    yield from pg_database.__wrapped__(request)
 
 
 @pytest.fixture
@@ -421,6 +421,7 @@ def test_http_import_export_contract_and_body_limit(authoring):
 
 
 @pytest.mark.integration
+@pytest.mark.pre_artifact
 def test_migration_downgrade_preserves_operational_registry(authoring):
     w, svc = authoring
     w.objects.create(w.actor, w.definition.id, factory())

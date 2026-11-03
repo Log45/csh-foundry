@@ -436,6 +436,7 @@ def test_links_apply_sql_target_policy_before_pagination(security):
         )
 
 
+@pytest.mark.pre_artifact
 def test_phase7_upgrade_downgrade_preserves_operational_rows(security):
     from ontology_platform.db.models import SecurityState
     from test_phase1 import migrate

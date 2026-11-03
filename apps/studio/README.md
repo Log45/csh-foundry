@@ -90,3 +90,9 @@ principal IDs; sharing uses an accessible target Project ID. Explicitly load sha
 Archived Projects remain selectable but read-only; archive does not delete canonical definitions.
 Refresh after 412 conflicts, revocation or membership changes. The backend rechecks all operations.
 See [contracts and limits](../../docs/api/projects.md).
+
+Project resources now support generic artifacts: create a logical artifact, upload a file up to
+64 MiB, inspect version history/checksums, download verified versions, archive and share through
+the existing resource controls. Binary transfers use `/bff/artifacts`, with session, CSRF and
+expected-tenant checks. Storage credentials stay in FastAPI. Storage setup is documented in
+[artifact operations](../../docs/development/artifact-storage.md); unavailable storage fails visibly.

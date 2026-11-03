@@ -21,7 +21,15 @@ from ontology_platform.security.contracts import AssignmentInput, RoleInput
 from pydantic import ValidationError
 from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
-from test_phase1 import active, client_for, database, make_world, migrate, world  # noqa: F401
+from test_phase1 import (  # noqa: F401
+    active,
+    client_for,
+    database,
+    historical_database,
+    make_world,
+    migrate,
+    world,
+)
 from test_security_platform import restrict, security  # noqa: F401
 
 
@@ -319,11 +327,11 @@ def test_conflicting_mutations_and_maximum_depth(world):  # noqa: F811
     raises(409, lambda: s.update_folder(p, a.id, f.id, None, 2))
 
 
-def test_upgrade_existing_data_and_historical_security_roles(database):  # noqa: F811
-    engine, sessions, _ = database
+def test_upgrade_existing_data_and_historical_security_roles(historical_database):  # noqa: F811
+    engine, sessions, _ = historical_database
     # Empty Phase 11 rollback is permitted; populated rollback fails closed.
     migrate(engine, "0017_capacity", downgrade=True)
-    w = make_world(database)
+    w = make_world(historical_database)
     active(w)
     from ontology_platform.db.models import (
         Membership,
@@ -411,7 +419,7 @@ def test_ontology_permission_required_after_project_access(security):  # noqa: F
     r = resource(s, admin, a.id)
     s.member(admin, a.id, MemberChange(principal_id=who, role="viewer", expected_revision=1))
     assert s.get_project(reader, a.id).role == "viewer"
-    raises(403, lambda: s.resources(reader, a.id))
+    assert s.resources(reader, a.id) == []  # Ontology entries filtered before pagination.
     raises(403, lambda: s.get_resource(reader, r.id))
 
 

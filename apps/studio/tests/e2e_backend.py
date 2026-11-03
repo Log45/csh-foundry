@@ -175,7 +175,7 @@ def main():
     if not server.started:
         raise RuntimeError("Local TLS provider could not bind 127.0.0.1:8443")
     os.environ.setdefault("TEST_DATABASE_URL", get_settings().database_url.get_secret_value())
-    fixture = database.__wrapped__()
+    fixture = database.__wrapped__(None)
     db = next(fixture)
     try:
         w = make_world(db)

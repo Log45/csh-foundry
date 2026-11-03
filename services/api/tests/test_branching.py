@@ -200,6 +200,7 @@ def test_stale_preview_concurrent_writers_and_rollback(world):  # noqa: F811
     assert s.head(w.actor, w.definition.id, b.id) == before
 
 
+@pytest.mark.pre_artifact
 def test_branch_tenant_api_constraints_and_migration(world, database):  # noqa: F811
     w = world
     active(w)

@@ -1,0 +1,6 @@
+# Optional host access for host-run API development; base profile publishes no storage ports.
+services:
+  minio:
+    ports:
+      - "127.0.0.1:${MINIO_API_PORT:-9000}:9000"
+      - "127.0.0.1:${MINIO_CONSOLE_PORT:-9001}:9001"

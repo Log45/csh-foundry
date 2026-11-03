@@ -12,7 +12,7 @@ node_modules/
 .next/
 target/
 .external/
-artifacts/
+/artifacts/
 *.egg-info/
 external/
 

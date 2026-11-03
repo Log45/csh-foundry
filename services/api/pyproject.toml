@@ -15,6 +15,8 @@ dependencies = [
     "pyjwt[crypto]==2.15.0",
     "httpx>=0.28,<1",
     "cryptography==50.0.2",
+    "boto3==1.43.123",
+    "boto3-stubs[s3]==1.43.123",
 ]
 [build-system]
 requires = ["hatchling"]

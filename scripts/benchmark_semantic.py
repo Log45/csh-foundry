@@ -26,7 +26,7 @@ from test_ingestion import setup, submit  # noqa: E402
 from test_phase1 import database  # noqa: E402
 
 os.environ.setdefault("TEST_DATABASE_URL", get_settings().database_url.get_secret_value())
-fixture = database.__wrapped__()
+fixture = database.__wrapped__(None)
 engine, sessions, url = next(fixture)
 measurements = {}
 

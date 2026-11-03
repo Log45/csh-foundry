@@ -24,7 +24,7 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = ["services/api/tests", "packages/ontology-schema/tests"]
-markers = ["integration: requires a real PostgreSQL database", "semantic: requires pinned Open Ontologies binary"]
+markers = ["pre_artifact: historical rollback tests start before forward-only artifact migration", "integration: requires a real PostgreSQL database", "semantic: requires pinned Open Ontologies binary"]
 
 [tool.ruff]
 extend-exclude = ["*.md"]

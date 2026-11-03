@@ -44,8 +44,8 @@ RELATIONS = {
 
 
 @pytest.fixture
-def database():
-    yield from pg_database.__wrapped__()
+def database(request):
+    yield from pg_database.__wrapped__(request)
 
 
 def setup(database, tmp_path):

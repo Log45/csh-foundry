@@ -18,7 +18,7 @@ from test_phase1 import active, database, make_world  # noqa: E402
 from test_queries import load_manufacturing  # noqa: E402
 
 os.environ.setdefault("TEST_DATABASE_URL", get_settings().database_url.get_secret_value())
-fixture = database.__wrapped__()
+fixture = database.__wrapped__(None)
 engine, sessions, url = next(fixture)
 try:
     world = make_world((engine, sessions, url))

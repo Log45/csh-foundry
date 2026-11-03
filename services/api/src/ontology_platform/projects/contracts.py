@@ -92,7 +92,14 @@ class UpdateResource(Expected):
     folder_id: UUID | None = None
 
 
-class ResourceView(CreateResource):
+class ResourceView(Model):
+    resource_type: Kind | Literal["ARTIFACT"]
+    ontology_id: str | None
+    schema_version: str | None
+    entity_id: str | None
+    name: Name
+    description: str
+    folder_id: UUID | None
     id: UUID
     project_id: UUID
     state: str
