@@ -496,3 +496,64 @@ if (process.env.STUDIO_E2E_REPLICA_PORT) {
     }
   });
 }
+
+test("Project workspace navigates folders and governed canonical references", async ({
+  page,
+}) => {
+  await login(page);
+  await page.getByRole("button", { name: "Projects", exact: true }).click();
+  const name = `E2E Project ${Date.now()}`;
+  await page.getByLabel("New Project name").fill(name);
+  await page
+    .getByRole("button", { name: "Create Project", exact: true })
+    .click();
+  await page
+    .getByLabel("Project", { exact: true })
+    .selectOption({ label: `${name} (owner, ACTIVE)` });
+  await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
+  await page.getByLabel("New folder name").fill("Models");
+  await page
+    .getByRole("button", { name: "Create folder", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Models", exact: true }).click();
+  await page.getByLabel("New folder name").fill("Nested");
+  await page
+    .getByRole("button", { name: "Create folder", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Nested", exact: true }),
+  ).toBeVisible();
+  await page
+    .getByText("Register published ontology assets", { exact: true })
+    .click();
+  await page.getByLabel("Catalog ontology ID").fill("manufacturing");
+  await page.getByLabel("Published version", { exact: true }).fill("1.0.0");
+  await page.getByRole("button", { name: "Register catalog page" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Machine (OBJECT_TYPE)", exact: true }),
+  ).toBeVisible();
+  const machine = page.locator("article").filter({
+    has: page.getByRole("heading", {
+      name: "Machine (OBJECT_TYPE)",
+      exact: true,
+    }),
+  });
+  await machine
+    .getByRole("button", { name: "Open ontology in Manager" })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Validate compatibility" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Projects", exact: true }).click();
+  await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
+  await page.getByText("Manage Project", { exact: true }).click();
+  await page
+    .getByRole("button", { name: "Archive Project", exact: true })
+    .click();
+  await expect(page.getByLabel("Project", { exact: true })).toContainText(
+    `${name} (owner, ARCHIVED)`,
+  );
+  await expect(
+    page.getByRole("button", { name: "Create folder", exact: true }),
+  ).toHaveCount(0);
+});

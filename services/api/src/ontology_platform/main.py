@@ -25,6 +25,7 @@ from ontology_platform.ingestion.catalog import SourceCatalog
 from ontology_platform.ingestion.routes import router as ingestion_router
 from ontology_platform.interoperability.routes import router as interchange_router
 from ontology_platform.operations import RequestTelemetry, Telemetry, TransportBounds
+from ontology_platform.projects.routes import router as project_router
 from ontology_platform.queries.cursor import CursorCodec
 from ontology_platform.queries.routes import router as query_router
 from ontology_platform.sdk.routes import router as sdk_router
@@ -89,6 +90,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         message="Ingestion payload exceeds 64 KiB",
     )
     app.include_router(router)
+    app.include_router(project_router)
+    app.add_middleware(
+        ActionPayloadLimit,
+        paths=("/projects", "/resources"),
+        code="project_payload_too_large",
+        message="Project request exceeds 64 KiB",
+    )
     app.include_router(branch_router)
     app.include_router(sdk_router)
     app.add_middleware(

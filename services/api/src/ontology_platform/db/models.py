@@ -14,6 +14,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
     func,
+    text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -1292,4 +1293,152 @@ class SDKArtifact(Base):
         CheckConstraint("schema_status = 'PUBLISHED'", name="ck_sdk_published"),
         CheckConstraint("language IN ('python','typescript')", name="ck_sdk_language"),
         CheckConstraint("octet_length(files_json) <= 8388608", name="ck_sdk_size"),
+    )
+
+
+class Project(Base):
+    __tablename__ = "projects"
+    tenant_id: Mapped[UUID] = mapped_column(ForeignKey("tenants.id"), primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(200))
+    description: Mapped[str] = mapped_column(Text, default="")
+    state: Mapped[str] = mapped_column(String(20), default="ACTIVE")
+    revision: Mapped[int] = mapped_column(default=1)
+    created_by: Mapped[str] = mapped_column(Text)
+    updated_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        CheckConstraint("state IN ('ACTIVE','ARCHIVED')", name="ck_project_state"),
+        CheckConstraint("revision > 0", name="ck_project_revision"),
+        Index(
+            "uq_project_name",
+            "tenant_id",
+            "name",
+            unique=True,
+            postgresql_where=text("state = 'ACTIVE'"),
+        ),
+    )
+
+
+class ProjectMember(Base):
+    __tablename__ = "project_members"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    project_id: Mapped[UUID] = mapped_column(primary_key=True)
+    principal_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    role: Mapped[str] = mapped_column(String(20))
+    __table_args__ = (
+        ForeignKeyConstraint(["tenant_id", "project_id"], ["projects.tenant_id", "projects.id"]),
+        CheckConstraint("role IN ('owner','editor','viewer')", name="ck_project_role"),
+    )
+
+
+class Folder(Base):
+    __tablename__ = "project_folders"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    project_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    parent_id: Mapped[UUID | None]
+    name: Mapped[str] = mapped_column(String(200))
+    state: Mapped[str] = mapped_column(String(20), default="ACTIVE")
+    revision: Mapped[int] = mapped_column(default=1)
+    created_by: Mapped[str] = mapped_column(Text)
+    updated_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(["tenant_id", "project_id"], ["projects.tenant_id", "projects.id"]),
+        ForeignKeyConstraint(
+            ["tenant_id", "project_id", "parent_id"],
+            ["project_folders.tenant_id", "project_folders.project_id", "project_folders.id"],
+        ),
+        CheckConstraint("id IS DISTINCT FROM parent_id", name="ck_folder_self"),
+        CheckConstraint("state IN ('ACTIVE','ARCHIVED')", name="ck_folder_state"),
+        CheckConstraint("revision > 0", name="ck_folder_revision"),
+        Index(
+            "uq_folder_name",
+            "tenant_id",
+            "project_id",
+            "parent_id",
+            "name",
+            unique=True,
+            postgresql_nulls_not_distinct=True,
+            postgresql_where=text("state = 'ACTIVE'"),
+        ),
+    )
+
+
+class Resource(Base):
+    __tablename__ = "platform_resources"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    project_id: Mapped[UUID]
+    folder_id: Mapped[UUID | None]
+    resource_type: Mapped[str] = mapped_column(String(40))
+    name: Mapped[str] = mapped_column(String(200))
+    description: Mapped[str] = mapped_column(Text, default="")
+    state: Mapped[str] = mapped_column(String(20), default="ACTIVE")
+    revision: Mapped[int] = mapped_column(default=1)
+    ontology_id: Mapped[str] = mapped_column(Text)
+    schema_version: Mapped[str] = mapped_column(Text)
+    entity_id: Mapped[str] = mapped_column(Text)
+    created_by: Mapped[str] = mapped_column(Text)
+    updated_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(["tenant_id", "project_id"], ["projects.tenant_id", "projects.id"]),
+        ForeignKeyConstraint(
+            ["tenant_id", "project_id", "folder_id"],
+            ["project_folders.tenant_id", "project_folders.project_id", "project_folders.id"],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "schema_version"],
+            [
+                "ontology_versions.tenant_id",
+                "ontology_versions.ontology_id",
+                "ontology_versions.version",
+            ],
+        ),
+        UniqueConstraint(
+            "tenant_id",
+            "project_id",
+            "resource_type",
+            "ontology_id",
+            "schema_version",
+            "entity_id",
+            name="uq_resource_authority",
+        ),
+        CheckConstraint(
+            "resource_type IN ('ONTOLOGY_OBJECT_TYPE','ONTOLOGY_LINK_TYPE',"
+            "'ONTOLOGY_ACTION','ONTOLOGY_VERSION')",
+            name="ck_resource_type",
+        ),
+        CheckConstraint("state IN ('ACTIVE','ARCHIVED')", name="ck_resource_state"),
+        CheckConstraint("revision > 0", name="ck_resource_revision"),
+        Index(
+            "uq_resource_name",
+            "tenant_id",
+            "project_id",
+            "folder_id",
+            "name",
+            unique=True,
+            postgresql_nulls_not_distinct=True,
+            postgresql_where=text("state = 'ACTIVE'"),
+        ),
+    )
+
+
+class ResourceShare(Base):
+    __tablename__ = "resource_shares"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    resource_id: Mapped[UUID] = mapped_column(primary_key=True)
+    project_id: Mapped[UUID] = mapped_column(primary_key=True)
+    created_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "resource_id"], ["platform_resources.tenant_id", "platform_resources.id"]
+        ),
+        ForeignKeyConstraint(["tenant_id", "project_id"], ["projects.tenant_id", "projects.id"]),
     )

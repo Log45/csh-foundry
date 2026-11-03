@@ -515,6 +515,10 @@ export function allowed(path: string, method: string) {
           "expected_version",
           "object_id",
           "expected_hash",
+          "parent_id",
+          "folder_id",
+          "search",
+          "shared",
         ].includes(k),
     )
   )

@@ -91,3 +91,45 @@ it("rejects unauthorized tenant selection without mutating the session", async (
   expect(response.status).toBe(403);
   expect(session(jar.id).tenant).toBe("tenant-a");
 });
+it("keeps Project mutations behind CSRF and allows only registered Project routes", async () => {
+  const fetch = vi.fn().mockResolvedValue(Response.json({ id: "p" }));
+  vi.stubGlobal("fetch", fetch);
+  expect(
+    (
+      await POST(
+        request(
+          {
+            path: "/api/v1/projects",
+            method: "POST",
+            expected_tenant: "tenant-a",
+            body: { name: "A" },
+          },
+          "wrong",
+        ),
+      )
+    ).status,
+  ).toBe(403);
+  expect(fetch).not.toHaveBeenCalled();
+  expect(
+    (
+      await POST(
+        request({
+          path: "/api/v1/projects/p/resources?folder_id=f&search=Machine&shared=true",
+          method: "GET",
+          expected_tenant: "tenant-a",
+        }),
+      )
+    ).status,
+  ).toBe(200);
+  expect(
+    (
+      await POST(
+        request({
+          path: "/api/v1/projects/p/execute",
+          method: "POST",
+          expected_tenant: "tenant-a",
+        }),
+      )
+    ).status,
+  ).toBe(400);
+});

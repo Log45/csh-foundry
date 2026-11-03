@@ -9,6 +9,7 @@ import {
   type Version,
 } from "@/lib/api";
 import { Field, Notice, Task, useTask } from "./ui";
+import { Projects } from "@/features/projects";
 import { Manager } from "@/features/manager";
 import { Explorer, Actions } from "@/features/explorer";
 import { Operations } from "@/features/operations";
@@ -143,6 +144,7 @@ export function Workspace() {
       </main>
     );
   const navigation = [
+    ["projects", "Projects", "project:read"],
     ["manager", "Ontology Manager", "schema:read"],
     ["explorer", "Objects & Object Sets", "object:query"],
     ["actions", "Actions", "action:invoke"],
@@ -334,6 +336,18 @@ export function Workspace() {
             </button>
           </details>
         )}
+        {tab === "projects" && session.tenant && can("project:read") && (
+          <Projects
+            key={session.tenant}
+            api={api}
+            can={can}
+            open={(ontology) => {
+              if (!navigate()) return;
+              setId(ontology);
+              setTab("manager");
+            }}
+          />
+        )}
         {id && session.tenant && (
           <div key={`${session.tenant}-${id}-${tab}`}>
             {tab === "manager" && can("schema:read") && (
@@ -345,7 +359,7 @@ export function Workspace() {
                 refresh={loadOntologies}
               />
             )}
-            {tab !== "manager" && !active && (
+            {tab !== "manager" && tab !== "projects" && !active && (
               <Task title="Publish and activate a schema">
                 <p>
                   Operational tools require an active published schema. Use

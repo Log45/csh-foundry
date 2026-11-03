@@ -146,3 +146,8 @@ previous API contract. Published versions remain immutable. Studio sends this pa
 
 Phase 9 adds [governed branches, three-way merges and published-schema SDK generation](branching-sdk.md).
 The current readiness migration is `0015_sdk`; publication and activation remain separate.
+
+Project/folder/resource governance routes and current lifecycle/permission contracts are documented
+in [projects.md](projects.md). Current source readiness requires migration `0018_projects`.
+Production OIDC and verified tenant selection are described in [security.md](security.md);
+the local-identity descriptions above describe the original development profile.

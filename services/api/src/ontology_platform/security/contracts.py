@@ -10,6 +10,7 @@ from ontology_platform.queries.ast import Name, QueryModel
 
 PERMISSIONS = frozenset(
     """
+project:create project:read project:write project:manage
 tenant:read ontology:create ontology:read schema:write schema:read schema:validate
 schema:publish schema:activate schema:export migration:plan migration:approve
 object:create object:read object:update object:delete object:link object:query object:count

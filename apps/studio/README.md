@@ -73,3 +73,20 @@ explicit published bases, revision guards, canonical JSON editing, saved schema 
 resolved merge previews/confirmation, history and draft handoff. Published-only SDK generation displays
 private manifests and downloads deterministic Python/TypeScript ZIPs without browser bearer tokens.
 See [contracts and documented UI limits](../../docs/api/branching-sdk.md).
+
+## Projects (Phase 11)
+
+The Projects tab uses the same BFF, selected tenant and opaque authenticated session. It appears
+with `project:read`; creating a Project also requires `project:create`. Owner/editor/viewer roles
+further restrict the caller's platform permissions. Owners manage membership/shares/Project lifecycle;
+editors organize folders and resources; viewers browse. Schema permission is additionally required
+for ontology resource discovery. No Project role grants object, property or action access.
+
+Create/select a Project, navigate direct folder children using the breadcrumb, and register a page
+of assets from a published ontology ID/version. Resources open the canonical ontology in Manager.
+Move assets using a stable destination folder ID (blank means root). Membership uses platform
+principal IDs; sharing uses an accessible target Project ID. Explicitly load share pages and select
+`Show resources shared with this Project` to browse incoming references. All lists paginate.
+Archived Projects remain selectable but read-only; archive does not delete canonical definitions.
+Refresh after 412 conflicts, revocation or membership changes. The backend rechecks all operations.
+See [contracts and limits](../../docs/api/projects.md).

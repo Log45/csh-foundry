@@ -353,3 +353,30 @@ See the [administrator request](docs/operations/okd4-infrastructure-request.md) 
 image identities and remaining gates. The application image security gate remains FAIL and release
 remains BLOCKED. Local container tests do not establish OKD SCC admission or production certification.
 The user’s future roadmap in PLANS.md is preserved; Phase 11 remains unapproved.
+
+## Project governance and resource workspace (Phase 11)
+
+Projects now provide explicit owner/editor/viewer collaboration, nested logical folders, stable
+resource references, and revocable read-only sharing within a tenant. Studio's **Projects** view
+supports creation, navigation, membership, rename/move/archive, sharing and bounded registration of
+existing published ontology assets. Open a resource in the existing Ontology Manager; schema and
+operational permissions remain independent and cumulative. Existing ontology-only clients continue
+to work. No dataset, storage backend, pipeline or application execution is introduced.
+
+See [Project API and lifecycle contracts](docs/api/projects.md),
+[design decisions](docs/decisions/0036-project-resource-governance.md) and
+[Phase 11 validation report](docs/development/phase-11-report.md).
+The new migration is `0018_projects`, following the verified `0017_capacity` head. Existing assets
+are not automatically assigned to Projects. Existing administrator role history is preserved;
+explicit Project membership is still required. Back up before applying a developer migration.
+This implementation did not migrate the shared developer database or restart its services.
+
+Run `PATH=/opt/homebrew/opt/node/bin:$PATH uv run python scripts/validate_phase11.py` on this host
+(or use Node >=22 on PATH elsewhere) for migration drift and Python regression in disposable
+PostgreSQL schemas. Frontend checks remain `npm test`, `npm run typecheck`, `npm run format:check`,
+and `npm run build` in `apps/studio`. The validation runner uses configured PostgreSQL and the
+pinned `.external/open-ontologies` binary; unavailable integration prerequisites are NOT RUN.
+
+Current authorization supersedes the historical Phase 11-unapproved statements above. Phase 10
+engineering is closed; deferred release gates remain mandatory under PLANS.md Section 23B.
+Production remains **BLOCKED / NOT PRODUCTION-CERTIFIED**. Phase 12 needs separate authorization.
