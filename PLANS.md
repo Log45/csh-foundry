@@ -4,7 +4,7 @@
 
 **Project status:** Phases 0–9 implemented; Phase 10 approved with Keycloak, implementation and acceptance tracked in docs/development/phase-10-report.md; Phase 11 not approved
 
-**Document version:** 1.4 (future platform architecture, MinIO local storage, and explicit Rust optimization milestone; existing phase authorization unchanged)
+**Document version:** 1.5 (engine-neutral pipeline contracts and future Spark-on-Kubernetes integration; existing phase authorization unchanged)
 
 **Primary language:** Python
 
@@ -112,6 +112,8 @@ The project must prioritize correctness, maintainability, extensibility, and dev
 
 - User-authored code executes only in isolated, least-privilege runtimes, never inside API request processes.
 
+- Pipeline definitions, dataset artifacts, and job lifecycle contracts must be independent of the selected processing engine; Polars is the initial implementation and Spark is a future optional distributed backend.
+
 - The initial deployment should be runnable locally through Docker Compose.
 
 ## 1.2 Non-goals for the initial release
@@ -218,6 +220,8 @@ These are recommendations, not mandatory dependencies for the first milestone.
 \| Redis | Caching, coordination, rate limiting | Only when justified |
 
 \| MinIO / S3 | Raw datasets, artifacts, exports | Ingestion milestone |
+
+| Apache Spark / PySpark on Kubernetes | Optional distributed pipeline execution for workloads proven unsuitable for single-node Polars | Future Spark milestone; not an initial dependency |
 
 \| DuckDB | Local analytical SQL over files | Optional ingestion enhancement |
 
@@ -3054,10 +3058,29 @@ Dataset ingestion and transformations **must not require** an existing ontology.
 - Add versioned pipeline definitions, typed input/output contracts, DAG dependencies, execution runs, status, logs, bounded errors, retry/idempotency, cancellation, and immutable output publication. Reuse existing durable-job infrastructure where appropriate.
 - Support controlled Polars expressions and **isolated Python/Polars code steps**. Never execute arbitrary user-authored code inside FastAPI, Next.js BFF, or unrestricted shared application workers.
 - Isolated execution requires non-root arbitrary-UID compatibility on OKD4, resource/time limits, scoped temporary storage, restricted network/egress, no ambient platform credentials, approved dependency/environment policy, and tenant-aware scheduling/quotas. A non-root UID alone is not sufficient sandboxing for hostile code; select and threat-model stronger isolation before exposing execution to untrusted tenants.
-- Define a shared versioned pipeline intermediate representation so the future visual Pipeline Builder compiles to the **same** transformation and execution engine as code-based pipelines; no second incompatible data-processing backend.
-- Record deterministic input versions, code/definition digest, environment/dependency versions, output schema, run metrics, provenance, and lineage. Prevent partial output promotion on failed runs.
+- Define a shared versioned, engine-neutral pipeline intermediate representation (IR) so the future visual Pipeline Builder compiles to the **same pipeline specification and execution control plane** as code-based pipelines; no second incompatible data-processing backend. Polars is the initial execution adapter; future Spark is a separate adapter with explicit capabilities, not a requirement that every arbitrary Python step run unchanged on both engines.
+- Record deterministic input versions, code/definition digest, environment/dependency versions, **engine name/version and execution configuration**, output schema, run metrics, provenance, and lineage. Prevent partial output promotion on failed runs.
+- Define a stable asynchronous engine contract covering capability/semantic validation, submission, status/reconciliation after controller restart, cancellation, log/metrics references, output manifest, and structured failure classification. An execution handle must identify the backend run without making a Kubernetes pod name the durable identity.
+- Define a portable IR subset (projection, filtering, renaming, casts, joins, group-by/aggregations, derived expressions) with explicit null, cast, decimal, timestamp/time-zone, ordering, and error semantics. Document engine-specific operations and reject unsupported translations; do not promise transparent portability for arbitrary Python/Polars code.
+- Keep input/output as immutable, engine-neutral dataset-version references and Parquet/Arrow-compatible artifacts where practical; avoid requiring every pipeline to load a full dataset into API memory.
 
 **Acceptance criteria:** A user uploads `machines.csv`, normalizes/derives columns with Polars, produces an independently browsable cleaned dataset, retries safely, and observes versioned lineage; unauthorized or failed code runs cannot access other Projects or publish partial results.
+
+## 23A.5A Future distributed execution — Apache Spark (not approved)
+
+**Objective:** Add Apache Spark as an optional execution backend for measured large-scale or multi-node workloads, without replacing Polars, the shared pipeline IR, the dataset registry, or the operational ontology backend. This section specifies forward-compatible contracts only; it does not authorize deployment or dependency installation.
+
+- **Engine selection:** Initial default is `polars`. A future pipeline/run may select `polars`, `spark`, or `auto` once supported. `auto` must use capability checks, resource estimates, administrator policy, and observed performance rather than a simplistic dataset-size threshold; explicit unsupported-engine errors are preferable to silent semantic changes.
+- **Execution adapter:** Implement Spark behind the same durable asynchronous pipeline engine interface. A Spark adapter translates only supported portable IR nodes to Spark DataFrame operations, or runs explicitly labeled Spark-specific code steps in a governed runtime. Pin and record Spark, Python, Java, Hadoop/S3A, connector, and dependency versions. Add conformance tests for portable transformations and explicitly document differences.
+- **Kubernetes / OKD4:** Evaluate Spark's native Kubernetes submission and a compatible Spark Operator before choosing a controller. Treat driver/executor pods as ephemeral execution resources. Use namespace/project-scoped service accounts, minimal RBAC, admission/quotas, CPU/memory limits, network policy, driver-executor networking, bounded logs, cleanup, and reconciled cancellation/retries. Validate images with OKD4 restricted SCC, arbitrary UIDs, non-root operation, writable temp paths, and no privilege escalation; do not assume upstream Spark images satisfy OKD constraints unchanged.
+- **Shared storage:** Spark reads pinned immutable dataset versions and writes outputs to unique run-scoped **staging** prefixes through S3A. Local integration uses the planned Docker Compose MinIO endpoint; OKD/hosted deployments use configured external S3-compatible storage. Document endpoint/path-style access, TLS trust, S3A dependency compatibility, scoped short-lived credentials where available, and multipart/large-object behavior. Do not give driver/executor pods administrator MinIO credentials or unrestricted cross-Project bucket access.
+- **Safe publication:** Spark outputs a validated manifest (files, schema, checksums/size where available, run and input-version IDs). After job success, the control plane validates authorization and output, then publishes an immutable dataset version and lineage through an atomic PostgreSQL metadata transaction. Storage writes are not database-transactional; quarantine/garbage-collect abandoned staging prefixes. Retries must not overwrite published versions or duplicate output publication.
+- **Operational boundary:** Spark creates or transforms **datasets**; it does not directly write canonical ontology object/link tables or bypass actions. Existing governed mapping, identity validation, reconciliation, and materialization remain the authority. Scale that materialization separately if profiling justifies it.
+- **Security:** Treat pipeline code and Spark executors as potentially untrusted. Enforce Project/tenant authorization before input resolution and submission; scope artifact access per job, isolate compute, prevent credential exfiltration and cross-tenant network access, constrain dependencies and egress, and record attributable audit/lineage. Restricted SCC alone is not a complete hostile-code sandbox; require a reviewed isolation model before allowing untrusted multi-tenant Spark jobs.
+- **Reliability/operations:** Track queued/submitted/running/succeeded/failed/cancelled states, heartbeat/controller reconciliation, submission idempotency, retries with attempt IDs, bounded logs, metrics, executor costs, and resource quotas. Failed or lost driver pods must not leave a successful dataset version or cause unbounded resubmission.
+- **Adoption gate:** Implement Spark only after an approved workload and benchmark demonstrate a benefit over Polars streaming/lazy execution or a genuine multi-node requirement. Keep local ontology-only and normal Polars development functional without Spark installed or running.
+
+**Acceptance criteria:** A representative multi-partition Parquet pipeline runs on Spark with MinIO in an isolated local integration profile and on an authorized OKD4 test cluster; output becomes a single immutable dataset version with correct lineage; equivalent portable IR steps match Polars on nulls, casts, timestamps, and aggregations; unsupported steps fail with actionable diagnostics; cross-Project reads, over-quota submissions, and privileged pods are denied; cancellation, controller restart, retries, and failed publication leave no visible partial dataset. Report real-cluster tests as `NOT RUN` if no cluster is available, not `PASS`.
 
 ## 23A.6 Dataset-to-ontology and empty-ontology authoring
 
@@ -3115,8 +3138,13 @@ The following are **proposed milestones, not approved phase numbers or instructi
 | G | Media Sets and functions/automations | Non-tabular assets, governed reusable logic, event/scheduled orchestration as separately approved vertical slices |
 | H | Visual Pipeline Builder | No-code DAG editor compiling to the existing pipeline representation |
 | I | Workshop-like application builder | Declarative app schema, runtime renderer, visual editor, app publication |
-| J | Advanced ecosystem | Rich lineage/analytics, ML/model registry, agent/MCP tooling, additional connectors, streaming, CDC, search, scale-out as demand justifies |
+| J | Advanced ecosystem | Rich lineage/analytics, ML/model registry, agent/MCP tooling, additional connectors, streaming, CDC, search, scale-out as demand justifies (Spark tracked separately in L) |
+| L | **Spark distributed execution (explicit, conditional)** | Introduce a Spark pipeline adapter and OKD4 execution integration only after a benchmarked distributed-workload need; test against MinIO/S3, shared pipeline IR, isolated drivers/executors, immutable outputs, and engine parity |
 | K | **Rust performance optimization (explicit, conditional)** | Profile Python/Polars/PostgreSQL baselines; prototype targeted Rust/PyO3 accelerators only for demonstrated bottlenecks; verify functional parity, benchmark improvements, packaging, and rollback |
+
+### Explicit Spark and Rust optimization tracks
+
+Spark (milestone L) adds **distributed data processing**; Rust (milestone K) accelerates measured platform-local bottlenecks. Neither is required for the initial Polars-based dataset pipeline, and they are not substitutes for one another. Spark-specific architectural requirements and acceptance criteria are in Section 23A.5A.
 
 ### Explicit Rust optimization track (preserved from original Phase 11)
 
