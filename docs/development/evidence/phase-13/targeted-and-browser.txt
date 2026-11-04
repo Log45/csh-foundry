@@ -1,0 +1,73 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase13-f4ee062085aa_default  Creating
+ Network phase13-f4ee062085aa_default  Created
+ Volume "phase13-f4ee062085aa_minio-data"  Creating
+ Volume "phase13-f4ee062085aa_minio-data"  Created
+ Container phase13-f4ee062085aa-minio-1  Creating
+ Container phase13-f4ee062085aa-minio-1  Created
+ Container phase13-f4ee062085aa-minio-1  Starting
+ Container phase13-f4ee062085aa-minio-1  Started
+ Container phase13-f4ee062085aa-minio-1  Waiting
+ Container phase13-f4ee062085aa-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase13-f4ee062085aa-minio-1  Restarting
+ Container phase13-f4ee062085aa-minio-1  Started
+ Container phase13-f4ee062085aa-minio-1  Running
+ Container phase13-f4ee062085aa-minio-1  Waiting
+ Container phase13-f4ee062085aa-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 49 items
+
+services/api/tests/test_artifacts.py ..............                      [ 28%]
+services/api/tests/test_datasets.py ...................................  [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 49 passed, 1 warning in 21.14s ========================
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test
+
+
+Running 8 tests using 1 worker
+
+(node:40104) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/workflow.spec.ts:47:1 › verified browser reference workflow (15.1s)
+  ✓  2 tests/e2e/workflow.spec.ts:237:1 › CSRF and unauthenticated proxy requests fail closed (728ms)
+  ✓  3 tests/e2e/workflow.spec.ts:252:1 › native authoring, OWL diagnostics, tenant isolation and session loss (1.9s)
+  ✓  4 tests/e2e/workflow.spec.ts:336:1 › schema branching, resolved merge and private SDK download (2.9s)
+  ✓  5 tests/e2e/workflow.spec.ts:437:3 › durable sessions survive replica restart and logout revokes every replica (2.4s)
+  ✓  6 tests/e2e/workflow.spec.ts:500:1 › Project workspace navigates folders and governed canonical references (2.1s)
+  ✓  7 tests/e2e/workflow.spec.ts:561:1 › Project artifacts upload immutable versions and download exact bytes (2.6s)
+  ✓  8 tests/e2e/workflow.spec.ts:621:1 › Project dataset uploads, discovers schema and previews historical versions (5.1s)
+
+  8 passed (33.9s)
+ Container phase13-f4ee062085aa-minio-1  Stopping
+ Container phase13-f4ee062085aa-minio-1  Stopped
+ Container phase13-f4ee062085aa-minio-1  Removing
+ Container phase13-f4ee062085aa-minio-1  Removed
+ Volume phase13-f4ee062085aa_minio-data  Removing
+ Network phase13-f4ee062085aa_default  Removing
+ Volume phase13-f4ee062085aa_minio-data  Removed
+ Network phase13-f4ee062085aa_default  Removed

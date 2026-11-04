@@ -3614,3 +3614,13 @@ and the [Phase 12 report](docs/development/phase-12-report.md) record actual imp
 acceptance evidence. Phase 13/milestone C and subsequent milestones remain unapproved. Section 23B
 production gates are unchanged and production release remains BLOCKED. Historical reports retain
 their original authorization and validation status.
+
+
+## Phase 13 authorization — 2026-11-03
+
+The user's explicit Phase 13 implementation request authorizes Section 23A milestone C only:
+independent governed datasets, immutable artifact-backed versions, uploads, full-content schema
+validation and bounded previews, provenance, Studio and automated validation. This supersedes prior
+statements that milestone C requires approval. Milestone D / Phase 14 and all later milestones remain
+unapproved. Production certification and organizational deployment remain blocked under Section 23B.
+See ADR 0038 and docs/development/phase-13-report.md for implementation and actual acceptance evidence.

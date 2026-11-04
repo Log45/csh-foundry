@@ -617,3 +617,74 @@ test("Project artifacts upload immutable versions and download exact bytes", asy
     page.getByRole("heading", { name: "Test file", exact: true }),
   ).toHaveCount(0);
 });
+
+test("Project dataset uploads, discovers schema and previews historical versions", async ({
+  page,
+}) => {
+  test.skip(
+    process.env.FOUNDRY_ARTIFACT_BACKEND !== "s3",
+    "NOT RUN: use scripts/validate_phase13.py --browser",
+  );
+  await login(page);
+  await page.getByRole("button", { name: "Projects", exact: true }).click();
+  const name = `Dataset Project ${Date.now()}`;
+  await page.getByLabel("New Project name").fill(name);
+  await page
+    .getByRole("button", { name: "Create Project", exact: true })
+    .click();
+  await page
+    .getByLabel("Project", { exact: true })
+    .selectOption({ label: `${name} (owner, ACTIVE)` });
+  await page.getByLabel("New dataset name").fill("Machines dataset");
+  await page
+    .getByRole("button", { name: "Create dataset", exact: true })
+    .click();
+  await page
+    .getByText("Dataset versions, schema and preview", { exact: true })
+    .click();
+  await page.getByLabel("Dataset file (up to 8 MiB)").setInputFiles({
+    name: "machines.csv",
+    mimeType: "text/csv",
+    buffer: Buffer.from("machineId,temperature\nM-1,42\nM-2,\n"),
+  });
+  await page
+    .getByRole("button", { name: "Upload new version", exact: true })
+    .click();
+  await page
+    .getByRole("button", {
+      name: "Inspect schema and preview version 1",
+      exact: true,
+    })
+    .click();
+  await expect(
+    page.getByRole("columnheader", { name: /machineId.*String/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("cell", { name: "M-1", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("cell", { name: "null", exact: true }),
+  ).toBeVisible();
+  await page.getByLabel("Dataset file (up to 8 MiB)").setInputFiles({
+    name: "bad.csv",
+    mimeType: "text/csv",
+    buffer: Buffer.from("a,a\n1,2"),
+  });
+  await page
+    .getByRole("button", { name: "Upload new version", exact: true })
+    .click();
+  await expect(
+    page.getByText("Too many or duplicate columns", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", {
+      name: "Inspect schema and preview version 1",
+      exact: true,
+    })
+    .click();
+  await expect(
+    page.getByRole("cell", { name: "M-1", exact: true }),
+  ).toBeVisible();
+});

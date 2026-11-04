@@ -1,4 +1,5 @@
 "use client";
+import { CreateDatasetPanel, DatasetPanel } from "@/features/datasets";
 import { useEffect, useState } from "react";
 import { ArtifactPanel, CreateArtifactPanel } from "./artifacts";
 
@@ -341,6 +342,14 @@ function ProjectBrowser({
           reload={reload}
         />
       )}
+      {writable && (
+        <CreateDatasetPanel
+          api={api}
+          project={project.id}
+          folder={folder ?? null}
+          reload={reload}
+        />
+      )}
       {!can("schema:read") && (
         <Notice>
           Schema read permission is also required to discover ontology
@@ -378,7 +387,13 @@ function ProjectBrowser({
             {r.entity_id}
           </p>
           <p>{r.description}</p>
-          {r.resource_type === "ARTIFACT" ? (
+          {r.resource_type === "DATASET" ? (
+            <DatasetPanel
+              api={api}
+              dataset={r.id}
+              writable={r.project_id === project.id && writable}
+            />
+          ) : r.resource_type === "ARTIFACT" ? (
             <ArtifactPanel
               api={api}
               artifact={r.id}

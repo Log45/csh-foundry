@@ -1411,12 +1411,14 @@ class Resource(Base):
         ),
         CheckConstraint(
             "resource_type IN ('ONTOLOGY_OBJECT_TYPE','ONTOLOGY_LINK_TYPE',"
-            "'ONTOLOGY_ACTION','ONTOLOGY_VERSION','ARTIFACT')",
+            "'ONTOLOGY_ACTION','ONTOLOGY_VERSION','ARTIFACT','DATASET')",
             name="ck_resource_type",
         ),
         CheckConstraint(
-            "(resource_type = 'ARTIFACT' AND ontology_id IS NULL AND schema_version IS NULL "
-            "AND entity_id IS NULL) OR (resource_type <> 'ARTIFACT' AND ontology_id IS NOT NULL "
+            "(resource_type IN ('ARTIFACT','DATASET') AND ontology_id IS NULL "
+            "AND schema_version IS NULL "
+            "AND entity_id IS NULL) OR (resource_type NOT IN ('ARTIFACT','DATASET') "
+            "AND ontology_id IS NOT NULL "
             "AND schema_version IS NOT NULL AND entity_id IS NOT NULL)",
             name="ck_resource_authority_kind",
         ),
@@ -1481,5 +1483,32 @@ class ArtifactVersion(Base):
         ),
         CheckConstraint(
             "(state = 'COMMITTED') = (committed_at IS NOT NULL)", name="ck_artifact_commit"
+        ),
+    )
+
+
+class DatasetVersion(Base):
+    __tablename__ = "dataset_versions"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    artifact_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    format: Mapped[str] = mapped_column(String(20))
+    state: Mapped[str] = mapped_column(String(20), default="PENDING")
+    result: Mapped[dict[str, JsonValue]] = mapped_column(JSONB, default=dict)
+    finalized_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "artifact_id", "id"],
+            [
+                "artifact_versions.tenant_id",
+                "artifact_versions.artifact_id",
+                "artifact_versions.id",
+            ],
+        ),
+        CheckConstraint("format IN ('csv','json','ndjson','parquet')", name="ck_dataset_format"),
+        CheckConstraint("state IN ('PENDING','COMMITTED','FAILED')", name="ck_dataset_state"),
+        CheckConstraint(
+            "(state IN ('COMMITTED','FAILED')) = (finalized_at IS NOT NULL)",
+            name="ck_dataset_commit",
         ),
     )

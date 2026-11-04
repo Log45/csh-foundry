@@ -1,0 +1,53 @@
+PHASE: 13
+BASE REVISION: 4a424cc (uncommitted implementation)
+ENVIRONMENT: macOS arm64, Python 3.12.0; supported Node 25.9.0;
+real disposable PostgreSQL schemas and private MinIO Compose projects.
+
+PASS uv run alembic heads (initial): 0019_artifacts
+PASS uv run alembic heads (final): 0020_datasets
+PASS uv run python scripts/validate_phase13.py --full:
+  681 passed, 1 preserved strict xfailed, zero skips; 403.70 seconds.
+  Alembic: No new upgrade operations detected.
+PASS final uv run python scripts/validate_phase13.py --browser:
+  49 artifact/dataset tests, 21.14 seconds; 8 browser tests, 33.9 seconds; zero skips.
+  Repeated MinIO initialization, restart, sentinel verification, private volume cleanup.
+  Includes phase-12 upgrade preservation and real CSV/JSON/NDJSON/Parquet upload.
+PASS final parser selection after empty-record hardening:
+  24 passed, 13 deselected, 1.82 seconds. See parser-final.txt for selection outcome.
+  Command: uv run pytest services/api/tests/test_datasets.py -k
+  'full_content_schema or rejects_invalid or empty_mixed or parquet_rich or spawned or capacity or bom_duplicate' -q
+PASS uv run ruff check .: All checks passed.
+PASS uv run ruff format --check .: 233 files already formatted.
+PASS uv run mypy: Success, 115 source files.
+PASS git diff --check: no whitespace errors.
+PASS uv run python scripts/export_openapi.py
+PASS npm --prefix apps/studio run generate:api (openapi-typescript 7.13.0)
+PASS Studio npm run typecheck and npm run format:check (supported Node path)
+PASS Studio npm test: 39 passed in 8 files.
+PASS Studio npm run build: compiled, TypeScript, static generation and route traces passed.
+PASS Linux parser smoke: 4 formats under subprocess CPU/address-space limits.
+  Cached csh-foundry-api:phase10-okd4, disposable --rm container, current source read-only;
+  pyarrow==23.0.1 installed only into /tmp/phase13deps in that container.
+  Command shape: docker run --rm --user 0 --entrypoint /bin/sh
+  -v <repo>/services/api/src:/phase13src:ro
+  -v <repo>/scripts/smoke_dataset_parser.py:/phase13-smoke.py:ro
+  csh-foundry-api:phase10-okd4 -c
+  'python -m ensurepip && python -m pip install --no-cache-dir --target /tmp/phase13deps pyarrow==23.0.1 && PYTHONPATH=/tmp/phase13deps:/phase13src python /phase13-smoke.py'
+  (Actual first execution mounted the identical pre-format /tmp smoke script.)
+PASS shared developer revision (read-only SELECT): 0017_capacity.
+
+The 681-pass full run predates final parser admission/BOM/empty-record refinements;
+final targeted/parser/browser checks validate those changes. Counts are separate executions,
+not a claim of one later combined full-suite result.
+
+NOT SUPPORTED raw pySHACL fixture compatibility: existing strict expected failure.
+NOT SUPPORTED exact fixture axiom in base owl-rl profile; supported owl-rl-ext tests PASS.
+NOT SUPPORTED standalone TypeScript lint command: repository has tsc/Prettier/build.
+NOT RUN manual desktop Protege GUI check: needs desktop authoring session.
+NOT RUN production images/organizational target-cluster certification: Section 23B,
+separate authorization, target infrastructure and independent review required.
+
+Initial and interrupted failures are described in phase-13-report.md; they are not counted
+as successful validation. No assertions/skips/timeouts were weakened. The existing strict
+pySHACL xfail was preserved. Historical migrations, fixtures and Phase 10-12 evidence unchanged.
+No shared developer migration, volume deletion, external resource mutation or deployment.

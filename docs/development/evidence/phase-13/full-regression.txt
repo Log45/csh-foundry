@@ -1,0 +1,104 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase13-8014ed81f2ae_default  Creating
+ Network phase13-8014ed81f2ae_default  Created
+ Volume "phase13-8014ed81f2ae_minio-data"  Creating
+ Volume "phase13-8014ed81f2ae_minio-data"  Created
+ Container phase13-8014ed81f2ae-minio-1  Creating
+ Container phase13-8014ed81f2ae-minio-1  Created
+ Container phase13-8014ed81f2ae-minio-1  Starting
+ Container phase13-8014ed81f2ae-minio-1  Started
+ Container phase13-8014ed81f2ae-minio-1  Waiting
+ Container phase13-8014ed81f2ae-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase13-8014ed81f2ae-minio-1  Restarting
+ Container phase13-8014ed81f2ae-minio-1  Started
+ Container phase13-8014ed81f2ae-minio-1  Running
+ Container phase13-8014ed81f2ae-minio-1  Waiting
+ Container phase13-8014ed81f2ae-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+testpaths: services/api/tests, packages/ontology-schema/tests
+plugins: anyio-4.15.1
+collected 682 items
+
+services/api/tests/test_action_models.py ............................    [  4%]
+services/api/tests/test_actions.py ..................................... [  9%]
+...................                                                      [ 12%]
+services/api/tests/test_api.py ...                                       [ 12%]
+services/api/tests/test_artifacts.py ..............                      [ 14%]
+services/api/tests/test_branching.py ................                    [ 17%]
+services/api/tests/test_capacity_acceptance.py ......                    [ 18%]
+services/api/tests/test_compatibility.py ..............                  [ 20%]
+services/api/tests/test_contracts.py ...                                 [ 20%]
+services/api/tests/test_database.py .                                    [ 20%]
+services/api/tests/test_datasets.py ..............................       [ 25%]
+services/api/tests/test_diagnostics.py ..                                [ 25%]
+services/api/tests/test_fixtures.py ..x..........                        [ 27%]
+services/api/tests/test_ingestion.py ................................... [ 32%]
+............                                                             [ 34%]
+services/api/tests/test_ingestion_connectors.py .......................  [ 37%]
+services/api/tests/test_ingestion_postgres.py ....                       [ 38%]
+services/api/tests/test_ingestion_recovery.py ........                   [ 39%]
+services/api/tests/test_kubernetes.py .......................            [ 42%]
+services/api/tests/test_ontology_import.py ............................. [ 46%]
+.........                                                                [ 48%]
+services/api/tests/test_operations.py .......................            [ 51%]
+services/api/tests/test_phase1.py .............................          [ 55%]
+services/api/tests/test_phase10_diagnostics_harness.py ....              [ 56%]
+services/api/tests/test_pitr_guard.py ..........                         [ 57%]
+services/api/tests/test_production_profile.py ..                         [ 58%]
+services/api/tests/test_projects.py ............                         [ 59%]
+services/api/tests/test_queries.py ..................................... [ 65%]
+.......                                                                  [ 66%]
+services/api/tests/test_query_ast.py ..........................          [ 70%]
+services/api/tests/test_release_evidence.py ...........................  [ 74%]
+services/api/tests/test_scan_images.py ..                                [ 74%]
+services/api/tests/test_sdk.py ................                          [ 76%]
+services/api/tests/test_security_dispositions.py ......................  [ 80%]
+services/api/tests/test_security_oidc.py ............................... [ 84%]
+..............                                                           [ 86%]
+services/api/tests/test_security_platform.py .................           [ 89%]
+services/api/tests/test_security_workflows.py ......                     [ 90%]
+services/api/tests/test_semantic.py ....                                 [ 90%]
+services/api/tests/test_semantic_compiler.py ............                [ 92%]
+services/api/tests/test_semantic_platform.py ........................... [ 96%]
+....                                                                     [ 96%]
+services/api/tests/test_studio.py ...                                    [ 97%]
+packages/ontology-schema/tests/test_models.py ..................         [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+services/api/tests/test_capacity_acceptance.py::test_cross_tenant_mixed_http_admission_and_cancel[2]
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py:2346: UnsupportedFieldAttributeWarning: The 'alias' attribute with value 'body' was provided to the `Field()` function, which has no effect in the context it was used. 'alias' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+XFAIL services/api/tests/test_fixtures.py::test_raw_pyshacl_compatibility - Raw pySHACL/RDFLib simple/xsd:string mismatch; see semantic-compatibility.md
+============ 681 passed, 1 xfailed, 2 warnings in 403.70s (0:06:43) ============
+No new upgrade operations detected.
+ Container phase13-8014ed81f2ae-minio-1  Stopping
+ Container phase13-8014ed81f2ae-minio-1  Stopped
+ Container phase13-8014ed81f2ae-minio-1  Removing
+ Container phase13-8014ed81f2ae-minio-1  Removed
+ Network phase13-8014ed81f2ae_default  Removing
+ Volume phase13-8014ed81f2ae_minio-data  Removing
+ Volume phase13-8014ed81f2ae_minio-data  Removed
+ Network phase13-8014ed81f2ae_default  Removed

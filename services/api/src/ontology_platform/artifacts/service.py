@@ -28,6 +28,8 @@ from ontology_platform.security.interfaces import Authorizer, Principal
 
 
 class ArtifactService(ProjectService):
+    resource_kind = "ARTIFACT"
+
     def __init__(
         self,
         sessions: sessionmaker[Session],
@@ -45,7 +47,7 @@ class ArtifactService(ProjectService):
 
     def artifact(self, s: Session, p: Principal, key: UUID, write: bool = False) -> Resource:
         row = self.resource(s, p, key)
-        if row.resource_type != "ARTIFACT":
+        if row.resource_type != self.resource_kind:
             raise missing("Artifact")
         if write:
             self.project(s, p, row.project_id, write=True)
@@ -77,7 +79,7 @@ class ArtifactService(ProjectService):
                 tenant_id=p.tenant_id,
                 id=uuid4(),
                 project_id=project,
-                resource_type="ARTIFACT",
+                resource_type=self.resource_kind,
                 **body.model_dump(),
                 created_by=p.principal_id,
                 updated_by=p.principal_id,
@@ -226,7 +228,7 @@ class ArtifactService(ProjectService):
         # Archived resources need an explicit owner-only maintenance path. No share access.
         with self.scope(p) as s:
             resource = s.get(Resource, (p.tenant_id, key))
-            if resource is None or resource.resource_type != "ARTIFACT":
+            if resource is None or resource.resource_type != self.resource_kind:
                 raise missing("Artifact")
             try:
                 _, member = self.project(s, p, resource.project_id)

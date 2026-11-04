@@ -96,3 +96,9 @@ Project resources now support generic artifacts: create a logical artifact, uplo
 the existing resource controls. Binary transfers use `/bff/artifacts`, with session, CSRF and
 expected-tenant checks. Storage credentials stay in FastAPI. Storage setup is documented in
 [artifact operations](../../docs/development/artifact-storage.md); unavailable storage fails visibly.
+
+Phase 13 adds independent, Project-governed datasets with immutable source versions, full-content
+CSV/JSON/NDJSON/Parquet validation, schema history and bounded previews. See the
+[dataset API and validation contract](../../docs/api/datasets.md). Studio supports dataset creation, upload,
+validation errors, source download, version history, schema and preview in Project folders.
+Production remains blocked; Phase 14 is not implemented.

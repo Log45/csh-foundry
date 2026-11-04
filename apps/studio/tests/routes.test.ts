@@ -133,41 +133,45 @@ it("keeps Project mutations behind CSRF and allows only registered Project route
     ).status,
   ).toBe(400);
 });
-it("keeps binary artifact transfers behind CSRF, tenant context and fixed UUID routes", async () => {
-  const { POST: transfer } = await import("../app/bff/artifacts/route");
-  const upstream = vi.fn().mockResolvedValue(new Response("exact bytes"));
-  vi.stubGlobal("fetch", upstream);
-  function req(
-    csrf = session(jar.id).csrf,
-    tenant = "tenant-a",
-    artifact = "00000000-0000-0000-0000-000000000001",
-  ) {
-    return new Request(
-      `http://127.0.0.1:3000/bff/artifacts?artifact=${artifact}&version=00000000-0000-0000-0000-000000000002&operation=download`,
-      {
-        method: "POST",
-        headers: {
-          origin: "http://127.0.0.1:3000",
-          "x-csrf-token": csrf,
-          "x-expected-tenant": tenant,
+it.each(["artifacts", "datasets"])(
+  "keeps binary %s transfers behind CSRF, tenant context and fixed UUID routes",
+  async (family) => {
+    const { POST: transfer } = await import("../app/bff/artifacts/route");
+    const upstream = vi.fn().mockResolvedValue(new Response("exact bytes"));
+    vi.stubGlobal("fetch", upstream);
+    function req(
+      csrf = session(jar.id).csrf,
+      tenant = "tenant-a",
+      artifact = "00000000-0000-0000-0000-000000000001",
+    ) {
+      return new Request(
+        `http://127.0.0.1:3000/bff/artifacts?family=${family}&artifact=${artifact}&version=00000000-0000-0000-0000-000000000002&operation=download`,
+        {
+          method: "POST",
+          headers: {
+            origin: "http://127.0.0.1:3000",
+            "x-csrf-token": csrf,
+            "x-expected-tenant": tenant,
+          },
         },
-      },
+      );
+    }
+    expect((await transfer(req("wrong"))).status).toBe(403);
+    expect(
+      (await transfer(req(session(jar.id).csrf, "old-tenant"))).status,
+    ).toBe(409);
+    expect(
+      (await transfer(req(session(jar.id).csrf, "tenant-a", "../../etc")))
+        .status,
+    ).toBe(400);
+    expect(upstream).not.toHaveBeenCalled();
+    const response = await transfer(req());
+    expect(await response.text()).toBe("exact bytes");
+    expect(response.headers.get("content-disposition")).toContain("attachment");
+    expect(response.headers.get("cache-control")).toBe("no-store");
+    expect(JSON.stringify([...response.headers])).not.toContain("private");
+    expect(upstream.mock.calls[0][1].headers.Authorization).toBe(
+      "Bearer private",
     );
-  }
-  expect((await transfer(req("wrong"))).status).toBe(403);
-  expect((await transfer(req(session(jar.id).csrf, "old-tenant"))).status).toBe(
-    409,
-  );
-  expect(
-    (await transfer(req(session(jar.id).csrf, "tenant-a", "../../etc"))).status,
-  ).toBe(400);
-  expect(upstream).not.toHaveBeenCalled();
-  const response = await transfer(req());
-  expect(await response.text()).toBe("exact bytes");
-  expect(response.headers.get("content-disposition")).toContain("attachment");
-  expect(response.headers.get("cache-control")).toBe("no-store");
-  expect(JSON.stringify([...response.headers])).not.toContain("private");
-  expect(upstream.mock.calls[0][1].headers.Authorization).toBe(
-    "Bearer private",
-  );
-});
+  },
+);

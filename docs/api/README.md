@@ -153,3 +153,9 @@ Production OIDC and verified tenant selection are described in [security.md](sec
 the local-identity descriptions above describe the original development profile.
 
 - [Generic artifacts and immutable versions](artifacts.md) — Phase 12 Project-governed storage.
+
+Phase 13 adds independent, Project-governed datasets with immutable source versions, full-content
+CSV/JSON/NDJSON/Parquet validation, schema history and bounded previews. See the
+[dataset API and validation contract](datasets.md). Studio supports dataset creation, upload,
+validation errors, source download, version history, schema and preview in Project folders.
+Production remains blocked; Phase 14 is not implemented.

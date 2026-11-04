@@ -15,6 +15,9 @@ export async function POST(request: Request) {
     if (request.headers.get("x-expected-tenant") !== value.tenant)
       throw new BoundaryError(409, "tenant_changed");
     const url = new URL(request.url);
+    const family = url.searchParams.get("family") ?? "artifacts";
+    if (!["artifacts", "datasets"].includes(family))
+      throw new BoundaryError(400, "invalid_transfer");
     const artifact = url.searchParams.get("artifact");
     const version = url.searchParams.get("version");
     const operation = url.searchParams.get("operation");
@@ -42,7 +45,7 @@ export async function POST(request: Request) {
       });
     const upload = operation === "upload";
     const response = await fetch(
-      `${config().api}/api/v1/artifacts/${artifact}/versions/${version}/content`,
+      `${config().api}/api/v1/${family}/${artifact}/versions/${version}/content`,
       {
         method: upload ? "PUT" : "GET",
         headers: {

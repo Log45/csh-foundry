@@ -21,6 +21,7 @@ from ontology_platform.artifacts.routes import router as artifact_router
 from ontology_platform.artifacts.s3 import S3ArtifactStore
 from ontology_platform.branching.routes import router as branch_router
 from ontology_platform.config import Settings, get_settings
+from ontology_platform.datasets.routes import router as dataset_router
 from ontology_platform.db.governance import SCHEMA_REVISION
 from ontology_platform.db.session import make_engine, require_runtime_role
 from ontology_platform.dependencies import get_session
@@ -96,9 +97,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(router)
     app.include_router(project_router)
     app.include_router(artifact_router)
+    app.include_router(dataset_router)
     app.add_middleware(
         ActionPayloadLimit,
-        paths=("/artifacts",),
+        paths=("/artifacts", "/datasets"),
         code="artifact_payload_too_large",
         message="Artifact metadata exceeds 64 KiB",
     )
