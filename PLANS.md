@@ -3624,3 +3624,21 @@ validation and bounded previews, provenance, Studio and automated validation. Th
 statements that milestone C requires approval. Milestone D / Phase 14 and all later milestones remain
 unapproved. Production certification and organizational deployment remain blocked under Section 23B.
 See ADR 0038 and docs/development/phase-13-report.md for implementation and actual acceptance evidence.
+
+
+## Phase 14 authorization addendum (2026-11-03)
+
+The explicit Phase 14 request authorizes Section 23A milestone D: engine-neutral governed pipeline
+definitions/runs with Polars, bounded durable ingestion and mandatory 1 GiB source support in all four
+dataset formats. This supersedes historical statements that milestone D is unapproved. Acceptance
+requires executed resource and PostgreSQL/MinIO evidence; see ADR 0039 and the Phase 14 report.
+Phase 15 and later milestones remain unapproved. Section 23B production release remains blocked.
+
+## Phase 15 authorization addendum — 2026-11-04
+
+The explicit Phase 15 request authorizes Section 23A milestone E: governed mapping resources,
+immutable mapping definitions, pinned dataset-to-ontology materialization, deterministic identity,
+strict conversion, relationship reconciliation, durable execution, provenance and Studio integration.
+This supersedes earlier statements that Phase 15 requires approval. ADR 0040 and the Phase 15 report
+record the implementation and executed acceptance evidence. Phase 16 and later milestones remain
+unapproved. Section 23B production deployment/certification remains blocked.

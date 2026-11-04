@@ -29,7 +29,9 @@ from ontology_platform.errors import ApplicationError
 from ontology_platform.ingestion.catalog import SourceCatalog
 from ontology_platform.ingestion.routes import router as ingestion_router
 from ontology_platform.interoperability.routes import router as interchange_router
+from ontology_platform.mappings.routes import router as mapping_router
 from ontology_platform.operations import RequestTelemetry, Telemetry, TransportBounds
+from ontology_platform.pipelines.routes import router as pipeline_router
 from ontology_platform.projects.routes import router as project_router
 from ontology_platform.queries.cursor import CursorCodec
 from ontology_platform.queries.routes import router as query_router
@@ -98,6 +100,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(project_router)
     app.include_router(artifact_router)
     app.include_router(dataset_router)
+    app.include_router(pipeline_router)
+    app.include_router(mapping_router)
     app.add_middleware(
         ActionPayloadLimit,
         paths=("/artifacts", "/datasets"),
@@ -173,7 +177,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.sessions = sessionmaker(engine, expire_on_commit=False)
     app.state.browser_store = BrowserStore(app.state.sessions, configuration)
     app.state.telemetry = Telemetry()
-    app.add_middleware(TransportBounds)
+    app.add_middleware(TransportBounds, transfer_deadline=artifact_settings.transfer_seconds)
     app.add_middleware(
         RequestTelemetry, telemetry=app.state.telemetry, diagnostic=configuration.diagnostic_timing
     )

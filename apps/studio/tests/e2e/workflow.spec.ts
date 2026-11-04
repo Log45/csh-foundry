@@ -1,5 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 import fs from "node:fs";
+import { login } from "./login";
 import { spawn } from "node:child_process";
 const root = new URL("../../../../", import.meta.url);
 async function operation(page: Page, name: string, body?: unknown) {
@@ -16,33 +17,6 @@ async function operation(page: Page, name: string, body?: unknown) {
   await expect(panel.locator(".result")).toBeVisible();
   await expect(panel.locator("[role=alert]")).toHaveCount(0);
   return JSON.parse(await panel.locator(".result").innerText());
-}
-async function login(page: Page) {
-  await page.route("https://127.0.0.1/oidc/**", async (route) => {
-    const result = await route.fetch({
-      url: route
-        .request()
-        .url()
-        .replace("https://127.0.0.1/", "https://127.0.0.1:8443/"),
-      maxRedirects: 0,
-    });
-    await route.fulfill({ response: result });
-  });
-  await page.goto("/");
-  await page
-    .getByRole("button", { name: "Sign in with OpenID Connect" })
-    .click();
-  await expect(page.getByLabel("Tenant", { exact: true })).toBeVisible();
-  const option = page
-    .getByLabel("Tenant", { exact: true })
-    .locator("option")
-    .filter({ hasText: "Manufacturing test tenant" });
-  await page
-    .getByLabel("Tenant", { exact: true })
-    .selectOption((await option.getAttribute("value")) ?? "");
-  await expect(
-    page.getByRole("heading", { name: "manufacturing", exact: true }),
-  ).toBeVisible();
 }
 test("verified browser reference workflow", async ({
   page,
@@ -642,7 +616,7 @@ test("Project dataset uploads, discovers schema and previews historical versions
   await page
     .getByText("Dataset versions, schema and preview", { exact: true })
     .click();
-  await page.getByLabel("Dataset file (up to 8 MiB)").setInputFiles({
+  await page.getByLabel("Dataset file (up to 1 GiB)").setInputFiles({
     name: "machines.csv",
     mimeType: "text/csv",
     buffer: Buffer.from("machineId,temperature\nM-1,42\nM-2,\n"),
@@ -665,7 +639,7 @@ test("Project dataset uploads, discovers schema and previews historical versions
   await expect(
     page.getByRole("cell", { name: "null", exact: true }),
   ).toBeVisible();
-  await page.getByLabel("Dataset file (up to 8 MiB)").setInputFiles({
+  await page.getByLabel("Dataset file (up to 1 GiB)").setInputFiles({
     name: "bad.csv",
     mimeType: "text/csv",
     buffer: Buffer.from("a,a\n1,2"),
@@ -687,4 +661,257 @@ test("Project dataset uploads, discovers schema and previews historical versions
   await expect(
     page.getByRole("cell", { name: "M-1", exact: true }),
   ).toBeVisible();
+});
+
+test("governed pipeline publishes immutable output and real lineage", async ({
+  page,
+}) => {
+  test.skip(
+    process.env.FOUNDRY_ARTIFACT_BACKEND !== "s3",
+    "NOT RUN: requires isolated MinIO runner",
+  );
+  await login(page);
+  await page.getByRole("button", { name: "Projects", exact: true }).click();
+  const name = `Pipeline Project ${Date.now()}`;
+  await page.getByLabel("New Project name").fill(name);
+  await page
+    .getByRole("button", { name: "Create Project", exact: true })
+    .click();
+  await page
+    .getByLabel("Project", { exact: true })
+    .selectOption({ label: `${name} (owner, ACTIVE)` });
+  async function createDataset(name: string) {
+    await page.getByLabel("New dataset name").fill(name);
+    const response = page.waitForResponse(
+      (r) =>
+        r.url().endsWith("/bff") &&
+        r.request().postDataJSON()?.path?.endsWith("/datasets") &&
+        r.request().postDataJSON()?.method === "POST",
+    );
+    await page
+      .getByRole("button", { name: "Create dataset", exact: true })
+      .click();
+    return (await (await response).json()) as { id: string };
+  }
+  const input = await createDataset("Pipeline input");
+  const inputPanel = page.locator("article.panel").filter({
+    has: page.getByRole("heading", { name: "Pipeline input", exact: true }),
+  });
+  await inputPanel
+    .getByText("Dataset versions, schema and preview", { exact: true })
+    .click();
+  await inputPanel.getByLabel("Dataset file (up to 1 GiB)").setInputFiles({
+    name: "input.csv",
+    mimeType: "text/csv",
+    buffer: Buffer.from("id,value\n1,a\n2,b\n"),
+  });
+  const finalized = page.waitForResponse(
+    (r) =>
+      r.url().endsWith("/bff") &&
+      r.request().postDataJSON()?.path?.endsWith("/finalize"),
+  );
+  await inputPanel
+    .getByRole("button", { name: "Upload new version", exact: true })
+    .click();
+  const version = await (await finalized).json();
+  await expect(inputPanel.getByText(/Version 1 · COMMITTED/)).toBeVisible();
+  const output = await createDataset("Pipeline output");
+  await page.getByLabel("New pipeline name").fill("Select identifiers");
+  await page
+    .getByRole("button", { name: "Create pipeline", exact: true })
+    .click();
+  const panel = page.locator("article.panel").filter({
+    has: page.getByRole("heading", {
+      name: "Select identifiers",
+      exact: true,
+    }),
+  });
+  await panel
+    .getByText("Pipeline definitions and runs", { exact: true })
+    .click();
+  await panel.getByLabel("Transformation specification JSON").fill(
+    JSON.stringify({
+      inputs: [{ name: "source" }],
+      steps: [{ op: "select", columns: ["id"] }],
+    }),
+  );
+  await panel
+    .getByRole("button", { name: "Validate definition", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "Definition grammar valid",
+  );
+  await panel
+    .getByRole("button", { name: "Publish definition version", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "Published immutable definition 1",
+  );
+  await panel
+    .getByLabel("Pinned input dataset versions JSON")
+    .fill(
+      JSON.stringify([
+        { name: "source", dataset_id: input.id, version_id: version.id },
+      ]),
+    );
+  await panel.getByLabel("Output dataset ID").fill(output.id);
+  await panel.getByRole("button", { name: "Launch run", exact: true }).click();
+  await expect(async () => {
+    await panel
+      .getByRole("button", { name: "Refresh pipeline", exact: true })
+      .click();
+    await expect(panel.getByText(/· SUCCEEDED · attempt/)).toBeVisible();
+  }).toPass({ timeout: 20000 });
+  await panel
+    .getByRole("button", { name: "Inspect lineage", exact: true })
+    .click();
+  await expect(panel.locator("pre").last()).toContainText(version.id);
+  await expect(panel.locator("pre").last()).toContainText(input.id);
+});
+
+test("governed mapping validates materializes and records source provenance", async ({
+  page,
+}) => {
+  expect(process.env.FOUNDRY_ARTIFACT_BACKEND).toBe("s3");
+  await login(page);
+  await page.getByRole("button", { name: "Projects", exact: true }).click();
+  const name = `Mapping Project ${Date.now()}`;
+  await page.getByLabel("New Project name").fill(name);
+  await page
+    .getByRole("button", { name: "Create Project", exact: true })
+    .click();
+  await page
+    .getByLabel("Project", { exact: true })
+    .selectOption({ label: `${name} (owner, ACTIVE)` });
+  await page
+    .getByText("Register published ontology assets", { exact: true })
+    .click();
+  await page.getByLabel("Catalog ontology ID").fill("manufacturing");
+  await page.getByLabel("Published version", { exact: true }).fill("1.0.0");
+  const catalogResponse = page.waitForResponse(
+    (r) =>
+      r.url().endsWith("/bff") &&
+      r.request().postDataJSON()?.path?.endsWith("/catalog-import"),
+  );
+  await page.getByRole("button", { name: "Register catalog page" }).click();
+  const catalog = await (await catalogResponse).json();
+  const target = catalog.find(
+    (r: { resource_type: string }) => r.resource_type === "ONTOLOGY_VERSION",
+  );
+  expect(target).toBeTruthy();
+  await page.getByLabel("New dataset name").fill("Mapping source");
+  const datasetResponse = page.waitForResponse(
+    (r) =>
+      r.url().endsWith("/bff") &&
+      r.request().postDataJSON()?.path?.endsWith("/datasets") &&
+      r.request().postDataJSON()?.method === "POST",
+  );
+  await page
+    .getByRole("button", { name: "Create dataset", exact: true })
+    .click();
+  const source = await (await datasetResponse).json();
+  const inputPanel = page.locator("article.panel").filter({
+    has: page.getByRole("heading", { name: "Mapping source", exact: true }),
+  });
+  await inputPanel
+    .getByText("Dataset versions, schema and preview", { exact: true })
+    .click();
+  const identifier = `Mapped-${Date.now()}`;
+  await inputPanel.getByLabel("Dataset file (up to 1 GiB)").setInputFiles({
+    name: "mapping.csv",
+    mimeType: "text/csv",
+    buffer: Buffer.from(`factoryId,name\n${identifier},Mapped factory\n`),
+  });
+  const finalized = page.waitForResponse(
+    (r) =>
+      r.url().endsWith("/bff") &&
+      r.request().postDataJSON()?.path?.endsWith("/finalize"),
+  );
+  await inputPanel
+    .getByRole("button", { name: "Upload new version", exact: true })
+    .click();
+  const version = await (await finalized).json();
+  await expect(inputPanel.getByText(/Version 1 · COMMITTED/)).toBeVisible();
+  await page.getByLabel("New mapping name").fill("Factory mapping");
+  await page
+    .getByRole("button", { name: "Create mapping", exact: true })
+    .click();
+  const panel = page.locator("article.panel").filter({
+    has: page.getByRole("heading", { name: "Factory mapping", exact: true }),
+  });
+  await panel
+    .getByText("Dataset mapping and materialization", { exact: true })
+    .click();
+  await panel.getByLabel("Mapping specification JSON").fill(
+    JSON.stringify({
+      target_resource_id: target.id,
+      ontology_id: "manufacturing",
+      schema_version: "1.0.0",
+      columns: { factoryId: "String", name: "String" },
+      objects: [
+        {
+          object_type: "Factory",
+          identity: {
+            components: [{ column: "factoryId", conversion: "string" }],
+          },
+          properties: {
+            factoryName: { column: "name", conversion: "string" },
+            location: { constant: "E2E", conversion: "string" },
+          },
+        },
+      ],
+    }),
+  );
+  await panel
+    .getByRole("button", { name: "Validate mapping structure", exact: true })
+    .click();
+  await expect(panel.getByLabel("Mapping result")).toContainText("structural");
+  await panel.getByLabel("Source dataset ID").fill(source.id);
+  await panel.getByLabel("Source dataset version ID").fill(version.id);
+  await panel
+    .getByRole("button", { name: "Preview draft sample", exact: true })
+    .click();
+  await expect(panel.getByLabel("Mapping result")).toContainText("sample-only");
+  await panel
+    .getByRole("button", { name: "Publish mapping definition", exact: true })
+    .click();
+  await expect(panel.getByLabel("Mapping definition version")).not.toHaveValue(
+    "",
+  );
+  await panel.getByLabel("Source dataset ID").fill(source.id);
+  await panel.getByLabel("Source dataset version ID").fill(version.id);
+  await panel
+    .getByRole("button", { name: "Preview mapped sample", exact: true })
+    .click();
+  await expect(panel.getByLabel("Mapping result")).toContainText("sample-only");
+  await panel
+    .getByRole("button", { name: "Validate full source", exact: true })
+    .click();
+  await expect(async () => {
+    await panel
+      .getByRole("button", { name: "Refresh mapping", exact: true })
+      .click();
+    await expect(panel.getByText(/· SUCCEEDED · attempt/)).toHaveCount(1);
+  }).toPass({ timeout: 20000 });
+  await panel
+    .getByRole("button", { name: "Materialize dataset", exact: true })
+    .click();
+  await expect(async () => {
+    await panel
+      .getByRole("button", { name: "Refresh mapping", exact: true })
+      .click();
+    await expect(panel.getByText(/· SUCCEEDED · attempt/)).toHaveCount(2);
+  }).toPass({ timeout: 20000 });
+  await panel.getByLabel("Materialized object ID").fill(identifier);
+  await panel
+    .getByRole("button", { name: "Inspect materialized object", exact: true })
+    .click();
+  await expect(panel.getByLabel("Mapping result")).toContainText(
+    "Mapped factory",
+  );
+  await panel
+    .getByRole("button", { name: "View source provenance", exact: true })
+    .first()
+    .click();
+  await expect(panel.getByLabel("Mapping result")).toContainText(version.id);
 });

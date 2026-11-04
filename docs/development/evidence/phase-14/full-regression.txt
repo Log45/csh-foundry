@@ -1,0 +1,104 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase14-ae6764ea7f28_default  Creating
+ Network phase14-ae6764ea7f28_default  Created
+ Volume "phase14-ae6764ea7f28_minio-data"  Creating
+ Volume "phase14-ae6764ea7f28_minio-data"  Created
+ Container phase14-ae6764ea7f28-minio-1  Creating
+ Container phase14-ae6764ea7f28-minio-1  Created
+ Container phase14-ae6764ea7f28-minio-1  Starting
+ Container phase14-ae6764ea7f28-minio-1  Started
+ Container phase14-ae6764ea7f28-minio-1  Waiting
+ Container phase14-ae6764ea7f28-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase14-ae6764ea7f28-minio-1  Restarting
+ Container phase14-ae6764ea7f28-minio-1  Started
+ Container phase14-ae6764ea7f28-minio-1  Running
+ Container phase14-ae6764ea7f28-minio-1  Waiting
+ Container phase14-ae6764ea7f28-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+testpaths: services/api/tests, packages/ontology-schema/tests
+plugins: anyio-4.15.1
+collected 743 items
+
+services/api/tests/test_action_models.py ............................    [  3%]
+services/api/tests/test_actions.py ..................................... [  8%]
+...................                                                      [ 11%]
+services/api/tests/test_api.py ...                                       [ 11%]
+services/api/tests/test_artifacts.py ..............                      [ 13%]
+services/api/tests/test_branching.py ................                    [ 15%]
+services/api/tests/test_capacity_acceptance.py ......                    [ 16%]
+services/api/tests/test_compatibility.py ..............                  [ 18%]
+services/api/tests/test_contracts.py ...                                 [ 18%]
+services/api/tests/test_database.py .                                    [ 18%]
+services/api/tests/test_datasets.py .................................... [ 23%]
+.                                                                        [ 23%]
+services/api/tests/test_diagnostics.py ..                                [ 24%]
+services/api/tests/test_execution.py ................................... [ 28%]
+...                                                                      [ 29%]
+services/api/tests/test_execution_large.py ................              [ 31%]
+services/api/tests/test_fixtures.py ..x..........                        [ 33%]
+services/api/tests/test_ingestion.py ................................... [ 37%]
+............                                                             [ 39%]
+services/api/tests/test_ingestion_connectors.py .......................  [ 42%]
+services/api/tests/test_ingestion_postgres.py ....                       [ 43%]
+services/api/tests/test_ingestion_recovery.py ........                   [ 44%]
+services/api/tests/test_kubernetes.py .......................            [ 47%]
+services/api/tests/test_ontology_import.py ............................. [ 51%]
+.........                                                                [ 52%]
+services/api/tests/test_operations.py .......................            [ 55%]
+services/api/tests/test_phase1.py .............................          [ 59%]
+services/api/tests/test_phase10_diagnostics_harness.py ....              [ 60%]
+services/api/tests/test_pitr_guard.py ..........                         [ 61%]
+services/api/tests/test_production_profile.py ..                         [ 61%]
+services/api/tests/test_projects.py ............                         [ 63%]
+services/api/tests/test_queries.py ..................................... [ 68%]
+.......                                                                  [ 69%]
+services/api/tests/test_query_ast.py ..........................          [ 72%]
+services/api/tests/test_release_evidence.py ...........................  [ 76%]
+services/api/tests/test_scan_images.py ..                                [ 76%]
+services/api/tests/test_sdk.py ................                          [ 78%]
+services/api/tests/test_security_dispositions.py ......................  [ 81%]
+services/api/tests/test_security_oidc.py ............................... [ 85%]
+..............                                                           [ 87%]
+services/api/tests/test_security_platform.py .................           [ 90%]
+services/api/tests/test_security_workflows.py ......                     [ 90%]
+services/api/tests/test_semantic.py ....                                 [ 91%]
+services/api/tests/test_semantic_compiler.py ............                [ 93%]
+services/api/tests/test_semantic_platform.py ........................... [ 96%]
+....                                                                     [ 97%]
+services/api/tests/test_studio.py ...                                    [ 97%]
+packages/ontology-schema/tests/test_models.py ..................         [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+XFAIL services/api/tests/test_fixtures.py::test_raw_pyshacl_compatibility - Raw pySHACL/RDFLib simple/xsd:string mismatch; see semantic-compatibility.md
+============ 742 passed, 1 xfailed, 1 warning in 705.55s (0:11:45) =============
+No new upgrade operations detected.
+ Container phase14-ae6764ea7f28-minio-1  Stopping
+ Container phase14-ae6764ea7f28-minio-1  Stopped
+ Container phase14-ae6764ea7f28-minio-1  Removing
+ Container phase14-ae6764ea7f28-minio-1  Removed
+ Volume phase14-ae6764ea7f28_minio-data  Removing
+ Network phase14-ae6764ea7f28_default  Removing
+ Volume phase14-ae6764ea7f28_minio-data  Removed
+ Network phase14-ae6764ea7f28_default  Removed

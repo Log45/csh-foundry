@@ -1,0 +1,254 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-ea47af3e910a_default  Creating
+ Network phase15-ea47af3e910a_default  Created
+ Volume "phase15-ea47af3e910a_minio-data"  Creating
+ Volume "phase15-ea47af3e910a_minio-data"  Created
+ Container phase15-ea47af3e910a-minio-1  Creating
+ Container phase15-ea47af3e910a-minio-1  Created
+ Container phase15-ea47af3e910a-minio-1  Starting
+ Container phase15-ea47af3e910a-minio-1  Started
+ Container phase15-ea47af3e910a-minio-1  Waiting
+ Container phase15-ea47af3e910a-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-ea47af3e910a-minio-1  Restarting
+ Container phase15-ea47af3e910a-minio-1  Started
+ Container phase15-ea47af3e910a-minio-1  Running
+ Container phase15-ea47af3e910a-minio-1  Waiting
+ Container phase15-ea47af3e910a-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+testpaths: services/api/tests, packages/ontology-schema/tests
+plugins: anyio-4.15.1
+collected 790 items
+
+services/api/tests/test_action_models.py ............................    [  3%]
+services/api/tests/test_actions.py ..................................... [  8%]
+...................                                                      [ 10%]
+services/api/tests/test_api.py ...                                       [ 11%]
+services/api/tests/test_artifacts.py ..............                      [ 12%]
+services/api/tests/test_branching.py ................                    [ 14%]
+services/api/tests/test_capacity_acceptance.py ......                    [ 15%]
+services/api/tests/test_compatibility.py ..............                  [ 17%]
+services/api/tests/test_contracts.py ...                                 [ 17%]
+services/api/tests/test_database.py .                                    [ 17%]
+services/api/tests/test_datasets.py .................................... [ 22%]
+.                                                                        [ 22%]
+services/api/tests/test_diagnostics.py ..                                [ 22%]
+services/api/tests/test_execution.py ................................... [ 27%]
+.............                                                            [ 28%]
+services/api/tests/test_execution_large.py ................              [ 30%]
+services/api/tests/test_fixtures.py ..x..........                        [ 32%]
+services/api/tests/test_ingestion.py ................................... [ 36%]
+............                                                             [ 38%]
+services/api/tests/test_ingestion_connectors.py .......................  [ 41%]
+services/api/tests/test_ingestion_postgres.py ....                       [ 41%]
+services/api/tests/test_ingestion_recovery.py FFF.F...                   [ 42%]
+services/api/tests/test_kubernetes.py .......................            [ 45%]
+services/api/tests/test_mappings.py ..................F..............    [ 50%]
+services/api/tests/test_mappings_large.py .                              [ 50%]
+services/api/tests/test_mappings_recovery.py ..F                         [ 50%]
+services/api/tests/test_ontology_import.py ............................. [ 54%]
+.........                                                                [ 55%]
+services/api/tests/test_operations.py .F.....................            [ 58%]
+services/api/tests/test_phase1.py .............................          [ 61%]
+services/api/tests/test_phase10_diagnostics_harness.py ....              [ 62%]
+services/api/tests/test_pitr_guard.py ..........                         [ 63%]
+services/api/tests/test_production_profile.py ..                         [ 63%]
+services/api/tests/test_projects.py ............                         [ 65%]
+services/api/tests/test_queries.py ..................................... [ 70%]
+.......                                                                  [ 71%]
+services/api/tests/test_query_ast.py ..........................          [ 74%]
+services/api/tests/test_release_evidence.py ...........................  [ 77%]
+services/api/tests/test_scan_images.py ..                                [ 77%]
+services/api/tests/test_sdk.py ...........F....                          [ 80%]
+services/api/tests/test_security_dispositions.py ......................  [ 82%]
+services/api/tests/test_security_oidc.py ............................... [ 86%]
+..............                                                           [ 88%]
+services/api/tests/test_security_platform.py .................           [ 90%]
+services/api/tests/test_security_workflows.py ......                     [ 91%]
+services/api/tests/test_semantic.py ....                                 [ 91%]
+services/api/tests/test_semantic_compiler.py ............                [ 93%]
+services/api/tests/test_semantic_platform.py ...F....................... [ 96%]
+....                                                                     [ 97%]
+services/api/tests/test_studio.py ...                                    [ 97%]
+packages/ontology-schema/tests/test_models.py ..................         [100%]
+
+=================================== FAILURES ===================================
+________________ test_real_worker_process_crash[before_commit] _________________
+services/api/tests/test_ingestion_recovery.py:111: in test_real_worker_process_crash
+    result = finish(ingestion, run)
+             ^^^^^^^^^^^^^^^^^^^^^^
+services/api/tests/test_ingestion.py:133: in finish
+    assert worker.run_one(world.actor, world.definition.id) == run.id
+E   AssertionError: assert None == UUID('2d983b77-6efa-438e-8c46-b497512aa308')
+E    +  where None = run_one(Principal(tenant_id=UUID('4c69383b-e9b4-41c7-9155-0bf161ad3707'), principal_id='local-developer', identity_provider=No..._method='local', principal_type='user', expires_at=None, actor_id=None, delegation_ontology=None, delegation_kind=None), 'manufacturing')
+E    +    where run_one = <ontology_platform.ingestion.worker.IngestionWorker object at 0x359d2f290>.run_one
+E    +    and   Principal(tenant_id=UUID('4c69383b-e9b4-41c7-9155-0bf161ad3707'), principal_id='local-developer', identity_provider=No..._method='local', principal_type='user', expires_at=None, actor_id=None, delegation_ontology=None, delegation_kind=None) = World(engine=Engine(postgresql+psycopg://foundry:***@localhost:55432/foundry?options=-csearch_path%3Dtest_phase11_suit...type='EXISTS', binding='employee', property=None, value=None, link=None, source=None, target=None, parameter=None)))))).actor
+E    +    and   'manufacturing' = OntologyDefinition(format_version=1, tenant_id=UUID('4c69383b-e9b4-41c7-9155-0bf161ad3707'), id='manufacturing', name=...(type='EXISTS', binding='employee', property=None, value=None, link=None, source=None, target=None, parameter=None))))).id
+E    +      where OntologyDefinition(format_version=1, tenant_id=UUID('4c69383b-e9b4-41c7-9155-0bf161ad3707'), id='manufacturing', name=...(type='EXISTS', binding='employee', property=None, value=None, link=None, source=None, target=None, parameter=None))))) = World(engine=Engine(postgresql+psycopg://foundry:***@localhost:55432/foundry?options=-csearch_path%3Dtest_phase11_suit...type='EXISTS', binding='employee', property=None, value=None, link=None, source=None, target=None, parameter=None)))))).definition
+E    +  and   UUID('2d983b77-6efa-438e-8c46-b497512aa308') = RunView(id=UUID('2d983b77-6efa-438e-8c46-b497512aa308'), schema_version='1.0.0', principal_id='local-developer', statu...eated_at=datetime.datetime(2026, 11, 4, 5, 29, 30, 401229, tzinfo=zoneinfo.ZoneInfo(key='Etc/UTC')), completed_at=None).id
+______________ test_real_worker_process_crash[before_checkpoint] _______________
+services/api/tests/test_ingestion_recovery.py:111: in test_real_worker_process_crash
+    result = finish(ingestion, run)
+             ^^^^^^^^^^^^^^^^^^^^^^
+services/api/tests/test_ingestion.py:133: in finish
+    assert worker.run_one(world.actor, world.definition.id) == run.id
+E   AssertionError: assert None == UUID('880dfe21-498c-41e3-8321-3f2df999ad42')
+E    +  where None = run_one(Principal(tenant_id=UUID('10181da8-6a2c-45c4-8f18-90713de9c349'), principal_id='local-developer', identity_provider=No..._method='local', principal_type='user', expires_at=None, actor_id=None, delegation_ontology=None, delegation_kind=None), 'manufacturing')
+E    +    where run_one = <ontology_platform.ingestion.worker.IngestionWorker object at 0x359da0650>.run_one
+E    +    and   Principal(tenant_id=UUID('10181da8-6a2c-45c4-8f18-90713de9c349'), principal_id='local-developer', identity_provider=No..._method='local', principal_type='user', expires_at=None, actor_id=None, delegation_ontology=None, delegation_kind=None) = World(engine=Engine(postgresql+psycopg://foundry:***@localhost:55432/foundry?options=-csearch_path%3Dtest_phase11_suit...type='EXISTS', binding='employee', property=None, value=None, link=None, source=None, target=None, parameter=None)))))).actor
+E    +    and   'manufacturing' = OntologyDefinition(format_version=1, tenant_id=UUID('10181da8-6a2c-45c4-8f18-90713de9c349'), id='manufacturing', name=...(type='EXISTS', binding='employee', property=None, value=None, link=None, source=None, target=None, parameter=None))))).id
+E    +      where OntologyDefinition(format_version=1, tenant_id=UUID('10181da8-6a2c-45c4-8f18-90713de9c349'), id='manufacturing', name=...(type='EXISTS', binding='employee', property=None, value=None, link=None, source=None, target=None, parameter=None))))) = World(engine=Engine(postgresql+psycopg://foundry:***@localhost:55432/foundry?options=-csearch_path%3Dtest_phase11_suit...type='EXISTS', binding='employee', property=None, value=None, link=None, source=None, target=None, parameter=None)))))).definition
+E    +  and   UUID('880dfe21-498c-41e3-8321-3f2df999ad42') = RunView(id=UUID('880dfe21-498c-41e3-8321-3f2df999ad42'), schema_version='1.0.0', principal_id='local-developer', statu...eated_at=datetime.datetime(2026, 11, 4, 5, 29, 31, 806887, tzinfo=zoneinfo.ZoneInfo(key='Etc/UTC')), completed_at=None).id
+_________________ test_real_worker_process_crash[after_commit] _________________
+services/api/tests/test_ingestion_recovery.py:111: in test_real_worker_process_crash
+    result = finish(ingestion, run)
+             ^^^^^^^^^^^^^^^^^^^^^^
+services/api/tests/test_ingestion.py:133: in finish
+    assert worker.run_one(world.actor, world.definition.id) == run.id
+E   AssertionError: assert None == UUID('4f3f01eb-f07a-4943-9630-8b1e1d59e778')
+E    +  where None = run_one(Principal(tenant_id=UUID('215c2b81-4257-432b-a5d8-eff4c7f45e32'), principal_id='local-developer', identity_provider=No..._method='local', principal_type='user', expires_at=None, actor_id=None, delegation_ontology=None, delegation_kind=None), 'manufacturing')
+E    +    where run_one = <ontology_platform.ingestion.worker.IngestionWorker object at 0x35a0f2ab0>.run_one
+E    +    and   Principal(tenant_id=UUID('215c2b81-4257-432b-a5d8-eff4c7f45e32'), principal_id='local-developer', identity_provider=No..._method='local', principal_type='user', expires_at=None, actor_id=None, delegation_ontology=None, delegation_kind=None) = World(engine=Engine(postgresql+psycopg://foundry:***@localhost:55432/foundry?options=-csearch_path%3Dtest_phase11_suit...type='EXISTS', binding='employee', property=None, value=None, link=None, source=None, target=None, parameter=None)))))).actor
+E    +    and   'manufacturing' = OntologyDefinition(format_version=1, tenant_id=UUID('215c2b81-4257-432b-a5d8-eff4c7f45e32'), id='manufacturing', name=...(type='EXISTS', binding='employee', property=None, value=None, link=None, source=None, target=None, parameter=None))))).id
+E    +      where OntologyDefinition(format_version=1, tenant_id=UUID('215c2b81-4257-432b-a5d8-eff4c7f45e32'), id='manufacturing', name=...(type='EXISTS', binding='employee', property=None, value=None, link=None, source=None, target=None, parameter=None))))) = World(engine=Engine(postgresql+psycopg://foundry:***@localhost:55432/foundry?options=-csearch_path%3Dtest_phase11_suit...type='EXISTS', binding='employee', property=None, value=None, link=None, source=None, target=None, parameter=None)))))).definition
+E    +  and   UUID('4f3f01eb-f07a-4943-9630-8b1e1d59e778') = RunView(id=UUID('4f3f01eb-f07a-4943-9630-8b1e1d59e778'), schema_version='1.0.0', principal_id='local-developer', statu...eated_at=datetime.datetime(2026, 11, 4, 5, 29, 32, 999445, tzinfo=zoneinfo.ZoneInfo(key='Etc/UTC')), completed_at=None).id
+______________________ test_retry_exhaustion_and_renewal _______________________
+services/api/tests/test_ingestion_recovery.py:142: in test_retry_exhaustion_and_renewal
+    with pytest.raises(ApplicationError):
+E   Failed: DID NOT RAISE <class 'ontology_platform.errors.ApplicationError'>
+_____________ test_expired_lease_stale_worker_and_concurrent_runs ______________
+services/api/tests/test_mappings.py:254: in test_expired_lease_stale_worker_and_concurrent_runs
+    assert svc.status(world.actor, job.id).state == "SUCCEEDED"
+E   AssertionError: assert 'RUNNING' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + RUNNING
+__________ test_real_controller_exit_after_batch_recovers_pinned_run ___________
+services/api/tests/test_mappings_recovery.py:177: in test_real_controller_exit_after_batch_recovers_pinned_run
+    assert (
+E   AssertionError: ExecutionJobView(id=UUID('0ab57fbb-7a37-49b7-9500-cf9ac08d6bf9'), resource_id=UUID('9b3c913f-9f2b-44bc-a190-628ec14258...y='Etc/UTC')), completed_at=datetime.datetime(2026, 11, 4, 5, 38, 32, 266520, tzinfo=zoneinfo.ZoneInfo(key='Etc/UTC')))
+E   assert ('FAILED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + FAILED)
+----------------------------- Captured stderr call -----------------------------
+/Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+_______________ test_login_consume_and_session_compare_swap_race _______________
+services/api/tests/test_operations.py:75: in test_login_consume_and_session_compare_swap_race
+    a.operate("login", login, "PUT", state())
+services/api/src/ontology_platform/security/browser.py:101: in operate
+    raise ApplicationError("invalid_session", "Invalid session lifetime", 400)
+E   ontology_platform.errors.ApplicationError: Invalid session lifetime
+__________________ test_generated_sdk_packages_manufacturing ___________________
+services/api/tests/test_sdk.py:295: in test_generated_sdk_packages_manufacturing
+    subprocess.run(
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py:571: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['/Users/log/.nvm/versions/node/v26.7.0/bin/node', '/private/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/pytest-of-log/pytest-156/test_generated_sdk_packages_ma0/typescript/check.mjs']' returned non-zero exit status 1.
+----------------------------- Captured stdout call -----------------------------
+Success: no issues found in 4 source files
+----------------------------- Captured stderr call -----------------------------
+Using CPython 3.12.0 interpreter at: /usr/local/bin/python3.12
+Creating virtual environment at: /private/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/pytest-of-log/pytest-156/test_generated_sdk_packages_ma0/venv
+Activate with: source /private/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/pytest-of-log/pytest-156/test_generated_sdk_packages_ma0/venv/bin/activate
+Using Python 3.12.0 environment at: /private/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/pytest-of-log/pytest-156/test_generated_sdk_packages_ma0/venv
+Resolved 12 packages in 439ms
+   Building ontology-generated-sdk @ file:///private/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/pytest-of-log/pytest-156/test_generated_sdk_packages_ma0/python
+      Built ontology-generated-sdk @ file:///private/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/pytest-of-log/pytest-156/test_generated_sdk_packages_ma0/python
+Prepared 1 package in 315ms
+Installed 12 packages in 17ms
+ + annotated-types==0.8.0
+ + anyio==4.16.0
+ + certifi==2026.10.23
+ + h11==0.16.0
+ + httpcore==1.0.9
+ + httpx==0.28.1
+ + idna==3.20
+ + ontology-generated-sdk==1.1.0 (from file:///private/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/pytest-of-log/pytest-156/test_generated_sdk_packages_ma0/python)
+ + pydantic==2.14.1
+ + pydantic-core==2.50.1
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.4
+file:///private/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/pytest-of-log/pytest-156/test_generated_sdk_packages_ma0/typescript/dist/runtime.js:69
+            throw new SDKError(response.status, envelope?.error?.code ?? "request_failed", data, response);
+                  ^
+
+SDKError: forbidden
+    at Transport.request (file:///private/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/pytest-of-log/pytest-156/test_generated_sdk_packages_ma0/typescript/dist/runtime.js:69:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///private/var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/pytest-of-log/pytest-156/test_generated_sdk_packages_ma0/typescript/check.mjs:10:14 {
+  status: 403,
+  code: 'forbidden',
+  body: {
+    error: { code: 'forbidden', message: 'Operation is not authorized' }
+  },
+  response: Response {}
+}
+
+Node.js v26.7.0
+________________ test_validation_violation_is_completed_result _________________
+services/api/tests/test_semantic_platform.py:176: in test_validation_violation_is_completed_result
+    assert completed.status == "COMPLETED"
+E   AssertionError: assert 'RUNNING' == 'COMPLETED'
+E     
+E     - COMPLETED
+E     + RUNNING
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+services/api/tests/test_capacity_acceptance.py::test_cross_tenant_mixed_http_admission_and_cancel[2]
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py:2346: UnsupportedFieldAttributeWarning: The 'alias' attribute with value 'limit' was provided to the `Field()` function, which has no effect in the context it was used. 'alias' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+XFAIL services/api/tests/test_fixtures.py::test_raw_pyshacl_compatibility - Raw pySHACL/RDFLib simple/xsd:string mismatch; see semantic-compatibility.md
+FAILED services/api/tests/test_ingestion_recovery.py::test_real_worker_process_crash[before_commit]
+FAILED services/api/tests/test_ingestion_recovery.py::test_real_worker_process_crash[before_checkpoint]
+FAILED services/api/tests/test_ingestion_recovery.py::test_real_worker_process_crash[after_commit]
+FAILED services/api/tests/test_ingestion_recovery.py::test_retry_exhaustion_and_renewal
+FAILED services/api/tests/test_mappings.py::test_expired_lease_stale_worker_and_concurrent_runs
+FAILED services/api/tests/test_mappings_recovery.py::test_real_controller_exit_after_batch_recovers_pinned_run
+FAILED services/api/tests/test_operations.py::test_login_consume_and_session_compare_swap_race
+FAILED services/api/tests/test_sdk.py::test_generated_sdk_packages_manufacturing
+FAILED services/api/tests/test_semantic_platform.py::test_validation_violation_is_completed_result
+====== 9 failed, 780 passed, 1 xfailed, 2 warnings in 1122.48s (0:18:42) =======
+No new upgrade operations detected.
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase11.py", line 35, in <module>
+    subprocess.run(["uv", "run", "pytest", "-ra", "--tb=short"], cwd=root, env=env, check=True)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['uv', 'run', 'pytest', '-ra', '--tb=short']' returned non-zero exit status 1.
+ Container phase15-ea47af3e910a-minio-1  Stopping
+ Container phase15-ea47af3e910a-minio-1  Stopped
+ Container phase15-ea47af3e910a-minio-1  Removing
+ Container phase15-ea47af3e910a-minio-1  Removed
+ Network phase15-ea47af3e910a_default  Removing
+ Volume phase15-ea47af3e910a_minio-data  Removing
+ Volume phase15-ea47af3e910a_minio-data  Removed
+ Network phase15-ea47af3e910a_default  Removed
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 151, in <module>
+    run("uv", "run", "python", "scripts/validate_phase11.py")
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 96, in run
+    raise subprocess.CalledProcessError(code, cmd)
+subprocess.CalledProcessError: Command '('uv', 'run', 'python', 'scripts/validate_phase11.py')' returned non-zero exit status 1.

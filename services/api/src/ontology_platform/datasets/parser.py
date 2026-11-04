@@ -204,7 +204,10 @@ def worker(path: str, output: str, format: str) -> None:
     if sys.platform == "linux":
         resource.setrlimit(resource.RLIMIT_AS, (2 * 1024**3, 2 * 1024**3))
     try:
-        result = parse(Path(path).read_bytes(), format)
+        from ontology_platform.datasets.streaming import validate_path
+        from ontology_platform.execution.config import ExecutionSettings
+
+        result = validate_path(Path(path), format, ExecutionSettings())
     except InvalidDataset as exc:
         result = {"error": "invalid_dataset", "message": str(exc)}
     except Exception:

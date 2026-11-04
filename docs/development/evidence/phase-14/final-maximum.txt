@@ -1,0 +1,58 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase14-8a14394228db_default  Creating
+ Network phase14-8a14394228db_default  Created
+ Volume "phase14-8a14394228db_minio-data"  Creating
+ Volume "phase14-8a14394228db_minio-data"  Created
+ Container phase14-8a14394228db-minio-1  Creating
+ Container phase14-8a14394228db-minio-1  Created
+ Container phase14-8a14394228db-minio-1  Starting
+ Container phase14-8a14394228db-minio-1  Started
+ Container phase14-8a14394228db-minio-1  Waiting
+ Container phase14-8a14394228db-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase14-8a14394228db-minio-1  Restarting
+ Container phase14-8a14394228db-minio-1  Started
+ Container phase14-8a14394228db-minio-1  Running
+ Container phase14-8a14394228db-minio-1  Waiting
+ Container phase14-8a14394228db-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 16 items / 12 deselected / 4 selected
+
+services/api/tests/test_execution_large.py MEASUREMENT {"checksum": "9df705da678f9418b4a8e9601677fb6eb234b5c91850ff34d871a21cea91b158", "format": "csv", "hardware": "macOS-15.6.1-arm64-arm-64bit", "rows": 262080, "source_bytes": 1073741824, "upload_mib_per_second": 41.648313273825416, "upload_seconds": 24.58683004201157, "worker": {"peak_memory_bytes": 248004608, "seconds": 17.317899667017628, "temporary_bytes": 1074152396}}
+TRANSFORMATION {"admitted_at": "2026-11-04T01:34:03.022765Z", "attempts": 1, "completed_at": "2026-11-04T01:34:27.812497Z", "created_at": "2026-11-04T01:34:02.991770Z", "error": null, "id": "30047b79-7ddc-45a7-b43c-3cef3656972f", "kind": "PIPELINE", "metrics": {"peak_memory_bytes": 1494614016, "seconds": 18.267358709010296, "temporary_bytes": 1074177319}, "output_dataset_id": "0f39c2bd-4541-4d8c-84cc-c4e19b1c426d", "output_version_id": "8ddec5fa-82df-40e3-ba7e-f11a03cdff52", "resource_id": "4c8c69c9-000a-4241-9652-668447a0ac82", "started_at": "2026-11-04T01:34:03.052757Z", "state": "SUCCEEDED"}
+.MEASUREMENT {"checksum": "5199eb7d2a3ba693ff78168698069f56738d1eab9fc5f9c021153e66b48ea090", "format": "ndjson", "hardware": "macOS-15.6.1-arm64-arm-64bit", "rows": 261187, "source_bytes": 1073741824, "upload_mib_per_second": 52.41967690824662, "upload_seconds": 19.534649208013434, "worker": {"peak_memory_bytes": 172507136, "seconds": 7.170818917045835, "temporary_bytes": 1074152398}}
+.MEASUREMENT {"checksum": "d4ac50db888d699fb5de0d16e0f8d734d582109ad6d347efe8d3bba3324842f1", "format": "json", "hardware": "macOS-15.6.1-arm64-arm-64bit", "rows": 261187, "source_bytes": 1073741824, "upload_mib_per_second": 52.236190260974986, "upload_seconds": 19.603267291968223, "worker": {"peak_memory_bytes": 169820160, "seconds": 7.549006375018507, "temporary_bytes": 1074152396}}
+.MEASUREMENT {"checksum": "0872fdef2393a3bf40cfe26eec9f083a6bda908a4f8f797614d244c8fff4270d", "format": "parquet", "hardware": "macOS-15.6.1-arm64-arm-64bit", "rows": 255620, "source_bytes": 1073741824, "upload_mib_per_second": 54.24632116800745, "upload_seconds": 18.876856125018094, "worker": {"peak_memory_bytes": 233553920, "seconds": 3.3812190829776227, "temporary_bytes": 1074152886}}
+.
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========== 4 passed, 12 deselected, 1 warning in 186.39s (0:03:06) ============
+ Container phase14-8a14394228db-minio-1  Stopping
+ Container phase14-8a14394228db-minio-1  Stopped
+ Container phase14-8a14394228db-minio-1  Removing
+ Container phase14-8a14394228db-minio-1  Removed
+ Volume phase14-8a14394228db_minio-data  Removing
+ Network phase14-8a14394228db_default  Removing
+ Volume phase14-8a14394228db_minio-data  Removed
+ Network phase14-8a14394228db_default  Removed

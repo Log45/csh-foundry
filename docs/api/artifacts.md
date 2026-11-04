@@ -86,3 +86,14 @@ capability revocation. Already authorized in-flight transfers may finish; subseq
 recheck live authority. Only enable when the configured HTTPS endpoint is reachable and appropriate
 for clients; internal MinIO uses the server-mediated path. Provider-side policy must prohibit public
 bucket access and arbitrary users' storage credentials.
+
+
+## Phase 14 transport extension
+
+The shared ArtifactStore transport now defaults to a configurable 1 GiB ceiling so dataset sources
+can reuse it. Studio generic artifact selection retains its original 64 MiB interface; dataset Studio
+supports the larger contract. Upload/download/finalize/presign verification releases broad governance
+transactions before S3 I/O and rechecks authority afterward. Database-wide transfer slots default to
+two uploads, one per tenant, and transfer deadlines default to 1800 seconds. Immutable checksums,
+keys, conditional/multipart writes and historical versions are preserved. See
+[worker and transfer limits](../development/execution-workers.md).

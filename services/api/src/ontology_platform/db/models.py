@@ -1411,13 +1411,14 @@ class Resource(Base):
         ),
         CheckConstraint(
             "resource_type IN ('ONTOLOGY_OBJECT_TYPE','ONTOLOGY_LINK_TYPE',"
-            "'ONTOLOGY_ACTION','ONTOLOGY_VERSION','ARTIFACT','DATASET')",
+            "'ONTOLOGY_ACTION','ONTOLOGY_VERSION','ARTIFACT','DATASET','PIPELINE','MAPPING')",
             name="ck_resource_type",
         ),
         CheckConstraint(
-            "(resource_type IN ('ARTIFACT','DATASET') AND ontology_id IS NULL "
+            "(resource_type IN ('ARTIFACT','DATASET','PIPELINE','MAPPING') AND ontology_id IS NULL "
             "AND schema_version IS NULL "
-            "AND entity_id IS NULL) OR (resource_type NOT IN ('ARTIFACT','DATASET') "
+            "AND entity_id IS NULL) OR (resource_type NOT IN "
+            "('ARTIFACT','DATASET','PIPELINE','MAPPING') "
             "AND ontology_id IS NOT NULL "
             "AND schema_version IS NOT NULL AND entity_id IS NOT NULL)",
             name="ck_resource_authority_kind",
@@ -1511,4 +1512,212 @@ class DatasetVersion(Base):
             "(state IN ('COMMITTED','FAILED')) = (finalized_at IS NOT NULL)",
             name="ck_dataset_commit",
         ),
+    )
+
+
+class PipelineDefinition(Base):
+    __tablename__ = "pipeline_definitions"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    pipeline_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    sequence: Mapped[int]
+    specification: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    created_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "pipeline_id"], ["platform_resources.tenant_id", "platform_resources.id"]
+        ),
+        UniqueConstraint("tenant_id", "pipeline_id", "sequence", name="uq_pipeline_sequence"),
+        CheckConstraint("sequence > 0", name="ck_pipeline_sequence"),
+    )
+
+
+class ExecutionJob(Base):
+    __tablename__ = "execution_jobs"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    resource_id: Mapped[UUID]
+    project_id: Mapped[UUID]
+    kind: Mapped[str] = mapped_column(String(20))
+    definition_id: Mapped[UUID | None]
+    mapping_definition_id: Mapped[UUID | None]
+    validation_version_id: Mapped[UUID | None]
+    output_dataset_id: Mapped[UUID | None]
+    output_version_id: Mapped[UUID | None]
+    request: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    principal: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    limits: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    state: Mapped[str] = mapped_column(String(20), default="QUEUED")
+    attempts: Mapped[int] = mapped_column(default=0)
+    token: Mapped[UUID | None]
+    lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    error: Mapped[str | None] = mapped_column(String(100))
+    metrics: Mapped[dict[str, JsonValue]] = mapped_column(JSONB, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    admitted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    heartbeat_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "resource_id"], ["platform_resources.tenant_id", "platform_resources.id"]
+        ),
+        ForeignKeyConstraint(["tenant_id", "project_id"], ["projects.tenant_id", "projects.id"]),
+        ForeignKeyConstraint(
+            ["tenant_id", "resource_id", "definition_id"],
+            [
+                "pipeline_definitions.tenant_id",
+                "pipeline_definitions.pipeline_id",
+                "pipeline_definitions.id",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "resource_id", "validation_version_id"],
+            ["dataset_versions.tenant_id", "dataset_versions.artifact_id", "dataset_versions.id"],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "output_dataset_id", "output_version_id"],
+            ["dataset_versions.tenant_id", "dataset_versions.artifact_id", "dataset_versions.id"],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "resource_id", "mapping_definition_id"],
+            [
+                "mapping_definitions.tenant_id",
+                "mapping_definitions.mapping_id",
+                "mapping_definitions.id",
+            ],
+        ),
+        UniqueConstraint(
+            "tenant_id", "resource_id", "validation_version_id", name="uq_dataset_validation_job"
+        ),
+        UniqueConstraint(
+            "tenant_id", "output_dataset_id", "output_version_id", name="uq_run_output"
+        ),
+        CheckConstraint(
+            "kind IN ('VALIDATION','PIPELINE','MATERIALIZATION')", name="ck_execution_kind"
+        ),
+        CheckConstraint(
+            "state IN ('QUEUED','ADMITTED','RUNNING','CANCELLING',"
+            "'SUCCEEDED','FAILED','CANCELLED')",
+            name="ck_execution_state",
+        ),
+        CheckConstraint("attempts >= 0", name="ck_execution_attempts"),
+        CheckConstraint(
+            "(state IN ('ADMITTED','RUNNING','CANCELLING')) = "
+            "(token IS NOT NULL AND lease_until IS NOT NULL)",
+            name="ck_execution_lease",
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "output_dataset_id"],
+            ["platform_resources.tenant_id", "platform_resources.id"],
+        ),
+        CheckConstraint(
+            "(state IN ('SUCCEEDED','FAILED','CANCELLED')) = (completed_at IS NOT NULL)",
+            name="ck_execution_completed",
+        ),
+        CheckConstraint(
+            "(kind = 'VALIDATION' AND validation_version_id IS NOT NULL "
+            "AND definition_id IS NULL AND mapping_definition_id IS NULL "
+            "AND output_dataset_id IS NULL) OR "
+            "(kind = 'PIPELINE' AND definition_id IS NOT NULL AND "
+            "validation_version_id IS NULL AND mapping_definition_id IS NULL "
+            "AND output_dataset_id IS NOT NULL) OR "
+            "(kind = 'MATERIALIZATION' AND mapping_definition_id IS NOT NULL "
+            "AND definition_id IS NULL "
+            "AND validation_version_id IS NULL AND output_dataset_id IS NULL)",
+            name="ck_execution_contract",
+        ),
+        Index("ix_execution_queue", "state", "created_at"),
+    )
+
+
+class ExecutionInput(Base):
+    __tablename__ = "execution_inputs"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    job_id: Mapped[UUID] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(200), primary_key=True)
+    dataset_id: Mapped[UUID]
+    version_id: Mapped[UUID]
+    checksum: Mapped[str] = mapped_column(String(64))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "job_id"], ["execution_jobs.tenant_id", "execution_jobs.id"]
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "dataset_id", "version_id"],
+            ["dataset_versions.tenant_id", "dataset_versions.artifact_id", "dataset_versions.id"],
+        ),
+    )
+
+
+class MappingDefinition(Base):
+    __tablename__ = "mapping_definitions"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    mapping_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    sequence: Mapped[int]
+    target_resource_id: Mapped[UUID]
+    ontology_id: Mapped[str] = mapped_column(Text)
+    schema_version: Mapped[str] = mapped_column(Text)
+    specification: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    created_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "mapping_id"], ["platform_resources.tenant_id", "platform_resources.id"]
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "target_resource_id"],
+            ["platform_resources.tenant_id", "platform_resources.id"],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "schema_version"],
+            [
+                "ontology_versions.tenant_id",
+                "ontology_versions.ontology_id",
+                "ontology_versions.version",
+            ],
+        ),
+        UniqueConstraint("tenant_id", "mapping_id", "sequence", name="uq_mapping_sequence"),
+        CheckConstraint("sequence > 0", name="ck_mapping_sequence"),
+    )
+
+
+class MappingOwnership(Base):
+    __tablename__ = "mapping_ownership"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    ontology_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    object_type: Mapped[str] = mapped_column(Text, primary_key=True)
+    object_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    mapping_id: Mapped[UUID]
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "mapping_id"], ["platform_resources.tenant_id", "platform_resources.id"]
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id"], ["ontologies.tenant_id", "ontologies.id"]
+        ),
+    )
+
+
+class MaterializationRecord(Base):
+    __tablename__ = "materialization_records"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    run_id: Mapped[UUID] = mapped_column(primary_key=True)
+    target_key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    target: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    source_record: Mapped[int] = mapped_column(BigInteger)
+    operation: Mapped[str] = mapped_column(String(20))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "run_id"], ["execution_jobs.tenant_id", "execution_jobs.id"]
+        ),
+        CheckConstraint(
+            "operation IN ('created','updated','preserved','observed')",
+            name="ck_materialization_operation",
+        ),
+        CheckConstraint("source_record > 0", name="ck_materialization_source"),
     )

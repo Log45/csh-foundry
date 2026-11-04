@@ -93,7 +93,7 @@ class UpdateResource(Expected):
 
 
 class ResourceView(Model):
-    resource_type: Kind | Literal["ARTIFACT", "DATASET"]
+    resource_type: Kind | Literal["ARTIFACT", "DATASET", "PIPELINE", "MAPPING"]
     ontology_id: str | None
     schema_version: str | None
     entity_id: str | None

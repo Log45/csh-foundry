@@ -1,0 +1,365 @@
+{
+  "measurements": [
+    {
+      "checksum": "abf8c1618c27f3f92104d8139244826e9b87df069964e9709e0d6b1db056b512",
+      "format": "csv",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 2047,
+      "source_bytes": 8388608,
+      "upload_mib_per_second": 26.61066974560346,
+      "upload_seconds": 0.3006312910001725,
+      "worker": {
+        "peak_memory_bytes": 156221440,
+        "seconds": 0.25647974997991696,
+        "temporary_bytes": 8799176
+      }
+    },
+    {
+      "checksum": "8c350fae93419904200664833131795aa31e6af44b69760c68865da9dd51b547",
+      "format": "csv",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 25593,
+      "source_bytes": 104857600,
+      "upload_mib_per_second": 55.53843120521039,
+      "upload_seconds": 1.8005550000234507,
+      "worker": {
+        "peak_memory_bytes": 226656256,
+        "seconds": 1.806433541001752,
+        "temporary_bytes": 105268169
+      }
+    },
+    {
+      "checksum": "bf706fc33a895564536f6f1e3434d6a4da736fed17be7f7f47068eb5b48afb01",
+      "format": "csv",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 127968,
+      "source_bytes": 524288000,
+      "upload_mib_per_second": 50.818423509589636,
+      "upload_seconds": 9.83895141701214,
+      "worker": {
+        "peak_memory_bytes": 247808000,
+        "seconds": 8.483382916019764,
+        "temporary_bytes": 524698570
+      }
+    },
+    {
+      "checksum": "9df705da678f9418b4a8e9601677fb6eb234b5c91850ff34d871a21cea91b158",
+      "format": "csv",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 262080,
+      "source_bytes": 1073741824,
+      "upload_mib_per_second": 43.78293205393616,
+      "upload_seconds": 23.388109291961882,
+      "worker": {
+        "peak_memory_bytes": 267681792,
+        "seconds": 17.2583615409676,
+        "temporary_bytes": 1074152394
+      }
+    },
+    {
+      "checksum": "bac18fbc7819878cd88d0faf8726345291e265ea3678cc66ebf6b531f43d70d8",
+      "format": "ndjson",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 2040,
+      "source_bytes": 8388608,
+      "upload_mib_per_second": 38.899532240204984,
+      "upload_seconds": 0.20565799996256828,
+      "worker": {
+        "peak_memory_bytes": 126222336,
+        "seconds": 0.18621420802082866,
+        "temporary_bytes": 8799179
+      }
+    },
+    {
+      "checksum": "a47bc664a49c6fda0e00aa2552a4153d768e8da0bb49ea7de99057c1a674654e",
+      "format": "ndjson",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 25506,
+      "source_bytes": 104857600,
+      "upload_mib_per_second": 62.36094969846822,
+      "upload_seconds": 1.6035676249885,
+      "worker": {
+        "peak_memory_bytes": 166494208,
+        "seconds": 0.7652371660224162,
+        "temporary_bytes": 105268173
+      }
+    },
+    {
+      "checksum": "7e5fed42868f1c5acc17eb60cdd31b74c985d1bc92228cda2eb935dcdc4fd5a0",
+      "format": "ndjson",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 127532,
+      "source_bytes": 524288000,
+      "upload_mib_per_second": 59.1912673462385,
+      "upload_seconds": 8.447192000050563,
+      "worker": {
+        "peak_memory_bytes": 180027392,
+        "seconds": 3.5572007500450127,
+        "temporary_bytes": 524698574
+      }
+    },
+    {
+      "checksum": "5199eb7d2a3ba693ff78168698069f56738d1eab9fc5f9c021153e66b48ea090",
+      "format": "ndjson",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 261187,
+      "source_bytes": 1073741824,
+      "upload_mib_per_second": 58.29601281041029,
+      "upload_seconds": 17.565523792000022,
+      "worker": {
+        "peak_memory_bytes": 170426368,
+        "seconds": 6.929232708993368,
+        "temporary_bytes": 1074152398
+      }
+    },
+    {
+      "checksum": "abc392f8bb02bc3f5690b0154b3374e04cbe782df651b85e52ba4d14881868fc",
+      "format": "json",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 2040,
+      "source_bytes": 8388608,
+      "upload_mib_per_second": 40.26101720622949,
+      "upload_seconds": 0.1987033750046976,
+      "worker": {
+        "peak_memory_bytes": 125550592,
+        "seconds": 0.19358308298978955,
+        "temporary_bytes": 8799177
+      }
+    },
+    {
+      "checksum": "030abc964ee982c5998f4235968a492d1ac10e481df2c42a6a38715c38359d68",
+      "format": "json",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 25506,
+      "source_bytes": 104857600,
+      "upload_mib_per_second": 54.633215367383094,
+      "upload_seconds": 1.8303883329499513,
+      "worker": {
+        "peak_memory_bytes": 169820160,
+        "seconds": 0.8244690000428818,
+        "temporary_bytes": 105268171
+      }
+    },
+    {
+      "checksum": "63690683ca90fe8cb1ae167a1c50b3fb66ec5a82da14d63471200c24950a71bf",
+      "format": "json",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 127532,
+      "source_bytes": 524288000,
+      "upload_mib_per_second": 58.08868898303195,
+      "upload_seconds": 8.60752770898398,
+      "worker": {
+        "peak_memory_bytes": 170278912,
+        "seconds": 3.7121007499517873,
+        "temporary_bytes": 524698572
+      }
+    },
+    {
+      "checksum": "d4ac50db888d699fb5de0d16e0f8d734d582109ad6d347efe8d3bba3324842f1",
+      "format": "json",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 261187,
+      "source_bytes": 1073741824,
+      "upload_mib_per_second": 55.79541803544086,
+      "upload_seconds": 18.352761500049382,
+      "worker": {
+        "peak_memory_bytes": 173883392,
+        "seconds": 7.624366541975178,
+        "temporary_bytes": 1074152396
+      }
+    },
+    {
+      "checksum": "9f43c6302fb40c2a4a879bbb150d1513924374b0018deefd89a92c2dda917a2f",
+      "format": "parquet",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 1965,
+      "source_bytes": 8388608,
+      "upload_mib_per_second": 43.864929742822426,
+      "upload_seconds": 0.18237804202362895,
+      "worker": {
+        "peak_memory_bytes": 120160256,
+        "seconds": 0.15401774999918416,
+        "temporary_bytes": 8799666
+      }
+    },
+    {
+      "checksum": "9142fe90acc7f473ed9d3833ece6d46d705933d2a84b8dd2fea40799594cfd16",
+      "format": "parquet",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 24934,
+      "source_bytes": 104857600,
+      "upload_mib_per_second": 59.228666557130886,
+      "upload_seconds": 1.6883716249722056,
+      "worker": {
+        "peak_memory_bytes": 158564352,
+        "seconds": 0.2277079580235295,
+        "temporary_bytes": 105268660
+      }
+    },
+    {
+      "checksum": "f058bc81e5b90c4ae71d3d46bab766f4e92977e4eff8aa4cc58fe5088210febe",
+      "format": "parquet",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 124798,
+      "source_bytes": 524288000,
+      "upload_mib_per_second": 54.87786699537062,
+      "upload_seconds": 9.11114129202906,
+      "worker": {
+        "peak_memory_bytes": 193626112,
+        "seconds": 0.8471895409747958,
+        "temporary_bytes": 524699061
+      }
+    },
+    {
+      "checksum": "0872fdef2393a3bf40cfe26eec9f083a6bda908a4f8f797614d244c8fff4270d",
+      "format": "parquet",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 255620,
+      "source_bytes": 1073741824,
+      "upload_mib_per_second": 36.27052366580194,
+      "upload_seconds": 28.23229158297181,
+      "worker": {
+        "peak_memory_bytes": 255082496,
+        "seconds": 2.790289208001923,
+        "temporary_bytes": 1074152885
+      }
+    }
+  ],
+  "transformations": [
+    {
+      "admitted_at": "2026-11-04T01:02:22.562876Z",
+      "attempts": 1,
+      "completed_at": "2026-11-04T01:02:50.434910Z",
+      "created_at": "2026-11-04T01:02:22.535467Z",
+      "error": null,
+      "id": "504c2459-968b-43c5-b2d0-d726fab74d00",
+      "kind": "PIPELINE",
+      "metrics": {
+        "peak_memory_bytes": 1350926336,
+        "seconds": 20.422544832981657,
+        "temporary_bytes": 1074177319
+      },
+      "output_dataset_id": "17cfa26b-03e1-4260-9239-6503c8d97fba",
+      "output_version_id": "822fabcf-a9e9-4d20-80d2-7344b0c6f414",
+      "resource_id": "7a63f9d5-cc93-487a-83f7-afec71a094f8",
+      "started_at": "2026-11-04T01:02:22.585532Z",
+      "state": "SUCCEEDED"
+    }
+  ],
+  "final_maximum_verification": [
+    {
+      "checksum": "9df705da678f9418b4a8e9601677fb6eb234b5c91850ff34d871a21cea91b158",
+      "format": "csv",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 262080,
+      "source_bytes": 1073741824,
+      "upload_mib_per_second": 41.648313273825416,
+      "upload_seconds": 24.58683004201157,
+      "worker": {
+        "peak_memory_bytes": 248004608,
+        "seconds": 17.317899667017628,
+        "temporary_bytes": 1074152396
+      }
+    },
+    {
+      "checksum": "5199eb7d2a3ba693ff78168698069f56738d1eab9fc5f9c021153e66b48ea090",
+      "format": "ndjson",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 261187,
+      "source_bytes": 1073741824,
+      "upload_mib_per_second": 52.41967690824662,
+      "upload_seconds": 19.534649208013434,
+      "worker": {
+        "peak_memory_bytes": 172507136,
+        "seconds": 7.170818917045835,
+        "temporary_bytes": 1074152398
+      }
+    },
+    {
+      "checksum": "d4ac50db888d699fb5de0d16e0f8d734d582109ad6d347efe8d3bba3324842f1",
+      "format": "json",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 261187,
+      "source_bytes": 1073741824,
+      "upload_mib_per_second": 52.236190260974986,
+      "upload_seconds": 19.603267291968223,
+      "worker": {
+        "peak_memory_bytes": 169820160,
+        "seconds": 7.549006375018507,
+        "temporary_bytes": 1074152396
+      }
+    },
+    {
+      "checksum": "0872fdef2393a3bf40cfe26eec9f083a6bda908a4f8f797614d244c8fff4270d",
+      "format": "parquet",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 255620,
+      "source_bytes": 1073741824,
+      "upload_mib_per_second": 54.24632116800745,
+      "upload_seconds": 18.876856125018094,
+      "worker": {
+        "peak_memory_bytes": 233553920,
+        "seconds": 3.3812190829776227,
+        "temporary_bytes": 1074152886
+      }
+    }
+  ],
+  "final_transformations": [
+    {
+      "admitted_at": "2026-11-04T01:34:03.022765Z",
+      "attempts": 1,
+      "completed_at": "2026-11-04T01:34:27.812497Z",
+      "created_at": "2026-11-04T01:34:02.991770Z",
+      "error": null,
+      "id": "30047b79-7ddc-45a7-b43c-3cef3656972f",
+      "kind": "PIPELINE",
+      "metrics": {
+        "peak_memory_bytes": 1494614016,
+        "seconds": 18.267358709010296,
+        "temporary_bytes": 1074177319
+      },
+      "output_dataset_id": "0f39c2bd-4541-4d8c-84cc-c4e19b1c426d",
+      "output_version_id": "8ddec5fa-82df-40e3-ba7e-f11a03cdff52",
+      "resource_id": "4c8c69c9-000a-4241-9652-668447a0ac82",
+      "started_at": "2026-11-04T01:34:03.052757Z",
+      "state": "SUCCEEDED"
+    }
+  ],
+  "final_source_contract_verification": [
+    {
+      "checksum": "9df705da678f9418b4a8e9601677fb6eb234b5c91850ff34d871a21cea91b158",
+      "format": "csv",
+      "hardware": "macOS-15.6.1-arm64-arm-64bit",
+      "rows": 262080,
+      "source_bytes": 1073741824,
+      "upload_mib_per_second": 58.4827392892706,
+      "upload_seconds": 17.509439749992453,
+      "worker": {
+        "peak_memory_bytes": 284934144,
+        "seconds": 16.535155082994606,
+        "temporary_bytes": 1074152396
+      }
+    }
+  ],
+  "final_source_contract_transformations": [
+    {
+      "admitted_at": "2026-11-04T02:55:44.964058Z",
+      "attempts": 1,
+      "completed_at": "2026-11-04T02:56:08.655887Z",
+      "created_at": "2026-11-04T02:55:44.937601Z",
+      "error": null,
+      "id": "f7ca7942-27a9-4a4e-80ab-47c12bb9804b",
+      "kind": "PIPELINE",
+      "metrics": {
+        "peak_memory_bytes": 1505132544,
+        "seconds": 17.767253292026,
+        "temporary_bytes": 1074177316
+      },
+      "output_dataset_id": "1b41664c-9c34-4b09-8158-f5fa2d09a34b",
+      "output_version_id": "5f5613e2-f6a1-4ca7-a6b2-29455672143b",
+      "resource_id": "f35ac6b8-caab-4e89-a80d-6752eab0220f",
+      "started_at": "2026-11-04T02:55:44.988601Z",
+      "state": "SUCCEEDED"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 "use client";
-import { useContext, useState } from "react";
+import { fileChecksum } from "@/lib/file-checksum";
+import { useContext, useEffect, useState } from "react";
 import type { Client } from "@/lib/api";
 import type { components } from "@/lib/api-schema";
 import { ArtifactContext } from "@/features/artifacts";
@@ -68,6 +69,39 @@ export function DatasetPanel({
     components["schemas"]["DatasetPreview"] | null
   >(null);
   const [progress, setProgress] = useState("");
+  const [validationJobs, setValidationJobs] = useState<
+    Record<string, components["schemas"]["ExecutionJobView"]>
+  >({});
+  useEffect(() => {
+    const active = Object.entries(validationJobs).filter(([, job]) =>
+      ["QUEUED", "ADMITTED", "RUNNING", "CANCELLING"].includes(job.state),
+    );
+    if (!active.length) return;
+    let current = true;
+    const timer = setTimeout(async () => {
+      try {
+        for (const [version, job] of active) {
+          const status = await api<components["schemas"]["ExecutionJobView"]>(
+            `/api/v1/execution/jobs/${job.id}`,
+          );
+          if (!current) return;
+          setValidationJobs((previous) => ({ ...previous, [version]: status }));
+          setProgress(
+            `Validation ${status.state.toLowerCase()}${status.error ? `: ${status.error}` : ""}`,
+          );
+          if (["SUCCEEDED", "FAILED", "CANCELLED"].includes(status.state))
+            await load(0);
+        }
+      } catch {
+        if (current)
+          setProgress("Status unavailable; refresh validation to retry");
+      }
+    }, 2000);
+    return () => {
+      current = false;
+      clearTimeout(timer);
+    };
+  }, [api, validationJobs]);
   const task = useTask();
   const path = `/api/v1/datasets/${dataset}`;
   async function load(page = offset) {
@@ -125,6 +159,27 @@ export function DatasetPanel({
           <p>
             {v.created_by} · {v.created_at}
           </p>
+          {v.state === "PENDING" && writable && (
+            <button
+              disabled={task.busy}
+              onClick={() =>
+                void task.run(async () => {
+                  const job = await api<
+                    components["schemas"]["ExecutionJobView"]
+                  >(`${path}/versions/${v.id}/validate`, "POST", {});
+                  setValidationJobs((previous) => ({
+                    ...previous,
+                    [v.id]: job,
+                  }));
+                  setProgress(`Validation ${job.state.toLowerCase()}`);
+                  if (job.state === "SUCCEEDED" || job.state === "FAILED")
+                    await load(0);
+                })
+              }
+            >
+              Refresh validation status
+            </button>
+          )}
           {v.state === "FAILED" && (
             <Notice>{String(v.result.message ?? "Validation failed")}</Notice>
           )}
@@ -241,18 +296,14 @@ export function DatasetPanel({
             e.preventDefault();
             void task
               .run(async () => {
-                if (!file || file.size > 8 * 1024 * 1024)
-                  throw new Error("File limit is 8 MiB");
+                if (!file || file.size > 1024 ** 3)
+                  throw new Error(
+                    "File limit is 1 GiB (administrator limits may be lower)",
+                  );
                 setProgress("Computing checksum…");
-                const checksum = Array.from(
-                  new Uint8Array(
-                    await crypto.subtle.digest(
-                      "SHA-256",
-                      await file.arrayBuffer(),
-                    ),
-                  ),
-                  (b) => b.toString(16).padStart(2, "0"),
-                ).join("");
+                const checksum = await fileChecksum(file, (percent) =>
+                  setProgress(`Computing checksum: ${percent}%`),
+                );
                 const v = await api<Version>(`${path}/uploads`, "POST", {
                   filename: file.name,
                   size: file.size,
@@ -267,10 +318,21 @@ export function DatasetPanel({
                   "POST",
                   {},
                 );
+                if (committed.state === "PENDING") {
+                  const job = await api<
+                    components["schemas"]["ExecutionJobView"]
+                  >(`${path}/versions/${v.id}/validate`, "POST", {});
+                  setValidationJobs((previous) => ({
+                    ...previous,
+                    [v.id]: job,
+                  }));
+                }
                 setProgress(
                   committed.state === "COMMITTED"
                     ? "Committed validated dataset version"
-                    : "Validation failed; inspect version errors",
+                    : committed.state === "PENDING"
+                      ? "Validation queued; refresh history for status"
+                      : "Validation failed; inspect version errors",
                 );
                 await load(0);
                 setOffset(0);
@@ -287,7 +349,7 @@ export function DatasetPanel({
               ))}
             </select>
           </Field>
-          <Field label="Dataset file (up to 8 MiB)">
+          <Field label="Dataset file (up to 1 GiB)">
             <input
               type="file"
               required

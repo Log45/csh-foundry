@@ -1,8 +1,10 @@
 """Dataset metadata publication composes the governed immutable artifact transport."""
 
 from datetime import UTC, datetime
-from uuid import UUID
+from typing import BinaryIO
+from uuid import UUID, uuid4
 
+from sqlalchemy import select, text
 from sqlalchemy.orm import Session
 
 from ontology_platform.artifacts.contracts import ArtifactVersionView, InitiateUpload
@@ -11,13 +13,54 @@ from ontology_platform.branching.service import page
 from ontology_platform.datasets.contracts import DatasetPreview, DatasetVersionView, InitiateDataset
 from ontology_platform.datasets.parser import validate
 from ontology_platform.db.governance import missing
-from ontology_platform.db.models import DatasetVersion
+from ontology_platform.db.models import DatasetVersion, ExecutionJob
+from ontology_platform.pipelines.contracts import ExecutionJobView
 from ontology_platform.projects.service import conflict
 from ontology_platform.security.interfaces import Principal
 
 
 class DatasetService(ArtifactService):
     resource_kind = "DATASET"
+
+    def user_version(self, s: Session, p: Principal, key: UUID, version: UUID) -> None:
+        # Prior-head upgrade tests have no execution tables and cannot contain reserved outputs.
+        if (
+            s.scalar(text("SELECT to_regclass(format('%I.execution_jobs', current_schema()))"))
+            is None
+        ):
+            return
+        reserved = s.scalar(
+            select(ExecutionJob.id).where(
+                ExecutionJob.tenant_id == p.tenant_id,
+                ExecutionJob.output_dataset_id == key,
+                ExecutionJob.output_version_id == version,
+            )
+        )
+        if reserved is not None:
+            raise conflict("Pipeline outputs can only be published by their fenced run")
+
+    def prepare_upload(self, p: Principal, key: UUID, version: UUID) -> ArtifactVersionView:
+        with self.scope(p) as s:
+            self.artifact(s, p, key, True)
+            self.user_version(s, p, key, version)
+        return super().prepare_upload(p, key, version)
+
+    def upload(
+        self, p: Principal, key: UUID, version: UUID, source: BinaryIO, size: int, checksum: str
+    ) -> ArtifactVersionView:
+        with self.scope(p) as s:
+            self.artifact(s, p, key, True)
+            self.user_version(s, p, key, version)
+        return super().upload(p, key, version, source, size, checksum)
+
+    def finalize(self, p: Principal, key: UUID, version: UUID) -> ArtifactVersionView:
+        with self.scope(p) as s:
+            self.artifact(s, p, key, True)
+            physical = self.version(s, p, key, version)
+            if physical.state == "COMMITTED":
+                return ArtifactVersionView.model_validate(physical)
+            self.user_version(s, p, key, version)
+        return super().finalize(p, key, version)
 
     def record(self, s: Session, p: Principal, key: UUID, version: UUID) -> DatasetVersion:
         self.artifact(s, p, key)
@@ -45,6 +88,13 @@ class DatasetService(ArtifactService):
     def initiate_dataset(
         self, p: Principal, key: UUID, body: InitiateDataset
     ) -> DatasetVersionView:
+        from ontology_platform.errors import ApplicationError
+        from ontology_platform.execution.config import ExecutionSettings
+
+        if body.size > ExecutionSettings().source_bytes:
+            raise ApplicationError(
+                "upload_too_large", "Dataset exceeds configured source limit", 413
+            )
         # One transaction reserves both records. Reuse artifact sequence/storage implementation
         # with a session bound to the existing governed transaction, avoiding an orphan window.
         with self.scope(p) as s:
@@ -63,8 +113,57 @@ class DatasetService(ArtifactService):
             self.audit(s, p, "dataset_version_initiate", artifact.id)
             return self.view(s, p, key, artifact.id)
 
+    def enqueue_validation(self, p: Principal, key: UUID, version: UUID) -> ExecutionJobView:
+        from ontology_platform.execution.config import ExecutionSettings
+        from ontology_platform.pipelines.contracts import ExecutionJobView
+        from ontology_platform.pipelines.service import PipelineService
+
+        limits = ExecutionSettings()
+        with self.scope(p) as s:
+            resource = self.artifact(s, p, key, True)
+            self.user_version(s, p, key, version)
+            logical = self.record(s, p, key, version)
+            previous = s.scalar(
+                select(ExecutionJob).where(
+                    ExecutionJob.tenant_id == p.tenant_id,
+                    ExecutionJob.resource_id == key,
+                    ExecutionJob.validation_version_id == version,
+                )
+            )
+            if previous is not None:
+                return ExecutionJobView.model_validate(previous)
+            if logical.state != "PENDING":
+                raise conflict("Dataset already has a terminal validation result")
+            PipelineService(self.sessions, self.authorizer, self.settings, self.store).capacity(
+                s, p, limits
+            )
+            row = ExecutionJob(
+                tenant_id=p.tenant_id,
+                id=uuid4(),
+                resource_id=key,
+                project_id=resource.project_id,
+                kind="VALIDATION",
+                validation_version_id=version,
+                request={},
+                principal=p.model_dump(mode="json"),
+                limits=limits.model_dump(mode="json"),
+            )
+            s.add(row)
+            s.flush()
+            self.audit(s, p, "dataset_validation_queued", row.id)
+            return ExecutionJobView.model_validate(row)
+
     def finalize_dataset(self, p: Principal, key: UUID, version: UUID) -> DatasetVersionView:
-        # Artifact commit is deliberately durable before validation; retry resumes this boundary.
+        with self.scope(p) as s:
+            self.artifact(s, p, key, True)
+            previous = self.view(s, p, key, version)
+            if previous.state != "PENDING":
+                return previous
+            self.user_version(s, p, key, version)
+        if previous.size > 8 * 1024**2:
+            self.enqueue_validation(p, key, version)
+            return self.dataset_metadata(p, key, version)
+        # Small-file compatibility remains available; explicit /validate always queues.
         self.finalize(p, key, version)
         previous = self.dataset_metadata(p, key, version)
         if previous.state != "PENDING":

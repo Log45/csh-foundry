@@ -1,4 +1,6 @@
 "use client";
+import { CreateMappingPanel, MappingPanel } from "@/features/mappings";
+import { CreatePipelinePanel, PipelinePanel } from "@/features/pipelines";
 import { CreateDatasetPanel, DatasetPanel } from "@/features/datasets";
 import { useEffect, useState } from "react";
 import { ArtifactPanel, CreateArtifactPanel } from "./artifacts";
@@ -350,6 +352,22 @@ function ProjectBrowser({
           reload={reload}
         />
       )}
+      {writable && (
+        <CreatePipelinePanel
+          api={api}
+          project={project.id}
+          folder={folder ?? null}
+          reload={reload}
+        />
+      )}
+      {writable && (
+        <CreateMappingPanel
+          api={api}
+          project={project.id}
+          folder={folder ?? null}
+          reload={reload}
+        />
+      )}
       {!can("schema:read") && (
         <Notice>
           Schema read permission is also required to discover ontology
@@ -386,8 +404,23 @@ function ProjectBrowser({
             {r.resource_type} · {r.ontology_id} · {r.schema_version} ·{" "}
             {r.entity_id}
           </p>
+          <p>
+            Resource ID: <code>{r.id}</code>
+          </p>
           <p>{r.description}</p>
-          {r.resource_type === "DATASET" ? (
+          {r.resource_type === "MAPPING" ? (
+            <MappingPanel
+              api={api}
+              mapping={r.id}
+              writable={r.project_id === project.id && writable}
+            />
+          ) : r.resource_type === "PIPELINE" ? (
+            <PipelinePanel
+              api={api}
+              pipeline={r.id}
+              writable={r.project_id === project.id && writable}
+            />
+          ) : r.resource_type === "DATASET" ? (
             <DatasetPanel
               api={api}
               dataset={r.id}

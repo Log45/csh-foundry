@@ -1,0 +1,3 @@
+PASS actual application OpenAPI equals generated contract
+PASS shared developer database read-only revision: 0017_capacity
+PASS no historical migration, canonical fixture or Phase 13 evidence modified (git diff inspection)

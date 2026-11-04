@@ -394,4 +394,16 @@ Phase 13 adds independent, Project-governed datasets with immutable source versi
 CSV/JSON/NDJSON/Parquet validation, schema history and bounded previews. See the
 [dataset API and validation contract](docs/api/datasets.md). Studio supports dataset creation, upload,
 validation errors, source download, version history, schema and preview in Project folders.
-Production remains blocked; Phase 14 is not implemented.
+Phase 14 adds immutable pipeline definitions, pinned dataset inputs, Polars runs, durable validation
+and bounded 1 GiB ingestion. See [pipeline contracts](docs/api/pipelines.md),
+[worker setup and limits](docs/development/execution-workers.md) and
+[Phase 14 validation status](docs/development/phase-14-report.md).
+Production remains blocked; Phase 15 is not authorized.
+
+Phase 15 adds governed dataset-to-ontology mapping and materialization. See
+[the mapping API](docs/api/mappings.md), [architecture](docs/architecture/materialization.md),
+[ADR 0040](docs/decisions/0040-governed-materialization.md) and
+[validation report](docs/development/phase-15-report.md). Materialization reuses the existing execution
+worker and canonical reconciliation services; committed batches are visible during incomplete runs.
+The additive migration is `0022_materialization`; never apply it to shared data without authorization.
+Phase 16 is excluded. Production remains blocked under Section 23B.

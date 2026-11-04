@@ -1,0 +1,80 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-ef92ab8a926d_default  Creating
+ Network phase15-ef92ab8a926d_default  Created
+ Volume "phase15-ef92ab8a926d_minio-data"  Creating
+ Volume "phase15-ef92ab8a926d_minio-data"  Created
+ Container phase15-ef92ab8a926d-minio-1  Creating
+ Container phase15-ef92ab8a926d-minio-1  Created
+ Container phase15-ef92ab8a926d-minio-1  Starting
+ Container phase15-ef92ab8a926d-minio-1  Started
+ Container phase15-ef92ab8a926d-minio-1  Waiting
+ Container phase15-ef92ab8a926d-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-ef92ab8a926d-minio-1  Restarting
+ Container phase15-ef92ab8a926d-minio-1  Started
+ Container phase15-ef92ab8a926d-minio-1  Running
+ Container phase15-ef92ab8a926d-minio-1  Waiting
+ Container phase15-ef92ab8a926d-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 122 items
+
+services/api/tests/test_artifacts.py ..............                      [ 11%]
+services/api/tests/test_datasets.py .................................... [ 40%]
+.                                                                        [ 41%]
+services/api/tests/test_execution.py ................................... [ 70%]
+.............                                                            [ 81%]
+services/api/tests/test_mappings.py .....................FF              [100%]
+
+=================================== FAILURES ===================================
+_______ test_resource_move_archive_immutable_versions_and_source_schema ________
+services/api/tests/test_mappings.py:357: in test_resource_move_archive_immutable_versions_and_source_schema
+    svc.update_resource(world.actor, resource.id, None, moved.revision)
+    ^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'MappingService' object has no attribute 'archive_resource'. Did you mean: 'create_resource'?
+_________ test_private_source_filtering_readonly_shares_and_revocation _________
+services/api/tests/test_mappings.py:371: in test_private_source_filtering_readonly_shares_and_revocation
+    run = svc.start(owner, resource.id, body)
+E   AssertionError: assert 'FAILED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + FAILED
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED services/api/tests/test_mappings.py::test_resource_move_archive_immutable_versions_and_source_schema
+FAILED services/api/tests/test_mappings.py::test_private_source_filtering_readonly_shares_and_revocation
+============= 2 failed, 120 passed, 1 warning in 85.11s (0:01:25) ==============
+ Container phase15-ef92ab8a926d-minio-1  Stopping
+ Container phase15-ef92ab8a926d-minio-1  Stopped
+ Container phase15-ef92ab8a926d-minio-1  Removing
+ Container phase15-ef92ab8a926d-minio-1  Removed
+ Volume phase15-ef92ab8a926d_minio-data  Removing
+ Network phase15-ef92ab8a926d_default  Removing
+ Volume phase15-ef92ab8a926d_minio-data  Removed
+ Network phase15-ef92ab8a926d_default  Removed
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 153, in <module>
+    run(
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 96, in run
+    raise subprocess.CalledProcessError(code, cmd)
+subprocess.CalledProcessError: Command '('uv', 'run', 'pytest', 'services/api/tests/test_artifacts.py', 'services/api/tests/test_datasets.py', 'services/api/tests/test_execution.py', 'services/api/tests/test_mappings.py', '-ra', '--tb=short')' returned non-zero exit status 1.

@@ -94,3 +94,21 @@ selector, validation progress, failure details, paginated version history and bo
 Rename/move/archive/share controls remain the generic Project controls. No Phase 14 transforms,
 ontology mapping, query engine or derived lineage operation is implemented. Provenance identifies
 actual uploads only. Production remains blocked under Section 23B.
+
+
+## Phase 14 ingestion extension
+
+The historical Phase 13 bounds above describe existing snapshots. New validation uses bounded records
+and batches, a configurable 1 GiB source ceiling, 100 million rows, 256 columns, 16 GiB total decoded
+bytes and a 256 MiB Parquet row-group expansion bound. See the independent administrator limits in
+[worker operations](../development/execution-workers.md). JSON arrays and NDJSON are incremental;
+CSV schema reconciliation covers all batches, including later text/null values; Parquet validates
+metadata plus every decoded batch. First-100 preview semantics remain, and historical snapshots
+are not rewritten. Arbitrary Parquet key-value metadata is excluded from source-schema display.
+
+`POST /datasets/{id}/versions/{version}/validate` returns 202 with a durable job; repeated calls return
+the same job. Poll `/execution/jobs/{job}` for sanitized status/metrics, then read version/schema/preview.
+Existing finalize requests remain synchronous through 8 MiB and queue above that threshold. Both paths
+use bounded parsing. Upload streams and S3 multipart transfers do not buffer source bytes in memory.
+Interrupted browser transfer may retry the same version from the beginning; it does not resume browser
+byte ranges. No source version publishes before integrity and complete content validation succeed.

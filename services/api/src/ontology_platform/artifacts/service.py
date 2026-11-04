@@ -143,12 +143,22 @@ class ArtifactService(ProjectService):
             if row.size != size or row.checksum != checksum:
                 raise StorageError(Failure.INTEGRITY)
             obj = self.key(row)
-            self.storage().abort_pending(obj)
-            # Recovery from a storage-success / database-failure window never overwrites.
-            if self.storage().exists(obj):
-                self.storage().verify(obj, size, checksum)
-            else:
+        # Immutable addresses make transfer retry safe without a broad governance lock.
+        self.storage().abort_pending(obj)
+        if self.storage().exists(obj):
+            self.storage().verify(obj, size, checksum)
+        else:
+            try:
                 self.storage().put(obj, source, size, checksum)
+            except StorageError as exc:
+                if exc.category != Failure.EXISTS:
+                    raise
+                self.storage().verify(obj, size, checksum)
+        with self.scope(p) as s:
+            self.artifact(s, p, key, True)
+            row = self.version(s, p, key, version)
+            if row.state not in {"PENDING", "COMMITTED"}:
+                raise conflict("Version no longer accepts bytes")
             self.audit(s, p, "artifact_bytes_verified", version)
             return ArtifactVersionView.model_validate(row)
 
@@ -160,8 +170,16 @@ class ArtifactService(ProjectService):
                 return ArtifactVersionView.model_validate(row)
             if row.state != "PENDING":
                 raise conflict("Version cannot be finalized")
-            self.storage().verify(self.key(row), row.size, row.checksum)
-            self.storage().abort_pending(self.key(row))
+            obj, size, checksum = self.key(row), row.size, row.checksum
+        self.storage().verify(obj, size, checksum)
+        self.storage().abort_pending(obj)
+        with self.scope(p) as s:
+            self.artifact(s, p, key, True)
+            row = self.version(s, p, key, version)
+            if row.state == "COMMITTED":
+                return ArtifactVersionView.model_validate(row)
+            if row.state != "PENDING":
+                raise conflict("Version cannot be finalized")
             row.state, row.committed_at = "COMMITTED", datetime.now(UTC)
             s.flush()
             self.audit(s, p, "artifact_commit", version)
@@ -193,23 +211,26 @@ class ArtifactService(ProjectService):
             row = self.version(s, p, key, version)
             if row.state != "COMMITTED":
                 raise missing("Committed artifact version")
-            result = tempfile.TemporaryFile(mode="w+b")
-            try:
-                digest, size = hashlib.sha256(), 0
-                for chunk in self.storage().chunks(self.key(row)):
-                    size += len(chunk)
-                    if size > row.size or size > self.settings.max_bytes:
-                        raise StorageError(Failure.INTEGRITY)
-                    digest.update(chunk)
-                    result.write(chunk)
-                if size != row.size or digest.hexdigest() != row.checksum:
+            obj, expected_size, checksum = self.key(row), row.size, row.checksum
+        result = tempfile.TemporaryFile(mode="w+b")
+        try:
+            digest, size = hashlib.sha256(), 0
+            for chunk in self.storage().chunks(obj):
+                size += len(chunk)
+                if size > expected_size or size > self.settings.max_bytes:
                     raise StorageError(Failure.INTEGRITY)
-                result.seek(0)
+                digest.update(chunk)
+                result.write(chunk)
+            if size != expected_size or digest.hexdigest() != checksum:
+                raise StorageError(Failure.INTEGRITY)
+            with self.scope(p) as s:
+                self.artifact(s, p, key)
                 self.audit(s, p, "artifact_download", version)
-                return result, size
-            except BaseException:
-                result.close()
-                raise
+            result.seek(0)
+            return result, size
+        except BaseException:
+            result.close()
+            raise
 
     def presigned(self, p: Principal, key: UUID, version: UUID) -> PresignedAccess:
         with self.scope(p) as s:
@@ -217,8 +238,11 @@ class ArtifactService(ProjectService):
             row = self.version(s, p, key, version)
             if row.state != "COMMITTED":
                 raise missing("Committed artifact version")
-            self.storage().verify(self.key(row), row.size, row.checksum)
-            url = self.storage().presign(self.key(row))
+            obj, size, checksum = self.key(row), row.size, row.checksum
+        self.storage().verify(obj, size, checksum)
+        with self.scope(p) as s:
+            self.artifact(s, p, key)
+            url = self.storage().presign(obj)
             self.audit(
                 s, p, "artifact_capability", version, {"expires_in": self.settings.presign_seconds}
             )

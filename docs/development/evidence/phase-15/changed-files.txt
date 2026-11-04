@@ -1,0 +1,43 @@
+Phase 15 inventory (base revision 23c237d; Phase 14 work already uncommitted on arrival).
+Existing baseline edits were preserved. This is the Phase 15 scope, not the entire git diff.
+
+CREATED
+apps/studio/features/mappings.tsx
+apps/studio/tests/mappings.test.tsx
+docs/api/mappings.md
+docs/architecture/materialization.md
+docs/decisions/0040-governed-materialization.md
+docs/development/phase-15-report.md
+docs/development/evidence/phase-15/ (executed logs, metrics and this inventory)
+scripts/validate_phase15.py
+services/api/migrations/versions/0022_materialization.py
+services/api/src/ontology_platform/mappings/__init__.py
+services/api/src/ontology_platform/mappings/contracts.py
+services/api/src/ontology_platform/mappings/conversion.py
+services/api/src/ontology_platform/mappings/engine.py
+services/api/src/ontology_platform/mappings/routes.py
+services/api/src/ontology_platform/mappings/service.py
+services/api/src/ontology_platform/mappings/worker.py
+services/api/tests/test_mappings.py
+services/api/tests/test_mappings_large.py
+services/api/tests/test_mappings_recovery.py
+
+MODIFIED (including files already modified/untracked at task start)
+PLANS.md
+README.md
+apps/studio/README.md
+apps/studio/features/projects.tsx
+apps/studio/lib/api-schema.ts
+apps/studio/lib/openapi.json
+apps/studio/tests/e2e/workflow.spec.ts
+docs/development/execution-workers.md
+services/api/src/ontology_platform/datasets/streaming.py
+services/api/src/ontology_platform/db/governance.py
+services/api/src/ontology_platform/db/models.py
+services/api/src/ontology_platform/execution/isolation.py
+services/api/src/ontology_platform/execution/worker.py
+services/api/src/ontology_platform/main.py
+services/api/src/ontology_platform/projects/contracts.py
+services/api/src/ontology_platform/projects/service.py
+
+Historical migrations through 0021, fixtures, Phase 11–14 reports and historical evidence unchanged.

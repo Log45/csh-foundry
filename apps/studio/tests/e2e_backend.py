@@ -251,9 +251,19 @@ def main():
             semantic = SemanticWorker(
                 w.sessions, auth, engine=OpenOntologiesAdapter(ROOT / ".external/open-ontologies")
             )
+            from ontology_platform.execution.worker import ExecutionWorker
+            from ontology_platform.pipelines.service import PipelineService
+
+            execution = ExecutionWorker(
+                PipelineService(
+                    w.sessions, auth, app.state.artifact_settings, app.state.artifact_store
+                )
+            )
             while not stop.wait(0.3):
                 ingestion.run_one(workers["ingestion"], definition.id)
                 semantic.run_one(workers["semantic"], definition.id)
+                if app.state.artifact_store is not None:
+                    execution.run_one()
 
         settings = Settings(
             database_url=w.settings.database_url,

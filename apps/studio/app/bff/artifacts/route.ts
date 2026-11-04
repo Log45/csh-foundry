@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { BoundaryError, browserSession, config, csrfCheck } from "@/lib/server";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-const MAX = 64 * 1024 * 1024;
+const MAX = 1024 ** 3;
 // Binary transfers use a dedicated, fixed-destination path. JSON BFF limits stay unchanged.
 export async function POST(request: Request) {
   try {
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
           : {}),
         cache: "no-store",
         redirect: "error",
-        signal: AbortSignal.timeout(55000),
+        signal: AbortSignal.timeout(1800000),
       } as RequestInit,
     );
     if (!response.ok) {
@@ -80,6 +80,7 @@ export async function POST(request: Request) {
           : "application/octet-stream",
         "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
+        "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'",
         ...(!upload
           ? { "Content-Disposition": 'attachment; filename="artifact.bin"' }
           : {}),
@@ -92,7 +93,14 @@ export async function POST(request: Request) {
         : new BoundaryError(502, "storage_unavailable");
     return Response.json(
       { error: { code: e.code } },
-      { status: e.status, headers: { "Cache-Control": "no-store" } },
+      {
+        status: e.status,
+        headers: {
+          "Cache-Control": "no-store",
+          "Content-Security-Policy":
+            "default-src 'none'; frame-ancestors 'none'",
+        },
+      },
     );
   }
 }

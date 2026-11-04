@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, Request
 from starlette.concurrency import run_in_threadpool
 from starlette.responses import StreamingResponse
 
+from ontology_platform.artifacts.admission import TransferSlot
 from ontology_platform.artifacts.contracts import (
     ArtifactVersionView,
     Cleanup,
@@ -67,18 +68,25 @@ async def upload(
 ) -> ArtifactVersionView:
     # Authenticate and authorize before consuming the body. Repeat authorization at transfer.
     pending = await run_in_threadpool(svc.prepare_upload, actor, artifact_id, version_id)
-    with tempfile.TemporaryFile(mode="w+b") as source:
-        digest, size = hashlib.sha256(), 0
-        async for chunk in request.stream():
-            size += len(chunk)
-            if size > min(svc.settings.max_bytes, pending.size):
-                raise ApplicationError("upload_too_large", "Artifact exceeds upload limit", 413)
-            digest.update(chunk)
-            await run_in_threadpool(source.write, chunk)
-        source.seek(0)
-        return await run_in_threadpool(
-            svc.upload, actor, artifact_id, version_id, source, size, digest.hexdigest()
-        )
+    admission = TransferSlot(
+        svc.sessions, actor.tenant_id, svc.settings.concurrent_uploads, svc.settings.tenant_uploads
+    )
+    await run_in_threadpool(admission.acquire)
+    try:
+        with tempfile.TemporaryFile(mode="w+b") as source:
+            digest, size = hashlib.sha256(), 0
+            async for chunk in request.stream():
+                size += len(chunk)
+                if size > min(svc.settings.max_bytes, pending.size):
+                    raise ApplicationError("upload_too_large", "Artifact exceeds upload limit", 413)
+                digest.update(chunk)
+                await run_in_threadpool(source.write, chunk)
+            source.seek(0)
+            return await run_in_threadpool(
+                svc.upload, actor, artifact_id, version_id, source, size, digest.hexdigest()
+            )
+    finally:
+        await run_in_threadpool(admission.release)
 
 
 @router.post(

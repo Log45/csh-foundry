@@ -1,0 +1,55 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase14-e50075746d86_default  Creating
+ Network phase14-e50075746d86_default  Created
+ Volume "phase14-e50075746d86_minio-data"  Creating
+ Volume "phase14-e50075746d86_minio-data"  Created
+ Container phase14-e50075746d86-minio-1  Creating
+ Container phase14-e50075746d86-minio-1  Created
+ Container phase14-e50075746d86-minio-1  Starting
+ Container phase14-e50075746d86-minio-1  Started
+ Container phase14-e50075746d86-minio-1  Waiting
+ Container phase14-e50075746d86-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase14-e50075746d86-minio-1  Restarting
+ Container phase14-e50075746d86-minio-1  Started
+ Container phase14-e50075746d86-minio-1  Running
+ Container phase14-e50075746d86-minio-1  Waiting
+ Container phase14-e50075746d86-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 16 items / 15 deselected / 1 selected
+
+services/api/tests/test_execution_large.py MEASUREMENT {"checksum": "9df705da678f9418b4a8e9601677fb6eb234b5c91850ff34d871a21cea91b158", "format": "csv", "hardware": "macOS-15.6.1-arm64-arm-64bit", "rows": 262080, "source_bytes": 1073741824, "upload_mib_per_second": 58.4827392892706, "upload_seconds": 17.509439749992453, "worker": {"peak_memory_bytes": 284934144, "seconds": 16.535155082994606, "temporary_bytes": 1074152396}}
+TRANSFORMATION {"admitted_at": "2026-11-04T02:55:44.964058Z", "attempts": 1, "completed_at": "2026-11-04T02:56:08.655887Z", "created_at": "2026-11-04T02:55:44.937601Z", "error": null, "id": "f7ca7942-27a9-4a4e-80ab-47c12bb9804b", "kind": "PIPELINE", "metrics": {"peak_memory_bytes": 1505132544, "seconds": 17.767253292026, "temporary_bytes": 1074177316}, "output_dataset_id": "1b41664c-9c34-4b09-8158-f5fa2d09a34b", "output_version_id": "5f5613e2-f6a1-4ca7-a6b2-29455672143b", "resource_id": "f35ac6b8-caab-4e89-a80d-6752eab0220f", "started_at": "2026-11-04T02:55:44.988601Z", "state": "SUCCEEDED"}
+.
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============ 1 passed, 15 deselected, 1 warning in 67.66s (0:01:07) ============
+ Container phase14-e50075746d86-minio-1  Stopping
+ Container phase14-e50075746d86-minio-1  Stopped
+ Container phase14-e50075746d86-minio-1  Removing
+ Container phase14-e50075746d86-minio-1  Removed
+ Volume phase14-e50075746d86_minio-data  Removing
+ Network phase14-e50075746d86_default  Removing
+ Volume phase14-e50075746d86_minio-data  Removed
+ Network phase14-e50075746d86_default  Removed

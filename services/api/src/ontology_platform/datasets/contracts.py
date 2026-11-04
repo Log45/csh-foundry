@@ -8,7 +8,7 @@ from ontology_platform.projects.contracts import Model
 
 
 class InitiateDataset(InitiateUpload):
-    size: int = Field(ge=0, le=8 * 1024 * 1024)
+    size: int = Field(ge=0, le=1024**3)
     format: Literal["csv", "json", "ndjson", "parquet"]
 
 

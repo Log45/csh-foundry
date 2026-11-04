@@ -102,3 +102,18 @@ CSV/JSON/NDJSON/Parquet validation, schema history and bounded previews. See the
 [dataset API and validation contract](../../docs/api/datasets.md). Studio supports dataset creation, upload,
 validation errors, source download, version history, schema and preview in Project folders.
 Production remains blocked; Phase 14 is not implemented.
+
+
+Phase 14 adds a structured JSON pipeline editor, immutable definition publication, pinned run inputs,
+run monitoring/cancellation/retry and authorized lineage. Dataset checksums use 1 MiB slices, and
+the fixed binary BFF streams up to 1 GiB. Large validation is queued; a separately operated durable
+worker processes it. Refresh validation/history to recover after navigation. See
+[execution limits](../../docs/development/execution-workers.md). Production remains blocked.
+
+Phase 15 Project resources include MAPPING. The mapping panel accepts a closed JSON definition with
+canonical ontology resource/version, identity columns, property conversions and relationship endpoints;
+users supply explicit dataset/version UUIDs. It offers structural validation, immutable publication,
+sample preview, durable full-source validation, materialization, run refresh/cancel/retry, reconciliation
+counts, canonical object inspection and access-controlled provenance. Samples are labeled separately
+from full validation. Partial transactional batch visibility is shown explicitly. Existing BFF session,
+CSRF and tenant-context rules apply; no storage/worker credentials enter the browser.

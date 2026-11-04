@@ -28,7 +28,10 @@ class StorageSettings(BaseSettings):
     development_http: bool = False
     client_reachable: bool = False
     presign_seconds: int = Field(default=60, ge=1, le=300)
-    max_bytes: int = Field(default=67108864, ge=1, le=1073741824)
+    max_bytes: int = Field(default=1073741824, ge=1, le=1073741824)
+    concurrent_uploads: int = Field(default=2, ge=1, le=32)
+    tenant_uploads: int = Field(default=1, ge=1, le=32)
+    transfer_seconds: int = Field(default=1800, ge=60, le=7200)
     part_bytes: int = Field(default=8388608, ge=5242880, le=67108864)
     connect_seconds: int = Field(default=3, ge=1, le=10)
     read_seconds: int = Field(default=10, ge=1, le=30)

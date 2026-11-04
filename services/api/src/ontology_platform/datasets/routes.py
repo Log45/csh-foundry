@@ -14,6 +14,7 @@ from ontology_platform.artifacts.contracts import (
 )
 from ontology_platform.datasets.contracts import DatasetPreview, DatasetVersionView, InitiateDataset
 from ontology_platform.datasets.service import DatasetService
+from ontology_platform.pipelines.contracts import ExecutionJobView
 from ontology_platform.projects.contracts import ResourceView
 from ontology_platform.projects.routes import Actor, Limit, Offset
 
@@ -112,3 +113,14 @@ def schema(
 @router.post("/datasets/{dataset_id}/cleanup", response_model=list[CleanupResult])
 def cleanup(dataset_id: UUID, body: Cleanup, actor: Actor, svc: Service) -> list[CleanupResult]:
     return svc.cleanup(actor, dataset_id, body.dry_run)
+
+
+@router.post(
+    "/datasets/{dataset_id}/versions/{version_id}/validate",
+    response_model=ExecutionJobView,
+    status_code=202,
+)
+def validate_async(
+    dataset_id: UUID, version_id: UUID, actor: Actor, svc: Service
+) -> ExecutionJobView:
+    return svc.enqueue_validation(actor, dataset_id, version_id)

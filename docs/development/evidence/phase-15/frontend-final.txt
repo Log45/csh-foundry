@@ -1,0 +1,24 @@
+
+> @foundry/studio@0.8.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /Users/log/Documents/code/csh-foundry/apps/studio
+
+
+ Test Files  10 passed (10)
+      Tests  45 passed (45)
+   Start at  00:02:38
+   Duration  1.49s (environment 61%, tests 18%, import 14%, transform 6%, worker 1%)
+
+
+> @foundry/studio@0.8.0 typecheck
+> tsc --noEmit
+
+
+> @foundry/studio@0.8.0 format:check
+> prettier --check "app/**/*.{ts,tsx,css}" "components/**/*.tsx" "features/**/*.tsx" lib/api.ts lib/server.ts "tests/**/*.{ts,tsx,mjs}" next.config.ts playwright.config.ts vitest.config.ts proxy.ts instrumentation.ts
+
+Checking formatting...
+[warn] tests/e2e/workflow.spec.ts
+[warn] Code style issues found in the above file. Run Prettier with --write to fix.

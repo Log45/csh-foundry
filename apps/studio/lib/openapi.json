@@ -4165,6 +4165,1701 @@
         }
       }
     },
+    "/api/v1/datasets/{dataset_id}/versions/{version_id}/validate": {
+      "post": {
+        "tags": [
+          "datasets"
+        ],
+        "summary": "Validate Async",
+        "operationId": "validate_async_api_v1_datasets__dataset_id__versions__version_id__validate_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecutionJobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/pipelines": {
+      "post": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Create",
+        "operationId": "create_api_v1_projects__project_id__pipelines_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateArtifact"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pipelines/{pipeline_id}": {
+      "get": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Get",
+        "operationId": "get_api_v1_pipelines__pipeline_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pipelines/{pipeline_id}/validate": {
+      "post": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Validate",
+        "operationId": "validate_api_v1_pipelines__pipeline_id__validate_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Definition-Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Definition-Output"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pipelines/{pipeline_id}/definitions": {
+      "post": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Publish",
+        "operationId": "publish_api_v1_pipelines__pipeline_id__definitions_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Definition-Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinitionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Definitions",
+        "operationId": "definitions_api_v1_pipelines__pipeline_id__definitions_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DefinitionView"
+                  },
+                  "title": "Response Definitions Api V1 Pipelines  Pipeline Id  Definitions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pipelines/{pipeline_id}/runs": {
+      "post": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Start",
+        "operationId": "start_api_v1_pipelines__pipeline_id__runs_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartRun"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecutionJobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "History",
+        "operationId": "history_api_v1_pipelines__pipeline_id__runs_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExecutionJobView"
+                  },
+                  "title": "Response History Api V1 Pipelines  Pipeline Id  Runs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/execution/jobs/{job_id}": {
+      "get": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Status",
+        "operationId": "status_api_v1_execution_jobs__job_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecutionJobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/execution/jobs/{job_id}/cancel": {
+      "post": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Cancel",
+        "operationId": "cancel_api_v1_execution_jobs__job_id__cancel_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecutionJobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/execution/jobs/{job_id}/retry": {
+      "post": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Retry",
+        "operationId": "retry_api_v1_execution_jobs__job_id__retry_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecutionJobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/datasets/{dataset_id}/versions/{version_id}/lineage": {
+      "get": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Lineage",
+        "operationId": "lineage_api_v1_datasets__dataset_id__versions__version_id__lineage_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Lineage Api V1 Datasets  Dataset Id  Versions  Version Id  Lineage Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pipelines/{pipeline_id}/definitions/{definition_id}": {
+      "get": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Definition",
+        "operationId": "definition_api_v1_pipelines__pipeline_id__definitions__definition_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          },
+          {
+            "name": "definition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Definition Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinitionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/mappings": {
+      "post": {
+        "tags": [
+          "mappings"
+        ],
+        "summary": "Create",
+        "operationId": "create_api_v1_projects__project_id__mappings_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateArtifact"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/mappings/{mapping_id}": {
+      "get": {
+        "tags": [
+          "mappings"
+        ],
+        "summary": "Get",
+        "operationId": "get_api_v1_mappings__mapping_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mapping_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mapping Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/mappings/{mapping_id}/validate": {
+      "post": {
+        "tags": [
+          "mappings"
+        ],
+        "summary": "Validate",
+        "operationId": "validate_api_v1_mappings__mapping_id__validate_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mapping_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mapping Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MappingSpec-Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MappingSpec-Output"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/mappings/{mapping_id}/definitions": {
+      "post": {
+        "tags": [
+          "mappings"
+        ],
+        "summary": "Publish",
+        "operationId": "publish_api_v1_mappings__mapping_id__definitions_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mapping_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mapping Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MappingSpec-Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MappingDefinitionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "mappings"
+        ],
+        "summary": "Definitions",
+        "operationId": "definitions_api_v1_mappings__mapping_id__definitions_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mapping_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mapping Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MappingDefinitionView"
+                  },
+                  "title": "Response Definitions Api V1 Mappings  Mapping Id  Definitions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/mappings/{mapping_id}/definitions/{definition_id}": {
+      "get": {
+        "tags": [
+          "mappings"
+        ],
+        "summary": "Definition",
+        "operationId": "definition_api_v1_mappings__mapping_id__definitions__definition_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mapping_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mapping Id"
+            }
+          },
+          {
+            "name": "definition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Definition Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MappingDefinitionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/mappings/{mapping_id}/preview": {
+      "post": {
+        "tags": [
+          "mappings"
+        ],
+        "summary": "Preview",
+        "operationId": "preview_api_v1_mappings__mapping_id__preview_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mapping_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mapping Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/MappingRun"
+                  },
+                  {
+                    "$ref": "#/components/schemas/MappingPreview"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Preview Api V1 Mappings  Mapping Id  Preview Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/mappings/{mapping_id}/runs": {
+      "post": {
+        "tags": [
+          "mappings"
+        ],
+        "summary": "Start",
+        "operationId": "start_api_v1_mappings__mapping_id__runs_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mapping_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mapping Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MappingRun"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecutionJobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "mappings"
+        ],
+        "summary": "History",
+        "operationId": "history_api_v1_mappings__mapping_id__runs_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mapping_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mapping Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExecutionJobView"
+                  },
+                  "title": "Response History Api V1 Mappings  Mapping Id  Runs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/materialization/runs/{run_id}/provenance": {
+      "get": {
+        "tags": [
+          "mappings"
+        ],
+        "summary": "Provenance",
+        "operationId": "provenance_api_v1_materialization_runs__run_id__provenance_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Provenance Api V1 Materialization Runs  Run Id  Provenance Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/datasets/{dataset_id}/versions/{version_id}/materializations": {
+      "get": {
+        "tags": [
+          "mappings"
+        ],
+        "summary": "Sources",
+        "operationId": "sources_api_v1_datasets__dataset_id__versions__version_id__materializations_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExecutionJobView"
+                  },
+                  "title": "Response Sources Api V1 Datasets  Dataset Id  Versions  Version Id  Materializations Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/objects/{type_id}/{object_id}/materializations": {
+      "get": {
+        "tags": [
+          "mappings"
+        ],
+        "summary": "Object Sources",
+        "operationId": "object_sources_api_v1_ontologies__ontology_id__objects__type_id___object_id__materializations_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "type_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Type Id"
+            }
+          },
+          {
+            "name": "object_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Object Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Object Sources Api V1 Ontologies  Ontology Id  Objects  Type Id   Object Id  Materializations Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ontologies/{ontology_id}/links/{link_type}/materializations": {
+      "get": {
+        "tags": [
+          "mappings"
+        ],
+        "summary": "Link Sources",
+        "operationId": "link_sources_api_v1_ontologies__ontology_id__links__link_type__materializations_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ontology_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "link_type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Link Type"
+            }
+          },
+          {
+            "name": "source_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Source Type"
+            }
+          },
+          {
+            "name": "source_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Source Id"
+            }
+          },
+          {
+            "name": "target_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Target Type"
+            }
+          },
+          {
+            "name": "target_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Target Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Link Sources Api V1 Ontologies  Ontology Id  Links  Link Type  Materializations Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/ontologies/{ontology_id}/branches": {
       "post": {
         "tags": [
@@ -8687,6 +10382,41 @@
         ],
         "title": "ActionTypeDefinition"
       },
+      "Aggregate": {
+        "properties": {
+          "column": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Column"
+          },
+          "function": {
+            "type": "string",
+            "enum": [
+              "sum",
+              "mean",
+              "min",
+              "max",
+              "count"
+            ],
+            "title": "Function"
+          },
+          "alias": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Alias"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "column",
+          "function",
+          "alias"
+        ],
+        "title": "Aggregate"
+      },
       "AggregateGroup": {
         "properties": {
           "key": {
@@ -10116,6 +11846,137 @@
         ],
         "title": "DatasetVersionView"
       },
+      "Definition-Input": {
+        "properties": {
+          "engine": {
+            "type": "string",
+            "const": "polars",
+            "title": "Engine",
+            "default": "polars"
+          },
+          "inputs": {
+            "items": {
+              "$ref": "#/components/schemas/InputContract"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "minItems": 1,
+            "title": "Inputs"
+          },
+          "steps": {
+            "items": {
+              "$ref": "#/components/schemas/Step-Input"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Steps"
+          },
+          "output_columns": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 256,
+            "title": "Output Columns"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "inputs"
+        ],
+        "title": "Definition"
+      },
+      "Definition-Output": {
+        "properties": {
+          "engine": {
+            "type": "string",
+            "const": "polars",
+            "title": "Engine",
+            "default": "polars"
+          },
+          "inputs": {
+            "items": {
+              "$ref": "#/components/schemas/InputContract"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "minItems": 1,
+            "title": "Inputs"
+          },
+          "steps": {
+            "items": {
+              "$ref": "#/components/schemas/Step-Output"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Steps"
+          },
+          "output_columns": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 256,
+            "title": "Output Columns"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "inputs"
+        ],
+        "title": "Definition"
+      },
+      "DefinitionView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "pipeline_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Pipeline Id"
+          },
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "specification": {
+            "$ref": "#/components/schemas/Definition-Output"
+          },
+          "created_by": {
+            "type": "string",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "pipeline_id",
+          "sequence",
+          "specification",
+          "created_by",
+          "created_at"
+        ],
+        "title": "DefinitionView"
+      },
       "DelegationInput": {
         "properties": {
           "worker_id": {
@@ -10322,6 +12183,26 @@
         ],
         "title": "DraftHandoff"
       },
+      "Endpoint": {
+        "properties": {
+          "object_type": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Object Type"
+          },
+          "identity": {
+            "$ref": "#/components/schemas/Identity"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "object_type",
+          "identity"
+        ],
+        "title": "Endpoint"
+      },
       "ExecuteRequest": {
         "properties": {
           "parameters": {
@@ -10358,6 +12239,133 @@
             }
           }
         ]
+      },
+      "ExecutionJobView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Resource Id"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "attempts": {
+            "type": "integer",
+            "title": "Attempts"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "metrics": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "title": "Metrics"
+          },
+          "output_version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Output Version Id"
+          },
+          "output_dataset_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Output Dataset Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "admitted_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Admitted At"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "resource_id",
+          "kind",
+          "state",
+          "attempts",
+          "error",
+          "metrics",
+          "output_version_id",
+          "output_dataset_id",
+          "created_at",
+          "admitted_at",
+          "started_at",
+          "completed_at"
+        ],
+        "title": "ExecutionJobView"
       },
       "ExecutionView": {
         "properties": {
@@ -10523,6 +12531,154 @@
           "diagnostics"
         ],
         "title": "ExportView"
+      },
+      "Expression-Input": {
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": [
+              "column",
+              "literal",
+              "add",
+              "subtract",
+              "multiply",
+              "divide",
+              "eq",
+              "ne",
+              "lt",
+              "le",
+              "gt",
+              "ge",
+              "and",
+              "or",
+              "not",
+              "is_null",
+              "coalesce"
+            ],
+            "title": "Op"
+          },
+          "column": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Column"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "args": {
+            "items": {
+              "$ref": "#/components/schemas/Expression-Input"
+            },
+            "type": "array",
+            "maxItems": 2,
+            "title": "Args"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "op"
+        ],
+        "title": "Expression"
+      },
+      "Expression-Output": {
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": [
+              "column",
+              "literal",
+              "add",
+              "subtract",
+              "multiply",
+              "divide",
+              "eq",
+              "ne",
+              "lt",
+              "le",
+              "gt",
+              "ge",
+              "and",
+              "or",
+              "not",
+              "is_null",
+              "coalesce"
+            ],
+            "title": "Op"
+          },
+          "column": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Column"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "args": {
+            "items": {
+              "$ref": "#/components/schemas/Expression-Output"
+            },
+            "type": "array",
+            "maxItems": 2,
+            "title": "Args"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "op"
+        ],
+        "title": "Expression"
       },
       "FactView": {
         "properties": {
@@ -10737,6 +12893,25 @@
           "has_more"
         ],
         "title": "HistoryPage"
+      },
+      "Identity": {
+        "properties": {
+          "components": {
+            "items": {
+              "$ref": "#/components/schemas/Value"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "minItems": 1,
+            "title": "Components"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "components"
+        ],
+        "title": "Identity"
       },
       "IdentityInput": {
         "properties": {
@@ -11087,7 +13262,7 @@
           },
           "size": {
             "type": "integer",
-            "maximum": 8388608.0,
+            "maximum": 1073741824.0,
             "minimum": 0.0,
             "title": "Size"
           },
@@ -11159,6 +13334,62 @@
           "checksum"
         ],
         "title": "InitiateUpload"
+      },
+      "InputContract": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "columns": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 256,
+            "title": "Columns"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "InputContract"
+      },
+      "InputVersion": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "dataset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Dataset Id"
+          },
+          "version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Version Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "dataset_id",
+          "version_id"
+        ],
+        "title": "InputVersion"
       },
       "JobInput": {
         "properties": {
@@ -11518,6 +13749,47 @@
         ],
         "title": "LiteralValue"
       },
+      "MappingDefinitionView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "mapping_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Mapping Id"
+          },
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "specification": {
+            "$ref": "#/components/schemas/MappingSpec-Output"
+          },
+          "created_by": {
+            "type": "string",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "mapping_id",
+          "sequence",
+          "specification",
+          "created_by",
+          "created_at"
+        ],
+        "title": "MappingDefinitionView"
+      },
       "MappingInput-Output": {
         "properties": {
           "classes": {
@@ -11543,6 +13815,31 @@
         "type": "object",
         "title": "MappingInput"
       },
+      "MappingPreview": {
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Dataset Id"
+          },
+          "version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Version Id"
+          },
+          "specification": {
+            "$ref": "#/components/schemas/MappingSpec-Input"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "dataset_id",
+          "version_id",
+          "specification"
+        ],
+        "title": "MappingPreview"
+      },
       "MappingRef": {
         "properties": {
           "id": {
@@ -11566,6 +13863,240 @@
           "version"
         ],
         "title": "MappingRef"
+      },
+      "MappingRun": {
+        "properties": {
+          "definition_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Definition Id"
+          },
+          "dataset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Dataset Id"
+          },
+          "version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Version Id"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "materialize",
+              "full_validation"
+            ],
+            "title": "Mode",
+            "default": "materialize"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "definition_id",
+          "dataset_id",
+          "version_id"
+        ],
+        "title": "MappingRun"
+      },
+      "MappingSpec-Input": {
+        "properties": {
+          "format_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Format Version",
+            "default": 1
+          },
+          "target_resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Target Resource Id"
+          },
+          "ontology_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Ontology Id"
+          },
+          "schema_version": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Schema Version"
+          },
+          "columns": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 256,
+            "minProperties": 1,
+            "title": "Columns"
+          },
+          "objects": {
+            "items": {
+              "$ref": "#/components/schemas/ObjectMapping"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "minItems": 1,
+            "title": "Objects"
+          },
+          "relationships": {
+            "items": {
+              "$ref": "#/components/schemas/ontology_platform__mappings__contracts__RelationshipMapping"
+            },
+            "type": "array",
+            "maxItems": 32,
+            "title": "Relationships"
+          },
+          "write_policy": {
+            "type": "string",
+            "enum": [
+              "insert_only",
+              "upsert_owned"
+            ],
+            "title": "Write Policy",
+            "default": "upsert_owned"
+          },
+          "duplicates": {
+            "type": "string",
+            "enum": [
+              "reject",
+              "coalesce_identical"
+            ],
+            "title": "Duplicates",
+            "default": "reject"
+          },
+          "max_objects": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "minimum": 1.0,
+            "title": "Max Objects",
+            "default": 100000
+          },
+          "max_links": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "minimum": 0.0,
+            "title": "Max Links",
+            "default": 100000
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "target_resource_id",
+          "ontology_id",
+          "schema_version",
+          "columns",
+          "objects"
+        ],
+        "title": "MappingSpec"
+      },
+      "MappingSpec-Output": {
+        "properties": {
+          "format_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Format Version",
+            "default": 1
+          },
+          "target_resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Target Resource Id"
+          },
+          "ontology_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Ontology Id"
+          },
+          "schema_version": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Schema Version"
+          },
+          "columns": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 256,
+            "minProperties": 1,
+            "title": "Columns"
+          },
+          "objects": {
+            "items": {
+              "$ref": "#/components/schemas/ObjectMapping"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "minItems": 1,
+            "title": "Objects"
+          },
+          "relationships": {
+            "items": {
+              "$ref": "#/components/schemas/RelationshipMapping-Output"
+            },
+            "type": "array",
+            "maxItems": 32,
+            "title": "Relationships"
+          },
+          "write_policy": {
+            "type": "string",
+            "enum": [
+              "insert_only",
+              "upsert_owned"
+            ],
+            "title": "Write Policy",
+            "default": "upsert_owned"
+          },
+          "duplicates": {
+            "type": "string",
+            "enum": [
+              "reject",
+              "coalesce_identical"
+            ],
+            "title": "Duplicates",
+            "default": "reject"
+          },
+          "max_objects": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "minimum": 1.0,
+            "title": "Max Objects",
+            "default": 100000
+          },
+          "max_links": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "minimum": 0.0,
+            "title": "Max Links",
+            "default": 100000
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "target_resource_id",
+          "ontology_id",
+          "schema_version",
+          "columns",
+          "objects"
+        ],
+        "title": "MappingSpec"
       },
       "MemberChange": {
         "properties": {
@@ -12111,6 +14642,38 @@
           "properties"
         ],
         "title": "ObjectInput"
+      },
+      "ObjectMapping": {
+        "properties": {
+          "object_type": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Object Type"
+          },
+          "identity": {
+            "$ref": "#/components/schemas/Identity"
+          },
+          "properties": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Value"
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 64,
+            "title": "Properties"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "object_type",
+          "identity"
+        ],
+        "title": "ObjectMapping"
       },
       "ObjectPatch": {
         "properties": {
@@ -13283,32 +15846,27 @@
           }
         ]
       },
-      "RelationshipMapping": {
+      "RelationshipMapping-Output": {
         "properties": {
-          "link": {
+          "link_type": {
             "type": "string",
             "maxLength": 200,
             "minLength": 1,
-            "title": "Link"
+            "title": "Link Type"
           },
-          "target_column": {
-            "type": "string",
-            "maxLength": 200,
-            "minLength": 1,
-            "title": "Target Column"
+          "source": {
+            "$ref": "#/components/schemas/Endpoint"
           },
-          "direction": {
-            "type": "string",
-            "const": "forward",
-            "title": "Direction",
-            "default": "forward"
+          "target": {
+            "$ref": "#/components/schemas/Endpoint"
           }
         },
         "additionalProperties": false,
         "type": "object",
         "required": [
-          "link",
-          "target_column"
+          "link_type",
+          "source",
+          "target"
         ],
         "title": "RelationshipMapping"
       },
@@ -13363,7 +15921,9 @@
                 "type": "string",
                 "enum": [
                   "ARTIFACT",
-                  "DATASET"
+                  "DATASET",
+                  "PIPELINE",
+                  "MAPPING"
                 ]
               }
             ],
@@ -14128,6 +16688,311 @@
           }
         ]
       },
+      "StartRun": {
+        "properties": {
+          "definition_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Definition Id"
+          },
+          "inputs": {
+            "items": {
+              "$ref": "#/components/schemas/InputVersion"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "minItems": 1,
+            "title": "Inputs"
+          },
+          "output_dataset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Output Dataset Id"
+          },
+          "parameters": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "maxProperties": 0,
+            "title": "Parameters"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "definition_id",
+          "inputs",
+          "output_dataset_id"
+        ],
+        "title": "StartRun"
+      },
+      "Step-Input": {
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": [
+              "select",
+              "rename",
+              "drop",
+              "filter",
+              "sort",
+              "cast",
+              "derive",
+              "fill_null",
+              "deduplicate",
+              "aggregate",
+              "join",
+              "union"
+            ],
+            "title": "Op"
+          },
+          "columns": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 256,
+            "title": "Columns"
+          },
+          "mapping": {
+            "additionalProperties": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 256,
+            "title": "Mapping"
+          },
+          "expression": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Expression-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "aggregates": {
+            "items": {
+              "$ref": "#/components/schemas/Aggregate"
+            },
+            "type": "array",
+            "maxItems": 256,
+            "title": "Aggregates"
+          },
+          "input": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input"
+          },
+          "how": {
+            "type": "string",
+            "enum": [
+              "inner",
+              "left",
+              "full",
+              "semi",
+              "anti"
+            ],
+            "title": "How",
+            "default": "inner"
+          },
+          "descending": {
+            "type": "boolean",
+            "title": "Descending",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "op"
+        ],
+        "title": "Step"
+      },
+      "Step-Output": {
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": [
+              "select",
+              "rename",
+              "drop",
+              "filter",
+              "sort",
+              "cast",
+              "derive",
+              "fill_null",
+              "deduplicate",
+              "aggregate",
+              "join",
+              "union"
+            ],
+            "title": "Op"
+          },
+          "columns": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 256,
+            "title": "Columns"
+          },
+          "mapping": {
+            "additionalProperties": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 256,
+            "title": "Mapping"
+          },
+          "expression": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Expression-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "aggregates": {
+            "items": {
+              "$ref": "#/components/schemas/Aggregate"
+            },
+            "type": "array",
+            "maxItems": 256,
+            "title": "Aggregates"
+          },
+          "input": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input"
+          },
+          "how": {
+            "type": "string",
+            "enum": [
+              "inner",
+              "left",
+              "full",
+              "semi",
+              "anti"
+            ],
+            "title": "How",
+            "default": "inner"
+          },
+          "descending": {
+            "type": "boolean",
+            "title": "Descending",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "op"
+        ],
+        "title": "Step"
+      },
       "TenantRequest": {
         "properties": {
           "name": {
@@ -14359,6 +17224,59 @@
         ],
         "title": "ValidationError"
       },
+      "Value": {
+        "properties": {
+          "column": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Column"
+          },
+          "constant": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "conversion": {
+            "type": "string",
+            "enum": [
+              "string",
+              "integer",
+              "float",
+              "decimal",
+              "boolean",
+              "date",
+              "timestamp",
+              "uuid"
+            ],
+            "title": "Conversion"
+          },
+          "nulls": {
+            "type": "string",
+            "enum": [
+              "reject",
+              "allow",
+              "default"
+            ],
+            "title": "Nulls",
+            "default": "reject"
+          },
+          "default": {
+            "$ref": "#/components/schemas/JsonValue"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "conversion"
+        ],
+        "title": "Value"
+      },
       "VersionView": {
         "properties": {
           "definition": {
@@ -14493,7 +17411,7 @@
           },
           "relationships": {
             "items": {
-              "$ref": "#/components/schemas/RelationshipMapping"
+              "$ref": "#/components/schemas/ontology_platform__ingestion__contracts__RelationshipMapping"
             },
             "type": "array",
             "maxItems": 8,
@@ -14512,6 +17430,35 @@
           "properties"
         ],
         "title": "MappingInput"
+      },
+      "ontology_platform__ingestion__contracts__RelationshipMapping": {
+        "properties": {
+          "link": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Link"
+          },
+          "target_column": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Target Column"
+          },
+          "direction": {
+            "type": "string",
+            "const": "forward",
+            "title": "Direction",
+            "default": "forward"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "link",
+          "target_column"
+        ],
+        "title": "RelationshipMapping"
       },
       "ontology_platform__interoperability__contracts__MappingInput": {
         "properties": {
@@ -14537,6 +17484,30 @@
         "additionalProperties": false,
         "type": "object",
         "title": "MappingInput"
+      },
+      "ontology_platform__mappings__contracts__RelationshipMapping": {
+        "properties": {
+          "link_type": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Link Type"
+          },
+          "source": {
+            "$ref": "#/components/schemas/Endpoint"
+          },
+          "target": {
+            "$ref": "#/components/schemas/Endpoint"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "link_type",
+          "source",
+          "target"
+        ],
+        "title": "RelationshipMapping"
       },
       "ontology_platform__sdk__service__ArtifactView": {
         "properties": {

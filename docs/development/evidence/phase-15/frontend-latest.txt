@@ -1,0 +1,23 @@
+
+> @foundry/studio@0.8.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /Users/log/Documents/code/csh-foundry/apps/studio
+
+
+ Test Files  10 passed (10)
+      Tests  45 passed (45)
+   Start at  00:10:23
+   Duration  1.55s (environment 59%, tests 19%, import 14%, transform 7%)
+
+
+> @foundry/studio@0.8.0 typecheck
+> tsc --noEmit
+
+
+> @foundry/studio@0.8.0 format:check
+> prettier --check "app/**/*.{ts,tsx,css}" "components/**/*.tsx" "features/**/*.tsx" lib/api.ts lib/server.ts "tests/**/*.{ts,tsx,mjs}" next.config.ts playwright.config.ts vitest.config.ts proxy.ts instrumentation.ts
+
+Checking formatting...
+All matched files use Prettier code style!

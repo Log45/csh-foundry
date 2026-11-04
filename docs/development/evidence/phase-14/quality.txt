@@ -1,0 +1,42 @@
+COMMAND: uv run ruff check .
+EXIT: 0
+All checks passed!
+
+COMMAND: uv run ruff format --check .
+EXIT: 0
+251 files already formatted
+
+COMMAND: uv run mypy
+EXIT: 0
+Success: no issues found in 126 source files
+
+COMMAND: PATH=/opt/homebrew/opt/node/bin:$PATH npm --prefix apps/studio run typecheck
+EXIT: 0
+
+> @foundry/studio@0.8.0 typecheck
+> tsc --noEmit
+
+
+COMMAND: PATH=/opt/homebrew/opt/node/bin:$PATH npm --prefix apps/studio run format:check
+EXIT: 0
+
+> @foundry/studio@0.8.0 format:check
+> prettier --check "app/**/*.{ts,tsx,css}" "components/**/*.tsx" "features/**/*.tsx" lib/api.ts lib/server.ts "tests/**/*.{ts,tsx,mjs}" next.config.ts playwright.config.ts vitest.config.ts proxy.ts instrumentation.ts
+
+Checking formatting...
+All matched files use Prettier code style!
+
+COMMAND: PATH=/opt/homebrew/opt/node/bin:$PATH npm --prefix apps/studio test
+EXIT: 0
+
+> @foundry/studio@0.8.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /Users/log/Documents/code/csh-foundry/apps/studio
+
+
+ Test Files  9 passed (9)
+      Tests  42 passed (42)
+   Start at  22:02:09
+   Duration  1.78s (environment 58%, tests 22%, import 13%, transform 7%, worker 1%)

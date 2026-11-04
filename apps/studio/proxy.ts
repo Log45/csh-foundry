@@ -14,5 +14,7 @@ export function proxy(request: NextRequest) {
   return response;
 }
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  // Binary BFF enforces its own session/CSRF/tenant boundary. Excluding it prevents
+  // Next Proxy from cloning/buffering the upload body before the streaming handler.
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|bff/artifacts).*)"],
 };

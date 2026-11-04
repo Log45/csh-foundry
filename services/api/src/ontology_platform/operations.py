@@ -30,8 +30,10 @@ class TransportBounds:
         request_bytes: int = 1048576,
         response_bytes: int = 8388608,
         deadline: float = 60,
+        transfer_deadline: float = 1800,
     ):
         self.app = app
+        self.transfer_deadline = transfer_deadline
         self.request_bytes, self.response_bytes, self.deadline = (
             request_bytes,
             response_bytes,
@@ -57,7 +59,7 @@ class TransportBounds:
                 await send(message)
 
             try:
-                async with asyncio.timeout(self.deadline):
+                async with asyncio.timeout(self.transfer_deadline):
                     await self.app(scope, receive, stream_send)
             except TimeoutError:
                 if started:

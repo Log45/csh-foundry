@@ -1,0 +1,58 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-447c10df6721_default  Creating
+ Network phase15-447c10df6721_default  Created
+ Volume "phase15-447c10df6721_minio-data"  Creating
+ Volume "phase15-447c10df6721_minio-data"  Created
+ Container phase15-447c10df6721-minio-1  Creating
+ Container phase15-447c10df6721-minio-1  Created
+ Container phase15-447c10df6721-minio-1  Starting
+ Container phase15-447c10df6721-minio-1  Started
+ Container phase15-447c10df6721-minio-1  Waiting
+ Container phase15-447c10df6721-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-447c10df6721-minio-1  Restarting
+ Container phase15-447c10df6721-minio-1  Started
+ Container phase15-447c10df6721-minio-1  Running
+ Container phase15-447c10df6721-minio-1  Waiting
+ Container phase15-447c10df6721-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 129 items
+
+services/api/tests/test_artifacts.py ..............                      [ 10%]
+services/api/tests/test_datasets.py .................................... [ 38%]
+.                                                                        [ 39%]
+services/api/tests/test_execution.py ................................... [ 66%]
+.............                                                            [ 76%]
+services/api/tests/test_mappings.py ..............................       [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================== 129 passed, 1 warning in 120.59s (0:02:00) ==================
+ Container phase15-447c10df6721-minio-1  Stopping
+ Container phase15-447c10df6721-minio-1  Stopped
+ Container phase15-447c10df6721-minio-1  Removing
+ Container phase15-447c10df6721-minio-1  Removed
+ Network phase15-447c10df6721_default  Removing
+ Volume phase15-447c10df6721_minio-data  Removing
+ Volume phase15-447c10df6721_minio-data  Removed
+ Network phase15-447c10df6721_default  Removed
