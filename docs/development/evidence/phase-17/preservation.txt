@@ -9,3 +9,6 @@ b4246508225435bac465626af975e53626acb35b646f2fd00d72056dfe4f75cd fixtures/manufa
 8c3e5bce738e8f0ddb8fa184151bf157862f49eeaf72a1b06b3342377bd9ad53 fixtures/manufacturing-shapes.ttl
 1907037cc90eb6a0977fec2752e5e53e1cf6b2fa74807044befd3ac5a742dff5 fixtures/manufacturing.ttl
 No shared schema upgrade/reset or shared MinIO deletion was performed.
+
+Final 2026-11-05 read-only verification: shared database 0017_capacity.
+PASS final implementation SHA-256 snapshot unchanged after complete validation.
