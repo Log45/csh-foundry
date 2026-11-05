@@ -1,0 +1,12 @@
+macOS-15.6.1-arm64-arm-64bit arm64
+Python 3.12.0
+fastapi 0.162.0
+pydantic 2.14.1
+sqlalchemy 2.0.55
+polars 1.44.2
+pillow 13.0.0
+av 16.0.1
+pypdf 6.12.0
+boto3 1.43.123
+FFmpeg library versions {'libavutil': (60, 8, 100), 'libavcodec': (62, 11, 100), 'libavformat': (62, 3, 100), 'libavdevice': (62, 1, 100), 'libavfilter': (11, 4, 100), 'libswscale': (9, 1, 100), 'libswresample': (6, 1, 100)}
+PostgreSQL 17.6 (Debian 17.6-2.pgdg12+1)

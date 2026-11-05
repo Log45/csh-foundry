@@ -159,3 +159,6 @@ CSV/JSON/NDJSON/Parquet validation, schema history and bounded previews. See the
 [dataset API and validation contract](datasets.md). Studio supports dataset creation, upload,
 validation errors, source download, version history, schema and preview in Project folders.
 Production remains blocked; Phase 14 is not implemented.
+
+- [Media Sets, Functions and Automations](media-functions-automations.md): immutable media snapshots,
+  typed trusted logic, shared durable execution and governed manual/scheduled/action-event triggers.

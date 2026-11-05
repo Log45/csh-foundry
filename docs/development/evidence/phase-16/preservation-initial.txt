@@ -1,0 +1,6 @@
+Revision 6a589f4594de157e243dcacf03892844cc3ddc25
+0022_materialization (head)
+PASS canonical fixtures and historical migrations unchanged
+Shared database revision (read-only) 0017_capacity
+PASS example browser chunks contain none of the inspected server credential/configuration symbols
+This is a targeted dependency-boundary inspection, not production secret/security certification.

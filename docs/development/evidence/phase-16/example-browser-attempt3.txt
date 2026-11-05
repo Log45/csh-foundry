@@ -1,0 +1,102 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-4b3bd0e3379c_default  Creating
+ Network phase15-4b3bd0e3379c_default  Created
+ Volume "phase15-4b3bd0e3379c_minio-data"  Creating
+ Volume "phase15-4b3bd0e3379c_minio-data"  Created
+ Container phase15-4b3bd0e3379c-minio-1  Creating
+ Container phase15-4b3bd0e3379c-minio-1  Created
+ Container phase15-4b3bd0e3379c-minio-1  Starting
+ Container phase15-4b3bd0e3379c-minio-1  Started
+ Container phase15-4b3bd0e3379c-minio-1  Waiting
+ Container phase15-4b3bd0e3379c-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-4b3bd0e3379c-minio-1  Restarting
+ Container phase15-4b3bd0e3379c-minio-1  Started
+ Container phase15-4b3bd0e3379c-minio-1  Running
+ Container phase15-4b3bd0e3379c-minio-1  Waiting
+ Container phase15-4b3bd0e3379c-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+Python suite NOT RUN in this explicit browser-only selection
+
+> @foundry/sdk-example@0.16.0 test:e2e
+> playwright test
+
+
+Running 1 test using 1 worker
+
+(node:85037) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/application.spec.ts:2:1 › real OIDC, tenant, SDK queries, errors and session invalidation (6.9s)
+
+
+  1) tests/application.spec.ts:2:1 › real OIDC, tenant, SDK queries, errors and session invalidation 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert').first()
+    Expected substring: "not_found"
+    Received string:    "validation: unknown_object_type"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('alert').first() with timeout 5000ms
+      - waiting for getByRole('alert').first()
+        2 × locator resolved to <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div>
+          - unexpected value ""
+        12 × locator resolved to <p role="alert">validation: unknown_object_type</p>
+           - unexpected value "validation: unknown_object_type"
+
+
+      56 |   await expect(page.locator("pre").first()).toContainText("schema_version");
+      57 |   await page.getByLabel("Object type", { exact: true }).fill("MissingType");
+    > 58 |   await expect(page.getByRole("alert").first()).toContainText("not_found");
+         |                                                 ^
+      59 |   await page.getByLabel("Object type", { exact: true }).fill("Machine");
+      60 |   await expect(page.locator("pre").first()).toContainText("items");
+      61 |   const seeded = await page.evaluate(
+        at /Users/log/Documents/code/csh-foundry/apps/sdk-example/tests/application.spec.ts:58:49
+
+    Error Context: test-results/application-real-OIDC-tena-d9733-rs-and-session-invalidation/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/application-real-OIDC-tena-d9733-rs-and-session-invalidation/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/application-real-OIDC-tena-d9733-rs-and-session-invalidation/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/application.spec.ts:2:1 › real OIDC, tenant, SDK queries, errors and session invalidation 
+npm error Lifecycle script `test:e2e` failed with error:
+npm error code 1
+npm error path /Users/log/Documents/code/csh-foundry/apps/sdk-example
+npm error workspace @foundry/sdk-example@0.16.0
+npm error location /Users/log/Documents/code/csh-foundry/apps/sdk-example
+npm error command failed
+npm error command sh -c playwright test
+ Container phase15-4b3bd0e3379c-minio-1  Stopping
+ Container phase15-4b3bd0e3379c-minio-1  Stopped
+ Container phase15-4b3bd0e3379c-minio-1  Removing
+ Container phase15-4b3bd0e3379c-minio-1  Removed
+ Volume phase15-4b3bd0e3379c_minio-data  Removing
+ Network phase15-4b3bd0e3379c_default  Removing
+ Volume phase15-4b3bd0e3379c_minio-data  Removed
+ Network phase15-4b3bd0e3379c_default  Removed
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 171, in <module>
+    run("uv", "run", "python", "scripts/test_studio.py")
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 99, in run
+    raise subprocess.CalledProcessError(code, cmd)
+subprocess.CalledProcessError: Command '('uv', 'run', 'python', 'scripts/test_studio.py')' returned non-zero exit status 1.

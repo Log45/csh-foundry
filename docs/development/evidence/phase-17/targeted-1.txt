@@ -1,0 +1,410 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-12ca1861dcd4_default  Creating
+ Network phase15-12ca1861dcd4_default  Created
+ Volume "phase15-12ca1861dcd4_minio-data"  Creating
+ Volume "phase15-12ca1861dcd4_minio-data"  Created
+ Container phase15-12ca1861dcd4-minio-1  Creating
+ Container phase15-12ca1861dcd4-minio-1  Created
+ Container phase15-12ca1861dcd4-minio-1  Starting
+ Container phase15-12ca1861dcd4-minio-1  Started
+ Container phase15-12ca1861dcd4-minio-1  Waiting
+ Container phase15-12ca1861dcd4-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-12ca1861dcd4-minio-1  Restarting
+ Container phase15-12ca1861dcd4-minio-1  Started
+ Container phase15-12ca1861dcd4-minio-1  Running
+ Container phase15-12ca1861dcd4-minio-1  Waiting
+ Container phase15-12ca1861dcd4-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 29 items
+
+services/api/tests/test_media_functions_automations.py ................. [ 58%]
+.FFF.....FF.                                                             [100%]
+
+=================================== FAILURES ===================================
+_______ test_real_function_execution_result_idempotency_and_immutability _______
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: record "new" has no field "set_id"
+E   CONTEXT:  SQL expression "TG_TABLE_NAME='media_memberships' AND NOT EXISTS (
+E               SELECT 1 FROM governed_definitions WHERE tenant_id=NEW.tenant_id
+E               AND resource_id=NEW.set_id AND id=NEW.version_id AND kind='MEDIA_SET'
+E               AND specification->'items' @> jsonb_build_array(NEW.item_id::text)
+E               AND xmin::text=pg_current_xact_id()::text
+E           )"
+E   PL/pgSQL function guard_g_immutable() line 8 at IF
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:152: in test_real_function_execution_result_idempotency_and_immutability
+    published = svc.publish_function(p, fn.id, definition("text.normalize.v1"))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:79: in publish_function
+    return self.publish_spec(s, p, key, spec.model_dump(mode="json"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:73: in publish_spec
+    s.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) record "new" has no field "set_id"
+E   CONTEXT:  SQL expression "TG_TABLE_NAME='media_memberships' AND NOT EXISTS (
+E               SELECT 1 FROM governed_definitions WHERE tenant_id=NEW.tenant_id
+E               AND resource_id=NEW.set_id AND id=NEW.version_id AND kind='MEDIA_SET'
+E               AND specification->'items' @> jsonb_build_array(NEW.item_id::text)
+E               AND xmin::text=pg_current_xact_id()::text
+E           )"
+E   PL/pgSQL function guard_g_immutable() line 8 at IF
+E   [SQL: INSERT INTO governed_definitions (tenant_id, resource_id, id, kind, sequence, specification, created_by) VALUES (%(tenant_id)s::UUID, %(resource_id)s::UUID, %(id)s::UUID, %(kind)s::VARCHAR, %(sequence)s::INTEGER, %(specification)s::JSONB, %(created_by)s::VARCHAR) RETURNING governed_definitions.created_at]
+E   [parameters: {'tenant_id': UUID('ba0e856d-0898-40b5-9ec4-65bd62e29965'), 'resource_id': UUID('eee59d3b-6553-45f3-a6b6-0c2c3aedb47b'), 'id': UUID('c0f6ed9d-62ab-4bcd-b728-f5afbaa5af14'), 'kind': 'FUNCTION', 'sequence': 1, 'specification': Jsonb({'implementation': 'text.normalize. ... (415 chars)), 'created_by': 'local-developer'}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+_____ test_worker_lease_recovery_cancel_stale_fence_and_unpublished_result _____
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: record "new" has no field "set_id"
+E   CONTEXT:  SQL expression "TG_TABLE_NAME='media_memberships' AND NOT EXISTS (
+E               SELECT 1 FROM governed_definitions WHERE tenant_id=NEW.tenant_id
+E               AND resource_id=NEW.set_id AND id=NEW.version_id AND kind='MEDIA_SET'
+E               AND specification->'items' @> jsonb_build_array(NEW.item_id::text)
+E               AND xmin::text=pg_current_xact_id()::text
+E           )"
+E   PL/pgSQL function guard_g_immutable() line 8 at IF
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:180: in test_worker_lease_recovery_cancel_stale_fence_and_unpublished_result
+    version = svc.publish_function(p, fn.id, definition())
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:79: in publish_function
+    return self.publish_spec(s, p, key, spec.model_dump(mode="json"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:73: in publish_spec
+    s.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) record "new" has no field "set_id"
+E   CONTEXT:  SQL expression "TG_TABLE_NAME='media_memberships' AND NOT EXISTS (
+E               SELECT 1 FROM governed_definitions WHERE tenant_id=NEW.tenant_id
+E               AND resource_id=NEW.set_id AND id=NEW.version_id AND kind='MEDIA_SET'
+E               AND specification->'items' @> jsonb_build_array(NEW.item_id::text)
+E               AND xmin::text=pg_current_xact_id()::text
+E           )"
+E   PL/pgSQL function guard_g_immutable() line 8 at IF
+E   [SQL: INSERT INTO governed_definitions (tenant_id, resource_id, id, kind, sequence, specification, created_by) VALUES (%(tenant_id)s::UUID, %(resource_id)s::UUID, %(id)s::UUID, %(kind)s::VARCHAR, %(sequence)s::INTEGER, %(specification)s::JSONB, %(created_by)s::VARCHAR) RETURNING governed_definitions.created_at]
+E   [parameters: {'tenant_id': UUID('1bba1a5e-3812-4741-a952-785fa18e8bbb'), 'resource_id': UUID('24e85c65-3ee4-4864-a999-c78c28fac917'), 'id': UUID('444fe61b-eefa-4863-bcd1-b11573f659f3'), 'kind': 'FUNCTION', 'sequence': 1, 'specification': Jsonb({'implementation': 'identity.v1', ' ... (407 chars)), 'created_by': 'local-developer'}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+_______ test_media_real_preview_snapshot_source_and_immutable_membership _______
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: record "new" has no field "resource_id"
+E   CONTEXT:  SQL expression "TG_TABLE_NAME='governed_definitions' AND NOT EXISTS (
+E               SELECT 1 FROM platform_resources WHERE tenant_id=NEW.tenant_id
+E               AND id=NEW.resource_id AND resource_type=NEW.kind AND state='ACTIVE'
+E           )"
+E   PL/pgSQL function guard_g_immutable() line 8 at IF
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:209: in test_media_real_preview_snapshot_source_and_immutable_membership
+    item = svc.attach(p, media.id, body)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/media/service.py:192: in attach
+    s.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) record "new" has no field "resource_id"
+E   CONTEXT:  SQL expression "TG_TABLE_NAME='governed_definitions' AND NOT EXISTS (
+E               SELECT 1 FROM platform_resources WHERE tenant_id=NEW.tenant_id
+E               AND id=NEW.resource_id AND resource_type=NEW.kind AND state='ACTIVE'
+E           )"
+E   PL/pgSQL function guard_g_immutable() line 8 at IF
+E   [SQL: INSERT INTO media_items (tenant_id, set_id, id, artifact_id, artifact_version_id, media_type, size, checksum, filename, metadata, preview_artifact_id, preview_version_id, created_by) VALUES (%(tenant_id)s::UUID, %(set_id)s::UUID, %(id)s::UUID, %(artifact_id)s::UUID, %(artifact_version_id)s::UUID, %(media_type)s::VARCHAR, %(size)s::BIGINT, %(checksum)s::VARCHAR, %(filename)s::VARCHAR, %(metadata)s::JSONB, %(preview_artifact_id)s::UUID, %(preview_version_id)s::UUID, %(created_by)s::VARCHAR) RETURNING media_items.created_at]
+E   [parameters: {'tenant_id': UUID('1faa47b8-53a5-48d8-a06b-ccff7d57e779'), 'set_id': UUID('29768aca-cf15-40a3-b2e0-7ab86a01dccf'), 'id': UUID('1adffd73-18d0-42b2-a6f6-638b1b5768f9'), 'artifact_id': UUID('d6e84f6e-1131-4acb-b16e-66972a2a17cd'), 'artifact_version_id': UUID('75b201ff-3848-401b-af99-1bb8e71b25a0'), 'media_type': 'image/png', 'size': 99, 'checksum': 'a71dea8c57cd6aacff8cc786a2fbd8fb220783ade9dec17f11a935882dd896a9', 'filename': 'file.bin', 'metadata': Jsonb({'width': 30, 'height': 20, 'format ... (107 chars)), 'preview_artifact_id': UUID('648ff41b-ca26-4524-87ad-835e2698adf9'), 'preview_version_id': UUID('bf427883-6258-4609-8d79-46176fed5a96'), 'created_by': 'local-developer'}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+____________ test_manual_automation_duplicate_disable_and_execution ____________
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: record "new" has no field "set_id"
+E   CONTEXT:  SQL expression "TG_TABLE_NAME='media_memberships' AND NOT EXISTS (
+E               SELECT 1 FROM governed_definitions WHERE tenant_id=NEW.tenant_id
+E               AND resource_id=NEW.set_id AND id=NEW.version_id AND kind='MEDIA_SET'
+E               AND specification->'items' @> jsonb_build_array(NEW.item_id::text)
+E               AND xmin::text=pg_current_xact_id()::text
+E           )"
+E   PL/pgSQL function guard_g_immutable() line 8 at IF
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:319: in test_manual_automation_duplicate_disable_and_execution
+    target = fn_svc.publish_function(p, fn.id, definition())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:79: in publish_function
+    return self.publish_spec(s, p, key, spec.model_dump(mode="json"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:73: in publish_spec
+    s.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) record "new" has no field "set_id"
+E   CONTEXT:  SQL expression "TG_TABLE_NAME='media_memberships' AND NOT EXISTS (
+E               SELECT 1 FROM governed_definitions WHERE tenant_id=NEW.tenant_id
+E               AND resource_id=NEW.set_id AND id=NEW.version_id AND kind='MEDIA_SET'
+E               AND specification->'items' @> jsonb_build_array(NEW.item_id::text)
+E               AND xmin::text=pg_current_xact_id()::text
+E           )"
+E   PL/pgSQL function guard_g_immutable() line 8 at IF
+E   [SQL: INSERT INTO governed_definitions (tenant_id, resource_id, id, kind, sequence, specification, created_by) VALUES (%(tenant_id)s::UUID, %(resource_id)s::UUID, %(id)s::UUID, %(kind)s::VARCHAR, %(sequence)s::INTEGER, %(specification)s::JSONB, %(created_by)s::VARCHAR) RETURNING governed_definitions.created_at]
+E   [parameters: {'tenant_id': UUID('7685bef5-41ee-4e41-b1cd-3ceac62051ab'), 'resource_id': UUID('1936e6d7-0f25-4f0d-9086-c0fdf11d83e1'), 'id': UUID('1abcac3e-5603-4e17-8223-a6d7755433e6'), 'kind': 'FUNCTION', 'sequence': 1, 'specification': Jsonb({'implementation': 'identity.v1', ' ... (407 chars)), 'created_by': 'local-developer'}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+_________ test_durable_interval_restart_multiple_dispatchers_coalesce __________
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: record "new" has no field "set_id"
+E   CONTEXT:  SQL expression "TG_TABLE_NAME='media_memberships' AND NOT EXISTS (
+E               SELECT 1 FROM governed_definitions WHERE tenant_id=NEW.tenant_id
+E               AND resource_id=NEW.set_id AND id=NEW.version_id AND kind='MEDIA_SET'
+E               AND specification->'items' @> jsonb_build_array(NEW.item_id::text)
+E               AND xmin::text=pg_current_xact_id()::text
+E           )"
+E   PL/pgSQL function guard_g_immutable() line 8 at IF
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:339: in test_durable_interval_restart_multiple_dispatchers_coalesce
+    target = fn_svc.publish_function(p, fn.id, definition())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:79: in publish_function
+    return self.publish_spec(s, p, key, spec.model_dump(mode="json"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:73: in publish_spec
+    s.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) record "new" has no field "set_id"
+E   CONTEXT:  SQL expression "TG_TABLE_NAME='media_memberships' AND NOT EXISTS (
+E               SELECT 1 FROM governed_definitions WHERE tenant_id=NEW.tenant_id
+E               AND resource_id=NEW.set_id AND id=NEW.version_id AND kind='MEDIA_SET'
+E               AND specification->'items' @> jsonb_build_array(NEW.item_id::text)
+E               AND xmin::text=pg_current_xact_id()::text
+E           )"
+E   PL/pgSQL function guard_g_immutable() line 8 at IF
+E   [SQL: INSERT INTO governed_definitions (tenant_id, resource_id, id, kind, sequence, specification, created_by) VALUES (%(tenant_id)s::UUID, %(resource_id)s::UUID, %(id)s::UUID, %(kind)s::VARCHAR, %(sequence)s::INTEGER, %(specification)s::JSONB, %(created_by)s::VARCHAR) RETURNING governed_definitions.created_at]
+E   [parameters: {'tenant_id': UUID('3b224903-7231-49a8-932a-17e9f7051839'), 'resource_id': UUID('2be3633e-f64a-46bd-89ff-7f3f6369c020'), 'id': UUID('4ccad3ec-4333-458a-93ba-27c39ac26913'), 'kind': 'FUNCTION', 'sequence': 1, 'specification': Jsonb({'implementation': 'identity.v1', ' ... (407 chars)), 'created_by': 'local-developer'}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED services/api/tests/test_media_functions_automations.py::test_real_function_execution_result_idempotency_and_immutability
+FAILED services/api/tests/test_media_functions_automations.py::test_worker_lease_recovery_cancel_stale_fence_and_unpublished_result
+FAILED services/api/tests/test_media_functions_automations.py::test_media_real_preview_snapshot_source_and_immutable_membership
+FAILED services/api/tests/test_media_functions_automations.py::test_manual_automation_duplicate_disable_and_execution
+FAILED services/api/tests/test_media_functions_automations.py::test_durable_interval_restart_multiple_dispatchers_coalesce
+=================== 5 failed, 24 passed, 1 warning in 19.31s ===================
+ Container phase15-12ca1861dcd4-minio-1  Stopping
+ Container phase15-12ca1861dcd4-minio-1  Stopped
+ Container phase15-12ca1861dcd4-minio-1  Removing
+ Container phase15-12ca1861dcd4-minio-1  Removed
+ Network phase15-12ca1861dcd4_default  Removing
+ Volume phase15-12ca1861dcd4_minio-data  Removing
+ Volume phase15-12ca1861dcd4_minio-data  Removed
+ Network phase15-12ca1861dcd4_default  Removed
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 143, in <module>
+    run("uv", "run", "pytest", *args.pytest_file, "-ra", "--tb=short")
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 99, in run
+    raise subprocess.CalledProcessError(code, cmd)
+subprocess.CalledProcessError: Command '('uv', 'run', 'pytest', 'services/api/tests/test_media_functions_automations.py', '-ra', '--tb=short')' returned non-zero exit status 1.

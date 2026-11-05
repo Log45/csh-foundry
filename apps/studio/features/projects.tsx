@@ -1,4 +1,5 @@
 "use client";
+import { CreateGovernedPanel, GovernedPanel } from "./governed-processing";
 import { CreateMappingPanel, MappingPanel } from "@/features/mappings";
 import { CreatePipelinePanel, PipelinePanel } from "@/features/pipelines";
 import { CreateDatasetPanel, DatasetPanel } from "@/features/datasets";
@@ -337,6 +338,14 @@ function ProjectBrowser({
       )}
       <h3>Resources</h3>
       {writable && (
+        <CreateGovernedPanel
+          api={api}
+          project={project.id}
+          folder={folder ?? null}
+          reload={reload}
+        />
+      )}
+      {writable && (
         <CreateArtifactPanel
           api={api}
           project={project.id}
@@ -408,7 +417,21 @@ function ProjectBrowser({
             Resource ID: <code>{r.id}</code>
           </p>
           <p>{r.description}</p>
-          {r.resource_type === "MAPPING" ? (
+          {["MEDIA_SET", "FUNCTION", "AUTOMATION"].includes(r.resource_type) ? (
+            <GovernedPanel
+              key={r.id}
+              api={api}
+              resource={r.id}
+              family={
+                r.resource_type === "MEDIA_SET"
+                  ? "media-sets"
+                  : r.resource_type === "FUNCTION"
+                    ? "functions"
+                    : "automations"
+              }
+              writable={r.project_id === project.id && writable}
+            />
+          ) : r.resource_type === "MAPPING" ? (
             <MappingPanel
               api={api}
               mapping={r.id}

@@ -54,6 +54,14 @@ def child(
             from ontology_platform.datasets.streaming import validate_path
 
             result = validate_path(Path(request["path"]), request["format"], limits)
+        elif operation == "function":
+            from ontology_platform.functions.engine import execute
+
+            result = execute(request)
+        elif operation == "media":
+            from ontology_platform.media.parser import extract
+
+            result = extract(request, Path(directory))
         elif operation == "mapping":
             from ontology_platform.mappings.engine import stage
 

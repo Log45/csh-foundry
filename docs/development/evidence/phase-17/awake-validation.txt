@@ -1,0 +1,11 @@
+   UserIsActive                   0
+   PreventUserIdleDisplaySleep    1
+   PreventSystemSleep             1
+   PreventUserIdleSystemSleep     1
+   pid 330(powerd): [0x000533a500018d34] 00:00:07 PreventUserIdleSystemSleep named: "Powerd - Prevent sleep while display is on"  
+   pid 63229(caffeinate): [0x000533a400018d2f] 00:00:08 PreventUserIdleSystemSleep named: "caffeinate command-line tool"  
+	Details: caffeinate asserting on behalf of 'uv' (pid 63201)
+   pid 63229(caffeinate): [0x000533a400058d30] 00:00:08 PreventUserIdleDisplaySleep named: "caffeinate command-line tool"  
+	Details: caffeinate asserting on behalf of 'uv' (pid 63201)
+   pid 63229(caffeinate): [0x000533a400078d31] 00:00:08 PreventSystemSleep named: "caffeinate command-line tool"  
+	Details: caffeinate asserting on behalf of 'uv' (pid 63201)

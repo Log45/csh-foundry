@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 const config: NextConfig = {
   output: "standalone",
+  // Keep Studio's existing standalone layout when the sibling SDK npm workspace is present.
+  outputFileTracingRoot: import.meta.dirname,
   poweredByHeader: false,
   async headers() {
     return [

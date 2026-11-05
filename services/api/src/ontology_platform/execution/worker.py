@@ -60,6 +60,11 @@ class ExecutionWorker:
                 .limit(self.settings.queue_jobs)
             )
             for row in candidates:
+                if row.kind == "FUNCTION":
+                    from ontology_platform.functions.contracts import GSettings
+
+                    if sum(j.kind == "FUNCTION" for j in active) >= GSettings().function_jobs:
+                        continue
                 if sum(j.tenant_id == row.tenant_id for j in active) >= self.settings.tenant_jobs:
                     continue
                 if (
@@ -178,6 +183,11 @@ class ExecutionWorker:
                         + timedelta(seconds=limits.wall_seconds + limits.lease_seconds + 300)
                     }
                 )
+        if job.kind == "FUNCTION":
+            from ontology_platform.functions.worker import execute as execute_function
+
+            execute_function(self, tenant, key, token, p, limits)
+            return
         if job.kind == "MATERIALIZATION":
             from ontology_platform.mappings.worker import execute
 

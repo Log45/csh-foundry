@@ -1,0 +1,5 @@
+
+> check:generated
+> python3 scripts/generate_platform_sdk.py --check && node scripts/check_sdk_schema.mjs
+
+PASS generated schema drift

@@ -1,0 +1,80 @@
+{
+  "python-quality": {
+    "result": "PASS",
+    "exit_code": 0,
+    "command": [
+      "uv",
+      "run",
+      "ruff",
+      "check",
+      "."
+    ]
+  },
+  "python-format": {
+    "result": "FAIL",
+    "exit_code": 1,
+    "command": [
+      "uv",
+      "run",
+      "ruff",
+      "format",
+      "--check",
+      "."
+    ]
+  },
+  "mypy": {
+    "result": "PASS",
+    "exit_code": 0,
+    "command": [
+      "uv",
+      "run",
+      "mypy"
+    ]
+  },
+  "openapi-export": {
+    "result": "PASS",
+    "exit_code": 0,
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/export_openapi.py"
+    ]
+  },
+  "generated": {
+    "result": "PASS",
+    "exit_code": 0,
+    "command": [
+      "npm",
+      "run",
+      "check:generated"
+    ]
+  },
+  "sdk-format": {
+    "result": "PASS",
+    "exit_code": 0,
+    "command": [
+      "npm",
+      "run",
+      "format:check"
+    ]
+  },
+  "sdk-build": {
+    "result": "PASS",
+    "exit_code": 0,
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ]
+  },
+  "sdk-typecheck": {
+    "result": "PASS",
+    "exit_code": 0,
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ]
+  }
+}

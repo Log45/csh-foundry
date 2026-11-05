@@ -1,0 +1,7 @@
+
+> @foundry/studio@0.8.0 format:check
+> prettier --check "app/**/*.{ts,tsx,css}" "components/**/*.tsx" "features/**/*.tsx" lib/api.ts lib/server.ts "tests/**/*.{ts,tsx,mjs}" next.config.ts playwright.config.ts vitest.config.ts proxy.ts instrumentation.ts
+
+Checking formatting...
+[warn] features/governed-processing.tsx
+[warn] Code style issues found in the above file. Run Prettier with --write to fix.

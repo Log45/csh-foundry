@@ -1,0 +1,34 @@
+{
+  "name": "@foundry/developer-workspace",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "packages/typescript-sdk",
+    "packages/react-sdk",
+    "apps/sdk-example"
+  ],
+  "scripts": {
+    "generate": "python3 scripts/generate_platform_sdk.py && openapi-typescript apps/studio/lib/openapi.json -o packages/typescript-sdk/src/schema.ts --default-non-nullable false",
+    "check:generated": "python3 scripts/generate_platform_sdk.py --check && node scripts/check_sdk_schema.mjs",
+    "build": "npm run build -w @foundry/sdk && npm run build -w @foundry/react && npm run build -w @foundry/sdk-example",
+    "typecheck": "tsc --noEmit -p tsconfig.tests.json && npm run typecheck -w @foundry/sdk-example",
+    "test": "vitest run",
+    "format": "prettier --write packages/{typescript-sdk,react-sdk}/src apps/sdk-example/{src,app,tests} apps/sdk-example/*.ts tests/sdk scripts/*.mjs",
+    "format:check": "prettier --check packages/{typescript-sdk,react-sdk}/src apps/sdk-example/{src,app,tests} apps/sdk-example/*.ts tests/sdk scripts/*.mjs",
+    "test:consumer": "node scripts/smoke_sdk_consumer.mjs"
+  },
+  "devDependencies": {
+    "@testing-library/react": "16.3.3",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "jsdom": "30.1.3",
+    "openapi-typescript": "7.13.0",
+    "prettier": "3.9.10",
+    "typescript": "5.9.3",
+    "vitest": "5.0.5"
+  }
+}

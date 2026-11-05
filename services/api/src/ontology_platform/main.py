@@ -19,6 +19,7 @@ from ontology_platform.api.v1.routes import router
 from ontology_platform.artifacts.config import StorageSettings
 from ontology_platform.artifacts.routes import router as artifact_router
 from ontology_platform.artifacts.s3 import S3ArtifactStore
+from ontology_platform.automations.routes import router as automation_router
 from ontology_platform.branching.routes import router as branch_router
 from ontology_platform.config import Settings, get_settings
 from ontology_platform.datasets.routes import router as dataset_router
@@ -26,10 +27,12 @@ from ontology_platform.db.governance import SCHEMA_REVISION
 from ontology_platform.db.session import make_engine, require_runtime_role
 from ontology_platform.dependencies import get_session
 from ontology_platform.errors import ApplicationError
+from ontology_platform.functions.routes import router as function_router
 from ontology_platform.ingestion.catalog import SourceCatalog
 from ontology_platform.ingestion.routes import router as ingestion_router
 from ontology_platform.interoperability.routes import router as interchange_router
 from ontology_platform.mappings.routes import router as mapping_router
+from ontology_platform.media.routes import router as media_router
 from ontology_platform.operations import RequestTelemetry, Telemetry, TransportBounds
 from ontology_platform.pipelines.routes import router as pipeline_router
 from ontology_platform.projects.routes import router as project_router
@@ -102,6 +105,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(dataset_router)
     app.include_router(pipeline_router)
     app.include_router(mapping_router)
+    app.include_router(media_router)
+    app.include_router(function_router)
+    app.include_router(automation_router)
+    app.add_middleware(
+        ActionPayloadLimit,
+        paths=("/media-sets", "/functions", "/automations"),
+        code="governed_payload_too_large",
+        message="Governed request exceeds 64 KiB",
+    )
     app.add_middleware(
         ActionPayloadLimit,
         paths=("/artifacts", "/datasets"),

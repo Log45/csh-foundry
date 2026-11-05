@@ -3642,3 +3642,20 @@ strict conversion, relationship reconciliation, durable execution, provenance an
 This supersedes earlier statements that Phase 15 requires approval. ADR 0040 and the Phase 15 report
 record the implementation and executed acceptance evidence. Phase 16 and later milestones remain
 unapproved. Section 23B production deployment/certification remains blocked.
+
+## Phase 16 scoped authorization (2026-11-04)
+
+The explicit Phase 16 request authorizes milestone F's TypeScript/React SDK, generated contract
+integration, secure existing-session access, starter application and future Code Workspace design
+contract. ADR 0041 records the scope difference: new application-registration backend and Action
+Builder expansion are not part of this request. No workspace/Git/container/IDE/hosting infrastructure,
+Phase 17 implementation or public package publication is authorized. See docs/development/phase-16-report.md
+for executed acceptance; Section 23B production release/certification remains blocked.
+
+## Phase 17 authorization addendum (2026-11-04)
+
+The explicit Phase 17 request authorizes milestone G only: governed Media Sets (including PDF per
+23A.7), closed trusted typed functions and durable manual/scheduled/allowlisted-event automations,
+with existing ArtifactStore, execution jobs, Studio and SDK integration. ADR 0042 records the boundary.
+No arbitrary user code, Code Workspace, hosting, Phase 18 or production certification is authorized.
+Section 23B remains BLOCKED. Local acceptance must be established in phase-17-report.md.

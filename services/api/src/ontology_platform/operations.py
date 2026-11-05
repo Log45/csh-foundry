@@ -47,7 +47,8 @@ class TransportBounds:
         # Artifact byte routes enforce their own streamed size and integrity bounds. Keep
         # metadata/ontology buffering unchanged; never buffer file bodies in middleware.
         if scope.get("method") in {"GET", "PUT"} and re.fullmatch(
-            r"/api/v1/(?:artifacts|datasets)/[0-9a-fA-F-]{36}/versions/[0-9a-fA-F-]{36}/content",
+            r"/api/v1/(?:(?:artifacts|datasets)/[0-9a-fA-F-]{36}/versions/"
+            r"[0-9a-fA-F-]{36}|media-sets/[0-9a-fA-F-]{36}/items/[0-9a-fA-F-]{36})/content",
             scope.get("path", ""),
         ):
             started = False

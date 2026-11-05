@@ -71,7 +71,8 @@ class ArtifactService(ProjectService):
         return key
 
     def create(self, p: Principal, project: UUID, body: CreateArtifact) -> ResourceView:
-        self.storage()
+        if self.resource_kind not in {"FUNCTION", "AUTOMATION"}:
+            self.storage()
         with self.scope(p) as s:
             self.project(s, p, project, write=True)
             self.destination(s, p, project, body.folder_id)

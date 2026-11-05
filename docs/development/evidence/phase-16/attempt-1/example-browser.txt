@@ -1,0 +1,50 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-434b141baad5_default  Creating
+ Network phase15-434b141baad5_default  Created
+ Volume "phase15-434b141baad5_minio-data"  Creating
+ Volume "phase15-434b141baad5_minio-data"  Created
+ Container phase15-434b141baad5-minio-1  Creating
+ Container phase15-434b141baad5-minio-1  Created
+ Container phase15-434b141baad5-minio-1  Starting
+ Container phase15-434b141baad5-minio-1  Started
+ Container phase15-434b141baad5-minio-1  Waiting
+ Container phase15-434b141baad5-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-434b141baad5-minio-1  Restarting
+ Container phase15-434b141baad5-minio-1  Started
+ Container phase15-434b141baad5-minio-1  Running
+ Container phase15-434b141baad5-minio-1  Waiting
+ Container phase15-434b141baad5-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+Python suite NOT RUN in this explicit browser-only selection
+
+> @foundry/sdk-example@0.16.0 test:e2e
+> playwright test
+
+
+Running 1 test using 1 worker
+
+(node:88947) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/application.spec.ts:2:1 › real OIDC, tenant, SDK queries, errors and session invalidation (9.5s)
+
+  1 passed (10.3s)
+ Container phase15-434b141baad5-minio-1  Stopping
+ Container phase15-434b141baad5-minio-1  Stopped
+ Container phase15-434b141baad5-minio-1  Removing
+ Container phase15-434b141baad5-minio-1  Removed
+ Volume phase15-434b141baad5_minio-data  Removing
+ Network phase15-434b141baad5_default  Removing
+ Volume phase15-434b141baad5_minio-data  Removed
+ Network phase15-434b141baad5_default  Removed

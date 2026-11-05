@@ -20,3 +20,11 @@ external/
 *.tsbuildinfo
 apps/studio/test-results/
 apps/studio/playwright-report/
+
+# Phase 16 local SDK builds
+packages/typescript-sdk/dist/
+packages/react-sdk/dist/
+apps/sdk-example/dist/
+*.tgz
+apps/sdk-example/test-results/
+apps/sdk-example/playwright-report/

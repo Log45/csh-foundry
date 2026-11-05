@@ -5860,6 +5860,1869 @@
         }
       }
     },
+    "/api/v1/projects/{project_id}/media-sets": {
+      "post": {
+        "tags": [
+          "media-sets"
+        ],
+        "summary": "Create",
+        "operationId": "create_api_v1_projects__project_id__media_sets_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateArtifact"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/media-sets/{set_id}": {
+      "get": {
+        "tags": [
+          "media-sets"
+        ],
+        "summary": "Get",
+        "operationId": "get_api_v1_media_sets__set_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "set_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Set Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/media-sets/{set_id}/validate": {
+      "post": {
+        "tags": [
+          "media-sets"
+        ],
+        "summary": "Validate",
+        "operationId": "validate_api_v1_media_sets__set_id__validate_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "set_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Set Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Snapshot"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Snapshot"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/media-sets/{set_id}/definitions": {
+      "post": {
+        "tags": [
+          "media-sets"
+        ],
+        "summary": "Publish",
+        "operationId": "publish_api_v1_media_sets__set_id__definitions_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "set_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Set Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Snapshot"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaSnapshotView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "media-sets"
+        ],
+        "summary": "Definitions",
+        "operationId": "definitions_api_v1_media_sets__set_id__definitions_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "set_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Set Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MediaSnapshotView"
+                  },
+                  "title": "Response Definitions Api V1 Media Sets  Set Id  Definitions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/media-sets/{set_id}/definitions/{definition_id}": {
+      "get": {
+        "tags": [
+          "media-sets"
+        ],
+        "summary": "Definition",
+        "operationId": "definition_api_v1_media_sets__set_id__definitions__definition_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "set_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Set Id"
+            }
+          },
+          {
+            "name": "definition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Definition Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaSnapshotView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/media-sets/{set_id}/items": {
+      "post": {
+        "tags": [
+          "media-sets"
+        ],
+        "summary": "Attach",
+        "operationId": "attach_api_v1_media_sets__set_id__items_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "set_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Set Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttachMedia"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "media-sets"
+        ],
+        "summary": "Items",
+        "operationId": "items_api_v1_media_sets__set_id__items_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "set_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Set Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemView"
+                  },
+                  "title": "Response Items Api V1 Media Sets  Set Id  Items Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/media-sets/{set_id}/items/{item_id}": {
+      "get": {
+        "tags": [
+          "media-sets"
+        ],
+        "summary": "Item",
+        "operationId": "item_api_v1_media_sets__set_id__items__item_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "set_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Set Id"
+            }
+          },
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Item Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/media-sets/{set_id}/items/{item_id}/content": {
+      "get": {
+        "tags": [
+          "media-sets"
+        ],
+        "summary": "Content",
+        "operationId": "content_api_v1_media_sets__set_id__items__item_id__content_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "set_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Set Id"
+            }
+          },
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Item Id"
+            }
+          },
+          {
+            "name": "preview",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Preview"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/media-sets/{set_id}/items/{item_id}/lineage": {
+      "get": {
+        "tags": [
+          "media-sets"
+        ],
+        "summary": "Lineage",
+        "operationId": "lineage_api_v1_media_sets__set_id__items__item_id__lineage_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "set_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Set Id"
+            }
+          },
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Item Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/functions": {
+      "post": {
+        "tags": [
+          "functions"
+        ],
+        "summary": "Create",
+        "operationId": "create_api_v1_projects__project_id__functions_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateArtifact"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/functions/{function_id}": {
+      "get": {
+        "tags": [
+          "functions"
+        ],
+        "summary": "Get",
+        "operationId": "get_api_v1_functions__function_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "function_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Function Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/functions/{function_id}/validate": {
+      "post": {
+        "tags": [
+          "functions"
+        ],
+        "summary": "Validate",
+        "operationId": "validate_api_v1_functions__function_id__validate_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "function_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Function Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FunctionDefinition"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FunctionDefinition"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/functions/{function_id}/definitions": {
+      "post": {
+        "tags": [
+          "functions"
+        ],
+        "summary": "Publish",
+        "operationId": "publish_api_v1_functions__function_id__definitions_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "function_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Function Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FunctionDefinition"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FunctionDefinitionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "functions"
+        ],
+        "summary": "Definitions",
+        "operationId": "definitions_api_v1_functions__function_id__definitions_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "function_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Function Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FunctionDefinitionView"
+                  },
+                  "title": "Response Definitions Api V1 Functions  Function Id  Definitions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/functions/{function_id}/definitions/{definition_id}": {
+      "get": {
+        "tags": [
+          "functions"
+        ],
+        "summary": "Definition",
+        "operationId": "definition_api_v1_functions__function_id__definitions__definition_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "function_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Function Id"
+            }
+          },
+          {
+            "name": "definition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Definition Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FunctionDefinitionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/functions/{function_id}/runs": {
+      "post": {
+        "tags": [
+          "functions"
+        ],
+        "summary": "Invoke",
+        "operationId": "invoke_api_v1_functions__function_id__runs_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "function_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Function Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Invoke"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecutionJobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "functions"
+        ],
+        "summary": "History",
+        "operationId": "history_api_v1_functions__function_id__runs_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "function_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Function Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExecutionJobView"
+                  },
+                  "title": "Response History Api V1 Functions  Function Id  Runs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/function-runs/{job_id}/result": {
+      "get": {
+        "tags": [
+          "functions"
+        ],
+        "summary": "Result",
+        "operationId": "result_api_v1_function_runs__job_id__result_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/function-runs/{job_id}/provenance": {
+      "get": {
+        "tags": [
+          "functions"
+        ],
+        "summary": "Provenance",
+        "operationId": "provenance_api_v1_function_runs__job_id__provenance_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Provenance Api V1 Function Runs  Job Id  Provenance Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/automations": {
+      "post": {
+        "tags": [
+          "automations"
+        ],
+        "summary": "Create",
+        "operationId": "create_api_v1_projects__project_id__automations_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateArtifact"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/automations/{automation_id}": {
+      "get": {
+        "tags": [
+          "automations"
+        ],
+        "summary": "Get",
+        "operationId": "get_api_v1_automations__automation_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "automation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Automation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/automations/{automation_id}/validate": {
+      "post": {
+        "tags": [
+          "automations"
+        ],
+        "summary": "Validate",
+        "operationId": "validate_api_v1_automations__automation_id__validate_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "automation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Automation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AutomationDefinition"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutomationDefinition"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/automations/{automation_id}/definitions": {
+      "post": {
+        "tags": [
+          "automations"
+        ],
+        "summary": "Publish",
+        "operationId": "publish_api_v1_automations__automation_id__definitions_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "automation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Automation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AutomationDefinition"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutomationDefinitionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "automations"
+        ],
+        "summary": "Definitions",
+        "operationId": "definitions_api_v1_automations__automation_id__definitions_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "automation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Automation Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AutomationDefinitionView"
+                  },
+                  "title": "Response Definitions Api V1 Automations  Automation Id  Definitions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/automations/{automation_id}/definitions/{definition_id}": {
+      "get": {
+        "tags": [
+          "automations"
+        ],
+        "summary": "Definition",
+        "operationId": "definition_api_v1_automations__automation_id__definitions__definition_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "automation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Automation Id"
+            }
+          },
+          {
+            "name": "definition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Definition Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutomationDefinitionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/automations/{automation_id}/activation": {
+      "put": {
+        "tags": [
+          "automations"
+        ],
+        "summary": "Enable",
+        "operationId": "enable_api_v1_automations__automation_id__activation_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "automation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Automation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Enable"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduleView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/automations/{automation_id}/schedule": {
+      "get": {
+        "tags": [
+          "automations"
+        ],
+        "summary": "Schedule",
+        "operationId": "schedule_api_v1_automations__automation_id__schedule_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "automation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Automation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduleView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/automations/{automation_id}/trigger": {
+      "post": {
+        "tags": [
+          "automations"
+        ],
+        "summary": "Trigger",
+        "operationId": "trigger_api_v1_automations__automation_id__trigger_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "automation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Automation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Manual"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/automations/{automation_id}/runs": {
+      "get": {
+        "tags": [
+          "automations"
+        ],
+        "summary": "History",
+        "operationId": "history_api_v1_automations__automation_id__runs_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "automation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Automation Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReceiptView"
+                  },
+                  "title": "Response History Api V1 Automations  Automation Id  Runs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/ontologies/{ontology_id}/branches": {
       "post": {
         "tags": [
@@ -10960,6 +12823,131 @@
         ],
         "title": "AssignmentInput"
       },
+      "AttachMedia": {
+        "properties": {
+          "artifact_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Artifact Id"
+          },
+          "artifact_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Artifact Version Id"
+          },
+          "media_type": {
+            "type": "string",
+            "enum": [
+              "image/png",
+              "image/jpeg",
+              "audio/wav",
+              "video/mp4",
+              "application/pdf"
+            ],
+            "title": "Media Type"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "artifact_id",
+          "artifact_version_id",
+          "media_type"
+        ],
+        "title": "AttachMedia"
+      },
+      "AutomationDefinition": {
+        "properties": {
+          "trigger": {
+            "$ref": "#/components/schemas/Trigger"
+          },
+          "function_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Function Id"
+          },
+          "function_definition_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Function Definition Id"
+          },
+          "inputs": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "maxProperties": 32,
+            "title": "Inputs"
+          },
+          "missed_run_policy": {
+            "type": "string",
+            "const": "coalesce",
+            "title": "Missed Run Policy",
+            "default": "coalesce"
+          },
+          "retry_policy": {
+            "type": "string",
+            "const": "bounded-idempotent",
+            "title": "Retry Policy",
+            "default": "bounded-idempotent"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "trigger",
+          "function_id",
+          "function_definition_id",
+          "inputs"
+        ],
+        "title": "AutomationDefinition"
+      },
+      "AutomationDefinitionView": {
+        "properties": {
+          "resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Resource Id"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "created_by": {
+            "type": "string",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "specification": {
+            "$ref": "#/components/schemas/AutomationDefinition"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "resource_id",
+          "id",
+          "kind",
+          "sequence",
+          "created_by",
+          "created_at",
+          "specification"
+        ],
+        "title": "AutomationDefinitionView"
+      },
       "BranchCreate": {
         "properties": {
           "name": {
@@ -12183,6 +14171,26 @@
         ],
         "title": "DraftHandoff"
       },
+      "Enable": {
+        "properties": {
+          "definition_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Definition Id"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "definition_id",
+          "enabled"
+        ],
+        "title": "Enable"
+      },
       "Endpoint": {
         "properties": {
           "object_type": {
@@ -12822,6 +14830,169 @@
         ],
         "title": "FolderView"
       },
+      "FunctionDefinition": {
+        "properties": {
+          "implementation": {
+            "type": "string",
+            "enum": [
+              "identity.v1",
+              "text.normalize.v1",
+              "number.add.v1"
+            ],
+            "title": "Implementation"
+          },
+          "input_schema": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ValueType"
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 32,
+            "minProperties": 1,
+            "title": "Input Schema"
+          },
+          "output_schema": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ValueType"
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 32,
+            "minProperties": 1,
+            "title": "Output Schema"
+          },
+          "configuration": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "maxProperties": 0,
+            "title": "Configuration"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/FunctionLimits"
+          },
+          "required_permissions": {
+            "type": "string",
+            "const": "project:write",
+            "title": "Required Permissions",
+            "default": "project:write"
+          },
+          "deterministic": {
+            "type": "boolean",
+            "const": true,
+            "title": "Deterministic",
+            "default": true
+          },
+          "idempotent": {
+            "type": "boolean",
+            "const": true,
+            "title": "Idempotent",
+            "default": true
+          },
+          "error_contract": {
+            "type": "string",
+            "const": "bounded-v1",
+            "title": "Error Contract",
+            "default": "bounded-v1"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "implementation",
+          "input_schema",
+          "output_schema"
+        ],
+        "title": "FunctionDefinition"
+      },
+      "FunctionDefinitionView": {
+        "properties": {
+          "resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Resource Id"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "created_by": {
+            "type": "string",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "specification": {
+            "$ref": "#/components/schemas/FunctionDefinition"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "resource_id",
+          "id",
+          "kind",
+          "sequence",
+          "created_by",
+          "created_at",
+          "specification"
+        ],
+        "title": "FunctionDefinitionView"
+      },
+      "FunctionLimits": {
+        "properties": {
+          "wall_seconds": {
+            "type": "integer",
+            "maximum": 60.0,
+            "minimum": 1.0,
+            "title": "Wall Seconds",
+            "default": 30
+          },
+          "cpu_seconds": {
+            "type": "integer",
+            "maximum": 30.0,
+            "minimum": 1.0,
+            "title": "Cpu Seconds",
+            "default": 10
+          },
+          "memory_bytes": {
+            "type": "integer",
+            "maximum": 536870912.0,
+            "minimum": 134217728.0,
+            "title": "Memory Bytes",
+            "default": 268435456
+          },
+          "temporary_bytes": {
+            "type": "integer",
+            "maximum": 16777216.0,
+            "minimum": 65536.0,
+            "title": "Temporary Bytes",
+            "default": 8388608
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "FunctionLimits"
+      },
       "GenerateInput": {
         "properties": {
           "version": {
@@ -13391,6 +15562,141 @@
         ],
         "title": "InputVersion"
       },
+      "Invoke": {
+        "properties": {
+          "definition_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Definition Id"
+          },
+          "inputs": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "maxProperties": 32,
+            "title": "Inputs"
+          },
+          "idempotency_key": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Idempotency Key"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "definition_id",
+          "inputs",
+          "idempotency_key"
+        ],
+        "title": "Invoke"
+      },
+      "ItemView": {
+        "properties": {
+          "set_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Set Id"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "artifact_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Artifact Id"
+          },
+          "artifact_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Artifact Version Id"
+          },
+          "media_type": {
+            "type": "string",
+            "title": "Media Type"
+          },
+          "size": {
+            "type": "integer",
+            "title": "Size"
+          },
+          "checksum": {
+            "type": "string",
+            "title": "Checksum"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "metadata": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "title": "Metadata"
+          },
+          "preview_artifact_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preview Artifact Id"
+          },
+          "preview_version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preview Version Id"
+          },
+          "validation_status": {
+            "type": "string",
+            "const": "VALID",
+            "title": "Validation Status",
+            "default": "VALID"
+          },
+          "created_by": {
+            "type": "string",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "set_id",
+          "id",
+          "artifact_id",
+          "artifact_version_id",
+          "media_type",
+          "size",
+          "checksum",
+          "filename",
+          "metadata",
+          "preview_artifact_id",
+          "preview_version_id",
+          "created_by",
+          "created_at"
+        ],
+        "title": "ItemView"
+      },
       "JobInput": {
         "properties": {
           "operation": {
@@ -13749,6 +16055,22 @@
         ],
         "title": "LiteralValue"
       },
+      "Manual": {
+        "properties": {
+          "idempotency_key": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Idempotency Key"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "idempotency_key"
+        ],
+        "title": "Manual"
+      },
       "MappingDefinitionView": {
         "properties": {
           "id": {
@@ -14097,6 +16419,52 @@
           "objects"
         ],
         "title": "MappingSpec"
+      },
+      "MediaSnapshotView": {
+        "properties": {
+          "resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Resource Id"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "created_by": {
+            "type": "string",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "specification": {
+            "$ref": "#/components/schemas/Snapshot"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "resource_id",
+          "id",
+          "kind",
+          "sequence",
+          "created_by",
+          "created_at",
+          "specification"
+        ],
+        "title": "MediaSnapshotView"
       },
       "MemberChange": {
         "properties": {
@@ -15846,6 +18214,75 @@
           }
         ]
       },
+      "ReceiptView": {
+        "properties": {
+          "automation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Automation Id"
+          },
+          "definition_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Definition Id"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "trigger_kind": {
+            "type": "string",
+            "title": "Trigger Kind"
+          },
+          "trigger_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Trigger At"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "automation_id",
+          "definition_id",
+          "id",
+          "trigger_kind",
+          "trigger_at",
+          "job_id",
+          "error",
+          "created_at"
+        ],
+        "title": "ReceiptView"
+      },
       "RelationshipMapping-Output": {
         "properties": {
           "link_type": {
@@ -15923,7 +18360,10 @@
                   "ARTIFACT",
                   "DATASET",
                   "PIPELINE",
-                  "MAPPING"
+                  "MAPPING",
+                  "MEDIA_SET",
+                  "FUNCTION",
+                  "AUTOMATION"
                 ]
               }
             ],
@@ -16041,6 +18481,41 @@
           "updated_at"
         ],
         "title": "ResourceView"
+      },
+      "ResultView": {
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Job Id"
+          },
+          "definition_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Definition Id"
+          },
+          "values": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "title": "Values"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "job_id",
+          "definition_id",
+          "values",
+          "created_at"
+        ],
+        "title": "ResultView"
       },
       "RevisionView": {
         "properties": {
@@ -16410,6 +18885,62 @@
         ],
         "title": "SDKCompatibility"
       },
+      "ScheduleView": {
+        "properties": {
+          "automation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Automation Id"
+          },
+          "definition_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Definition Id"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "next_run_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Run At"
+          },
+          "owner": {
+            "type": "string",
+            "title": "Owner"
+          },
+          "last_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Error"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "automation_id",
+          "definition_id",
+          "enabled",
+          "next_run_at",
+          "owner",
+          "last_error"
+        ],
+        "title": "ScheduleView"
+      },
       "SchemaChange": {
         "properties": {
           "path": {
@@ -16498,6 +19029,25 @@
           "project_id"
         ],
         "title": "ShareView"
+      },
+      "Snapshot": {
+        "properties": {
+          "items": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 10000,
+            "title": "Items"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "Snapshot"
       },
       "SnapshotView": {
         "properties": {
@@ -17082,6 +19632,83 @@
         ],
         "title": "TraversalStep"
       },
+      "Trigger": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "manual",
+              "interval",
+              "daily",
+              "action.committed"
+            ],
+            "title": "Kind"
+          },
+          "interval_seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 31536000.0,
+                "minimum": 60.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval Seconds"
+          },
+          "hour": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 23.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hour"
+          },
+          "minute": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 59.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minute"
+          },
+          "timezone": {
+            "type": "string",
+            "const": "UTC",
+            "title": "Timezone",
+            "default": "UTC"
+          },
+          "ontology_resource_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ontology Resource Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "title": "Trigger"
+      },
       "UpdateFolder": {
         "properties": {
           "expected_revision": {
@@ -17276,6 +19903,31 @@
           "conversion"
         ],
         "title": "Value"
+      },
+      "ValueType": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "string",
+              "integer",
+              "number",
+              "boolean"
+            ],
+            "title": "Type"
+          },
+          "nullable": {
+            "type": "boolean",
+            "title": "Nullable",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "title": "ValueType"
       },
       "VersionView": {
         "properties": {

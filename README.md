@@ -407,3 +407,14 @@ Phase 15 adds governed dataset-to-ontology mapping and materialization. See
 worker and canonical reconciliation services; committed batches are visible during incomplete runs.
 The additive migration is `0022_materialization`; never apply it to shared data without authorization.
 Phase 16 is excluded. Production remains blocked under Section 23B.
+
+Phase 16 developer packages: [TypeScript SDK](packages/typescript-sdk/README.md),
+[React hooks](packages/react-sdk/README.md), [local starter application](apps/sdk-example/README.md),
+and [future workspace design contract](docs/development/code-workspace-sdk-contract.md).
+Packages are local build artifacts; production remains blocked under PLANS.md Section 23B.
+
+Phase 17 adds governed Media Sets, trusted typed functions and durable automations. See
+[API/workflow contracts](docs/api/media-functions-automations.md),
+[resource limits and trust boundary](docs/development/phase-17-limits.md), and the
+[Phase 17 validation report](docs/development/phase-17-report.md). Use disposable test schemas;
+`0023_media_functions` is not automatically applied to the shared developer database.

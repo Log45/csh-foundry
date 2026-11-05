@@ -5,6 +5,7 @@ import time
 
 from ontology_platform.artifacts.config import StorageSettings
 from ontology_platform.artifacts.s3 import S3ArtifactStore
+from ontology_platform.automations.service import AutomationService
 from ontology_platform.config import get_settings
 from ontology_platform.db.session import make_engine
 from ontology_platform.execution.worker import ExecutionWorker
@@ -25,7 +26,7 @@ def main() -> None:
             if settings.trusted_local_identity
             else PlatformAuthorizer(sessions),
             storage,
-            S3ArtifactStore(storage),
+            S3ArtifactStore(storage) if storage.backend == "s3" else None,
         )
     )
     running = True
@@ -37,7 +38,11 @@ def main() -> None:
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
     try:
+        automations = AutomationService(
+            sessions, worker.service.authorizer, storage, worker.service.store
+        )
         while running:
+            automations.tick()
             if worker.run_one() is None:
                 time.sleep(1)
     finally:

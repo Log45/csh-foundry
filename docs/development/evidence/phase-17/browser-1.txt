@@ -1,0 +1,113 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-1aea7781c6b2_default  Creating
+ Network phase15-1aea7781c6b2_default  Created
+ Volume "phase15-1aea7781c6b2_minio-data"  Creating
+ Volume "phase15-1aea7781c6b2_minio-data"  Created
+ Container phase15-1aea7781c6b2-minio-1  Creating
+ Container phase15-1aea7781c6b2-minio-1  Created
+ Container phase15-1aea7781c6b2-minio-1  Starting
+ Container phase15-1aea7781c6b2-minio-1  Started
+ Container phase15-1aea7781c6b2-minio-1  Waiting
+ Container phase15-1aea7781c6b2-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-1aea7781c6b2-minio-1  Restarting
+ Container phase15-1aea7781c6b2-minio-1  Started
+ Container phase15-1aea7781c6b2-minio-1  Running
+ Container phase15-1aea7781c6b2-minio-1  Waiting
+ Container phase15-1aea7781c6b2-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+Python suite NOT RUN in this explicit browser-only selection
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test
+
+
+Running 12 tests using 1 worker
+
+(node:42353) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/e2e/governed-processing.spec.ts:4:1 › governed media, typed functions and manual automations use the authenticated Studio (19.5s)
+(node:42741) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 tests/e2e/workflow.spec.ts:21:1 › verified browser reference workflow (20.2s)
+  ✓   3 tests/e2e/workflow.spec.ts:211:1 › CSRF and unauthenticated proxy requests fail closed (705ms)
+  ✓   4 tests/e2e/workflow.spec.ts:226:1 › native authoring, OWL diagnostics, tenant isolation and session loss (2.5s)
+  ✓   5 tests/e2e/workflow.spec.ts:310:1 › schema branching, resolved merge and private SDK download (3.1s)
+  ✓   6 tests/e2e/workflow.spec.ts:411:3 › durable sessions survive replica restart and logout revokes every replica (2.2s)
+  ✓   7 tests/e2e/workflow.spec.ts:474:1 › Project workspace navigates folders and governed canonical references (2.1s)
+  ✓   8 tests/e2e/workflow.spec.ts:535:1 › Project artifacts upload immutable versions and download exact bytes (2.0s)
+  ✓   9 tests/e2e/workflow.spec.ts:595:1 › Project dataset uploads, discovers schema and previews historical versions (5.5s)
+  ✓  10 tests/e2e/workflow.spec.ts:666:1 › governed pipeline publishes immutable output and real lineage (9.0s)
+  ✓  11 tests/e2e/workflow.spec.ts:772:1 › governed mapping validates materializes and records source provenance (15.3s)
+(node:43152) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS_BROWSER_MAXIMUM {"source_bytes":1073741824,"rows":262144,"format":"csv","asynchronous_validation":true}
+  ✓  12 tests/e2e/maximum.spec.ts:6:1 › exact 1 GiB browser upload streams through BFF and asynchronous validation (1.1m)
+
+
+  1) tests/e2e/governed-processing.spec.ts:4:1 › governed media, typed functions and manual automations use the authenticated Studio 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[role=alert]')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('[role=alert]') with timeout 5000ms
+      - waiting for locator('[role=alert]')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      160 |   await expect(auto.locator("pre").last()).toContainText('"enabled": false');
+      161 |   expect(media.id).toBeTruthy();
+    > 162 |   await expect(page.locator("[role=alert]")).toHaveCount(0);
+          |                                              ^
+      163 | });
+      164 |
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/governed-processing.spec.ts:162:46
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/governed-processing-govern-e42e0-se-the-authenticated-Studio/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/governed-processing-govern-e42e0-se-the-authenticated-Studio/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/governed-processing-govern-e42e0-se-the-authenticated-Studio/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/governed-processing-govern-e42e0-se-the-authenticated-Studio/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/e2e/governed-processing.spec.ts:4:1 › governed media, typed functions and manual automations use the authenticated Studio 
+  11 passed (2.5m)
+ Container phase15-1aea7781c6b2-minio-1  Stopping
+ Container phase15-1aea7781c6b2-minio-1  Stopped
+ Container phase15-1aea7781c6b2-minio-1  Removing
+ Container phase15-1aea7781c6b2-minio-1  Removed
+ Volume phase15-1aea7781c6b2_minio-data  Removing
+ Network phase15-1aea7781c6b2_default  Removing
+ Volume phase15-1aea7781c6b2_minio-data  Removed
+ Network phase15-1aea7781c6b2_default  Removed
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 171, in <module>
+    run("uv", "run", "python", "scripts/test_studio.py")
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 99, in run
+    raise subprocess.CalledProcessError(code, cmd)
+subprocess.CalledProcessError: Command '('uv', 'run', 'python', 'scripts/test_studio.py')' returned non-zero exit status 1.

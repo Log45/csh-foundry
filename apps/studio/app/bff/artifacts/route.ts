@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       throw new BoundaryError(409, "tenant_changed");
     const url = new URL(request.url);
     const family = url.searchParams.get("family") ?? "artifacts";
-    if (!["artifacts", "datasets"].includes(family))
+    if (!["artifacts", "datasets", "media-sets"].includes(family))
       throw new BoundaryError(400, "invalid_transfer");
     const artifact = url.searchParams.get("artifact");
     const version = url.searchParams.get("version");
@@ -28,7 +28,10 @@ export async function POST(request: Request) {
       !version ||
       !uuid.test(artifact) ||
       !uuid.test(version) ||
-      !["upload", "download"].includes(operation ?? "")
+      !["upload", "download", "preview"].includes(operation ?? "") ||
+      (family === "media-sets"
+        ? operation === "upload"
+        : operation === "preview")
     )
       throw new BoundaryError(400, "invalid_transfer");
     const length = request.headers.get("content-length");
@@ -44,23 +47,25 @@ export async function POST(request: Request) {
         },
       });
     const upload = operation === "upload";
-    const response = await fetch(
-      `${config().api}/api/v1/${family}/${artifact}/versions/${version}/content`,
-      {
-        method: upload ? "PUT" : "GET",
-        headers: {
-          Authorization: `Bearer ${value.token}`,
-          "X-Tenant-ID": value.tenant,
-          "Content-Type": "application/octet-stream",
-        },
-        ...(upload && request.body
-          ? { body: request.body.pipeThrough(bound()), duplex: "half" }
-          : {}),
-        cache: "no-store",
-        redirect: "error",
-        signal: AbortSignal.timeout(1800000),
-      } as RequestInit,
-    );
+    const target =
+      family === "media-sets"
+        ? `${config().api}/api/v1/media-sets/${artifact}/items/${version}/content?preview=${operation === "preview"}`
+        : `${config().api}/api/v1/${family}/${artifact}/versions/${version}/content`;
+    const response = await fetch(target, {
+      method: upload ? "PUT" : "GET",
+      headers: {
+        Authorization: `Bearer ${value.token}`,
+        "X-Tenant-ID": value.tenant,
+        "Content-Type":
+          operation === "preview" ? "image/jpeg" : "application/octet-stream",
+      },
+      ...(upload && request.body
+        ? { body: request.body.pipeThrough(bound()), duplex: "half" }
+        : {}),
+      cache: "no-store",
+      redirect: "error",
+      signal: AbortSignal.timeout(1800000),
+    } as RequestInit);
     if (!response.ok) {
       await response.body?.cancel();
       // Fixed error categories; never reflect provider responses, credentials or endpoint details.
@@ -77,7 +82,9 @@ export async function POST(request: Request) {
       headers: {
         "Content-Type": upload
           ? "application/json"
-          : "application/octet-stream",
+          : operation === "preview"
+            ? "image/jpeg"
+            : "application/octet-stream",
         "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
         "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'",

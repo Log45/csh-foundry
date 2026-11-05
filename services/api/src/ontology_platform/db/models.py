@@ -1411,14 +1411,16 @@ class Resource(Base):
         ),
         CheckConstraint(
             "resource_type IN ('ONTOLOGY_OBJECT_TYPE','ONTOLOGY_LINK_TYPE',"
-            "'ONTOLOGY_ACTION','ONTOLOGY_VERSION','ARTIFACT','DATASET','PIPELINE','MAPPING')",
+            "'ONTOLOGY_ACTION','ONTOLOGY_VERSION','ARTIFACT','DATASET','PIPELINE','MAPPING',"
+            "'MEDIA_SET','FUNCTION','AUTOMATION')",
             name="ck_resource_type",
         ),
         CheckConstraint(
-            "(resource_type IN ('ARTIFACT','DATASET','PIPELINE','MAPPING') AND ontology_id IS NULL "
+            "(resource_type IN ('ARTIFACT','DATASET','PIPELINE','MAPPING',"
+            "'MEDIA_SET','FUNCTION','AUTOMATION') AND ontology_id IS NULL "
             "AND schema_version IS NULL "
             "AND entity_id IS NULL) OR (resource_type NOT IN "
-            "('ARTIFACT','DATASET','PIPELINE','MAPPING') "
+            "('ARTIFACT','DATASET','PIPELINE','MAPPING','MEDIA_SET','FUNCTION','AUTOMATION') "
             "AND ontology_id IS NOT NULL "
             "AND schema_version IS NOT NULL AND entity_id IS NOT NULL)",
             name="ck_resource_authority_kind",
@@ -1595,7 +1597,8 @@ class ExecutionJob(Base):
             "tenant_id", "output_dataset_id", "output_version_id", name="uq_run_output"
         ),
         CheckConstraint(
-            "kind IN ('VALIDATION','PIPELINE','MATERIALIZATION')", name="ck_execution_kind"
+            "kind IN ('VALIDATION','PIPELINE','MATERIALIZATION','FUNCTION')",
+            name="ck_execution_kind",
         ),
         CheckConstraint(
             "state IN ('QUEUED','ADMITTED','RUNNING','CANCELLING',"
@@ -1625,6 +1628,8 @@ class ExecutionJob(Base):
             "AND output_dataset_id IS NOT NULL) OR "
             "(kind = 'MATERIALIZATION' AND mapping_definition_id IS NOT NULL "
             "AND definition_id IS NULL "
+            "AND validation_version_id IS NULL AND output_dataset_id IS NULL) OR "
+            "(kind = 'FUNCTION' AND definition_id IS NULL AND mapping_definition_id IS NULL "
             "AND validation_version_id IS NULL AND output_dataset_id IS NULL)",
             name="ck_execution_contract",
         ),
@@ -1720,4 +1725,218 @@ class MaterializationRecord(Base):
             name="ck_materialization_operation",
         ),
         CheckConstraint("source_record > 0", name="ck_materialization_source"),
+    )
+
+
+class GovernedDefinition(Base):
+    __tablename__ = "governed_definitions"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    resource_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    kind: Mapped[str] = mapped_column(String(20))
+    target_resource_id: Mapped[UUID | None]
+    target_definition_id: Mapped[UUID | None]
+    event_resource_id: Mapped[UUID | None]
+    sequence: Mapped[int]
+    specification: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    created_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "resource_id"], ["platform_resources.tenant_id", "platform_resources.id"]
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "target_resource_id", "target_definition_id"],
+            [
+                "governed_definitions.tenant_id",
+                "governed_definitions.resource_id",
+                "governed_definitions.id",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "event_resource_id"],
+            ["platform_resources.tenant_id", "platform_resources.id"],
+        ),
+        CheckConstraint(
+            "(kind='AUTOMATION' AND target_resource_id IS NOT NULL AND "
+            "target_definition_id IS NOT NULL) OR (kind<>'AUTOMATION' AND "
+            "target_resource_id IS NULL AND target_definition_id IS NULL "
+            "AND event_resource_id IS NULL)",
+            name="ck_governed_target",
+        ),
+        UniqueConstraint("tenant_id", "resource_id", "sequence", name="uq_governed_sequence"),
+        CheckConstraint("sequence > 0", name="ck_governed_sequence"),
+        CheckConstraint("kind IN ('MEDIA_SET','FUNCTION','AUTOMATION')", name="ck_governed_kind"),
+        CheckConstraint("octet_length(specification::text) <= 524288", name="ck_governed_bytes"),
+    )
+
+
+class MediaItem(Base):
+    __tablename__ = "media_items"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    set_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    artifact_id: Mapped[UUID]
+    artifact_version_id: Mapped[UUID]
+    media_type: Mapped[str] = mapped_column(String(100))
+    size: Mapped[int] = mapped_column(BigInteger)
+    checksum: Mapped[str] = mapped_column(String(64))
+    filename: Mapped[str] = mapped_column(Text)
+    # Avoid Declarative's reserved metadata attribute.
+    extracted: Mapped[dict[str, JsonValue]] = mapped_column("metadata", JSONB)
+    preview_artifact_id: Mapped[UUID | None]
+    preview_version_id: Mapped[UUID | None]
+    created_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "set_id"], ["platform_resources.tenant_id", "platform_resources.id"]
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "artifact_id", "artifact_version_id"],
+            [
+                "artifact_versions.tenant_id",
+                "artifact_versions.artifact_id",
+                "artifact_versions.id",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "preview_artifact_id", "preview_version_id"],
+            [
+                "artifact_versions.tenant_id",
+                "artifact_versions.artifact_id",
+                "artifact_versions.id",
+            ],
+        ),
+        UniqueConstraint(
+            "tenant_id", "set_id", "artifact_id", "artifact_version_id", name="uq_media_source"
+        ),
+        CheckConstraint("size >= 0", name="ck_media_size"),
+        CheckConstraint(
+            "media_type IN ('image/png','image/jpeg','audio/wav','video/mp4','application/pdf')",
+            name="ck_media_type",
+        ),
+        CheckConstraint(
+            "(preview_artifact_id IS NULL) = (preview_version_id IS NULL)", name="ck_media_preview"
+        ),
+    )
+
+
+class MediaMembership(Base):
+    __tablename__ = "media_memberships"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    set_id: Mapped[UUID] = mapped_column(primary_key=True)
+    version_id: Mapped[UUID] = mapped_column(primary_key=True)
+    item_id: Mapped[UUID] = mapped_column(primary_key=True)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "set_id", "version_id"],
+            [
+                "governed_definitions.tenant_id",
+                "governed_definitions.resource_id",
+                "governed_definitions.id",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "set_id", "item_id"],
+            ["media_items.tenant_id", "media_items.set_id", "media_items.id"],
+        ),
+    )
+
+
+class FunctionInvocation(Base):
+    __tablename__ = "function_invocations"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    job_id: Mapped[UUID] = mapped_column(primary_key=True)
+    function_id: Mapped[UUID]
+    definition_id: Mapped[UUID]
+    key: Mapped[str] = mapped_column(String(64))
+    actor: Mapped[str] = mapped_column(Text)
+    inputs: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "job_id"], ["execution_jobs.tenant_id", "execution_jobs.id"]
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "function_id", "definition_id"],
+            [
+                "governed_definitions.tenant_id",
+                "governed_definitions.resource_id",
+                "governed_definitions.id",
+            ],
+        ),
+        UniqueConstraint("tenant_id", "function_id", "actor", "key", name="uq_function_key"),
+        CheckConstraint("octet_length(inputs::text) <= 65536", name="ck_function_input_bytes"),
+    )
+
+
+class FunctionResult(Base):
+    __tablename__ = "function_results"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    job_id: Mapped[UUID] = mapped_column(primary_key=True)
+    definition_id: Mapped[UUID]
+    values: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "job_id"],
+            ["function_invocations.tenant_id", "function_invocations.job_id"],
+        ),
+        CheckConstraint("octet_length(values::text) <= 65536", name="ck_function_output_bytes"),
+    )
+
+
+class AutomationState(Base):
+    __tablename__ = "automation_states"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    automation_id: Mapped[UUID] = mapped_column(primary_key=True)
+    definition_id: Mapped[UUID]
+    enabled: Mapped[bool] = mapped_column(default=False)
+    activation_id: Mapped[UUID]
+    checked_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    next_run_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    event_time: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    event_id: Mapped[UUID]
+    owner: Mapped[str] = mapped_column(Text)
+    principal: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    last_error: Mapped[str | None] = mapped_column(String(100))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "automation_id", "definition_id"],
+            [
+                "governed_definitions.tenant_id",
+                "governed_definitions.resource_id",
+                "governed_definitions.id",
+            ],
+        ),
+        Index("ix_automation_due", "enabled", "next_run_at"),
+    )
+
+
+class AutomationReceipt(Base):
+    __tablename__ = "automation_receipts"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    automation_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    definition_id: Mapped[UUID]
+    dedup_key: Mapped[str] = mapped_column(String(200))
+    trigger_kind: Mapped[str] = mapped_column(String(30))
+    trigger_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    job_id: Mapped[UUID | None]
+    error: Mapped[str | None] = mapped_column(String(100))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "automation_id", "definition_id"],
+            [
+                "governed_definitions.tenant_id",
+                "governed_definitions.resource_id",
+                "governed_definitions.id",
+            ],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "job_id"], ["execution_jobs.tenant_id", "execution_jobs.id"]
+        ),
+        UniqueConstraint("tenant_id", "automation_id", "dedup_key", name="uq_automation_trigger"),
+        CheckConstraint("(job_id IS NULL) <> (error IS NULL)", name="ck_automation_outcome"),
     )

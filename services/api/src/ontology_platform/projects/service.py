@@ -554,7 +554,15 @@ class ProjectService(GovernedService):
         )
         if row is None:
             raise missing("Resource")
-        if row.resource_type not in ("ARTIFACT", "DATASET", "PIPELINE", "MAPPING"):
+        if row.resource_type not in (
+            "ARTIFACT",
+            "DATASET",
+            "PIPELINE",
+            "MAPPING",
+            "MEDIA_SET",
+            "FUNCTION",
+            "AUTOMATION",
+        ):
             self.authorizer.require(p, "schema:read", f"{p.tenant_id}/{row.ontology_id}")
         return row
 
@@ -603,7 +611,17 @@ class ProjectService(GovernedService):
                 if exc.status_code != 403:
                     raise
                 query = query.where(
-                    Resource.resource_type.in_(["ARTIFACT", "DATASET", "PIPELINE", "MAPPING"])
+                    Resource.resource_type.in_(
+                        [
+                            "ARTIFACT",
+                            "DATASET",
+                            "PIPELINE",
+                            "MAPPING",
+                            "MEDIA_SET",
+                            "FUNCTION",
+                            "AUTOMATION",
+                        ]
+                    )
                 )
             if shared:
                 query = query.where(
@@ -621,7 +639,15 @@ class ProjectService(GovernedService):
                 s.scalars(query.order_by(Resource.name, Resource.id).offset(offset).limit(limit))
             )
             for item in rows:
-                if item.resource_type not in ("ARTIFACT", "DATASET", "PIPELINE", "MAPPING"):
+                if item.resource_type not in (
+                    "ARTIFACT",
+                    "DATASET",
+                    "PIPELINE",
+                    "MAPPING",
+                    "MEDIA_SET",
+                    "FUNCTION",
+                    "AUTOMATION",
+                ):
                     self.authorizer.require(p, "schema:read", f"{p.tenant_id}/{item.ontology_id}")
             return [ResourceView.model_validate(item) for item in rows]
 

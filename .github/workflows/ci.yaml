@@ -44,6 +44,8 @@ jobs:
           cache-dependency-path: apps/studio/package-lock.json
       - run: npm ci
         working-directory: apps/studio
+      - run: npm ci
+      - run: npm run build && npm run typecheck && npm test && npm run check:generated && npm run test:consumer
       - run: uv run python scripts/validate_phase0.py
       - run: uv run python scripts/export_openapi.py
       - run: npm run generate:api

@@ -1,0 +1,453 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-0ae0ab65bfb4_default  Creating
+ Network phase15-0ae0ab65bfb4_default  Created
+ Volume "phase15-0ae0ab65bfb4_minio-data"  Creating
+ Volume "phase15-0ae0ab65bfb4_minio-data"  Created
+ Container phase15-0ae0ab65bfb4-minio-1  Creating
+ Container phase15-0ae0ab65bfb4-minio-1  Created
+ Container phase15-0ae0ab65bfb4-minio-1  Starting
+ Container phase15-0ae0ab65bfb4-minio-1  Started
+ Container phase15-0ae0ab65bfb4-minio-1  Waiting
+ Container phase15-0ae0ab65bfb4-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-0ae0ab65bfb4-minio-1  Restarting
+ Container phase15-0ae0ab65bfb4-minio-1  Started
+ Container phase15-0ae0ab65bfb4-minio-1  Running
+ Container phase15-0ae0ab65bfb4-minio-1  Waiting
+ Container phase15-0ae0ab65bfb4-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 34 items
+
+services/api/tests/test_media_functions_automations.py ................. [ 50%]
+.FFF.....FFFFF.FF                                                        [100%]
+
+=================================== FAILURES ===================================
+_______ test_real_function_execution_result_idempotency_and_immutability _______
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: column "target_resource_id" of relation "governed_definitions" does not exist
+E   LINE 1: ...ed_definitions (tenant_id, resource_id, id, kind, target_res...
+E                                                                ^
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:153: in test_real_function_execution_result_idempotency_and_immutability
+    published = svc.publish_function(p, fn.id, definition("text.normalize.v1"))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:93: in publish_function
+    return self.publish_spec(s, p, key, spec.model_dump(mode="json"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:85: in publish_spec
+    s.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) column "target_resource_id" of relation "governed_definitions" does not exist
+E   LINE 1: ...ed_definitions (tenant_id, resource_id, id, kind, target_res...
+E                                                                ^
+E   [SQL: INSERT INTO governed_definitions (tenant_id, resource_id, id, kind, target_resource_id, target_definition_id, event_resource_id, sequence, specification, created_by) VALUES (%(tenant_id)s::UUID, %(resource_id)s::UUID, %(id)s::UUID, %(kind)s::VARCHAR, %(target_resource_id)s::UUID, %(target_definition_id)s::UUID, %(event_resource_id)s::UUID, %(sequence)s::INTEGER, %(specification)s::JSONB, %(created_by)s::VARCHAR) RETURNING governed_definitions.created_at]
+E   [parameters: {'tenant_id': UUID('d1ee5c2d-29de-4e76-9f80-f52ed292b04a'), 'resource_id': UUID('ae45f004-2642-4ef1-9be3-d56fd231cda6'), 'id': UUID('8a72d670-5f39-466c-b8d0-aee39ac842cd'), 'kind': 'FUNCTION', 'target_resource_id': None, 'target_definition_id': None, 'event_resource_id': None, 'sequence': 1, 'specification': Jsonb({'implementation': 'text.normalize. ... (415 chars)), 'created_by': 'local-developer'}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+_____ test_worker_lease_recovery_cancel_stale_fence_and_unpublished_result _____
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: column "target_resource_id" of relation "governed_definitions" does not exist
+E   LINE 1: ...ed_definitions (tenant_id, resource_id, id, kind, target_res...
+E                                                                ^
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:181: in test_worker_lease_recovery_cancel_stale_fence_and_unpublished_result
+    version = svc.publish_function(p, fn.id, definition())
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:93: in publish_function
+    return self.publish_spec(s, p, key, spec.model_dump(mode="json"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:85: in publish_spec
+    s.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) column "target_resource_id" of relation "governed_definitions" does not exist
+E   LINE 1: ...ed_definitions (tenant_id, resource_id, id, kind, target_res...
+E                                                                ^
+E   [SQL: INSERT INTO governed_definitions (tenant_id, resource_id, id, kind, target_resource_id, target_definition_id, event_resource_id, sequence, specification, created_by) VALUES (%(tenant_id)s::UUID, %(resource_id)s::UUID, %(id)s::UUID, %(kind)s::VARCHAR, %(target_resource_id)s::UUID, %(target_definition_id)s::UUID, %(event_resource_id)s::UUID, %(sequence)s::INTEGER, %(specification)s::JSONB, %(created_by)s::VARCHAR) RETURNING governed_definitions.created_at]
+E   [parameters: {'tenant_id': UUID('bc7aeec5-2b6b-4157-a7a3-d7e21c3bdb05'), 'resource_id': UUID('2dcba4d3-c5f4-4490-884e-5bc0f2ae43aa'), 'id': UUID('d9fd29e5-cff6-4592-9d41-b18185a00e33'), 'kind': 'FUNCTION', 'target_resource_id': None, 'target_definition_id': None, 'event_resource_id': None, 'sequence': 1, 'specification': Jsonb({'implementation': 'identity.v1', ' ... (407 chars)), 'created_by': 'local-developer'}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+_______ test_media_real_preview_snapshot_source_and_immutable_membership _______
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: column "target_resource_id" of relation "governed_definitions" does not exist
+E   LINE 1: ...ed_definitions (tenant_id, resource_id, id, kind, target_res...
+E                                                                ^
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:214: in test_media_real_preview_snapshot_source_and_immutable_membership
+    first = svc.publish_snapshot(p, media.id, Snapshot(items=[item.id]))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/media/service.py:252: in publish_snapshot
+    result = self.publish_spec(s, p, key, body.model_dump(mode="json"))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:85: in publish_spec
+    s.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) column "target_resource_id" of relation "governed_definitions" does not exist
+E   LINE 1: ...ed_definitions (tenant_id, resource_id, id, kind, target_res...
+E                                                                ^
+E   [SQL: INSERT INTO governed_definitions (tenant_id, resource_id, id, kind, target_resource_id, target_definition_id, event_resource_id, sequence, specification, created_by) VALUES (%(tenant_id)s::UUID, %(resource_id)s::UUID, %(id)s::UUID, %(kind)s::VARCHAR, %(target_resource_id)s::UUID, %(target_definition_id)s::UUID, %(event_resource_id)s::UUID, %(sequence)s::INTEGER, %(specification)s::JSONB, %(created_by)s::VARCHAR) RETURNING governed_definitions.created_at]
+E   [parameters: {'tenant_id': UUID('0a5bd96c-109d-4d76-bae5-4c6140bd0db3'), 'resource_id': UUID('0a7a7256-fff3-4918-8002-104517afc7bf'), 'id': UUID('9279d9a7-e644-46ff-a717-2c2f2376a86a'), 'kind': 'MEDIA_SET', 'target_resource_id': None, 'target_definition_id': None, 'event_resource_id': None, 'sequence': 1, 'specification': Jsonb({'items': ['662a3a75-2057-4ed2-afb4 ... (51 chars)), 'created_by': 'local-developer'}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+____________ test_manual_automation_duplicate_disable_and_execution ____________
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: column "target_resource_id" of relation "governed_definitions" does not exist
+E   LINE 1: ...ed_definitions (tenant_id, resource_id, id, kind, target_res...
+E                                                                ^
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:321: in test_manual_automation_duplicate_disable_and_execution
+    target = fn_svc.publish_function(p, fn.id, definition())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:93: in publish_function
+    return self.publish_spec(s, p, key, spec.model_dump(mode="json"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:85: in publish_spec
+    s.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) column "target_resource_id" of relation "governed_definitions" does not exist
+E   LINE 1: ...ed_definitions (tenant_id, resource_id, id, kind, target_res...
+E                                                                ^
+E   [SQL: INSERT INTO governed_definitions (tenant_id, resource_id, id, kind, target_resource_id, target_definition_id, event_resource_id, sequence, specification, created_by) VALUES (%(tenant_id)s::UUID, %(resource_id)s::UUID, %(id)s::UUID, %(kind)s::VARCHAR, %(target_resource_id)s::UUID, %(target_definition_id)s::UUID, %(event_resource_id)s::UUID, %(sequence)s::INTEGER, %(specification)s::JSONB, %(created_by)s::VARCHAR) RETURNING governed_definitions.created_at]
+E   [parameters: {'tenant_id': UUID('018c9aac-e2f7-4c88-84d2-36baefe2b184'), 'resource_id': UUID('ce34e029-425c-46b4-8d27-a35073567c15'), 'id': UUID('053e701c-f777-4cd2-8df5-63a605a2f5c4'), 'kind': 'FUNCTION', 'target_resource_id': None, 'target_definition_id': None, 'event_resource_id': None, 'sequence': 1, 'specification': Jsonb({'implementation': 'identity.v1', ' ... (407 chars)), 'created_by': 'local-developer'}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+_________ test_durable_interval_restart_multiple_dispatchers_coalesce __________
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: column "target_resource_id" of relation "governed_definitions" does not exist
+E   LINE 1: ...ed_definitions (tenant_id, resource_id, id, kind, target_res...
+E                                                                ^
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:341: in test_durable_interval_restart_multiple_dispatchers_coalesce
+    target = fn_svc.publish_function(p, fn.id, definition())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:93: in publish_function
+    return self.publish_spec(s, p, key, spec.model_dump(mode="json"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:85: in publish_spec
+    s.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) column "target_resource_id" of relation "governed_definitions" does not exist
+E   LINE 1: ...ed_definitions (tenant_id, resource_id, id, kind, target_res...
+E                                                                ^
+E   [SQL: INSERT INTO governed_definitions (tenant_id, resource_id, id, kind, target_resource_id, target_definition_id, event_resource_id, sequence, specification, created_by) VALUES (%(tenant_id)s::UUID, %(resource_id)s::UUID, %(id)s::UUID, %(kind)s::VARCHAR, %(target_resource_id)s::UUID, %(target_definition_id)s::UUID, %(event_resource_id)s::UUID, %(sequence)s::INTEGER, %(specification)s::JSONB, %(created_by)s::VARCHAR) RETURNING governed_definitions.created_at]
+E   [parameters: {'tenant_id': UUID('989862b2-7d10-4a35-a68b-93504602a204'), 'resource_id': UUID('0418f826-ea7b-4d61-8c2e-32a9671181cb'), 'id': UUID('03b977b7-d840-422b-a963-065a30d52ba4'), 'kind': 'FUNCTION', 'target_resource_id': None, 'target_definition_id': None, 'event_resource_id': None, 'sequence': 1, 'specification': Jsonb({'implementation': 'identity.v1', ' ... (407 chars)), 'created_by': 'local-developer'}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+__________ test_g_migration_upgrade_preserves_previous_data_and_drift __________
+services/api/tests/test_media_functions_automations.py:375: in test_g_migration_upgrade_preserves_previous_data_and_drift
+    command.check(config)
+.venv/lib/python3.12/site-packages/alembic/command.py:370: in check
+    raise util.AutogenerateDiffsDetected(
+E   alembic.util.exc.AutogenerateDiffsDetected: New upgrade operations detected: [('add_column', None, 'governed_definitions', Column('target_resource_id', Uuid(), ForeignKey('governed_definitions.resource_id'), table=<governed_definitions>)), ('add_column', None, 'governed_definitions', Column('target_definition_id', Uuid(), ForeignKey('governed_definitions.id'), table=<governed_definitions>)), ('add_column', None, 'governed_definitions', Column('event_resource_id', Uuid(), ForeignKey('platform_resources.id'), table=<governed_definitions>)), ('add_fk', ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x1156601d0>, None, table=Table('governed_definitions', MetaData(), Column('tenant_id', NullType(), ForeignKey('platform_resources.tenant_id'), table=<governed_definitions>), Column('event_resource_id', NullType(), ForeignKey('platform_resources.id'), table=<governed_definitions>), schema=None))), ('add_fk', ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x11705e980>, None, table=Table('governed_definitions', MetaData(), Column('tenant_id', NullType(), ForeignKey('governed_definitions.tenant_id'), table=<governed_definitions>), Column('target_resource_id', NullType(), ForeignKey('governed_definitions.resource_id'), table=<governed_definitions>), Column('target_definition_id', NullType(), ForeignKey('governed_definitions.id'), table=<governed_definitions>), Column('resource_id', NullType(), table=<governed_definitions>), Column('id', NullType(), table=<governed_definitions>), schema=None)))]
+_________ test_private_media_shared_set_requires_source_and_revocation _________
+services/api/tests/test_media_functions_automations.py:380: in test_private_media_shared_set_requires_source_and_revocation
+    grant_projects(administration, owner, reader)
+    ^^^^^^^^^^^^^^
+E   NameError: name 'grant_projects' is not defined
+___ test_function_automation_current_owner_revocation_before_worker_and_tick ___
+services/api/tests/test_media_functions_automations.py:452: in test_function_automation_current_owner_revocation_before_worker_and_tick
+    grant_projects(administration, owner, reader)
+    ^^^^^^^^^^^^^^
+E   NameError: name 'grant_projects' is not defined
+_______ test_function_budget_retry_exhaustion_fencing_and_cancel_queued ________
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: column "target_resource_id" of relation "governed_definitions" does not exist
+E   LINE 1: ...ed_definitions (tenant_id, resource_id, id, kind, target_res...
+E                                                                ^
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:536: in test_function_budget_retry_exhaustion_fencing_and_cancel_queued
+    version = svc.publish_function(p, fn.id, definition())
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:93: in publish_function
+    return self.publish_spec(s, p, key, spec.model_dump(mode="json"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/functions/service.py:85: in publish_spec
+    s.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) column "target_resource_id" of relation "governed_definitions" does not exist
+E   LINE 1: ...ed_definitions (tenant_id, resource_id, id, kind, target_res...
+E                                                                ^
+E   [SQL: INSERT INTO governed_definitions (tenant_id, resource_id, id, kind, target_resource_id, target_definition_id, event_resource_id, sequence, specification, created_by) VALUES (%(tenant_id)s::UUID, %(resource_id)s::UUID, %(id)s::UUID, %(kind)s::VARCHAR, %(target_resource_id)s::UUID, %(target_definition_id)s::UUID, %(event_resource_id)s::UUID, %(sequence)s::INTEGER, %(specification)s::JSONB, %(created_by)s::VARCHAR) RETURNING governed_definitions.created_at]
+E   [parameters: {'tenant_id': UUID('e82b0e73-0102-4bad-b39b-5917c41c805c'), 'resource_id': UUID('464d857c-3f3c-4072-a952-7e1c19797354'), 'id': UUID('46e1e793-6360-4f6e-abda-c240e537ad5f'), 'kind': 'FUNCTION', 'target_resource_id': None, 'target_definition_id': None, 'event_resource_id': None, 'sequence': 1, 'specification': Jsonb({'implementation': 'identity.v1', ' ... (407 chars)), 'created_by': 'local-developer'}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+_________________ test_actual_api_contracts_and_binary_access __________________
+services/api/tests/test_media_functions_automations.py:586: in test_actual_api_contracts_and_binary_access
+    assert version.status_code == 201
+E   assert 500 == 201
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED services/api/tests/test_media_functions_automations.py::test_real_function_execution_result_idempotency_and_immutability
+FAILED services/api/tests/test_media_functions_automations.py::test_worker_lease_recovery_cancel_stale_fence_and_unpublished_result
+FAILED services/api/tests/test_media_functions_automations.py::test_media_real_preview_snapshot_source_and_immutable_membership
+FAILED services/api/tests/test_media_functions_automations.py::test_manual_automation_duplicate_disable_and_execution
+FAILED services/api/tests/test_media_functions_automations.py::test_durable_interval_restart_multiple_dispatchers_coalesce
+FAILED services/api/tests/test_media_functions_automations.py::test_g_migration_upgrade_preserves_previous_data_and_drift
+FAILED services/api/tests/test_media_functions_automations.py::test_private_media_shared_set_requires_source_and_revocation
+FAILED services/api/tests/test_media_functions_automations.py::test_function_automation_current_owner_revocation_before_worker_and_tick
+FAILED services/api/tests/test_media_functions_automations.py::test_function_budget_retry_exhaustion_fencing_and_cancel_queued
+FAILED services/api/tests/test_media_functions_automations.py::test_actual_api_contracts_and_binary_access
+================== 10 failed, 24 passed, 1 warning in 12.54s ===================
+ Container phase15-0ae0ab65bfb4-minio-1  Stopping
+ Container phase15-0ae0ab65bfb4-minio-1  Stopped
+ Container phase15-0ae0ab65bfb4-minio-1  Removing
+ Container phase15-0ae0ab65bfb4-minio-1  Removed
+ Network phase15-0ae0ab65bfb4_default  Removing
+ Volume phase15-0ae0ab65bfb4_minio-data  Removing
+ Volume phase15-0ae0ab65bfb4_minio-data  Removed
+ Network phase15-0ae0ab65bfb4_default  Removed
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 143, in <module>
+    run("uv", "run", "pytest", *args.pytest_file, "-ra", "--tb=short")
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 99, in run
+    raise subprocess.CalledProcessError(code, cmd)
+subprocess.CalledProcessError: Command '('uv', 'run', 'pytest', 'services/api/tests/test_media_functions_automations.py', '-ra', '--tb=short')' returned non-zero exit status 1.

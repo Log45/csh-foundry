@@ -1,0 +1,52 @@
+unformatted: File would be reformatted
+   --> scripts/generate_platform_sdk.py:79:30
+    |
+78  |     ]
+    - for family, ident, group in [("functions", "function_id", "functions"),
+    -                              ("automations", "automation_id", "automations"),
+    -                              ("media-sets", "set_id", "mediaSets")]:
+79  + for family, ident, group in [
+80  +     ("functions", "function_id", "functions"),
+81  +     ("automations", "automation_id", "automations"),
+82  +     ("media-sets", "set_id", "mediaSets"),
+83  + ]:
+84  |     base = "/" + family + "/{" + ident + "}"
+85  |     manifest[group] = [
+86  |         ("create", "post", "/projects/{project_id}/" + family),
+    -         ("get", "get", base), ("validate", "post", base + "/validate"),
+87  +         ("get", "get", base),
+88  +         ("validate", "post", base + "/validate"),
+89  |         ("publish", "post", base + "/definitions"),
+--------------------------------------------------------------------------------
+93  |     if family == "functions":
+    -         manifest[group] += [("invoke", "post", base + "/runs"), ("history", "get", base + "/runs"),
+94  +         manifest[group] += [
+95  +             ("invoke", "post", base + "/runs"),
+96  +             ("history", "get", base + "/runs"),
+97  |             ("result", "get", "/function-runs/{job_id}/result"),
+    -             ("provenance", "get", "/function-runs/{job_id}/provenance")]
+98  +             ("provenance", "get", "/function-runs/{job_id}/provenance"),
+99  +         ]
+100 |     elif family == "automations":
+    -         manifest[group] += [("activate", "put", base + "/activation"),
+    -             ("schedule", "get", base + "/schedule"), ("trigger", "post", base + "/trigger"),
+    -             ("history", "get", base + "/runs")]
+101 +         manifest[group] += [
+102 +             ("activate", "put", base + "/activation"),
+103 +             ("schedule", "get", base + "/schedule"),
+104 +             ("trigger", "post", base + "/trigger"),
+105 +             ("history", "get", base + "/runs"),
+106 +         ]
+107 |     else:
+    -         manifest[group] += [("attach", "post", base + "/items"), ("items", "get", base + "/items"),
+108 +         manifest[group] += [
+109 +             ("attach", "post", base + "/items"),
+110 +             ("items", "get", base + "/items"),
+111 |             ("item", "get", base + "/items/{item_id}"),
+    -             ("lineage", "get", base + "/items/{item_id}/lineage")]
+112 +             ("lineage", "get", base + "/items/{item_id}/lineage"),
+113 +         ]
+114 | manifest["mappings"].append(("preview", "post", "/mappings/{mapping_id}/preview"))
+    |
+
+1 file would be reformatted, 283 files already formatted

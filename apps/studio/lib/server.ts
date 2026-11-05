@@ -511,6 +511,7 @@ export function allowed(path: string, method: string) {
           "offset",
           "cursor",
           "version",
+          "version_id",
           "direction",
           "expected_version",
           "object_id",

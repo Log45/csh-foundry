@@ -1,0 +1,394 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-c22d529ff742_default  Creating
+ Network phase15-c22d529ff742_default  Created
+ Volume "phase15-c22d529ff742_minio-data"  Creating
+ Volume "phase15-c22d529ff742_minio-data"  Created
+ Container phase15-c22d529ff742-minio-1  Creating
+ Container phase15-c22d529ff742-minio-1  Created
+ Container phase15-c22d529ff742-minio-1  Starting
+ Container phase15-c22d529ff742-minio-1  Started
+ Container phase15-c22d529ff742-minio-1  Waiting
+ Container phase15-c22d529ff742-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-c22d529ff742-minio-1  Restarting
+ Container phase15-c22d529ff742-minio-1  Started
+ Container phase15-c22d529ff742-minio-1  Running
+ Container phase15-c22d529ff742-minio-1  Waiting
+ Container phase15-c22d529ff742-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 36 items
+
+services/api/tests/test_media_functions_automations.py ................. [ 47%]
+.........FF......FF                                                      [100%]
+
+=================================== FAILURES ===================================
+____________ test_manual_automation_duplicate_disable_and_execution ____________
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.AmbiguousColumn: column reference "j.tenant_id" is ambiguous
+E   LINE 3:                 ON d.tenant_id=j.tenant_id AND d.resource_id...
+E                                          ^
+E   DETAIL:  It could refer to either a PL/pgSQL variable or a table column.
+E   QUERY:  NEW.job_id IS NOT NULL AND NOT EXISTS (
+E                   SELECT 1 FROM execution_jobs j JOIN governed_definitions d
+E                   ON d.tenant_id=j.tenant_id AND d.resource_id=NEW.automation_id
+E                   AND d.id=NEW.definition_id
+E                   WHERE j.tenant_id=NEW.tenant_id AND j.id=NEW.job_id AND j.kind='FUNCTION'
+E                   AND j.resource_id=d.target_resource_id
+E                   AND j.request->>'definition_id'=d.target_definition_id::text
+E                   AND j.request->'automation'->>'resource_id'=NEW.automation_id::text
+E                   AND j.request->'automation'->>'definition_id'=NEW.definition_id::text
+E               )
+E   CONTEXT:  PL/pgSQL function guard_g_immutable() line 74 at IF
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:326: in test_manual_automation_duplicate_disable_and_execution
+    first = svc.manual(p, row.id, "once")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/automations/service.py:286: in manual
+    return self.dispatch(s, p, row, "manual:" + dedup, clock(s), "manual")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/automations/service.py:273: in dispatch
+    self.audit(s, p, "automation_dispatch", receipt.id)
+services/api/src/ontology_platform/projects/service.py:111: in audit
+    policy_version=s.scalar(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:2421: in scalar
+    return self._execute_internal(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:2250: in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py:577: in orm_pre_session_exec
+    session._autoflush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:3073: in _autoflush
+    raise e.with_traceback(sys.exc_info()[2])
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:3062: in _autoflush
+    self.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+E   (psycopg.errors.AmbiguousColumn) column reference "j.tenant_id" is ambiguous
+E   LINE 3:                 ON d.tenant_id=j.tenant_id AND d.resource_id...
+E                                          ^
+E   DETAIL:  It could refer to either a PL/pgSQL variable or a table column.
+E   QUERY:  NEW.job_id IS NOT NULL AND NOT EXISTS (
+E                   SELECT 1 FROM execution_jobs j JOIN governed_definitions d
+E                   ON d.tenant_id=j.tenant_id AND d.resource_id=NEW.automation_id
+E                   AND d.id=NEW.definition_id
+E                   WHERE j.tenant_id=NEW.tenant_id AND j.id=NEW.job_id AND j.kind='FUNCTION'
+E                   AND j.resource_id=d.target_resource_id
+E                   AND j.request->>'definition_id'=d.target_definition_id::text
+E                   AND j.request->'automation'->>'resource_id'=NEW.automation_id::text
+E                   AND j.request->'automation'->>'definition_id'=NEW.definition_id::text
+E               )
+E   CONTEXT:  PL/pgSQL function guard_g_immutable() line 74 at IF
+E   [SQL: INSERT INTO automation_receipts (tenant_id, automation_id, id, definition_id, dedup_key, trigger_kind, trigger_at, job_id, error) VALUES (%(tenant_id)s::UUID, %(automation_id)s::UUID, %(id)s::UUID, %(definition_id)s::UUID, %(dedup_key)s::VARCHAR, %(trigger_kind)s::VARCHAR, %(trigger_at)s::TIMESTAMP WITH TIME ZONE, %(job_id)s::UUID, %(error)s::VARCHAR) RETURNING automation_receipts.created_at]
+E   [parameters: {'tenant_id': UUID('01eb6a17-f146-4c5c-88fa-6279ec3c7156'), 'automation_id': UUID('c4d98a11-02d8-4acf-af31-4a776f3a32ca'), 'id': UUID('410e77c2-ba87-4300-9dc7-7a1ce5ed6f68'), 'definition_id': UUID('72998004-6bad-4ac0-b359-371e49eb4852'), 'dedup_key': 'manual:once', 'trigger_kind': 'manual', 'trigger_at': datetime.datetime(2026, 11, 5, 2, 8, 43, 128042, tzinfo=zoneinfo.ZoneInfo(key='Etc/UTC')), 'job_id': UUID('f6f8ef71-244f-4e99-b3aa-edce22f356c2'), 'error': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+_________ test_durable_interval_restart_multiple_dispatchers_coalesce __________
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.AmbiguousColumn: column reference "j.tenant_id" is ambiguous
+E   LINE 3:                 ON d.tenant_id=j.tenant_id AND d.resource_id...
+E                                          ^
+E   DETAIL:  It could refer to either a PL/pgSQL variable or a table column.
+E   QUERY:  NEW.job_id IS NOT NULL AND NOT EXISTS (
+E                   SELECT 1 FROM execution_jobs j JOIN governed_definitions d
+E                   ON d.tenant_id=j.tenant_id AND d.resource_id=NEW.automation_id
+E                   AND d.id=NEW.definition_id
+E                   WHERE j.tenant_id=NEW.tenant_id AND j.id=NEW.job_id AND j.kind='FUNCTION'
+E                   AND j.resource_id=d.target_resource_id
+E                   AND j.request->>'definition_id'=d.target_definition_id::text
+E                   AND j.request->'automation'->>'resource_id'=NEW.automation_id::text
+E                   AND j.request->'automation'->>'definition_id'=NEW.definition_id::text
+E               )
+E   CONTEXT:  PL/pgSQL function guard_g_immutable() line 74 at IF
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:355: in test_durable_interval_restart_multiple_dispatchers_coalesce
+    assert sum(pool.map(tick, range(2))) == 1
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py:619: in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py:317: in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/tests/test_media_functions_automations.py:352: in tick
+    return service(world, store, AutomationService).tick()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/automations/service.py:356: in tick
+    self.dispatch(
+services/api/src/ontology_platform/automations/service.py:273: in dispatch
+    self.audit(s, p, "automation_dispatch", receipt.id)
+services/api/src/ontology_platform/projects/service.py:111: in audit
+    policy_version=s.scalar(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:2421: in scalar
+    return self._execute_internal(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:2250: in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py:577: in orm_pre_session_exec
+    session._autoflush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:3073: in _autoflush
+    raise e.with_traceback(sys.exc_info()[2])
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:3062: in _autoflush
+    self.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+E   (psycopg.errors.AmbiguousColumn) column reference "j.tenant_id" is ambiguous
+E   LINE 3:                 ON d.tenant_id=j.tenant_id AND d.resource_id...
+E                                          ^
+E   DETAIL:  It could refer to either a PL/pgSQL variable or a table column.
+E   QUERY:  NEW.job_id IS NOT NULL AND NOT EXISTS (
+E                   SELECT 1 FROM execution_jobs j JOIN governed_definitions d
+E                   ON d.tenant_id=j.tenant_id AND d.resource_id=NEW.automation_id
+E                   AND d.id=NEW.definition_id
+E                   WHERE j.tenant_id=NEW.tenant_id AND j.id=NEW.job_id AND j.kind='FUNCTION'
+E                   AND j.resource_id=d.target_resource_id
+E                   AND j.request->>'definition_id'=d.target_definition_id::text
+E                   AND j.request->'automation'->>'resource_id'=NEW.automation_id::text
+E                   AND j.request->'automation'->>'definition_id'=NEW.definition_id::text
+E               )
+E   CONTEXT:  PL/pgSQL function guard_g_immutable() line 74 at IF
+E   [SQL: INSERT INTO automation_receipts (tenant_id, automation_id, id, definition_id, dedup_key, trigger_kind, trigger_at, job_id, error) VALUES (%(tenant_id)s::UUID, %(automation_id)s::UUID, %(id)s::UUID, %(definition_id)s::UUID, %(dedup_key)s::VARCHAR, %(trigger_kind)s::VARCHAR, %(trigger_at)s::TIMESTAMP WITH TIME ZONE, %(job_id)s::UUID, %(error)s::VARCHAR) RETURNING automation_receipts.created_at]
+E   [parameters: {'tenant_id': UUID('0d449974-75b2-41a8-8d6b-cd350a7506ab'), 'automation_id': UUID('8ba177b9-a9d6-47ab-bc36-ced82cc94569'), 'id': UUID('061d9a03-6121-4685-935a-e6c3e75106ee'), 'definition_id': UUID('89f526d5-60e8-4262-a4d8-d74bd39b3416'), 'dedup_key': 'schedule:2026-11-04T02:08:44.146704+00:00', 'trigger_kind': 'interval', 'trigger_at': datetime.datetime(2026, 11, 4, 2, 8, 44, 146704, tzinfo=zoneinfo.ZoneInfo(key='Etc/UTC')), 'job_id': UUID('38fad5b2-3f16-4caa-8324-0328455b93c3'), 'error': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+_ test_existing_action_outbox_dispatch_is_durable_deduplicated_and_nonrecursive _
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.AmbiguousColumn: column reference "j.tenant_id" is ambiguous
+E   LINE 3:                 ON d.tenant_id=j.tenant_id AND d.resource_id...
+E                                          ^
+E   DETAIL:  It could refer to either a PL/pgSQL variable or a table column.
+E   QUERY:  NEW.job_id IS NOT NULL AND NOT EXISTS (
+E                   SELECT 1 FROM execution_jobs j JOIN governed_definitions d
+E                   ON d.tenant_id=j.tenant_id AND d.resource_id=NEW.automation_id
+E                   AND d.id=NEW.definition_id
+E                   WHERE j.tenant_id=NEW.tenant_id AND j.id=NEW.job_id AND j.kind='FUNCTION'
+E                   AND j.resource_id=d.target_resource_id
+E                   AND j.request->>'definition_id'=d.target_definition_id::text
+E                   AND j.request->'automation'->>'resource_id'=NEW.automation_id::text
+E                   AND j.request->'automation'->>'definition_id'=NEW.definition_id::text
+E               )
+E   CONTEXT:  PL/pgSQL function guard_g_immutable() line 74 at IF
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_media_functions_automations.py:637: in test_existing_action_outbox_dispatch_is_durable_deduplicated_and_nonrecursive
+    assert svc.tick() == 1
+           ^^^^^^^^^^
+services/api/src/ontology_platform/automations/service.py:392: in tick
+    self.dispatch(
+services/api/src/ontology_platform/automations/service.py:273: in dispatch
+    self.audit(s, p, "automation_dispatch", receipt.id)
+services/api/src/ontology_platform/projects/service.py:111: in audit
+    policy_version=s.scalar(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:2421: in scalar
+    return self._execute_internal(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:2250: in _execute_internal
+    ) = compile_state_cls.orm_pre_session_exec(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/context.py:577: in orm_pre_session_exec
+    session._autoflush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:3073: in _autoflush
+    raise e.with_traceback(sys.exc_info()[2])
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:3062: in _autoflush
+    self.flush()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1428: in execute
+    return meth(
+.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1650: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1855: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1995: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2372: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1976: in _exec_single_context
+    self.dialect.do_execute(
+.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:964: in do_execute
+    cursor.execute(statement, parameters)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+E   (psycopg.errors.AmbiguousColumn) column reference "j.tenant_id" is ambiguous
+E   LINE 3:                 ON d.tenant_id=j.tenant_id AND d.resource_id...
+E                                          ^
+E   DETAIL:  It could refer to either a PL/pgSQL variable or a table column.
+E   QUERY:  NEW.job_id IS NOT NULL AND NOT EXISTS (
+E                   SELECT 1 FROM execution_jobs j JOIN governed_definitions d
+E                   ON d.tenant_id=j.tenant_id AND d.resource_id=NEW.automation_id
+E                   AND d.id=NEW.definition_id
+E                   WHERE j.tenant_id=NEW.tenant_id AND j.id=NEW.job_id AND j.kind='FUNCTION'
+E                   AND j.resource_id=d.target_resource_id
+E                   AND j.request->>'definition_id'=d.target_definition_id::text
+E                   AND j.request->'automation'->>'resource_id'=NEW.automation_id::text
+E                   AND j.request->'automation'->>'definition_id'=NEW.definition_id::text
+E               )
+E   CONTEXT:  PL/pgSQL function guard_g_immutable() line 74 at IF
+E   [SQL: INSERT INTO automation_receipts (tenant_id, automation_id, id, definition_id, dedup_key, trigger_kind, trigger_at, job_id, error) VALUES (%(tenant_id)s::UUID, %(automation_id)s::UUID, %(id)s::UUID, %(definition_id)s::UUID, %(dedup_key)s::VARCHAR, %(trigger_kind)s::VARCHAR, %(trigger_at)s::TIMESTAMP WITH TIME ZONE, %(job_id)s::UUID, %(error)s::VARCHAR) RETURNING automation_receipts.created_at]
+E   [parameters: {'tenant_id': UUID('1a32ded5-0e1d-46c6-b7a8-29f95912f9c7'), 'automation_id': UUID('d0a857f3-607b-4114-8041-0cc2eb28d831'), 'id': UUID('0590e8a7-489d-4dad-8e69-6afb8be92564'), 'definition_id': UUID('979d4b61-95af-4d8e-9202-84600bc74a1f'), 'dedup_key': 'event:79f8eb64-52e9-4843-8af8-20c48b203291', 'trigger_kind': 'action.committed', 'trigger_at': datetime.datetime(2026, 11, 5, 2, 8, 51, 946486, tzinfo=zoneinfo.ZoneInfo(key='Etc/UTC')), 'job_id': UUID('7beef9a6-010a-48c2-a463-7b7c298e4719'), 'error': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+______ test_built_sdk_consumer_real_governed_media_functions_automations _______
+services/api/tests/test_media_functions_automations.py:667: in test_built_sdk_consumer_real_governed_media_functions_automations
+    exercise(
+services/api/tests/test_platform_sdk.py:138: in exercise
+    assert code == 0, process.stderr.read() if process.stderr else "node failed"
+E   AssertionError: file:///Users/log/Documents/code/csh-foundry/packages/typescript-sdk/dist/errors.js:37
+E         return new FoundryError(category, typeof code === "string" && /^[a-zA-Z0-9_.:-]{1,128}$/.test(code)
+E                ^
+E     
+E     FoundryError: internal_error
+E         at responseError (file:///Users/log/Documents/code/csh-foundry/packages/typescript-sdk/dist/errors.js:37:12)
+E         at send (file:///Users/log/Documents/code/csh-foundry/packages/typescript-sdk/dist/transport.js:149:27)
+E         at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+E         at async file:///Users/log/Documents/code/csh-foundry/tests/sdk/integration.mjs:78:19 {
+E       category: 'network',
+E       code: 'internal_error',
+E       status: 500
+E     }
+E     
+E     Node.js v26.7.0
+E     
+E   assert 1 == 0
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED services/api/tests/test_media_functions_automations.py::test_manual_automation_duplicate_disable_and_execution
+FAILED services/api/tests/test_media_functions_automations.py::test_durable_interval_restart_multiple_dispatchers_coalesce
+FAILED services/api/tests/test_media_functions_automations.py::test_existing_action_outbox_dispatch_is_durable_deduplicated_and_nonrecursive
+FAILED services/api/tests/test_media_functions_automations.py::test_built_sdk_consumer_real_governed_media_functions_automations
+=================== 4 failed, 32 passed, 1 warning in 17.58s ===================
+ Container phase15-c22d529ff742-minio-1  Stopping
+ Container phase15-c22d529ff742-minio-1  Stopped
+ Container phase15-c22d529ff742-minio-1  Removing
+ Container phase15-c22d529ff742-minio-1  Removed
+ Volume phase15-c22d529ff742_minio-data  Removing
+ Network phase15-c22d529ff742_default  Removing
+ Volume phase15-c22d529ff742_minio-data  Removed
+ Network phase15-c22d529ff742_default  Removed
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 143, in <module>
+    run("uv", "run", "pytest", *args.pytest_file, "-ra", "--tb=short")
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 99, in run
+    raise subprocess.CalledProcessError(code, cmd)
+subprocess.CalledProcessError: Command '('uv', 'run', 'pytest', 'services/api/tests/test_media_functions_automations.py', '-ra', '--tb=short')' returned non-zero exit status 1.

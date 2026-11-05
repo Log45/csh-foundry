@@ -1,0 +1,7 @@
+Revision 6a589f4594de157e243dcacf03892844cc3ddc25
+0022_materialization (head)
+PASS canonical fixtures and historical migrations unchanged
+PASS shared developer database remains 0017_capacity (read-only inspection)
+PASS existing Studio standalone entry path preserved
+PASS inspected browser chunks exclude server credential/configuration symbols
+Targeted boundary inspection only; production certification remains NOT RUN/BLOCKED.

@@ -1,0 +1,13 @@
+
+> @foundry/studio@0.8.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /Users/log/Documents/code/csh-foundry/apps/studio
+
+
+ Test Files  10 passed (10)
+      Tests  45 passed (45)
+   Start at  19:17:40
+   Duration  1.32s (environment 56%, tests 19%, import 13%, transform 10%, worker 1%)
+

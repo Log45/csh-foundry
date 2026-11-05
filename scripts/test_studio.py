@@ -37,8 +37,11 @@ env = os.environ | {
     "NODE_EXTRA_CA_CERTS": str(cert),
     "NODE_OPTIONS": "--import=" + str(ROOT / "apps/studio/tests/oidc_transport.mjs"),
 }
+app_directory = ROOT / os.environ.get("STUDIO_E2E_APP", "apps/studio")
 processes = []
 durable = os.environ.get("STUDIO_E2E_DURABLE") == "true"
+if durable and app_directory != ROOT / "apps/studio":
+    raise ValueError("Standalone durable browser validation is supported only for Studio")
 if durable:
     shutil.copytree(
         ROOT / "apps/studio/.next/static",
@@ -80,7 +83,7 @@ try:
         processes.append(
             subprocess.Popen(
                 ["node", ".next/standalone/server.js"] if durable else ["npm", "run", "dev"],
-                cwd=ROOT / "apps/studio",
+                cwd=app_directory,
                 stdout=frontend,
                 stderr=subprocess.STDOUT,
                 env=env | {"HOSTNAME": "127.0.0.1", "PORT": str(studio_port)},
@@ -99,7 +102,7 @@ try:
         if durable:
             replica = subprocess.Popen(
                 ["node", ".next/standalone/server.js"],
-                cwd=ROOT / "apps/studio",
+                cwd=app_directory,
                 stdout=frontend,
                 stderr=subprocess.STDOUT,
                 env=env | {"HOSTNAME": "127.0.0.1", "PORT": str(replica_port)},
@@ -116,9 +119,7 @@ try:
             else:
                 raise RuntimeError("Second replica readiness timed out")
             env["STUDIO_E2E_REPLICA_PID"] = str(replica.pid)
-        raise SystemExit(
-            subprocess.call(["npm", "run", "test:e2e"], cwd=ROOT / "apps/studio", env=env)
-        )
+        raise SystemExit(subprocess.call(["npm", "run", "test:e2e"], cwd=app_directory, env=env))
 finally:
     for process in reversed(processes):
         if process.poll() is None:

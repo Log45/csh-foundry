@@ -1,0 +1,13 @@
+
+> test
+> vitest run
+
+file:///Users/log/Documents/code/csh-foundry/node_modules/vitest/dist/chunks/utils.DSfl_w8V.js:1
+import { stripVTControlCharacters } from 'node:util';
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: The requested module 'node:util' does not provide an export named 'stripVTControlCharacters'
+    at ModuleJob._instantiate (node:internal/modules/esm/module_job:121:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:171:5)
+    at async Loader.import (node:internal/modules/esm/loader:178:24)
+    at async start (file:///Users/log/Documents/code/csh-foundry/node_modules/vitest/dist/chunks/cac.CLrZKo1g.js:2371:27)
+    at async CAC.run (file:///Users/log/Documents/code/csh-foundry/node_modules/vitest/dist/chunks/cac.CLrZKo1g.js:2344:2)
