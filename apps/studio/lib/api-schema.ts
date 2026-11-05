@@ -995,6 +995,92 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/pipelines/{pipeline_id}/graph/compile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Graph Compile */
+        post: operations["graph_compile_api_v1_pipelines__pipeline_id__graph_compile_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/pipelines/{pipeline_id}/graph/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Graph Publish */
+        post: operations["graph_publish_api_v1_pipelines__pipeline_id__graph_publish_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/pipelines/{pipeline_id}/graph/draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Graph Draft */
+        get: operations["graph_draft_api_v1_pipelines__pipeline_id__graph_draft_get"];
+        /** Graph Save */
+        put: operations["graph_save_api_v1_pipelines__pipeline_id__graph_draft_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/pipelines/{pipeline_id}/definitions/{definition_id}/graph": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Graph Definition */
+        get: operations["graph_definition_api_v1_pipelines__pipeline_id__definitions__definition_id__graph_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/pipelines/{pipeline_id}/definitions/{definition_id}/visualize": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Graph Visualize */
+        post: operations["graph_visualize_api_v1_pipelines__pipeline_id__definitions__definition_id__visualize_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{project_id}/mappings": {
         parameters: {
             query?: never;
@@ -2925,7 +3011,7 @@ export interface components {
                 [key: string]: unknown;
             };
             /** Diagnostics */
-            diagnostics?: components["schemas"]["Diagnostic"][];
+            diagnostics?: components["schemas"]["ontology_platform__semantic__contracts__Diagnostic"][];
         };
         /** ArtifactVersionView */
         ArtifactVersionView: {
@@ -3223,6 +3309,29 @@ export interface components {
             /** Version */
             version: string;
         };
+        /** Compilation */
+        Compilation: {
+            /**
+             * Valid
+             * @default false
+             */
+            valid?: boolean;
+            /** Diagnostics */
+            diagnostics?: components["schemas"]["ontology_platform__pipelines__graph__Diagnostic"][];
+            specification?: components["schemas"]["Definition-Output"] | null;
+            /** Inputs */
+            inputs?: components["schemas"]["InputVersion"][];
+            /** Output Dataset Id */
+            output_dataset_id?: string | null;
+            /** Semantic Digest */
+            semantic_digest?: string | null;
+            /** Schemas */
+            schemas?: {
+                [key: string]: {
+                    [key: string]: string;
+                };
+            };
+        };
         /** CompileInput */
         CompileInput: {
             /** Schema Version */
@@ -3434,15 +3543,6 @@ export interface components {
              */
             enabled?: boolean;
         };
-        /** Diagnostic */
-        Diagnostic: {
-            /** Code */
-            code: string;
-            /** Construct */
-            construct: string;
-            /** Message */
-            message: string;
-        };
         /** DiagnosticView */
         DiagnosticView: {
             /** Mapping Id */
@@ -3491,6 +3591,33 @@ export interface components {
             expected_revision: number;
             /** Version */
             version: string;
+        };
+        /** DraftView */
+        DraftView: {
+            /** Revision */
+            revision: number;
+            graph: components["schemas"]["Graph-Output"];
+        };
+        /** Edge */
+        Edge: {
+            /** Id */
+            id: string;
+            /** Source */
+            source: string;
+            /**
+             * Source Port
+             * @default output
+             * @enum {string}
+             */
+            source_port?: "output" | "scalar_output";
+            /** Target */
+            target: string;
+            /**
+             * Target Port
+             * @default input
+             * @enum {string}
+             */
+            target_port?: "input" | "right" | "scalar_input";
         };
         /** Enable */
         Enable: {
@@ -3629,7 +3756,7 @@ export interface components {
             canonical_hash: string;
             mappings: components["schemas"]["MappingInput-Output"];
             /** Diagnostics */
-            diagnostics: components["schemas"]["Diagnostic"][];
+            diagnostics: components["schemas"]["ontology_platform__semantic__contracts__Diagnostic"][];
         };
         /** Expression */
         "Expression-Input": {
@@ -3815,6 +3942,25 @@ export interface components {
              */
             temporary_bytes?: number;
         };
+        /** FunctionNode */
+        FunctionNode: {
+            /** Id */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "function_reference";
+            position?: components["schemas"]["Position"];
+            config: components["schemas"]["FunctionReference"];
+        };
+        /** FunctionReference */
+        FunctionReference: {
+            /** Function Id */
+            function_id?: string | null;
+            /** Definition Id */
+            definition_id?: string | null;
+        };
         /** GenerateInput */
         GenerateInput: {
             /** Version */
@@ -3824,6 +3970,32 @@ export interface components {
              * @enum {string}
              */
             language: "python" | "typescript";
+        };
+        /** Graph */
+        "Graph-Input": {
+            /**
+             * Format Version
+             * @default 1
+             * @constant
+             */
+            format_version?: 1;
+            /** Nodes */
+            nodes: (components["schemas"]["SourceNode"] | components["schemas"]["TransformNode-Input"] | components["schemas"]["OutputNode"] | components["schemas"]["FunctionNode"])[];
+            /** Edges */
+            edges: components["schemas"]["Edge"][];
+        };
+        /** Graph */
+        "Graph-Output": {
+            /**
+             * Format Version
+             * @default 1
+             * @constant
+             */
+            format_version?: 1;
+            /** Nodes */
+            nodes: (components["schemas"]["SourceNode"] | components["schemas"]["TransformNode-Output"] | components["schemas"]["OutputNode"] | components["schemas"]["FunctionNode"])[];
+            /** Edges */
+            edges: components["schemas"]["Edge"][];
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -3943,7 +4115,7 @@ export interface components {
             /** Diagnostic Count */
             diagnostic_count: number;
             /** Diagnostics */
-            diagnostics: components["schemas"]["Diagnostic"][];
+            diagnostics: components["schemas"]["ontology_platform__semantic__contracts__Diagnostic"][];
             /** Diagnostics Truncated */
             diagnostics_truncated: boolean;
             /** Diagnostic Reference */
@@ -4742,6 +4914,27 @@ export interface components {
             /** Active Version */
             active_version: string | null;
         };
+        /** OutputConfig */
+        OutputConfig: {
+            /** Dataset Id */
+            dataset_id?: string | null;
+            /** Columns */
+            columns?: {
+                [key: string]: string;
+            };
+        };
+        /** OutputNode */
+        OutputNode: {
+            /** Id */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "dataset_output";
+            position?: components["schemas"]["Position"];
+            config: components["schemas"]["OutputConfig"];
+        };
         /** ParameterDefinition */
         ParameterDefinition: {
             /** Id */
@@ -4866,6 +5059,19 @@ export interface components {
              * @default []
              */
             rules?: components["schemas"]["Rule"][];
+        };
+        /** Position */
+        Position: {
+            /**
+             * X
+             * @default 0
+             */
+            x?: number;
+            /**
+             * Y
+             * @default 0
+             */
+            y?: number;
         };
         /** Predicate */
         Predicate: {
@@ -5382,6 +5588,12 @@ export interface components {
             /** Diagnostics */
             diagnostics?: string[];
         };
+        /** SaveDraft */
+        SaveDraft: {
+            /** Expected Revision */
+            expected_revision: number;
+            graph: components["schemas"]["Graph-Input"];
+        };
         /** ScheduleView */
         ScheduleView: {
             /**
@@ -5495,6 +5707,19 @@ export interface components {
              */
             direction?: "asc" | "desc";
         };
+        /** SourceConfig */
+        SourceConfig: {
+            /** Name */
+            name: string;
+            /** Dataset Id */
+            dataset_id?: string | null;
+            /** Version Id */
+            version_id?: string | null;
+            /** Columns */
+            columns?: {
+                [key: string]: string;
+            };
+        };
         /**
          * SourceInput
          * @example {
@@ -5543,6 +5768,18 @@ export interface components {
              * @constant
              */
             deletion_policy?: "ignore";
+        };
+        /** SourceNode */
+        SourceNode: {
+            /** Id */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "dataset_source";
+            position?: components["schemas"]["Position"];
+            config: components["schemas"]["SourceConfig"];
         };
         /** StartRun */
         StartRun: {
@@ -5650,6 +5887,30 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+        };
+        /** TransformNode */
+        "TransformNode-Input": {
+            /** Id */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "transform";
+            position?: components["schemas"]["Position"];
+            config: components["schemas"]["Step-Input"];
+        };
+        /** TransformNode */
+        "TransformNode-Output": {
+            /** Id */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "transform";
+            position?: components["schemas"]["Position"];
+            config: components["schemas"]["Step-Output"];
         };
         /** TraversalStep */
         TraversalStep: {
@@ -5780,6 +6041,22 @@ export interface components {
             /** Published By */
             published_by: string | null;
         };
+        /** Visualization */
+        Visualization: {
+            graph?: components["schemas"]["Graph-Output"] | null;
+            /** Diagnostics */
+            diagnostics?: components["schemas"]["ontology_platform__pipelines__graph__Diagnostic"][];
+        };
+        /** Visualize */
+        Visualize: {
+            /** Inputs */
+            inputs: components["schemas"]["InputVersion"][];
+            /**
+             * Output Dataset Id
+             * Format: uuid
+             */
+            output_dataset_id: string;
+        };
         /** VocabularyTerm */
         VocabularyTerm: {
             /** Iri */
@@ -5844,6 +6121,17 @@ export interface components {
             source: components["schemas"]["Endpoint"];
             target: components["schemas"]["Endpoint"];
         };
+        /** Diagnostic */
+        ontology_platform__pipelines__graph__Diagnostic: {
+            /** Code */
+            code: string;
+            /** Message */
+            message: string;
+            /** Node Id */
+            node_id?: string | null;
+            /** Edge Id */
+            edge_id?: string | null;
+        };
         /** ArtifactView */
         ontology_platform__sdk__service__ArtifactView: {
             /**
@@ -5884,6 +6172,15 @@ export interface components {
              * @enum {string}
              */
             freshness: "SCHEMA_ONLY" | "SNAPSHOT" | "CURRENT" | "STALE" | "UNKNOWN";
+        };
+        /** Diagnostic */
+        ontology_platform__semantic__contracts__Diagnostic: {
+            /** Code */
+            code: string;
+            /** Construct */
+            construct: string;
+            /** Message */
+            message: string;
         };
     };
     responses: never;
@@ -8553,6 +8850,210 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DefinitionView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    graph_compile_api_v1_pipelines__pipeline_id__graph_compile_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pipeline_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Graph-Input"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Compilation"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    graph_publish_api_v1_pipelines__pipeline_id__graph_publish_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pipeline_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Graph-Input"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DefinitionView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    graph_draft_api_v1_pipelines__pipeline_id__graph_draft_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pipeline_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftView"] | null;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    graph_save_api_v1_pipelines__pipeline_id__graph_draft_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pipeline_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveDraft"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    graph_definition_api_v1_pipelines__pipeline_id__definitions__definition_id__graph_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pipeline_id: string;
+                definition_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Graph-Output"] | null;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    graph_visualize_api_v1_pipelines__pipeline_id__definitions__definition_id__visualize_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pipeline_id: string;
+                definition_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Visualize"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Visualization"];
                 };
             };
             /** @description Validation Error */
@@ -11765,7 +12266,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Diagnostic"][];
+                    "application/json": components["schemas"]["ontology_platform__semantic__contracts__Diagnostic"][];
                 };
             };
             /** @description Validation Error */

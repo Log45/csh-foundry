@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
+import "@xyflow/react/dist/style.css";
 import "./style.css";
 export const metadata: Metadata = {
   title: "Foundry · Ontology workspace",

@@ -1,0 +1,15 @@
+Base revision: 70af08ecc19a58565b61b2ebbd51ce4b570b64c0
+Initial worktree: clean
+Initial repository migration head: 0023_media_functions
+Final repository migration head: 0024_pipeline_graphs
+Shared developer revision (read-only verification): 0017_capacity
+
+PASS git diff --check
+PASS canonical fixtures unchanged
+PASS historical migrations 0001 through 0023 unchanged
+PASS previous-head 0023 to 0024 upgrade preserved sentinel data
+PASS Alembic drift check at 0024
+
+All integration tests used randomly named disposable PostgreSQL schemas and private
+MinIO Compose projects/volumes. No shared schema migration, downgrade, reset, or shared
+MinIO deletion was performed.

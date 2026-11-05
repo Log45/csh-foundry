@@ -4,11 +4,20 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Request
 
 from ontology_platform.artifacts.contracts import CreateArtifact
+from ontology_platform.pipelines.authoring import AuthoringService
 from ontology_platform.pipelines.contracts import (
     Definition,
     DefinitionView,
     ExecutionJobView,
     StartRun,
+)
+from ontology_platform.pipelines.graph import (
+    Compilation,
+    DraftView,
+    Graph,
+    SaveDraft,
+    Visualization,
+    Visualize,
 )
 from ontology_platform.pipelines.service import PipelineService
 from ontology_platform.projects.contracts import ResourceView
@@ -101,3 +110,55 @@ def definition(
         return DefinitionView.model_validate(
             svc.definition(session, actor, pipeline_id, definition_id)
         )
+
+
+def authoring(request: Request) -> AuthoringService:
+    return AuthoringService(
+        request.app.state.sessions,
+        request.app.state.authorizer,
+        request.app.state.artifact_settings,
+        request.app.state.artifact_store,
+    )
+
+
+Authoring = Annotated[AuthoringService, Depends(authoring)]
+
+
+@router.post("/pipelines/{pipeline_id}/graph/compile", response_model=Compilation)
+def graph_compile(pipeline_id: UUID, body: Graph, actor: Actor, svc: Authoring) -> Compilation:
+    return svc.compile(actor, pipeline_id, body)
+
+
+@router.post(
+    "/pipelines/{pipeline_id}/graph/publish", response_model=DefinitionView, status_code=201
+)
+def graph_publish(pipeline_id: UUID, body: Graph, actor: Actor, svc: Authoring) -> DefinitionView:
+    return svc.publish_graph(actor, pipeline_id, body)
+
+
+@router.get("/pipelines/{pipeline_id}/graph/draft", response_model=DraftView | None)
+def graph_draft(pipeline_id: UUID, actor: Actor, svc: Authoring) -> DraftView | None:
+    return svc.draft(actor, pipeline_id)
+
+
+@router.put("/pipelines/{pipeline_id}/graph/draft", response_model=DraftView)
+def graph_save(pipeline_id: UUID, body: SaveDraft, actor: Actor, svc: Authoring) -> DraftView:
+    return svc.save(actor, pipeline_id, body)
+
+
+@router.get(
+    "/pipelines/{pipeline_id}/definitions/{definition_id}/graph", response_model=Graph | None
+)
+def graph_definition(
+    pipeline_id: UUID, definition_id: UUID, actor: Actor, svc: Authoring
+) -> Graph | None:
+    return svc.published_graph(actor, pipeline_id, definition_id)
+
+
+@router.post(
+    "/pipelines/{pipeline_id}/definitions/{definition_id}/visualize", response_model=Visualization
+)
+def graph_visualize(
+    pipeline_id: UUID, definition_id: UUID, body: Visualize, actor: Actor, svc: Authoring
+) -> Visualization:
+    return svc.visualize(actor, pipeline_id, definition_id, body)

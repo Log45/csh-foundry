@@ -1535,6 +1535,42 @@ class PipelineDefinition(Base):
     )
 
 
+class PipelineDraft(Base):
+    __tablename__ = "pipeline_drafts"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    pipeline_id: Mapped[UUID] = mapped_column(primary_key=True)
+    actor_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    revision: Mapped[int]
+    graph: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "pipeline_id"], ["platform_resources.tenant_id", "platform_resources.id"]
+        ),
+        CheckConstraint("revision > 0", name="ck_pipeline_draft_revision"),
+        CheckConstraint("octet_length(graph::text) <= 524288", name="ck_pipeline_draft_bytes"),
+    )
+
+
+class PipelineGraph(Base):
+    __tablename__ = "pipeline_graphs"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    pipeline_id: Mapped[UUID] = mapped_column(primary_key=True)
+    definition_id: Mapped[UUID] = mapped_column(primary_key=True)
+    graph: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    semantic_digest: Mapped[str] = mapped_column(String(64))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "pipeline_id", "definition_id"],
+            [
+                "pipeline_definitions.tenant_id",
+                "pipeline_definitions.pipeline_id",
+                "pipeline_definitions.id",
+            ],
+        ),
+        CheckConstraint("octet_length(graph::text) <= 524288", name="ck_pipeline_graph_bytes"),
+    )
+
+
 class ExecutionJob(Base):
     __tablename__ = "execution_jobs"
     tenant_id: Mapped[UUID] = mapped_column(primary_key=True)

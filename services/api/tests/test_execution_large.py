@@ -14,11 +14,12 @@ from ontology_platform.artifacts.contracts import CreateArtifact
 from ontology_platform.datasets.contracts import InitiateDataset
 from ontology_platform.execution.config import ExecutionSettings
 from ontology_platform.execution.worker import ExecutionWorker
+from ontology_platform.pipelines.authoring import AuthoringService
 from ontology_platform.pipelines.contracts import StartRun
+from ontology_platform.pipelines.graph import Graph
 from ontology_platform.pipelines.service import PipelineService
 from test_artifacts import store  # noqa: F401
 from test_datasets import dataset, make_service
-from test_execution import spec
 from test_phase1 import database, historical_database, world  # noqa: F401
 
 
@@ -72,24 +73,60 @@ def test_exact_source_tiers(world, store, tmp_path, size, format):  # noqa: F811
         flush=True,
     )
     if size == 1024**3 and format == "csv":
+        authoring = AuthoringService(
+            world.sessions, world.registry.authorizer, store.settings, store
+        )
         output = datasets.create(p, resource.project_id, CreateArtifact(name="Large output"))
-        pipeline = service.create(
+        pipeline = authoring.create(
             p, resource.project_id, CreateArtifact(name="Large transformation")
         )
-        definition = service.publish(
-            p, pipeline.id, spec([{"op": "select", "columns": ["payload"]}])
+        graph = Graph.model_validate(
+            {
+                "nodes": [
+                    {
+                        "id": "source",
+                        "kind": "dataset_source",
+                        "config": {
+                            "name": "source",
+                            "dataset_id": resource.id,
+                            "version_id": v.id,
+                            "columns": {"payload": "String"},
+                        },
+                    },
+                    {
+                        "id": "select",
+                        "kind": "transform",
+                        "config": {"op": "select", "columns": ["payload"]},
+                    },
+                    {
+                        "id": "output",
+                        "kind": "dataset_output",
+                        "config": {
+                            "dataset_id": output.id,
+                            "columns": {"payload": "String"},
+                        },
+                    },
+                ],
+                "edges": [
+                    {"id": "source-select", "source": "source", "target": "select"},
+                    {"id": "select-output", "source": "select", "target": "output"},
+                ],
+            }
         )
-        run = service.start(
+        compiled = authoring.compile(p, pipeline.id, graph)
+        assert compiled.valid
+        definition = authoring.publish_graph(p, pipeline.id, graph)
+        run = authoring.start(
             p,
             pipeline.id,
             StartRun(
                 definition_id=definition.id,
-                inputs=[{"name": "source", "dataset_id": resource.id, "version_id": v.id}],
+                inputs=compiled.inputs,
                 output_dataset_id=output.id,
             ),
         )
-        assert ExecutionWorker(service).run_one() == run.id
-        status = service.status(p, run.id)
+        assert ExecutionWorker(authoring).run_one() == run.id
+        status = authoring.status(p, run.id)
         assert status.state == "SUCCEEDED", status
         assert (
             datasets.dataset_metadata(p, output.id, status.output_version_id).result["row_count"]

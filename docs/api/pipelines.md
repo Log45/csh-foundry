@@ -1,4 +1,4 @@
-# Governed transformation pipelines (Phase 14)
+# Governed transformation and visual pipelines (Phases 14 and 18)
 
 All paths are `/api/v1`, authenticated and tenant scoped. Use existing Project membership and resource
 sharing. Pipeline sharing never grants input or output access. Unknown/private IDs have identical errors.
@@ -7,34 +7,47 @@ target dataset write permission. These permissions are checked again at sensitiv
 Read-only pipeline sharing does not authorize execution.
 Metadata uses JSON, bounded pagination (`limit` 1–100, `offset` 0–10000), and the existing error envelope.
 
-| Method/path | Contract |
-| --- | --- |
-| POST `/projects/{project}/pipelines` | Create stable registry resource; name, description, folder_id |
-| GET `/pipelines/{pipeline}` | Governed resource metadata |
-| POST `/pipelines/{pipeline}/validate` | Validate the closed Definition grammar; does not execute |
-| POST `/pipelines/{pipeline}/definitions` | Publish immutable DefinitionView; editing publishes a new UUID |
-| GET `/pipelines/{pipeline}/definitions` | Paginated published history |
-| POST `/pipelines/{pipeline}/runs` | 202; pin definition_id, named inputs (dataset_id/version_id), output_dataset_id |
-| GET `/pipelines/{pipeline}/runs` | Paginated execution history |
-| GET `/execution/jobs/{job}` | Validation/run state, attempts, sanitized error, metrics and output identity |
-| POST `/execution/jobs/{job}/cancel` | Initiator with current owning-Project write permission; idempotent terminal read |
-| POST `/execution/jobs/{job}/retry` | Initiator; FAILED only, bounded attempts; exact definition/input pins retained |
-| GET `/datasets/{dataset}/versions/{version}/lineage` | Authorized successful-run provenance, bounded inputs |
-| POST `/datasets/{dataset}/versions/{version}/validate` | 202; durable validation enqueue/idempotent existing status |
+| Method/path                                                     | Contract                                                                                    |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| POST `/projects/{project}/pipelines`                            | Create stable registry resource; name, description, folder_id                               |
+| GET `/pipelines/{pipeline}`                                     | Governed resource metadata                                                                  |
+| POST `/pipelines/{pipeline}/validate`                           | Validate the closed Definition grammar; does not execute                                    |
+| POST `/pipelines/{pipeline}/definitions`                        | Publish immutable DefinitionView; editing publishes a new UUID                              |
+| GET `/pipelines/{pipeline}/definitions`                         | Paginated published history                                                                 |
+| POST `/pipelines/{pipeline}/graph/compile`                      | Authoritative structural/resource/schema validation and deterministic canonical compilation |
+| GET `/pipelines/{pipeline}/graph/draft`                         | Current actor's private working draft or null                                               |
+| PUT `/pipelines/{pipeline}/graph/draft`                         | Save draft with `expected_revision` compare-and-swap                                        |
+| POST `/pipelines/{pipeline}/graph/publish`                      | Revalidate and atomically publish canonical definition plus immutable graph metadata        |
+| GET `/pipelines/{pipeline}/definitions/{definition}/graph`      | Authorized stored graph for a visual publication, or null for JSON-only history             |
+| POST `/pipelines/{pipeline}/definitions/{definition}/visualize` | Reconstruct compatible JSON definition using caller-supplied exact source/output pins       |
+| POST `/pipelines/{pipeline}/runs`                               | 202; pin definition_id, named inputs (dataset_id/version_id), output_dataset_id             |
+| GET `/pipelines/{pipeline}/runs`                                | Paginated execution history                                                                 |
+| GET `/execution/jobs/{job}`                                     | Validation/run state, attempts, sanitized error, metrics and output identity                |
+| POST `/execution/jobs/{job}/cancel`                             | Initiator with current owning-Project write permission; idempotent terminal read            |
+| POST `/execution/jobs/{job}/retry`                              | Initiator; FAILED only, bounded attempts; exact definition/input pins retained              |
+| GET `/datasets/{dataset}/versions/{version}/lineage`            | Authorized successful-run provenance, bounded inputs                                        |
+| POST `/datasets/{dataset}/versions/{version}/validate`          | 202; durable validation enqueue/idempotent existing status                                  |
 
 Example definition:
 
 ```json
 {
   "engine": "polars",
-  "inputs": [{"name": "source", "columns": {"id": "Int64"}}],
+  "inputs": [{ "name": "source", "columns": { "id": "Int64" } }],
   "steps": [
-    {"op": "filter", "expression": {"op": "gt", "args": [
-      {"op": "column", "column": "id"}, {"op": "literal", "value": 0}
-    ]}},
-    {"op": "select", "columns": ["id"]}
+    {
+      "op": "filter",
+      "expression": {
+        "op": "gt",
+        "args": [
+          { "op": "column", "column": "id" },
+          { "op": "literal", "value": 0 }
+        ]
+      }
+    },
+    { "op": "select", "columns": ["id"] }
   ],
-  "output_columns": {"id": "Int64"}
+  "output_columns": { "id": "Int64" }
 }
 ```
 
@@ -46,19 +59,19 @@ fails validation. Integer add/subtract/multiply widen to Decimal before checked 
 strict casts reject overflow. Floating arithmetic follows Polars IEEE semantics. Decimal arithmetic
 retains Polars precision/scale rules and rejects unsupported conversions; cast Decimal uses (38,9).
 
-| Step | Fields and semantics |
-| --- | --- |
-| select/drop | columns; missing names fail |
-| rename | mapping of old to new names; collisions fail |
-| filter | expression returning Boolean; null excluded |
-| sort | columns, descending; stable ties, null order follows Polars default |
-| cast | mapping to String/Int64/UInt64/Float64/Boolean/Date/Datetime/Decimal; strict |
-| derive | new name and expression; overwriting existing columns rejected |
-| fill_null | name and scalar value; must have compatible type |
-| deduplicate | optional columns; source-first order retained |
-| aggregate | columns as group keys; aggregates with column/function/alias; sum/mean/min/max/count |
-| join | named input, common columns, inner/left/full/semi/anti; identical key types; collisions fail |
-| union | named input; schemas must match exactly; input order retained |
+| Step        | Fields and semantics                                                                         |
+| ----------- | -------------------------------------------------------------------------------------------- |
+| select/drop | columns; missing names fail                                                                  |
+| rename      | mapping of old to new names; collisions fail                                                 |
+| filter      | expression returning Boolean; null excluded                                                  |
+| sort        | columns, descending; stable ties, null order follows Polars default                          |
+| cast        | mapping to String/Int64/UInt64/Float64/Boolean/Date/Datetime/Decimal; strict                 |
+| derive      | new name and expression; overwriting existing columns rejected                               |
+| fill_null   | name and scalar value; must have compatible type                                             |
+| deduplicate | optional columns; source-first order retained                                                |
+| aggregate   | columns as group keys; aggregates with column/function/alias; sum/mean/min/max/count         |
+| join        | named input, common columns, inner/left/full/semi/anti; identical key types; collisions fail |
+| union       | named input; schemas must match exactly; input order retained                                |
 
 Projection/filter/cast/derive/fill preserve source order. Sort changes order explicitly. Dedup keeps
 first occurrence, grouping keeps first-seen key order, joins request left/right deterministic order.
@@ -81,3 +94,8 @@ Committed bytes have existing indefinite retention, including abandoned output r
 Lineage contains actual successful-run edges only. Output permission alone reveals no private input
 UUID/checksum or private pipeline/definition UUID: each is filtered using current authorization. The
 run/output identities and completion time remain visible as provenance of the readable output.
+
+Visual graph v1, deterministic identity, node catalog, diagnostics and lifecycle are documented in
+[Visual pipeline authoring](../development/visual-pipeline-authoring.md). Published visual definitions
+also pin their source versions and output dataset; run requests cannot substitute them. The canonical
+definition and Phase 14 worker remain the sole execution authority.

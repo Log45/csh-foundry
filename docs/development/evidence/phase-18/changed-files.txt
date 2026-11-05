@@ -1,0 +1,36 @@
+PLANS.md
+apps/studio/app/layout.tsx
+apps/studio/app/style.css
+apps/studio/features/pipeline-builder.tsx
+apps/studio/features/pipelines.tsx
+apps/studio/features/projects.tsx
+apps/studio/lib/api-schema.ts
+apps/studio/lib/openapi.json
+apps/studio/package-lock.json
+apps/studio/package.json
+apps/studio/tests/e2e/workflow.spec.ts
+apps/studio/tests/pipelines.test.tsx
+docs/api/pipelines.md
+docs/decisions/0043-visual-pipeline-authoring.md
+docs/development/phase-18-limits.md
+docs/development/phase-18-report.md
+docs/development/visual-pipeline-authoring.md
+packages/react-sdk/src/hooks.ts
+packages/typescript-sdk/src/endpoints.ts
+packages/typescript-sdk/src/schema.ts
+scripts/generate_platform_sdk.py
+scripts/validate_phase18.py
+services/api/migrations/versions/0024_pipeline_graphs.py
+services/api/src/ontology_platform/db/governance.py
+services/api/src/ontology_platform/db/models.py
+services/api/src/ontology_platform/pipelines/authoring.py
+services/api/src/ontology_platform/pipelines/graph.py
+services/api/src/ontology_platform/pipelines/routes.py
+services/api/src/ontology_platform/pipelines/service.py
+services/api/tests/test_execution_large.py
+services/api/tests/test_mappings.py
+services/api/tests/test_media_functions_automations.py
+services/api/tests/test_pipeline_graphs.py
+
+Generated acceptance evidence is contained under docs/development/evidence/phase-18/ and is
+inventory metadata rather than implementation source. No file was staged or committed.

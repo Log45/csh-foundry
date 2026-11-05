@@ -1,0 +1,53 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-3799fe676d56_default  Creating
+ Network phase15-3799fe676d56_default  Created
+ Volume "phase15-3799fe676d56_minio-data"  Creating
+ Volume "phase15-3799fe676d56_minio-data"  Created
+ Container phase15-3799fe676d56-minio-1  Creating
+ Container phase15-3799fe676d56-minio-1  Created
+ Container phase15-3799fe676d56-minio-1  Starting
+ Container phase15-3799fe676d56-minio-1  Started
+ Container phase15-3799fe676d56-minio-1  Waiting
+ Container phase15-3799fe676d56-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-3799fe676d56-minio-1  Restarting
+ Container phase15-3799fe676d56-minio-1  Started
+ Container phase15-3799fe676d56-minio-1  Running
+ Container phase15-3799fe676d56-minio-1  Waiting
+ Container phase15-3799fe676d56-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+testpaths: services/api/tests, packages/ontology-schema/tests
+plugins: anyio-4.15.1
+collected 849 items
+
+services/api/tests/test_action_models.py ............................    [  3%]
+services/api/tests/test_actions.py ..................................... [  7%]
+...................                                                      [  9%]
+services/api/tests/test_api.py ...                                       [ 10%]
+services/api/tests/test_artifacts.py .............F                      [ 11%]
+services/api/tests/test_branching.py ................                    [ 13%]
+services/api/tests/test_capacity_acceptance.py ......                    [ 14%]
+services/api/tests/test_compatibility.py ..............                  [ 16%]
+services/api/tests/test_contracts.py ...                                 [ 16%]
+services/api/tests/test_database.py .                                    [ 16%]
+services/api/tests/test_datasets.py .................................... [ 20%]
+.                                                                        [ 20%]
+services/api/tests/test_diagnostics.py ..                                [ 21%]
+services/api/tests/test_execution.py ................................... [ 25%]
+.............                                                            [ 26%]
+services/api/tests/test_execution_large.py ..

@@ -444,6 +444,62 @@ export function usePipelinesHistory(
     options,
   );
 }
+export function usePipelinesCompileGraph(
+  input: EndpointInput["pipelines.compileGraph"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "pipelines.compileGraph",
+    input,
+    (c, signal) => c.pipelines.compileGraph(input, { signal }),
+    options,
+  );
+}
+export function usePipelinesPublishGraph() {
+  return useFoundryMutation<
+    EndpointInput["pipelines.publishGraph"],
+    EndpointOutput["pipelines.publishGraph"]
+  >((c, input) => c.pipelines.publishGraph(input));
+}
+export function usePipelinesDraft(
+  input: EndpointInput["pipelines.draft"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "pipelines.draft",
+    input,
+    (c, signal) => c.pipelines.draft(input, { signal }),
+    options,
+  );
+}
+export function usePipelinesSaveDraft() {
+  return useFoundryMutation<
+    EndpointInput["pipelines.saveDraft"],
+    EndpointOutput["pipelines.saveDraft"]
+  >((c, input) => c.pipelines.saveDraft(input));
+}
+export function usePipelinesGraph(
+  input: EndpointInput["pipelines.graph"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "pipelines.graph",
+    input,
+    (c, signal) => c.pipelines.graph(input, { signal }),
+    options,
+  );
+}
+export function usePipelinesVisualize(
+  input: EndpointInput["pipelines.visualize"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "pipelines.visualize",
+    input,
+    (c, signal) => c.pipelines.visualize(input, { signal }),
+    options,
+  );
+}
 export function useFunctionsCreate() {
   return useFoundryMutation<
     EndpointInput["functions.create"],

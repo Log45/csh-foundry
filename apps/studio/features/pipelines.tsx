@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { Client } from "@/lib/api";
 import type { components } from "@/lib/api-schema";
 import { Field, Notice, useTask } from "@/components/ui";
+import { PipelineBuilder } from "@/features/pipeline-builder";
 
 type Job = components["schemas"]["ExecutionJobView"];
 type Definition = components["schemas"]["DefinitionView"];
@@ -58,10 +59,12 @@ export function CreatePipelinePanel({
 }
 export function PipelinePanel({
   api,
+  project,
   pipeline,
   writable,
 }: {
   api: Client;
+  project: string;
   pipeline: string;
   writable: boolean;
 }) {
@@ -96,46 +99,66 @@ export function PipelinePanel({
       >
         Refresh pipeline
       </button>
-      {writable && (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            void task.run(async () => {
-              const v = await api<Definition>(
-                `${path}/definitions`,
-                "POST",
-                JSON.parse(spec),
-              );
-              setDefinition(v.id);
-              setMessage(`Published immutable definition ${v.sequence}`);
-              await refresh();
-            });
-          }}
-        >
-          <Field label="Transformation specification JSON">
-            <textarea
-              rows={14}
-              value={spec}
-              onChange={(e) => setSpec(e.target.value)}
-            />
-          </Field>
-          <button
-            type="button"
-            disabled={task.busy}
-            onClick={() =>
+      <PipelineBuilder
+        api={api}
+        project={project}
+        pipeline={pipeline}
+        writable={writable}
+        onPublished={(published, compilation) => {
+          setDefinition(published.id);
+          setInputs(JSON.stringify(compilation.inputs, null, 2));
+          setOutput(compilation.output_dataset_id ?? "");
+          setMessage(
+            `Published immutable visual definition ${published.sequence}`,
+          );
+          void task.run(() => refresh());
+        }}
+      />
+      <details>
+        <summary>
+          Advanced canonical JSON editor and compatibility fallback
+        </summary>
+        {writable && (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
               void task.run(async () => {
-                await api(`${path}/validate`, "POST", JSON.parse(spec));
-                setMessage(
-                  "Definition grammar valid; run planning checks input columns and types",
+                const v = await api<Definition>(
+                  `${path}/definitions`,
+                  "POST",
+                  JSON.parse(spec),
                 );
-              })
-            }
+                setDefinition(v.id);
+                setMessage(`Published immutable definition ${v.sequence}`);
+                await refresh();
+              });
+            }}
           >
-            Validate definition
-          </button>
-          <button disabled={task.busy}>Publish definition version</button>
-        </form>
-      )}
+            <Field label="Transformation specification JSON">
+              <textarea
+                rows={14}
+                value={spec}
+                onChange={(e) => setSpec(e.target.value)}
+              />
+            </Field>
+            <button
+              type="button"
+              disabled={task.busy}
+              onClick={() =>
+                void task.run(async () => {
+                  await api(`${path}/validate`, "POST", JSON.parse(spec));
+                  setMessage(
+                    "Definition grammar valid; run planning checks input columns and types",
+                  );
+                })
+              }
+            >
+              Validate definition
+            </button>
+            <button disabled={task.busy}>Publish definition version</button>
+          </form>
+        )}
+      </details>
       <Field label="Published definition">
         <select
           value={definition}

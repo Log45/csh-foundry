@@ -76,6 +76,14 @@ for family, ident in [("pipelines", "pipeline_id"), ("mappings", "mapping_id")]:
         ("start", "post", base + "/runs"),
         ("history", "get", base + "/runs"),
     ]
+manifest["pipelines"] += [
+    ("compileGraph", "post", "/pipelines/{pipeline_id}/graph/compile"),
+    ("publishGraph", "post", "/pipelines/{pipeline_id}/graph/publish"),
+    ("draft", "get", "/pipelines/{pipeline_id}/graph/draft"),
+    ("saveDraft", "put", "/pipelines/{pipeline_id}/graph/draft"),
+    ("graph", "get", "/pipelines/{pipeline_id}/definitions/{definition_id}/graph"),
+    ("visualize", "post", "/pipelines/{pipeline_id}/definitions/{definition_id}/visualize"),
+]
 for family, ident, group in [
     ("functions", "function_id", "functions"),
     ("automations", "automation_id", "automations"),
@@ -116,6 +124,8 @@ read_posts = {
     ("objects", "query"),
     ("actions", "preview"),
     ("pipelines", "validate"),
+    ("pipelines", "compileGraph"),
+    ("pipelines", "visualize"),
     ("mappings", "validate"),
     ("mappings", "preview"),
     ("functions", "validate"),

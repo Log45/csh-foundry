@@ -4928,6 +4928,368 @@
         }
       }
     },
+    "/api/v1/pipelines/{pipeline_id}/graph/compile": {
+      "post": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Graph Compile",
+        "operationId": "graph_compile_api_v1_pipelines__pipeline_id__graph_compile_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Graph-Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Compilation"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pipelines/{pipeline_id}/graph/publish": {
+      "post": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Graph Publish",
+        "operationId": "graph_publish_api_v1_pipelines__pipeline_id__graph_publish_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Graph-Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinitionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pipelines/{pipeline_id}/graph/draft": {
+      "get": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Graph Draft",
+        "operationId": "graph_draft_api_v1_pipelines__pipeline_id__graph_draft_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/DraftView"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Graph Draft Api V1 Pipelines  Pipeline Id  Graph Draft Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Graph Save",
+        "operationId": "graph_save_api_v1_pipelines__pipeline_id__graph_draft_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveDraft"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pipelines/{pipeline_id}/definitions/{definition_id}/graph": {
+      "get": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Graph Definition",
+        "operationId": "graph_definition_api_v1_pipelines__pipeline_id__definitions__definition_id__graph_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          },
+          {
+            "name": "definition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Definition Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/Graph-Output"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Graph Definition Api V1 Pipelines  Pipeline Id  Definitions  Definition Id  Graph Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pipelines/{pipeline_id}/definitions/{definition_id}/visualize": {
+      "post": {
+        "tags": [
+          "pipelines"
+        ],
+        "summary": "Graph Visualize",
+        "operationId": "graph_visualize_api_v1_pipelines__pipeline_id__definitions__definition_id__visualize_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          },
+          {
+            "name": "definition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Definition Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Visualize"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Visualization"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/projects/{project_id}/mappings": {
       "post": {
         "tags": [
@@ -10877,7 +11239,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Diagnostic"
+                    "$ref": "#/components/schemas/ontology_platform__semantic__contracts__Diagnostic"
                   },
                   "title": "Response Diagnostics Api V1 Ontologies  Ontology Id  Interchange Imports  Key  Diagnostics Get"
                 }
@@ -12695,7 +13057,7 @@
           },
           "diagnostics": {
             "items": {
-              "$ref": "#/components/schemas/Diagnostic"
+              "$ref": "#/components/schemas/ontology_platform__semantic__contracts__Diagnostic"
             },
             "type": "array",
             "title": "Diagnostics"
@@ -13478,6 +13840,76 @@
         ],
         "title": "CompatibilityInput"
       },
+      "Compilation": {
+        "properties": {
+          "valid": {
+            "type": "boolean",
+            "title": "Valid",
+            "default": false
+          },
+          "diagnostics": {
+            "items": {
+              "$ref": "#/components/schemas/ontology_platform__pipelines__graph__Diagnostic"
+            },
+            "type": "array",
+            "maxItems": 256,
+            "title": "Diagnostics"
+          },
+          "specification": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Definition-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "inputs": {
+            "items": {
+              "$ref": "#/components/schemas/InputVersion"
+            },
+            "type": "array",
+            "title": "Inputs"
+          },
+          "output_dataset_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Output Dataset Id"
+          },
+          "semantic_digest": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Semantic Digest"
+          },
+          "schemas": {
+            "additionalProperties": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "type": "object",
+            "title": "Schemas"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Compilation"
+      },
       "CompileInput": {
         "properties": {
           "schema_version": {
@@ -14015,33 +14447,6 @@
         ],
         "title": "DelegationInput"
       },
-      "Diagnostic": {
-        "properties": {
-          "code": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Code"
-          },
-          "construct": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Construct"
-          },
-          "message": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Message"
-          }
-        },
-        "additionalProperties": false,
-        "type": "object",
-        "required": [
-          "code",
-          "construct",
-          "message"
-        ],
-        "title": "Diagnostic"
-      },
       "DiagnosticView": {
         "properties": {
           "mapping_id": {
@@ -14170,6 +14575,70 @@
           "version"
         ],
         "title": "DraftHandoff"
+      },
+      "DraftView": {
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "graph": {
+            "$ref": "#/components/schemas/Graph-Output"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "revision",
+          "graph"
+        ],
+        "title": "DraftView"
+      },
+      "Edge": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,80}$",
+            "title": "Id"
+          },
+          "source": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,80}$",
+            "title": "Source"
+          },
+          "source_port": {
+            "type": "string",
+            "enum": [
+              "output",
+              "scalar_output"
+            ],
+            "title": "Source Port",
+            "default": "output"
+          },
+          "target": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,80}$",
+            "title": "Target"
+          },
+          "target_port": {
+            "type": "string",
+            "enum": [
+              "input",
+              "right",
+              "scalar_input"
+            ],
+            "title": "Target Port",
+            "default": "input"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "source",
+          "target"
+        ],
+        "title": "Edge"
       },
       "Enable": {
         "properties": {
@@ -14523,7 +14992,7 @@
           },
           "diagnostics": {
             "items": {
-              "$ref": "#/components/schemas/Diagnostic"
+              "$ref": "#/components/schemas/ontology_platform__semantic__contracts__Diagnostic"
             },
             "type": "array",
             "title": "Diagnostics"
@@ -14993,6 +15462,65 @@
         "type": "object",
         "title": "FunctionLimits"
       },
+      "FunctionNode": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,80}$",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "const": "function_reference",
+            "title": "Kind"
+          },
+          "position": {
+            "$ref": "#/components/schemas/Position"
+          },
+          "config": {
+            "$ref": "#/components/schemas/FunctionReference"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "config"
+        ],
+        "title": "FunctionNode"
+      },
+      "FunctionReference": {
+        "properties": {
+          "function_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Function Id"
+          },
+          "definition_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Definition Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "FunctionReference"
+      },
       "GenerateInput": {
         "properties": {
           "version": {
@@ -15016,6 +15544,116 @@
           "language"
         ],
         "title": "GenerateInput"
+      },
+      "Graph-Input": {
+        "properties": {
+          "format_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Format Version",
+            "default": 1
+          },
+          "nodes": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/SourceNode"
+                },
+                {
+                  "$ref": "#/components/schemas/TransformNode-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/OutputNode"
+                },
+                {
+                  "$ref": "#/components/schemas/FunctionNode"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "kind",
+                "mapping": {
+                  "dataset_output": "#/components/schemas/OutputNode",
+                  "dataset_source": "#/components/schemas/SourceNode",
+                  "function_reference": "#/components/schemas/FunctionNode",
+                  "transform": "#/components/schemas/TransformNode-Input"
+                }
+              }
+            },
+            "type": "array",
+            "maxItems": 118,
+            "title": "Nodes"
+          },
+          "edges": {
+            "items": {
+              "$ref": "#/components/schemas/Edge"
+            },
+            "type": "array",
+            "maxItems": 216,
+            "title": "Edges"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "nodes",
+          "edges"
+        ],
+        "title": "Graph"
+      },
+      "Graph-Output": {
+        "properties": {
+          "format_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Format Version",
+            "default": 1
+          },
+          "nodes": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/SourceNode"
+                },
+                {
+                  "$ref": "#/components/schemas/TransformNode-Output"
+                },
+                {
+                  "$ref": "#/components/schemas/OutputNode"
+                },
+                {
+                  "$ref": "#/components/schemas/FunctionNode"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "kind",
+                "mapping": {
+                  "dataset_output": "#/components/schemas/OutputNode",
+                  "dataset_source": "#/components/schemas/SourceNode",
+                  "function_reference": "#/components/schemas/FunctionNode",
+                  "transform": "#/components/schemas/TransformNode-Output"
+                }
+              }
+            },
+            "type": "array",
+            "maxItems": 118,
+            "title": "Nodes"
+          },
+          "edges": {
+            "items": {
+              "$ref": "#/components/schemas/Edge"
+            },
+            "type": "array",
+            "maxItems": 216,
+            "title": "Edges"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "nodes",
+          "edges"
+        ],
+        "title": "Graph"
       },
       "HTTPValidationError": {
         "properties": {
@@ -15341,7 +15979,7 @@
           },
           "diagnostics": {
             "items": {
-              "$ref": "#/components/schemas/Diagnostic"
+              "$ref": "#/components/schemas/ontology_platform__semantic__contracts__Diagnostic"
             },
             "type": "array",
             "title": "Diagnostics"
@@ -17326,6 +17964,61 @@
         ],
         "title": "OntologyView"
       },
+      "OutputConfig": {
+        "properties": {
+          "dataset_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset Id"
+          },
+          "columns": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "maxProperties": 256,
+            "title": "Columns"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "OutputConfig"
+      },
+      "OutputNode": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,80}$",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "const": "dataset_output",
+            "title": "Kind"
+          },
+          "position": {
+            "$ref": "#/components/schemas/Position"
+          },
+          "config": {
+            "$ref": "#/components/schemas/OutputConfig"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "config"
+        ],
+        "title": "OutputNode"
+      },
       "ParameterDefinition": {
         "properties": {
           "id": {
@@ -17659,6 +18352,27 @@
           "object_type"
         ],
         "title": "PolicyInput"
+      },
+      "Position": {
+        "properties": {
+          "x": {
+            "type": "number",
+            "maximum": 100000.0,
+            "minimum": -100000.0,
+            "title": "X",
+            "default": 0
+          },
+          "y": {
+            "type": "number",
+            "maximum": 100000.0,
+            "minimum": -100000.0,
+            "title": "Y",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Position"
       },
       "Predicate": {
         "properties": {
@@ -18885,6 +19599,25 @@
         ],
         "title": "SDKCompatibility"
       },
+      "SaveDraft": {
+        "properties": {
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Revision"
+          },
+          "graph": {
+            "$ref": "#/components/schemas/Graph-Input"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_revision",
+          "graph"
+        ],
+        "title": "SaveDraft"
+      },
       "ScheduleView": {
         "properties": {
           "automation_id": {
@@ -19152,6 +19885,54 @@
         ],
         "title": "Sort"
       },
+      "SourceConfig": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "dataset_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset Id"
+          },
+          "version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Id"
+          },
+          "columns": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "maxProperties": 256,
+            "title": "Columns"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "SourceConfig"
+      },
       "SourceInput": {
         "properties": {
           "id": {
@@ -19237,6 +20018,34 @@
             "version": 1
           }
         ]
+      },
+      "SourceNode": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,80}$",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "const": "dataset_source",
+            "title": "Kind"
+          },
+          "position": {
+            "$ref": "#/components/schemas/Position"
+          },
+          "config": {
+            "$ref": "#/components/schemas/SourceConfig"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "config"
+        ],
+        "title": "SourceNode"
       },
       "StartRun": {
         "properties": {
@@ -19586,6 +20395,62 @@
           "created_at"
         ],
         "title": "TenantView"
+      },
+      "TransformNode-Input": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,80}$",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "const": "transform",
+            "title": "Kind"
+          },
+          "position": {
+            "$ref": "#/components/schemas/Position"
+          },
+          "config": {
+            "$ref": "#/components/schemas/Step-Input"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "config"
+        ],
+        "title": "TransformNode"
+      },
+      "TransformNode-Output": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,80}$",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "const": "transform",
+            "title": "Kind"
+          },
+          "position": {
+            "$ref": "#/components/schemas/Position"
+          },
+          "config": {
+            "$ref": "#/components/schemas/Step-Output"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "config"
+        ],
+        "title": "TransformNode"
       },
       "TraversalStep": {
         "properties": {
@@ -19983,6 +20848,55 @@
         ],
         "title": "VersionView"
       },
+      "Visualization": {
+        "properties": {
+          "graph": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Graph-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "diagnostics": {
+            "items": {
+              "$ref": "#/components/schemas/ontology_platform__pipelines__graph__Diagnostic"
+            },
+            "type": "array",
+            "title": "Diagnostics"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Visualization"
+      },
+      "Visualize": {
+        "properties": {
+          "inputs": {
+            "items": {
+              "$ref": "#/components/schemas/InputVersion"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "minItems": 1,
+            "title": "Inputs"
+          },
+          "output_dataset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Output Dataset Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "inputs",
+          "output_dataset_id"
+        ],
+        "title": "Visualize"
+      },
       "VocabularyTerm": {
         "properties": {
           "iri": {
@@ -20161,6 +21075,47 @@
         ],
         "title": "RelationshipMapping"
       },
+      "ontology_platform__pipelines__graph__Diagnostic": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "node_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Node Id"
+          },
+          "edge_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Edge Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "Diagnostic"
+      },
       "ontology_platform__sdk__service__ArtifactView": {
         "properties": {
           "id": {
@@ -20253,6 +21208,33 @@
           "freshness"
         ],
         "title": "ArtifactView"
+      },
+      "ontology_platform__semantic__contracts__Diagnostic": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Code"
+          },
+          "construct": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Construct"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "construct",
+          "message"
+        ],
+        "title": "Diagnostic"
       }
     },
     "securitySchemes": {

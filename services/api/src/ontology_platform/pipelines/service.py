@@ -18,6 +18,7 @@ from ontology_platform.pipelines.contracts import (
     Definition,
     DefinitionView,
     ExecutionJobView,
+    InputVersion,
     StartRun,
 )
 from ontology_platform.projects.service import conflict
@@ -39,28 +40,31 @@ class PipelineService(ArtifactService):
 
     def publish(self, p: Principal, key: UUID, spec: Definition) -> DefinitionView:
         with self.scope(p) as s:
-            self.artifact(s, p, key, True)
-            sequence = (
-                s.scalar(
-                    select(func.max(PipelineDefinition.sequence)).where(
-                        PipelineDefinition.tenant_id == p.tenant_id,
-                        PipelineDefinition.pipeline_id == key,
-                    )
+            return self.publish_in(s, p, key, spec)
+
+    def publish_in(self, s: Session, p: Principal, key: UUID, spec: Definition) -> DefinitionView:
+        self.artifact(s, p, key, True)
+        sequence = (
+            s.scalar(
+                select(func.max(PipelineDefinition.sequence)).where(
+                    PipelineDefinition.tenant_id == p.tenant_id,
+                    PipelineDefinition.pipeline_id == key,
                 )
-                or 0
             )
-            row = PipelineDefinition(
-                tenant_id=p.tenant_id,
-                pipeline_id=key,
-                id=uuid4(),
-                sequence=sequence + 1,
-                specification=spec.model_dump(mode="json"),
-                created_by=p.principal_id,
-            )
-            s.add(row)
-            s.flush()
-            self.audit(s, p, "pipeline_publish", row.id)
-            return DefinitionView.model_validate(row)
+            or 0
+        )
+        row = PipelineDefinition(
+            tenant_id=p.tenant_id,
+            pipeline_id=key,
+            id=uuid4(),
+            sequence=sequence + 1,
+            specification=spec.model_dump(mode="json"),
+            created_by=p.principal_id,
+        )
+        s.add(row)
+        s.flush()
+        self.audit(s, p, "pipeline_publish", row.id)
+        return DefinitionView.model_validate(row)
 
     def definitions(
         self, p: Principal, key: UUID, limit: int = 50, offset: int = 0
@@ -105,6 +109,23 @@ class PipelineService(ArtifactService):
             resource = self.artifact(s, p, key, True)
             definition = self.definition(s, p, key, body.definition_id)
             spec = Definition.model_validate(definition.specification)
+            # Visual publications are executable only with their immutable authoring bindings.
+            from ontology_platform.db.models import PipelineGraph
+            from ontology_platform.pipelines.graph import Graph, compile_graph
+
+            visual = s.get(PipelineGraph, (p.tenant_id, key, definition.id))
+            if visual is not None:
+                compiled = compile_graph(Graph.model_validate(visual.graph))
+
+                def pins(items: list[InputVersion]) -> list[tuple[str, UUID, UUID]]:
+                    return sorted((i.name, i.dataset_id, i.version_id) for i in items)
+
+                if (
+                    pins(body.inputs) != pins(compiled.inputs)
+                    or body.output_dataset_id != compiled.output_dataset_id
+                ):
+                    raise conflict("Visual definition requires its published immutable bindings")
+
             if sorted(i.name for i in body.inputs) != sorted(i.name for i in spec.inputs):
                 raise conflict("Inputs must match definition contracts exactly")
             datasets.artifact(s, p, body.output_dataset_id, True)

@@ -440,6 +440,7 @@ function ProjectBrowser({
           ) : r.resource_type === "PIPELINE" ? (
             <PipelinePanel
               api={api}
+              project={project.id}
               pipeline={r.id}
               writable={r.project_id === project.id && writable}
             />

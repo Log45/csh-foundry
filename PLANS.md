@@ -3659,3 +3659,13 @@ The explicit Phase 17 request authorizes milestone G only: governed Media Sets (
 with existing ArtifactStore, execution jobs, Studio and SDK integration. ADR 0042 records the boundary.
 No arbitrary user code, Code Workspace, hosting, Phase 18 or production certification is authorized.
 Section 23B remains BLOCKED. Local acceptance must be established in phase-17-report.md.
+
+## Phase 18 authorization addendum (2026-11-05)
+
+The explicit Phase 18 request authorizes milestone H only: a governed visual Pipeline Builder whose
+versioned graph documents compile to the existing Phase 14 canonical definition and execute through
+the existing durable Polars control plane. ADR 0043 records graph, draft, compatibility and Function
+boundaries. Scalar Phase 17 Functions are authoring-only references and cannot execute as dataset
+transformations. No second pipeline engine, arbitrary code, Code Workspace, application hosting,
+Spark/Rust work, Phase 19 or production certification is authorized. Section 23B remains BLOCKED.
+Local acceptance must be established in phase-18-report.md.

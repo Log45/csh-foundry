@@ -1,0 +1,10 @@
+Command:
+PATH=/Users/log/.nvm/versions/node/v26.7.0/bin:$PATH caffeinate -dimsu uv run python scripts/validate_phase15.py --pytest-file services/api/tests/test_execution_large.py::test_exact_source_tiers[csv-1073741824]
+
+Result: PASS (exit 0)
+Pytest: 1 passed in 66.84s
+Scope: exact 1 GiB CSV source, real PostgreSQL, private disposable MinIO, visual graph
+publication, existing durable worker execution, immutable output publication and cleanup.
+
+The final complete run independently executed the same case inside the sixteen-case exact-size
+matrix and passed. Its complete log is final/full-platform-browser.txt.

@@ -729,32 +729,50 @@ test("governed pipeline publishes immutable output and real lineage", async ({
   await panel
     .getByText("Pipeline definitions and runs", { exact: true })
     .click();
-  await panel.getByLabel("Transformation specification JSON").fill(
-    JSON.stringify({
-      inputs: [{ name: "source" }],
-      steps: [{ op: "select", columns: ["id"] }],
-    }),
+  const builder = panel.locator("details.pipeline-builder");
+  await builder.getByRole("button", { name: "Dataset source" }).click();
+  await builder.getByLabel("Source logical name").fill("source");
+  await builder.getByLabel("Source dataset").selectOption(input.id);
+  await builder.getByLabel("Immutable source version").selectOption(version.id);
+  await builder.getByRole("button", { name: "select", exact: true }).click();
+  await builder.getByLabel("Columns (comma separated)").fill("id");
+  await builder.getByRole("button", { name: "Dataset output" }).click();
+  await builder
+    .getByLabel("Output dataset", { exact: true })
+    .selectOption(output.id);
+  await builder
+    .getByLabel("Connection source")
+    .selectOption({ label: "source" });
+  await builder
+    .getByLabel("Connection target")
+    .selectOption({ label: "select" });
+  await builder.getByRole("button", { name: "Add connection" }).click();
+  await builder
+    .getByLabel("Connection source")
+    .selectOption({ label: "select" });
+  await builder
+    .getByLabel("Connection target")
+    .selectOption({ label: "Dataset output" });
+  await builder.getByRole("button", { name: "Add connection" }).click();
+  await builder.getByRole("button", { name: "Save draft" }).click();
+  await expect(builder.getByRole("status")).toContainText(
+    "Saved draft revision 1",
   );
-  await panel
-    .getByRole("button", { name: "Validate definition", exact: true })
+  await builder
+    .getByRole("button", { name: "Validate graph", exact: true })
     .click();
-  await expect(panel.getByRole("status")).toContainText(
-    "Definition grammar valid",
-  );
-  await panel
-    .getByRole("button", { name: "Publish definition version", exact: true })
+  await expect(
+    builder.getByRole("heading", { name: "Graph is valid", exact: true }),
+  ).toBeVisible();
+  await builder
+    .getByRole("button", {
+      name: "Publish immutable visual definition",
+      exact: true,
+    })
     .click();
-  await expect(panel.getByRole("status")).toContainText(
-    "Published immutable definition 1",
-  );
-  await panel
-    .getByLabel("Pinned input dataset versions JSON")
-    .fill(
-      JSON.stringify([
-        { name: "source", dataset_id: input.id, version_id: version.id },
-      ]),
-    );
-  await panel.getByLabel("Output dataset ID").fill(output.id);
+  await expect(
+    panel.getByText("Published immutable visual definition 1", { exact: true }),
+  ).toBeVisible();
   await panel.getByRole("button", { name: "Launch run", exact: true }).click();
   await expect(async () => {
     await panel

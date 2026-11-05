@@ -144,6 +144,24 @@ export interface EndpointInput {
   "pipelines.history": Input<
     operations["history_api_v1_pipelines__pipeline_id__runs_get"]
   >;
+  "pipelines.compileGraph": Input<
+    operations["graph_compile_api_v1_pipelines__pipeline_id__graph_compile_post"]
+  >;
+  "pipelines.publishGraph": Input<
+    operations["graph_publish_api_v1_pipelines__pipeline_id__graph_publish_post"]
+  >;
+  "pipelines.draft": Input<
+    operations["graph_draft_api_v1_pipelines__pipeline_id__graph_draft_get"]
+  >;
+  "pipelines.saveDraft": Input<
+    operations["graph_save_api_v1_pipelines__pipeline_id__graph_draft_put"]
+  >;
+  "pipelines.graph": Input<
+    operations["graph_definition_api_v1_pipelines__pipeline_id__definitions__definition_id__graph_get"]
+  >;
+  "pipelines.visualize": Input<
+    operations["graph_visualize_api_v1_pipelines__pipeline_id__definitions__definition_id__visualize_post"]
+  >;
   "functions.create": Input<
     operations["create_api_v1_projects__project_id__functions_post"]
   >;
@@ -355,6 +373,24 @@ export interface EndpointOutput {
   >;
   "pipelines.history": Output<
     operations["history_api_v1_pipelines__pipeline_id__runs_get"]
+  >;
+  "pipelines.compileGraph": Output<
+    operations["graph_compile_api_v1_pipelines__pipeline_id__graph_compile_post"]
+  >;
+  "pipelines.publishGraph": Output<
+    operations["graph_publish_api_v1_pipelines__pipeline_id__graph_publish_post"]
+  >;
+  "pipelines.draft": Output<
+    operations["graph_draft_api_v1_pipelines__pipeline_id__graph_draft_get"]
+  >;
+  "pipelines.saveDraft": Output<
+    operations["graph_save_api_v1_pipelines__pipeline_id__graph_draft_put"]
+  >;
+  "pipelines.graph": Output<
+    operations["graph_definition_api_v1_pipelines__pipeline_id__definitions__definition_id__graph_get"]
+  >;
+  "pipelines.visualize": Output<
+    operations["graph_visualize_api_v1_pipelines__pipeline_id__definitions__definition_id__visualize_post"]
   >;
   "functions.create": Output<
     operations["create_api_v1_projects__project_id__functions_post"]
@@ -892,6 +928,72 @@ export function endpoints(send: Transport) {
         send(
           "GET",
           "/api/v1/pipelines/{pipeline_id}/runs",
+          input,
+          true,
+          options,
+        ),
+      compileGraph: (
+        input: EndpointInput["pipelines.compileGraph"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["pipelines.compileGraph"]> =>
+        send(
+          "POST",
+          "/api/v1/pipelines/{pipeline_id}/graph/compile",
+          input,
+          true,
+          options,
+        ),
+      publishGraph: (
+        input: EndpointInput["pipelines.publishGraph"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["pipelines.publishGraph"]> =>
+        send(
+          "POST",
+          "/api/v1/pipelines/{pipeline_id}/graph/publish",
+          input,
+          false,
+          options,
+        ),
+      draft: (
+        input: EndpointInput["pipelines.draft"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["pipelines.draft"]> =>
+        send(
+          "GET",
+          "/api/v1/pipelines/{pipeline_id}/graph/draft",
+          input,
+          true,
+          options,
+        ),
+      saveDraft: (
+        input: EndpointInput["pipelines.saveDraft"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["pipelines.saveDraft"]> =>
+        send(
+          "PUT",
+          "/api/v1/pipelines/{pipeline_id}/graph/draft",
+          input,
+          false,
+          options,
+        ),
+      graph: (
+        input: EndpointInput["pipelines.graph"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["pipelines.graph"]> =>
+        send(
+          "GET",
+          "/api/v1/pipelines/{pipeline_id}/definitions/{definition_id}/graph",
+          input,
+          true,
+          options,
+        ),
+      visualize: (
+        input: EndpointInput["pipelines.visualize"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["pipelines.visualize"]> =>
+        send(
+          "POST",
+          "/api/v1/pipelines/{pipeline_id}/definitions/{definition_id}/visualize",
           input,
           true,
           options,

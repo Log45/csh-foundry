@@ -484,7 +484,7 @@ def test_upgrade_from_phase14_preserves_definitions(historical_database, store):
         command.check(config)
         assert (
             connection.scalar(text("SELECT version_num FROM alembic_version"))
-            == "0023_media_functions"
+            == "0024_pipeline_graphs"
         )
     assert pipelines.definitions(w.actor, pipe.id)[0].id == definition.id
     assert datasets.dataset_metadata(w.actor, source.id, version.id).checksum == version.checksum
