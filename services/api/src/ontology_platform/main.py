@@ -113,6 +113,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(artifact_router)
     app.include_router(dataset_router)
     app.include_router(pipeline_router)
+    app.add_middleware(
+        ActionPayloadLimit,
+        paths=("/pipelines",),
+        methods=("POST", "PUT"),
+        code="pipeline_payload_too_large",
+        message="Pipeline payload exceeds 512 KiB",
+        max_bytes=524288,
+    )
     app.include_router(mapping_router)
     app.include_router(media_router)
     app.include_router(function_router)

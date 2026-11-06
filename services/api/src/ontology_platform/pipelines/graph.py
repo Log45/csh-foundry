@@ -8,6 +8,13 @@ from uuid import UUID
 from pydantic import Field, FiniteFloat, model_validator
 
 from ontology_platform.pipelines.contracts import Definition, InputContract, InputVersion, Step
+from ontology_platform.pipelines.dag import (
+    DAGDefinition,
+    DAGInput,
+    DAGNode,
+    DAGOutput,
+    semantic_digest,
+)
 from ontology_platform.projects.contracts import Model, Name
 
 Identifier = Annotated[str, Field(pattern=r"^[A-Za-z0-9_-]{1,80}$")]
@@ -26,6 +33,9 @@ class SourceConfig(Model):
 
 
 class OutputConfig(Model):
+    format: Literal["parquet", "csv", "ndjson"] = "parquet"
+    project_id: UUID | None = None
+    name: Name | None = None
     dataset_id: UUID | None = None
     columns: dict[str, str] = Field(default_factory=dict, max_length=256)
 
@@ -77,13 +87,26 @@ class Edge(Model):
 
 
 class Graph(Model):
-    format_version: Literal[1] = 1
+    format_version: Literal[1, 2] = 1
     nodes: list[Node] = Field(max_length=118)
     edges: list[Edge] = Field(max_length=216)
 
     @model_validator(mode="after")
     def budget(self) -> "Graph":
-        if len(self.model_dump_json().encode()) > 262144:
+        payload = self.model_dump(mode="json")
+        if self.format_version == 1:
+            for node in payload["nodes"]:
+                if node["kind"] == "dataset_output":
+                    config = node["config"]
+                    if (
+                        config["format"] != "parquet"
+                        or config["project_id"] is not None
+                        or config["name"] is not None
+                    ):
+                        raise ValueError("Output formats and new targets require graph format 2")
+                    for field in ("format", "project_id", "name"):
+                        del config[field]
+        if len(json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode()) > 262144:
             raise ValueError("Graph exceeds 256 KiB")
         if any(len(n.config.model_dump_json().encode()) > 16384 for n in self.nodes):
             raise ValueError("Node configuration exceeds 16 KiB")
@@ -106,7 +129,8 @@ class Diagnostic(Model):
 class Compilation(Model):
     valid: bool = False
     diagnostics: list[Diagnostic] = Field(default_factory=list, max_length=256)
-    specification: Definition | None = None
+    specification: Definition | DAGDefinition | None = None
+    outputs: list[DAGOutput] = Field(default_factory=list)
     inputs: list[InputVersion] = Field(default_factory=list)
     output_dataset_id: UUID | None = None
     semantic_digest: str | None = None
@@ -115,6 +139,8 @@ class Compilation(Model):
 
 def compile_graph(graph: Graph) -> Compilation:
     """Structural compilation, without I/O. Resource and schema checks are service-owned."""
+    if graph.format_version == 2:
+        return compile_dag_graph(graph)
     errors: list[Diagnostic] = []
 
     def error(code: str, message: str, node: str | None = None, edge: str | None = None) -> None:
@@ -360,3 +386,114 @@ class SaveDraft(Model):
 class DraftView(Model):
     revision: int
     graph: Graph
+
+
+def compile_dag_graph(graph: Graph) -> Compilation:
+    """Canvas-independent v2 compilation, retaining v1 historical compilation unchanged."""
+    from pydantic import ValidationError
+
+    errors: list[Diagnostic] = []
+
+    def error(code: str, message: str, node: str | None = None, edge: str | None = None) -> None:
+        if len(errors) < 256:
+            errors.append(Diagnostic(code=code, message=message, node_id=node, edge_id=edge))
+
+    nodes = {n.id: n for n in graph.nodes}
+    if len(nodes) != len(graph.nodes):
+        error("duplicate_node", "Node IDs must be unique")
+    if len({e.id for e in graph.edges}) != len(graph.edges):
+        error("duplicate_edge", "Edge IDs must be unique")
+    incoming: dict[str, dict[str, str]] = {key: {} for key in nodes}
+    refs = {n.id: n.config.name if isinstance(n, SourceNode) else n.id for n in graph.nodes}
+    for edge in graph.edges:
+        source, target = nodes.get(edge.source), nodes.get(edge.target)
+        if source is None or target is None:
+            error("missing_node", "Connection references a missing node", edge=edge.id)
+            continue
+        ports = (
+            {"input", "right"}
+            if isinstance(target, TransformNode) and target.config.op in {"join", "union"}
+            else {"input"}
+        )
+        if (
+            isinstance(source, (OutputNode, FunctionNode))
+            or isinstance(target, (SourceNode, FunctionNode))
+            or edge.source_port != "output"
+            or edge.target_port not in ports
+        ):
+            error("port_type", "Connect compatible dataset ports", edge=edge.id)
+            continue
+        if edge.target_port in incoming[target.id]:
+            error("duplicate_port", "One edge is allowed per input port", target.id, edge.id)
+        incoming[target.id][edge.target_port] = refs[source.id]
+    inputs = []
+    transforms = []
+    outputs = []
+    for node in graph.nodes:
+        if isinstance(node, SourceNode):
+            if node.config.dataset_id is None or node.config.version_id is None:
+                error("source_reference_required", "Select exact dataset/version", node.id)
+            else:
+                try:
+                    inputs.append(DAGInput(**node.config.model_dump()))
+                except ValidationError:
+                    error(
+                        "input_identity_invalid",
+                        "Use a stable source name with letters, numbers, underscores or hyphens",
+                        node.id,
+                    )
+        elif isinstance(node, FunctionNode):
+            error(
+                "function_execution_unsupported",
+                "Scalar Functions cannot execute in pipelines",
+                node.id,
+            )
+        elif isinstance(node, TransformNode):
+            step = (
+                node.config.model_copy(update={"input": "right"})
+                if node.config.op in {"join", "union"}
+                else node.config
+            )
+            try:
+                transforms.append(DAGNode(id=node.id, inputs=incoming[node.id], config=step))
+            except ValidationError:
+                error("missing_input", "Required operation input ports are missing", node.id)
+        elif isinstance(node, OutputNode):
+            if "input" not in incoming[node.id]:
+                error("missing_input", "Connect an output source", node.id)
+            else:
+                try:
+                    outputs.append(
+                        DAGOutput(
+                            id=node.id,
+                            source=incoming[node.id]["input"],
+                            **node.config.model_dump(),
+                        )
+                    )
+                except ValidationError:
+                    error(
+                        "output_reference_required",
+                        "Select output dataset or new Project/name",
+                        node.id,
+                    )
+    if errors:
+        return Compilation(diagnostics=errors)
+    try:
+        spec = DAGDefinition(format_version=2, inputs=inputs, nodes=transforms, outputs=outputs)
+    except ValidationError as exc:
+        return Compilation(
+            diagnostics=[
+                Diagnostic(code="dag_invalid", message=e["msg"])
+                for e in exc.errors(include_input=False)
+            ][:256]
+        )
+    return Compilation(
+        valid=True,
+        specification=spec,
+        inputs=[
+            InputVersion(name=i.name, dataset_id=i.dataset_id, version_id=i.version_id)
+            for i in spec.inputs
+        ],
+        outputs=spec.outputs,
+        semantic_digest=semantic_digest(spec),
+    )

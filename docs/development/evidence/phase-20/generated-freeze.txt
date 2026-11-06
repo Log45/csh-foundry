@@ -1,0 +1,17 @@
+
+> generate
+> python3 scripts/generate_platform_sdk.py && openapi-typescript apps/studio/lib/openapi.json -o packages/typescript-sdk/src/schema.ts --default-non-nullable false
+
+✨ openapi-typescript 7.13.0
+🚀 apps/studio/lib/openapi.json → packages/typescript-sdk/src/schema.ts [231.1ms]
+
+> @foundry/studio@0.8.0 generate:api
+> openapi-typescript lib/openapi.json -o lib/api-schema.ts --default-non-nullable false
+
+✨ openapi-typescript 7.13.0
+🚀 lib/openapi.json → lib/api-schema.ts [286.9ms]
+
+> check:generated
+> python3 scripts/generate_platform_sdk.py --check && node scripts/check_sdk_schema.mjs
+
+PASS generated schema drift

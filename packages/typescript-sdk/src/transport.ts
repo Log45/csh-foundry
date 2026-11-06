@@ -162,7 +162,10 @@ export function createTransport(config: ClientConfig) {
       body: input.body,
       expected_tenant: tenantId,
     });
-    if (new TextEncoder().encode(envelope).byteLength > 65536)
+    const bodyLimit = /^\/api\/v1\/pipelines(?:\/|$)/.test(template)
+      ? 524288
+      : 65536;
+    if (new TextEncoder().encode(envelope).byteLength > bodyLimit)
       throw new FoundryError("validation", "request_too_large");
     const timeout = AbortSignal.timeout(timeoutMs);
     const signal = AbortSignal.any([

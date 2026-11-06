@@ -1,0 +1,8 @@
+{
+  "status_code": 200,
+  "readiness": {
+    "status": "ready"
+  },
+  "change": "Pipeline resource creation no longer requires object storage. One-line hotfix copied to the existing 0024-compatible development API; only API restarted. Full Phase 20 source not deployed to shared schema.",
+  "isolated_regression": "PASS: test_pipeline_metadata_creation_does_not_require_object_storage; no shared test resources created."
+}

@@ -1,0 +1,8 @@
+{
+  "date": "2026-11-06",
+  "service": "Existing development Studio and protected Keycloak",
+  "result": "PASS",
+  "method": "User completed existing-account sign-in in Chrome; observed return to http://127.0.0.1:3000 with authenticated developer workspace and authorized tenant selector.",
+  "credentials": "Not read, logged, reset or modified by agent",
+  "configuration_mutation": false
+}

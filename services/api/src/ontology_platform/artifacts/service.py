@@ -71,14 +71,19 @@ class ArtifactService(ProjectService):
         return key
 
     def create(self, p: Principal, project: UUID, body: CreateArtifact) -> ResourceView:
-        if self.resource_kind not in {"FUNCTION", "AUTOMATION"}:
+        return self.create_preallocated(p, project, uuid4(), body)
+
+    def create_preallocated(
+        self, p: Principal, project: UUID, identity: UUID, body: CreateArtifact
+    ) -> ResourceView:
+        if self.resource_kind not in {"FUNCTION", "AUTOMATION", "PIPELINE"}:
             self.storage()
         with self.scope(p) as s:
             self.project(s, p, project, write=True)
             self.destination(s, p, project, body.folder_id)
             row = Resource(
                 tenant_id=p.tenant_id,
-                id=uuid4(),
+                id=identity,
                 project_id=project,
                 resource_type=self.resource_kind,
                 **body.model_dump(),

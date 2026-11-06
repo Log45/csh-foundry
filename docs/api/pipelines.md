@@ -99,3 +99,16 @@ Visual graph v1, deterministic identity, node catalog, diagnostics and lifecycle
 [Visual pipeline authoring](../development/visual-pipeline-authoring.md). Published visual definitions
 also pin their source versions and output dataset; run requests cannot substitute them. The canonical
 definition and Phase 14 worker remain the sole execution authority.
+
+## Phase 20 general DAG extension
+
+Canonical `format_version: 2` definitions use explicit typed input/right dependencies, immutable
+source pins, stable transformation IDs and multiple output declarations. Existing definition/run,
+visual graph compile/publish/draft, execution status/cancel/retry and dataset lineage APIs are reused.
+Legacy JSON and graph v1 remain supported without historical rewriting. DAG run requests omit the
+legacy output_dataset_id; all output targets/formats come from the immutable published specification.
+Status adds typed node records, plan digest, publication state/prepared count and authorized committed
+outputs. Prepared identities/storage keys are never returned. Output resource creation, dataset/
+artifact version visibility, manifest completion and parent success commit in one PostgreSQL transaction.
+See [DAG contracts and SDK example](../development/pipeline-dag-execution.md) and
+[publication/recovery protocol](../development/atomic-multi-output-publication.md).

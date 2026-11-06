@@ -294,13 +294,24 @@ export async function bounded(response: Response, limit = 5 * 1024 * 1024) {
   }
   return Buffer.concat(chunks).toString("utf8");
 }
-export async function input(request: Request) {
+export async function input(request: Request, allowPipeline = false) {
   if (!request.headers.get("content-type")?.startsWith("application/json"))
     throw new BoundaryError(415, "json_required");
-  return JSON.parse(await bounded(new Response(request.body), 65536)) as Record<
-    string,
-    unknown
-  >;
+  const raw = await bounded(
+    new Response(request.body),
+    allowPipeline ? 524288 : 65536,
+  );
+  const value = JSON.parse(raw) as Record<string, unknown>;
+  if (
+    Buffer.byteLength(raw) > 65536 &&
+    !(
+      allowPipeline &&
+      typeof value.path === "string" &&
+      /^\/api\/v1\/pipelines(?:\/|$)/.test(value.path)
+    )
+  )
+    throw new BoundaryError(413, "request_too_large");
+  return value;
 }
 async function document(url: string, options: RequestInit = {}) {
   const port = process.env.STUDIO_OIDC_BACKCHANNEL_PORT;

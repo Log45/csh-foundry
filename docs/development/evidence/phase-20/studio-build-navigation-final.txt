@@ -1,0 +1,35 @@
+
+> @foundry/studio@0.8.0 build
+> next build --webpack
+
+▲ Next.js 16.4.3 (webpack)
+✓ Running next.config.ts took 68ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.1s
+  Running TypeScript ...
+  Finished TypeScript in 2.0s ...
+  Collecting page data using 9 workers ...
+  Generating static pages using 9 workers (0/5) ...
+  Generating static pages using 9 workers (1/5) 
+  Generating static pages using 9 workers (2/5) 
+  Generating static pages using 9 workers (3/5) 
+✓ Generating static pages using 9 workers (5/5) in 152ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /applications/[application]/versions/[version]
+├ ƒ /auth/[operation]
+├ ƒ /bff
+├ ƒ /bff/artifacts
+├ ƒ /health/live
+└ ƒ /health/ready
+
+
+ƒ Proxy (Middleware)
+
+ƒ  (Dynamic)  server-rendered on demand
+

@@ -21,6 +21,7 @@ from ontology_platform.pipelines.contracts import (
     InputVersion,
     StartRun,
 )
+from ontology_platform.pipelines.dag import DAGDefinition, parse_definition
 from ontology_platform.projects.service import conflict
 from ontology_platform.security.interfaces import Principal
 
@@ -36,14 +37,24 @@ class PipelineService(ArtifactService):
         row = s.get(PipelineDefinition, (p.tenant_id, key, version))
         if row is None:
             raise missing("Pipeline definition")
+        if row.specification.get("format_version") == 2:
+            from ontology_platform.pipelines.dag_service import read_bindings
+
+            read_bindings(self, s, p, DAGDefinition.model_validate(row.specification))
         return row
 
-    def publish(self, p: Principal, key: UUID, spec: Definition) -> DefinitionView:
+    def publish(self, p: Principal, key: UUID, spec: Definition | DAGDefinition) -> DefinitionView:
         with self.scope(p) as s:
             return self.publish_in(s, p, key, spec)
 
-    def publish_in(self, s: Session, p: Principal, key: UUID, spec: Definition) -> DefinitionView:
+    def publish_in(
+        self, s: Session, p: Principal, key: UUID, spec: Definition | DAGDefinition
+    ) -> DefinitionView:
         self.artifact(s, p, key, True)
+        if isinstance(spec, DAGDefinition):
+            from ontology_platform.pipelines.dag_service import validate_in
+
+            validate_in(self, s, p, spec)
         sequence = (
             s.scalar(
                 select(func.max(PipelineDefinition.sequence)).where(
@@ -84,7 +95,21 @@ class PipelineService(ArtifactService):
                     .limit(limit)
                     .offset(offset)
                 )
+                if self.visible_definition(s, p, r)
             ]
+
+    def visible_definition(self, s: Session, p: Principal, row: PipelineDefinition) -> bool:
+        if row.specification.get("format_version") != 2:
+            return True
+        from ontology_platform.pipelines.dag_service import read_bindings
+
+        try:
+            read_bindings(self, s, p, DAGDefinition.model_validate(row.specification))
+        except ApplicationError as exc:
+            if exc.status_code not in {403, 404}:
+                raise
+            return False
+        return True
 
     def capacity(self, s: Session, p: Principal, limits: ExecutionSettings) -> None:
         # Tenant lock is already held; advisory lock serializes global admission with workers.
@@ -108,7 +133,11 @@ class PipelineService(ArtifactService):
         with self.scope(p) as s:
             resource = self.artifact(s, p, key, True)
             definition = self.definition(s, p, key, body.definition_id)
-            spec = Definition.model_validate(definition.specification)
+            spec = parse_definition(definition.specification)
+            if isinstance(spec, DAGDefinition):
+                from ontology_platform.pipelines.dag_service import admit
+
+                return admit(self, s, p, key, spec, body)
             # Visual publications are executable only with their immutable authoring bindings.
             from ontology_platform.db.models import PipelineGraph
             from ontology_platform.pipelines.graph import Graph, compile_graph
@@ -128,6 +157,8 @@ class PipelineService(ArtifactService):
 
             if sorted(i.name for i in body.inputs) != sorted(i.name for i in spec.inputs):
                 raise conflict("Inputs must match definition contracts exactly")
+            if body.output_dataset_id is None:
+                raise conflict("Legacy execution requires an output dataset")
             datasets.artifact(s, p, body.output_dataset_id, True)
             self.capacity(s, p, limits)
             job = ExecutionJob(
@@ -186,7 +217,9 @@ class PipelineService(ArtifactService):
                 if exc.status_code not in {403, 404}:
                     raise
                 view.output_dataset_id, view.output_version_id = None, None
-        return view
+        from ontology_platform.pipelines.dag_service import enrich
+
+        return enrich(self, s, p, row, view)
 
     def status(self, p: Principal, key: UUID) -> ExecutionJobView:
         with self.scope(p) as s:
@@ -259,7 +292,9 @@ class PipelineService(ArtifactService):
                     .limit(limit)
                 )
             )
-            result = []
+            from ontology_platform.pipelines.dag_service import lineage as dag_lineage
+
+            result = dag_lineage(self, s, p, dataset, version)
             for job in jobs:
                 inputs = []
                 for item in s.scalars(

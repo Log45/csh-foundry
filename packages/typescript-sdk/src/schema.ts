@@ -4060,7 +4060,10 @@ export interface components {
             valid?: boolean;
             /** Diagnostics */
             diagnostics?: components["schemas"]["ontology_platform__pipelines__graph__Diagnostic"][];
-            specification?: components["schemas"]["Definition-Output"] | null;
+            /** Specification */
+            specification?: components["schemas"]["Definition-Output"] | components["schemas"]["DAGDefinition-Output"] | null;
+            /** Outputs */
+            outputs?: components["schemas"]["DAGOutput"][];
             /** Inputs */
             inputs?: components["schemas"]["InputVersion"][];
             /** Output Dataset Id */
@@ -4144,6 +4147,108 @@ export interface components {
             description?: string;
             /** Folder Id */
             folder_id?: string | null;
+        };
+        /** DAGDefinition */
+        "DAGDefinition-Input": {
+            /**
+             * Format Version
+             * @constant
+             */
+            format_version: 2;
+            /**
+             * Engine
+             * @default polars
+             * @constant
+             */
+            engine?: "polars";
+            /** Inputs */
+            inputs: components["schemas"]["DAGInput"][];
+            /** Nodes */
+            nodes: components["schemas"]["DAGNode-Input"][];
+            /** Outputs */
+            outputs: components["schemas"]["DAGOutput"][];
+        };
+        /** DAGDefinition */
+        "DAGDefinition-Output": {
+            /**
+             * Format Version
+             * @constant
+             */
+            format_version: 2;
+            /**
+             * Engine
+             * @default polars
+             * @constant
+             */
+            engine?: "polars";
+            /** Inputs */
+            inputs: components["schemas"]["DAGInput"][];
+            /** Nodes */
+            nodes: components["schemas"]["DAGNode-Output"][];
+            /** Outputs */
+            outputs: components["schemas"]["DAGOutput"][];
+        };
+        /** DAGInput */
+        DAGInput: {
+            /** Name */
+            name: string;
+            /** Columns */
+            columns?: {
+                [key: string]: string;
+            };
+            /**
+             * Dataset Id
+             * Format: uuid
+             */
+            dataset_id: string;
+            /**
+             * Version Id
+             * Format: uuid
+             */
+            version_id: string;
+        };
+        /** DAGNode */
+        "DAGNode-Input": {
+            /** Id */
+            id: string;
+            /** Inputs */
+            inputs: {
+                [key: string]: string;
+            };
+            config: components["schemas"]["Step-Input"];
+        };
+        /** DAGNode */
+        "DAGNode-Output": {
+            /** Id */
+            id: string;
+            /** Inputs */
+            inputs: {
+                [key: string]: string;
+            };
+            config: components["schemas"]["Step-Output"];
+        };
+        /** DAGOutput */
+        DAGOutput: {
+            /** Id */
+            id: string;
+            /** Source */
+            source: string;
+            /**
+             * Format
+             * @default parquet
+             * @enum {string}
+             */
+            format?: "parquet" | "csv" | "ndjson";
+            /** Columns */
+            columns?: {
+                [key: string]: string;
+            };
+            /** Dataset Id */
+            dataset_id?: string | null;
+            /** Project Id */
+            project_id?: string | null;
+            /** Name */
+            name?: string | null;
         };
         /** DatasetPreview */
         DatasetPreview: {
@@ -4252,7 +4357,8 @@ export interface components {
             pipeline_id: string;
             /** Sequence */
             sequence: number;
-            specification: components["schemas"]["Definition-Output"];
+            /** Specification */
+            specification: components["schemas"]["Definition-Output"] | components["schemas"]["DAGDefinition-Output"];
             /** Created By */
             created_by: string;
             /**
@@ -4435,6 +4541,19 @@ export interface components {
             started_at: string | null;
             /** Completed At */
             completed_at: string | null;
+            /** Plan Digest */
+            plan_digest?: string | null;
+            /** Publication State */
+            publication_state?: string | null;
+            /**
+             * Prepared Output Count
+             * @default 0
+             */
+            prepared_output_count?: number;
+            /** Nodes */
+            nodes?: components["schemas"]["NodeExecutionView"][];
+            /** Outputs */
+            outputs?: components["schemas"]["OutputPublicationView"][];
         };
         /** ExecutionView */
         ExecutionView: {
@@ -4718,9 +4837,9 @@ export interface components {
             /**
              * Format Version
              * @default 1
-             * @constant
+             * @enum {integer}
              */
-            format_version?: 1;
+            format_version?: 1 | 2;
             /** Nodes */
             nodes: (components["schemas"]["SourceNode"] | components["schemas"]["TransformNode-Input"] | components["schemas"]["OutputNode"] | components["schemas"]["FunctionNode"])[];
             /** Edges */
@@ -4731,9 +4850,9 @@ export interface components {
             /**
              * Format Version
              * @default 1
-             * @constant
+             * @enum {integer}
              */
-            format_version?: 1;
+            format_version?: 1 | 2;
             /** Nodes */
             nodes: (components["schemas"]["SourceNode"] | components["schemas"]["TransformNode-Output"] | components["schemas"]["OutputNode"] | components["schemas"]["FunctionNode"])[];
             /** Edges */
@@ -5520,6 +5639,17 @@ export interface components {
             /** Not */
             not: components["schemas"]["Predicate"] | components["schemas"]["All"] | components["schemas"]["AnyOf"] | components["schemas"]["Negation"];
         };
+        /** NodeExecutionView */
+        NodeExecutionView: {
+            /** Node Id */
+            node_id: string;
+            /** State */
+            state: string;
+            /** Attempt */
+            attempt: number;
+            /** Error */
+            error?: string | null;
+        };
         /** ObjectInput */
         ObjectInput: {
             /** Object Id */
@@ -5658,6 +5788,16 @@ export interface components {
         };
         /** OutputConfig */
         OutputConfig: {
+            /**
+             * Format
+             * @default parquet
+             * @enum {string}
+             */
+            format?: "parquet" | "csv" | "ndjson";
+            /** Project Id */
+            project_id?: string | null;
+            /** Name */
+            name?: string | null;
             /** Dataset Id */
             dataset_id?: string | null;
             /** Columns */
@@ -5676,6 +5816,23 @@ export interface components {
             kind: "dataset_output";
             position?: components["schemas"]["Position"];
             config: components["schemas"]["OutputConfig"];
+        };
+        /** OutputPublicationView */
+        OutputPublicationView: {
+            /** Output Id */
+            output_id: string;
+            /**
+             * Dataset Id
+             * Format: uuid
+             */
+            dataset_id: string;
+            /**
+             * Version Id
+             * Format: uuid
+             */
+            version_id: string;
+            /** State */
+            state: string;
         };
         /** ParameterDefinition */
         ParameterDefinition: {
@@ -6576,11 +6733,8 @@ export interface components {
             definition_id: string;
             /** Inputs */
             inputs: components["schemas"]["InputVersion"][];
-            /**
-             * Output Dataset Id
-             * Format: uuid
-             */
-            output_dataset_id: string;
+            /** Output Dataset Id */
+            output_dataset_id?: string | null;
             /** Parameters */
             parameters?: {
                 [key: string]: components["schemas"]["JsonValue"];
@@ -9736,7 +9890,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["Definition-Input"];
+                "application/json": components["schemas"]["Definition-Input"] | components["schemas"]["DAGDefinition-Input"];
             };
         };
         responses: {
@@ -9746,7 +9900,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Definition-Output"];
+                    "application/json": components["schemas"]["Definition-Output"] | components["schemas"]["DAGDefinition-Output"];
                 };
             };
             /** @description Validation Error */
@@ -9805,7 +9959,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["Definition-Input"];
+                "application/json": components["schemas"]["Definition-Input"] | components["schemas"]["DAGDefinition-Input"];
             };
         };
         responses: {

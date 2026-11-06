@@ -45,19 +45,26 @@ export function Projects({
   api,
   can,
   open,
+  initialProjectId = "",
+  onSelectionChange,
 }: {
   api: Client;
   can: (p: string) => boolean;
   open: (ontology: string) => void;
+  initialProjectId?: string;
+  onSelectionChange?: (id: string) => void;
 }) {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [selected, select] = useState("");
+  const [selected, select] = useState(initialProjectId);
   const [offset, setOffset] = useState(0);
   const [name, setName] = useState("");
   const task = useTask();
   const [loading, setLoading] = useState(false);
   const [readError, setReadError] = useState("");
   const [refresh, setRefresh] = useState(0);
+  useEffect(() => {
+    onSelectionChange?.(selected);
+  }, [selected, onSelectionChange]);
   useEffect(() => {
     let valid = true;
     setReadError("");

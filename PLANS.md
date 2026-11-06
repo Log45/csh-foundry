@@ -3678,3 +3678,13 @@ ADR 0044 records reuse of Project governance, canonical query/action services, S
 visual application registration is included; external OAuth registration and standalone Action Builder
 expansion remain deferred. No Phase 20, workspace, arbitrary code, hosting, Spark/Rust or §23B work.
 Production remains BLOCKED. Local acceptance requires executed evidence in phase-19-report.md.
+
+## Phase 20 authorization addendum — 2026-11-06
+
+The explicit Phase 20 request authorizes a dedicated extension of §§23A.5/23A.10: general closed
+DAG IR, reusable Polars intermediates, durable fenced node execution, multiple governed output
+datasets with atomic PostgreSQL publication, visual authoring and SDK integration. ADR 0045 records
+the design. Phase 20 is locally accepted with executed evidence and limits recorded in
+docs/development/phase-20-report.md; no shared Phase 20 migration/deployment was performed.
+Existing shared developer data and the protected Keycloak environment must remain unchanged.
+No arbitrary code, Code Workspaces, Spark, Rust or §23B work. Production remains BLOCKED.

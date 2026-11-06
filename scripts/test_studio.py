@@ -122,7 +122,20 @@ try:
             env["STUDIO_E2E_REPLICA_PID"] = str(replica.pid)
         raise SystemExit(
             subprocess.call(
-                ["npm", "run", "test:e2e", "--", *sys.argv[1:]], cwd=app_directory, env=env
+                [
+                    "npm",
+                    "run",
+                    "test:e2e",
+                    "--",
+                    *sys.argv[1:],
+                    *(
+                        ["--grep", env["STUDIO_E2E_TEST_GREP"]]
+                        if env.get("STUDIO_E2E_TEST_GREP")
+                        else []
+                    ),
+                ],
+                cwd=app_directory,
+                env=env,
             )
         )
 finally:

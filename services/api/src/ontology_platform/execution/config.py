@@ -6,6 +6,14 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class ExecutionSettings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="FOUNDRY_EXECUTION_", extra="ignore")
+    retained_nodes: int = Field(default=100_000, ge=100, le=1_000_000)
+    manifest_bytes: int = Field(default=16 * 1024**2, ge=1024, le=32 * 1024**2)
+    dag_nodes: int = Field(default=100, ge=1, le=100)
+    dag_outputs: int = Field(default=16, ge=1, le=16)
+    intermediate_bytes: int = Field(default=2 * 1024**3, ge=1, le=4 * 1024**3)
+    staged_bytes: int = Field(default=2 * 1024**3, ge=1, le=4 * 1024**3)
+    cumulative_output_rows: int = Field(default=100_000_000, ge=1, le=100_000_000)
+    node_seconds: int = Field(default=600, ge=1, le=1800)
     source_bytes: int = Field(default=1024**3, ge=1, le=1024**3)
     decoded_bytes: int = Field(default=16 * 1024**3, ge=1)
     batch_bytes: int = Field(default=8 * 1024**2, ge=65536)

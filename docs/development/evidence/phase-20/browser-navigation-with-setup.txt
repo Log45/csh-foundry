@@ -1,0 +1,52 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-2e09c5c6f4d8_default  Creating
+ Network phase15-2e09c5c6f4d8_default  Created
+ Volume "phase15-2e09c5c6f4d8_minio-data"  Creating
+ Volume "phase15-2e09c5c6f4d8_minio-data"  Created
+ Container phase15-2e09c5c6f4d8-minio-1  Creating
+ Container phase15-2e09c5c6f4d8-minio-1  Created
+ Container phase15-2e09c5c6f4d8-minio-1  Starting
+ Container phase15-2e09c5c6f4d8-minio-1  Started
+ Container phase15-2e09c5c6f4d8-minio-1  Waiting
+ Container phase15-2e09c5c6f4d8-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-2e09c5c6f4d8-minio-1  Restarting
+ Container phase15-2e09c5c6f4d8-minio-1  Started
+ Container phase15-2e09c5c6f4d8-minio-1  Running
+ Container phase15-2e09c5c6f4d8-minio-1  Waiting
+ Container phase15-2e09c5c6f4d8-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+Python suite NOT RUN in this explicit browser-only selection
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test --grep visual DAG|verified browser reference workflow|Project workspace
+
+
+Running 3 tests using 1 worker
+
+(node:17422) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/pipeline-dag.spec.ts:4:1 › visual DAG branches converge and two outputs commit together (24.2s)
+  ✓  2 tests/e2e/workflow.spec.ts:21:1 › verified browser reference workflow (15.0s)
+  ✓  3 tests/e2e/workflow.spec.ts:474:1 › Project workspace navigates folders and governed canonical references (4.1s)
+
+  3 passed (44.3s)
+ Container phase15-2e09c5c6f4d8-minio-1  Stopping
+ Container phase15-2e09c5c6f4d8-minio-1  Stopped
+ Container phase15-2e09c5c6f4d8-minio-1  Removing
+ Container phase15-2e09c5c6f4d8-minio-1  Removed
+ Volume phase15-2e09c5c6f4d8_minio-data  Removing
+ Network phase15-2e09c5c6f4d8_default  Removing
+ Volume phase15-2e09c5c6f4d8_minio-data  Removed
+ Network phase15-2e09c5c6f4d8_default  Removed

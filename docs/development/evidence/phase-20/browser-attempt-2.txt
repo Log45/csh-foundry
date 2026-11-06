@@ -1,0 +1,48 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-cde3a9e6d40c_default  Creating
+ Network phase15-cde3a9e6d40c_default  Created
+ Volume "phase15-cde3a9e6d40c_minio-data"  Creating
+ Volume "phase15-cde3a9e6d40c_minio-data"  Created
+ Container phase15-cde3a9e6d40c-minio-1  Creating
+ Container phase15-cde3a9e6d40c-minio-1  Created
+ Container phase15-cde3a9e6d40c-minio-1  Starting
+ Container phase15-cde3a9e6d40c-minio-1  Started
+ Container phase15-cde3a9e6d40c-minio-1  Waiting
+ Container phase15-cde3a9e6d40c-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-cde3a9e6d40c-minio-1  Restarting
+ Container phase15-cde3a9e6d40c-minio-1  Started
+ Container phase15-cde3a9e6d40c-minio-1  Running
+ Container phase15-cde3a9e6d40c-minio-1  Waiting
+ Container phase15-cde3a9e6d40c-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+Python suite NOT RUN in this explicit browser-only selection
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/test_studio.py", line 83, in <module>
+    raise RuntimeError("Backend readiness timed out")
+RuntimeError: Backend readiness timed out
+ Container phase15-cde3a9e6d40c-minio-1  Stopping
+ Container phase15-cde3a9e6d40c-minio-1  Stopped
+ Container phase15-cde3a9e6d40c-minio-1  Removing
+ Container phase15-cde3a9e6d40c-minio-1  Removed
+ Network phase15-cde3a9e6d40c_default  Removing
+ Volume phase15-cde3a9e6d40c_minio-data  Removing
+ Volume phase15-cde3a9e6d40c_minio-data  Removed
+ Network phase15-cde3a9e6d40c_default  Removed
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 171, in <module>
+    run("uv", "run", "python", "scripts/test_studio.py")
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 99, in run
+    raise subprocess.CalledProcessError(code, cmd)
+subprocess.CalledProcessError: Command '('uv', 'run', 'python', 'scripts/test_studio.py')' returned non-zero exit status 1.

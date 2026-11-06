@@ -175,7 +175,7 @@ def test_join_compiles_right_source_to_existing_named_input_contract():
 
 def test_contract_limits_and_no_executable_payloads():
     with pytest.raises(ValidationError):
-        Graph.model_validate({"format_version": 2, "nodes": [], "edges": []})
+        Graph.model_validate({"format_version": 3, "nodes": [], "edges": []})
     with pytest.raises(ValidationError):
         Graph.model_validate(
             {
@@ -305,7 +305,7 @@ def test_phase18_migration_preserves_previous_head_and_has_no_drift(
     with engine.begin() as connection:
         assert connection.scalar(text("SELECT value FROM phase18_sentinel")) == "preserved"
         assert connection.scalar(text("SELECT version_num FROM alembic_version")) == (
-            "0025_applications"
+            "0026_pipeline_dag"
         )
         assert connection.scalar(text("SELECT to_regclass('pipeline_drafts')")) == (
             "pipeline_drafts"

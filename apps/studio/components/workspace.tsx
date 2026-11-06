@@ -32,6 +32,18 @@ export function Workspace() {
       version: "1.0.0",
     }),
     [offset, setOffset] = useState(0);
+  const projectScope = `${session?.tenant ?? ""}:${session?.me?.principal.principal_id ?? ""}:${session?.csrf ?? ""}`;
+  const [projectContext, setProjectContext] = useState({ scope: "", id: "" });
+  const rememberProject = useCallback(
+    (projectId: string) => {
+      setProjectContext((current) =>
+        current.scope === projectScope && current.id === projectId
+          ? current
+          : { scope: projectScope, id: projectId },
+      );
+    },
+    [projectScope],
+  );
   const task = useTask(),
     api = useMemo(
       () => client(session?.csrf ?? "", session?.tenant ?? ""),
@@ -342,9 +354,13 @@ export function Workspace() {
             value={{ csrf: session.csrf, tenant: session.tenant ?? "" }}
           >
             <Projects
-              key={session.tenant}
+              key={projectScope}
               api={api}
               can={can}
+              initialProjectId={
+                projectContext.scope === projectScope ? projectContext.id : ""
+              }
+              onSelectionChange={rememberProject}
               open={(ontology) => {
                 if (!navigate()) return;
                 setId(ontology);

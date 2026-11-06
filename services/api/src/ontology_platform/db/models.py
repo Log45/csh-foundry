@@ -1662,7 +1662,8 @@ class ExecutionJob(Base):
             "AND output_dataset_id IS NULL) OR "
             "(kind = 'PIPELINE' AND definition_id IS NOT NULL AND "
             "validation_version_id IS NULL AND mapping_definition_id IS NULL "
-            "AND output_dataset_id IS NOT NULL) OR "
+            "AND (output_dataset_id IS NOT NULL OR "
+            "coalesce(request->>'format_version','')='2')) OR "
             "(kind = 'MATERIALIZATION' AND mapping_definition_id IS NOT NULL "
             "AND definition_id IS NULL "
             "AND validation_version_id IS NULL AND output_dataset_id IS NULL) OR "
@@ -2021,4 +2022,66 @@ class ApplicationVersion(Base):
         CheckConstraint(
             "octet_length(document::text) <= 131072", name="ck_application_version_bytes"
         ),
+    )
+
+
+class DAGRun(Base):
+    __tablename__ = "dag_runs"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    job_id: Mapped[UUID] = mapped_column(primary_key=True)
+    plan_digest: Mapped[str] = mapped_column(String(64))
+    plan: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    state: Mapped[str] = mapped_column(String(20), default="EXECUTING")
+    commit_id: Mapped[UUID | None]
+    cleaned_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    execution_started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "job_id"], ["execution_jobs.tenant_id", "execution_jobs.id"]
+        ),
+        CheckConstraint(
+            "state IN ('EXECUTING','PREPARING','PREPARED','COMMITTED','ABANDONED')",
+            name="ck_dag_run_state",
+        ),
+        CheckConstraint("(state = 'COMMITTED') = (commit_id IS NOT NULL)", name="ck_dag_commit"),
+        Index("ix_dag_cleanup", "cleaned_at"),
+    )
+
+
+class DAGNodeExecution(Base):
+    __tablename__ = "dag_nodes"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    job_id: Mapped[UUID] = mapped_column(primary_key=True)
+    node_id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    state: Mapped[str] = mapped_column(String(20), default="PENDING")
+    attempt: Mapped[int] = mapped_column(default=0)
+    token: Mapped[UUID | None]
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    result_id: Mapped[UUID | None]
+    result: Mapped[dict[str, JsonValue]] = mapped_column(JSONB, default=dict)
+    error: Mapped[str | None] = mapped_column(String(100))
+    __table_args__ = (
+        ForeignKeyConstraint(["tenant_id", "job_id"], ["dag_runs.tenant_id", "dag_runs.job_id"]),
+        CheckConstraint(
+            "state IN ('PENDING','RUNNING','COMPLETED','FAILED')", name="ck_dag_node_state"
+        ),
+        CheckConstraint("attempt >= 0", name="ck_dag_node_attempt"),
+    )
+
+
+class DAGPreparedOutput(Base):
+    __tablename__ = "dag_outputs"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    job_id: Mapped[UUID] = mapped_column(primary_key=True)
+    output_id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    dataset_id: Mapped[UUID]
+    version_id: Mapped[UUID]
+    state: Mapped[str] = mapped_column(String(20), default="PENDING")
+    result: Mapped[dict[str, JsonValue]] = mapped_column(JSONB, default=dict)
+    __table_args__ = (
+        ForeignKeyConstraint(["tenant_id", "job_id"], ["dag_runs.tenant_id", "dag_runs.job_id"]),
+        UniqueConstraint("tenant_id", "dataset_id", "version_id", name="uq_dag_output_version"),
+        UniqueConstraint("tenant_id", "job_id", "dataset_id", name="uq_dag_output_target"),
+        CheckConstraint("state IN ('PENDING','PREPARED','COMMITTED')", name="ck_dag_output_state"),
     )

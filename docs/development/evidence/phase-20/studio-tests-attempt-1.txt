@@ -1,0 +1,16 @@
+
+> @foundry/studio@0.8.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /Users/log/Documents/code/csh-foundry/apps/studio
+
+
+ Test Files  13 passed (13)
+      Tests  53 passed (53)
+   Start at  08:19:36
+   Duration  4.00s (environment 52%, transform 20%, tests 15%, import 13%, worker 1%)
+
+    Isolate  13 workers spawned · ~1.61s startup each (spawn + environment, per file)
+             at least ~715ms faster with isolate: false — reuses workers across files instead of one per file
+

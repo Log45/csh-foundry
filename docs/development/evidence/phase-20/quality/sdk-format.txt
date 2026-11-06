@@ -1,0 +1,6 @@
+
+> format:check
+> prettier --check packages/{typescript-sdk,react-sdk}/src apps/sdk-example/{src,app,tests} apps/sdk-example/*.ts tests/sdk scripts/*.mjs
+
+Checking formatting...
+All matched files use Prettier code style!

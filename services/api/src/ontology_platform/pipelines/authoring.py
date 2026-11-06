@@ -9,8 +9,9 @@ from sqlalchemy.orm import Session
 from ontology_platform.db.models import PipelineDraft, PipelineGraph
 from ontology_platform.errors import ApplicationError
 from ontology_platform.functions.service import FunctionService
-from ontology_platform.pipelines.contracts import Definition, DefinitionView
-from ontology_platform.pipelines.engine import TYPES, plan
+from ontology_platform.pipelines.contracts import DefinitionView
+from ontology_platform.pipelines.dag import DAGDefinition, parse_definition
+from ontology_platform.pipelines.engine import dag_frames, plan, schema_dtype
 from ontology_platform.pipelines.graph import (
     Compilation,
     Diagnostic,
@@ -54,17 +55,14 @@ class AuthoringService(PipelineService):
                 }
                 if any(schema.get(c) != t for c, t in node.config.columns.items()):
                     raise conflict("Source schema contract mismatch")
-                supported = TYPES | {
-                    "Null": pl.Null,
-                    "Int32": pl.Int32,
-                    "UInt32": pl.UInt32,
-                    "Float32": pl.Float32,
-                }
-                if any(t not in supported for t in schema.values()):
-                    raise conflict("Source schema type is not supported by visual planning")
-                frames[node.config.name] = pl.LazyFrame(
-                    schema={c: supported[t] for c, t in schema.items()}
-                )
+                try:
+                    frames[node.config.name] = pl.LazyFrame(
+                        schema={c: schema_dtype(t) for c, t in schema.items()}
+                    )
+                except (ValueError, TypeError, pl.exceptions.PolarsError) as exc:
+                    raise conflict(
+                        "Source schema type is not supported by visual planning"
+                    ) from exc
             elif isinstance(node, FunctionNode):
                 if node.config.function_id is None or node.config.definition_id is None:
                     continue
@@ -76,6 +74,8 @@ class AuthoringService(PipelineService):
                 )
             elif node.kind == "dataset_output":
                 if node.config.dataset_id is None:
+                    if node.config.project_id is not None:
+                        self.project(s, p, node.config.project_id)
                     continue
                 output = self.datasets().artifact(s, p, node.config.dataset_id)
                 if output.state != "ACTIVE":
@@ -105,6 +105,23 @@ class AuthoringService(PipelineService):
             return result
         assert result.specification is not None
         try:
+            if isinstance(result.specification, DAGDefinition):
+                planned = dag_frames(result.specification, frames, schema_only=True)
+                result.schemas = {
+                    n.id: {
+                        c: str(t)
+                        for c, t in planned[n.config.name if isinstance(n, SourceNode) else n.id]
+                        .collect_schema()
+                        .items()
+                    }
+                    for n in graph.nodes
+                    if isinstance(n, (SourceNode, TransformNode))
+                }
+                for output in result.specification.outputs:
+                    result.schemas[output.id] = {
+                        c: str(t) for c, t in planned[output.source].collect_schema().items()
+                    }
+                return result
             schema = plan(result.specification, frames).collect_schema()
             result.schemas = {
                 n.id: {c: str(t) for c, t in frames[n.config.name].collect_schema().items()}
@@ -162,8 +179,17 @@ class AuthoringService(PipelineService):
                 raise ApplicationError(
                     "graph_invalid", "Compile and resolve graph diagnostics before publication", 422
                 )
-            assert compiled.specification is not None and compiled.output_dataset_id is not None
-            self.datasets().artifact(s, p, compiled.output_dataset_id, True)
+            assert compiled.specification is not None
+            if isinstance(compiled.specification, DAGDefinition):
+                for output in compiled.specification.outputs:
+                    if output.dataset_id is not None:
+                        self.datasets().artifact(s, p, output.dataset_id, True)
+                    else:
+                        assert output.project_id is not None
+                        self.project(s, p, output.project_id, write=True)
+            else:
+                assert compiled.output_dataset_id is not None
+                self.datasets().artifact(s, p, compiled.output_dataset_id, True)
             view = self.publish_in(s, p, key, compiled.specification)
             s.add(
                 PipelineGraph(
@@ -228,7 +254,16 @@ class AuthoringService(PipelineService):
     ) -> Visualization:
         with self.scope(p) as s:
             row = self.definition(s, p, key, definition)
-            result = reconstruct(Definition.model_validate(row.specification), body)
+            spec = parse_definition(row.specification)
+            if isinstance(spec, DAGDefinition):
+                return Visualization(
+                    diagnostics=[
+                        Diagnostic(
+                            code="published_graph", message="Open the published DAG graph document"
+                        )
+                    ]
+                )
+            result = reconstruct(spec, body)
             if result.graph:
                 compiled = self.compile_in(s, p, key, result.graph)
                 if not compiled.valid:

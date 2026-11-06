@@ -117,3 +117,9 @@ Visual application authoring/publication/runtime operations are generated under 
 Discovery retains the Project resource registry. See [application examples](../../docs/api/applications.md).
 Runtime gateways call the existing governed query/action services in the application transaction;
 registration or publication never grants ontology/data/action access.
+
+Phase 20 retains the pipeline API names and adds typed DAG v2 definitions/compilation and multi-output
+ExecutionJobView results through generated OpenAPI contracts. Supply exact definition input pins and
+omit output_dataset_id for v2. Use execution.get and datasets.lineage as before; each committed output
+is individually authorized. Pipeline request envelopes permit 512 KiB, independently bounded by the
+server's 256 KiB semantic graph budget. See docs/development/pipeline-dag-execution.md in the repository.

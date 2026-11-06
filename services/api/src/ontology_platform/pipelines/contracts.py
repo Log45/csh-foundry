@@ -157,11 +157,73 @@ class Definition(Model):
         return self
 
 
+NodeId = Annotated[str, Field(pattern=r"^[A-Za-z0-9_-]{1,80}$")]
+
+
+class DAGInput(InputContract):
+    name: NodeId
+    dataset_id: UUID
+    version_id: UUID
+
+
+class DAGNode(Model):
+    id: NodeId
+    inputs: dict[Literal["input", "right"], NodeId] = Field(min_length=1, max_length=2)
+    config: Step
+
+    @model_validator(mode="after")
+    def ports(self) -> "DAGNode":
+        binary = self.config.op in {"join", "union"}
+        if set(self.inputs) != ({"input", "right"} if binary else {"input"}):
+            raise ValueError("Operation input ports do not match arity")
+        if binary and self.config.input != "right":
+            raise ValueError("DAG binary configuration input must be right")
+        # Reuse canonical expression depth/closed operation validation.
+        Definition(inputs=[InputContract(name="right")], steps=[self.config])
+        return self
+
+
+class DAGOutput(Model):
+    id: NodeId
+    source: NodeId
+    format: Literal["parquet", "csv", "ndjson"] = "parquet"
+    columns: dict[Column, str] = Field(default_factory=dict, max_length=256)
+    dataset_id: UUID | None = None
+    project_id: UUID | None = None
+    name: Name | None = None
+
+    @model_validator(mode="after")
+    def target(self) -> "DAGOutput":
+        if self.dataset_id is not None:
+            if self.project_id is not None or self.name is not None:
+                raise ValueError("Existing targets cannot specify resource creation")
+        elif self.project_id is None or self.name is None:
+            raise ValueError("New output requires Project and name")
+        return self
+
+
+class DAGDefinition(Model):
+    format_version: Literal[2]
+    engine: Literal["polars"] = "polars"
+    inputs: list[DAGInput] = Field(min_length=1, max_length=16)
+    nodes: list[DAGNode] = Field(max_length=100)
+    outputs: list[DAGOutput] = Field(min_length=1, max_length=16)
+
+    @model_validator(mode="after")
+    def graph(self) -> "DAGDefinition":
+        if len(self.model_dump_json().encode()) > 262144:
+            raise ValueError("DAG exceeds 256 KiB")
+        from ontology_platform.pipelines.dag import topology
+
+        topology(self)
+        return self
+
+
 class DefinitionView(Model):
     id: UUID
     pipeline_id: UUID
     sequence: int
-    specification: Definition
+    specification: Definition | DAGDefinition
     created_by: str
     created_at: datetime
 
@@ -175,8 +237,22 @@ class InputVersion(Model):
 class StartRun(Model):
     definition_id: UUID
     inputs: list[InputVersion] = Field(min_length=1, max_length=16)
-    output_dataset_id: UUID
+    output_dataset_id: UUID | None = None
     parameters: dict[str, JsonValue] = Field(default_factory=dict, max_length=0)
+
+
+class NodeExecutionView(Model):
+    node_id: str
+    state: str
+    attempt: int
+    error: str | None = None
+
+
+class OutputPublicationView(Model):
+    output_id: str
+    dataset_id: UUID
+    version_id: UUID
+    state: str
 
 
 class ExecutionJobView(Model):
@@ -193,3 +269,8 @@ class ExecutionJobView(Model):
     admitted_at: datetime | None
     started_at: datetime | None
     completed_at: datetime | None
+    plan_digest: str | None = None
+    publication_state: str | None = None
+    prepared_output_count: int = 0
+    nodes: list[NodeExecutionView] = Field(default_factory=list)
+    outputs: list[OutputPublicationView] = Field(default_factory=list)

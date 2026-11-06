@@ -1,0 +1,107 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-8984f4abd395_default  Creating
+ Network phase15-8984f4abd395_default  Created
+ Volume "phase15-8984f4abd395_minio-data"  Creating
+ Volume "phase15-8984f4abd395_minio-data"  Created
+ Container phase15-8984f4abd395-minio-1  Creating
+ Container phase15-8984f4abd395-minio-1  Created
+ Container phase15-8984f4abd395-minio-1  Starting
+ Container phase15-8984f4abd395-minio-1  Started
+ Container phase15-8984f4abd395-minio-1  Waiting
+ Container phase15-8984f4abd395-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-8984f4abd395-minio-1  Restarting
+ Container phase15-8984f4abd395-minio-1  Started
+ Container phase15-8984f4abd395-minio-1  Running
+ Container phase15-8984f4abd395-minio-1  Waiting
+ Container phase15-8984f4abd395-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 4 items
+
+services/api/tests/test_pipeline_dag.py FFFF                             [100%]
+
+=================================== FAILURES ===================================
+________ test_raw_text_source_fanout_and_multiple_direct_outputs[json] _________
+services/api/tests/test_pipeline_dag.py:1013: in test_raw_text_source_fanout_and_multiple_direct_outputs
+    assert status.state == "SUCCEEDED", status
+E   AssertionError: ExecutionJobView(id=UUID('06f2eb06-d5c8-4600-a8c6-ff55b18e5503'), resource_id=UUID('0294968c-214b-4010-be7a-b4c13c4806... error=None), NodeExecutionView(node_id='right', state='FAILED', attempt=1, error='invalid_data_or_plan')], outputs=[])
+E   assert 'FAILED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + FAILED
+_______ test_raw_text_source_fanout_and_multiple_direct_outputs[ndjson] ________
+services/api/tests/test_pipeline_dag.py:1013: in test_raw_text_source_fanout_and_multiple_direct_outputs
+    assert status.state == "SUCCEEDED", status
+E   AssertionError: ExecutionJobView(id=UUID('9a4d9246-1224-4d58-b559-c8469a135b7d'), resource_id=UUID('5b3fd6ea-46b9-4d0a-b826-d23b4d44ff... error=None), NodeExecutionView(node_id='right', state='FAILED', attempt=1, error='invalid_data_or_plan')], outputs=[])
+E   assert 'FAILED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + FAILED
+_____ test_repeated_source_pin_aliases_keep_one_physical_lineage_identity ______
+services/api/tests/test_pipeline_dag.py:1044: in test_repeated_source_pin_aliases_keep_one_physical_lineage_identity
+    assert status.state == "SUCCEEDED", status
+E   AssertionError: ExecutionJobView(id=UUID('7b4542a3-5085-4667-b928-352639561cea'), resource_id=UUID('2bbcead6-0202-4bac-9375-7e55f4c273...DING', attempt=0, error=None), NodeExecutionView(node_id='union', state='PENDING', attempt=0, error=None)], outputs=[])
+E   assert 'QUEUED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + QUEUED
+_________ test_parameterized_temporal_decimal_schema_preserved_in_dag __________
+services/api/src/ontology_platform/pipelines/dag_service.py:60: in validate_in
+    schema={c["name"]: supported[c["logical_type"]] for c in columns}
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: "Datetime(time_unit='us', time_zone='UTC')"
+
+The above exception was the direct cause of the following exception:
+services/api/tests/test_pipeline_dag.py:1088: in test_parameterized_temporal_decimal_schema_preserved_in_dag
+    definition = svc.publish(world.actor, pipe.id, spec)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/pipelines/service.py:48: in publish
+    return self.publish_in(s, p, key, spec)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/api/src/ontology_platform/pipelines/service.py:57: in publish_in
+    validate_in(self, s, p, spec)
+services/api/src/ontology_platform/pipelines/dag_service.py:63: in validate_in
+    raise ApplicationError(
+E   ontology_platform.errors.ApplicationError: Unsupported source schema type
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED services/api/tests/test_pipeline_dag.py::test_raw_text_source_fanout_and_multiple_direct_outputs[json]
+FAILED services/api/tests/test_pipeline_dag.py::test_raw_text_source_fanout_and_multiple_direct_outputs[ndjson]
+FAILED services/api/tests/test_pipeline_dag.py::test_repeated_source_pin_aliases_keep_one_physical_lineage_identity
+FAILED services/api/tests/test_pipeline_dag.py::test_parameterized_temporal_decimal_schema_preserved_in_dag
+========================= 4 failed, 1 warning in 9.95s =========================
+ Container phase15-8984f4abd395-minio-1  Stopping
+ Container phase15-8984f4abd395-minio-1  Stopped
+ Container phase15-8984f4abd395-minio-1  Removing
+ Container phase15-8984f4abd395-minio-1  Removed
+ Volume phase15-8984f4abd395_minio-data  Removing
+ Network phase15-8984f4abd395_default  Removing
+ Volume phase15-8984f4abd395_minio-data  Removed
+ Network phase15-8984f4abd395_default  Removed
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 143, in <module>
+    run("uv", "run", "pytest", *args.pytest_file, "-ra", "--tb=short")
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 99, in run
+    raise subprocess.CalledProcessError(code, cmd)
+subprocess.CalledProcessError: Command '('uv', 'run', 'pytest', 'services/api/tests/test_pipeline_dag.py::test_raw_text_source_fanout_and_multiple_direct_outputs', 'services/api/tests/test_pipeline_dag.py::test_repeated_source_pin_aliases_keep_one_physical_lineage_identity', 'services/api/tests/test_pipeline_dag.py::test_parameterized_temporal_decimal_schema_preserved_in_dag', '-ra', '--tb=short')' returned non-zero exit status 1.

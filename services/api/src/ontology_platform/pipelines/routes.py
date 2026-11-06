@@ -11,6 +11,7 @@ from ontology_platform.pipelines.contracts import (
     ExecutionJobView,
     StartRun,
 )
+from ontology_platform.pipelines.dag import DAGDefinition
 from ontology_platform.pipelines.graph import (
     Compilation,
     DraftView,
@@ -49,15 +50,23 @@ def get(pipeline_id: UUID, actor: Actor, svc: Service) -> ResourceView:
         return ResourceView.model_validate(svc.artifact(session, actor, pipeline_id))
 
 
-@router.post("/pipelines/{pipeline_id}/validate", response_model=Definition)
-def validate(pipeline_id: UUID, body: Definition, actor: Actor, svc: Service) -> Definition:
+@router.post("/pipelines/{pipeline_id}/validate", response_model=Definition | DAGDefinition)
+def validate(
+    pipeline_id: UUID, body: Definition | DAGDefinition, actor: Actor, svc: Service
+) -> Definition | DAGDefinition:
     with svc.scope(actor) as session:
         svc.artifact(session, actor, pipeline_id)
+        if isinstance(body, DAGDefinition):
+            from ontology_platform.pipelines.dag_service import validate_in
+
+            validate_in(svc, session, actor, body)
     return body
 
 
 @router.post("/pipelines/{pipeline_id}/definitions", response_model=DefinitionView, status_code=201)
-def publish(pipeline_id: UUID, body: Definition, actor: Actor, svc: Service) -> DefinitionView:
+def publish(
+    pipeline_id: UUID, body: Definition | DAGDefinition, actor: Actor, svc: Service
+) -> DefinitionView:
     return svc.publish(actor, pipeline_id, body)
 
 

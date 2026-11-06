@@ -187,8 +187,10 @@ def main():
     if not server.started:
         raise RuntimeError("Local TLS provider could not bind 127.0.0.1:8443")
     os.environ.setdefault("TEST_DATABASE_URL", get_settings().database_url.get_secret_value())
+    print("Browser backend: creating owned disposable PostgreSQL schema", flush=True)
     fixture = database.__wrapped__(None)
     db = next(fixture)
+    print("Browser backend: disposable schema migrated", flush=True)
     try:
         w = make_world(db)
         with w.sessions.begin() as sql:
@@ -318,6 +320,7 @@ def main():
                 event_hooks={"request": [provider_transport]},
             ),
         )
+        print("Browser backend: isolated app configured", flush=True)
         worker_thread = threading.Thread(target=work, daemon=True)
         worker_thread.start()
         uvicorn.run(

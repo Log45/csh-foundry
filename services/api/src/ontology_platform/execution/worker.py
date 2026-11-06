@@ -127,10 +127,20 @@ class ExecutionWorker:
             datasets.artifact(s, p, resource.id, True)
             assert job.validation_version_id is not None
             return [datasets.version(s, p, resource.id, job.validation_version_id)]
-        assert job.definition_id is not None and job.output_dataset_id is not None
+        assert job.definition_id is not None
         svc.artifact(s, p, job.resource_id, True)
         svc.definition(s, p, resource.id, job.definition_id)
-        datasets.artifact(s, p, job.output_dataset_id, True)
+        if job.request.get("format_version") == 2:
+            from ontology_platform.pipelines.dag import DAGDefinition
+            from ontology_platform.pipelines.dag_service import validate_in
+
+            spec = DAGDefinition.model_validate(
+                svc.definition(s, p, resource.id, job.definition_id).specification
+            )
+            validate_in(svc, s, p, spec)
+        else:
+            assert job.output_dataset_id is not None
+            datasets.artifact(s, p, job.output_dataset_id, True)
         versions = []
         for item in s.scalars(
             select(ExecutionInput)
@@ -183,6 +193,11 @@ class ExecutionWorker:
                         + timedelta(seconds=limits.wall_seconds + limits.lease_seconds + 300)
                     }
                 )
+        if job.kind == "PIPELINE" and job.request.get("format_version") == 2:
+            from ontology_platform.pipelines.dag_worker import execute as execute_dag
+
+            execute_dag(self, tenant, key, token, p, limits)
+            return
         if job.kind == "FUNCTION":
             from ontology_platform.functions.worker import execute as execute_function
 
@@ -221,7 +236,8 @@ class ExecutionWorker:
             )
             # Detach only immutable metadata; no transaction remains open during I/O.
             for version in versions:
-                s.expunge(version)
+                if version in s:
+                    s.expunge(version)
 
         def renew() -> bool:
             return self.heartbeat(tenant, key, token)
@@ -423,6 +439,12 @@ class ExecutionWorker:
             )
 
     def run_one(self) -> UUID | None:
+        from ontology_platform.pipelines.dag_worker import sweep
+
+        try:
+            sweep(self)
+        except (ApplicationError, SQLAlchemyError):
+            pass
         claim = self.claim()
         if claim is None:
             return None
@@ -451,7 +473,24 @@ class ExecutionWorker:
                     token,
                     exc.code
                     if exc.code
-                    in {"execution_limit", "temporary_limit", "source_limit", "engine_version"}
+                    in {
+                        "execution_limit",
+                        "temporary_limit",
+                        "source_limit",
+                        "engine_version",
+                        "intermediate_limit",
+                        "output_limit",
+                        "output_serialization",
+                        "invalid_data_or_plan",
+                        "plan_integrity",
+                        "manifest_limit",
+                        "intermediate_integrity",
+                        "input_unavailable",
+                        "storage_disabled",
+                        "output_unavailable",
+                        "schema_mismatch",
+                        "memory_limit",
+                    }
                     else "authorization_or_contract",
                     False,
                 )
@@ -464,4 +503,10 @@ class ExecutionWorker:
         finally:
             stopped.set()
             thread.join(timeout=5)
+            from ontology_platform.pipelines.dag_worker import cleanup
+
+            try:
+                cleanup(self, tenant, key, repeat=True)
+            except (ApplicationError, SQLAlchemyError):
+                pass  # Private orphan bytes can be swept safely on a later worker tick.
         return key

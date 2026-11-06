@@ -21,7 +21,7 @@ async function handle(request: Request) {
     csrfCheck(request, value);
     if (!value.tenant)
       throw new BoundaryError(403, "tenant_selection_required");
-    const { path, method, body, expected_tenant } = await input(request);
+    const { path, method, body, expected_tenant } = await input(request, true);
     if (expected_tenant !== value.tenant)
       throw new BoundaryError(409, "tenant_changed");
     if (

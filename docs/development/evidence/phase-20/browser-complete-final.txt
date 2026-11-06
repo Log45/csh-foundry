@@ -1,0 +1,67 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-b8850ca444bf_default  Creating
+ Network phase15-b8850ca444bf_default  Created
+ Volume "phase15-b8850ca444bf_minio-data"  Creating
+ Volume "phase15-b8850ca444bf_minio-data"  Created
+ Container phase15-b8850ca444bf-minio-1  Creating
+ Container phase15-b8850ca444bf-minio-1  Created
+ Container phase15-b8850ca444bf-minio-1  Starting
+ Container phase15-b8850ca444bf-minio-1  Started
+ Container phase15-b8850ca444bf-minio-1  Waiting
+ Container phase15-b8850ca444bf-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-b8850ca444bf-minio-1  Restarting
+ Container phase15-b8850ca444bf-minio-1  Started
+ Container phase15-b8850ca444bf-minio-1  Running
+ Container phase15-b8850ca444bf-minio-1  Waiting
+ Container phase15-b8850ca444bf-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+Python suite NOT RUN in this explicit browser-only selection
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test
+
+
+Running 15 tests using 1 worker
+
+(node:18540) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/application-security.spec.ts:25:1 › another signed-in principal cannot borrow application, object or action authority (2.5s)
+  ✓   2 tests/e2e/governed-processing.spec.ts:4:1 › governed media, typed functions and manual automations use the authenticated Studio (14.0s)
+  ✓   3 tests/e2e/pipeline-dag.spec.ts:4:1 › visual DAG branches converge and two outputs commit together (22.7s)
+  ✓   4 tests/e2e/workflow.spec.ts:21:1 › verified browser reference workflow (20.9s)
+  ✓   5 tests/e2e/workflow.spec.ts:211:1 › CSRF and unauthenticated proxy requests fail closed (847ms)
+  ✓   6 tests/e2e/workflow.spec.ts:226:1 › native authoring, OWL diagnostics, tenant isolation and session loss (2.3s)
+  ✓   7 tests/e2e/workflow.spec.ts:310:1 › schema branching, resolved merge and private SDK download (3.2s)
+  ✓   8 tests/e2e/workflow.spec.ts:411:3 › durable sessions survive replica restart and logout revokes every replica (3.0s)
+  ✓   9 tests/e2e/workflow.spec.ts:474:1 › Project workspace navigates folders and governed canonical references (2.7s)
+  ✓  10 tests/e2e/workflow.spec.ts:535:1 › Project artifacts upload immutable versions and download exact bytes (2.0s)
+  ✓  11 tests/e2e/workflow.spec.ts:595:1 › Project dataset uploads, discovers schema and previews historical versions (6.1s)
+  ✓  12 tests/e2e/workflow.spec.ts:666:1 › governed pipeline publishes immutable output and real lineage (9.4s)
+  ✓  13 tests/e2e/workflow.spec.ts:790:1 › governed mapping validates materializes and records source provenance (16.1s)
+  ✓  14 tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action (5.8s)
+(node:19467) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS_BROWSER_MAXIMUM {"source_bytes":1073741824,"rows":262144,"format":"csv","asynchronous_validation":true}
+  ✓  15 tests/e2e/maximum.spec.ts:6:1 › exact 1 GiB browser upload streams through BFF and asynchronous validation (1.3m)
+
+  15 passed (3.2m)
+ Container phase15-b8850ca444bf-minio-1  Stopping
+ Container phase15-b8850ca444bf-minio-1  Stopped
+ Container phase15-b8850ca444bf-minio-1  Removing
+ Container phase15-b8850ca444bf-minio-1  Removed
+ Volume phase15-b8850ca444bf_minio-data  Removing
+ Network phase15-b8850ca444bf_default  Removing
+ Volume phase15-b8850ca444bf_minio-data  Removed
+ Network phase15-b8850ca444bf_default  Removed

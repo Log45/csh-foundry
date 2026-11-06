@@ -17,3 +17,7 @@ execution integration, and authenticated media original/preview streaming. Exist
 Phase 19 (unreleased local workspace): generated application resource/draft/validation/publication/
 runtime gateways and canonical object aggregate capability. Existing sessions, tenant scoping,
 mutation retry policy, request limits and typed errors remain authoritative.
+
+Phase 20 (unreleased local workspace): generated legacy/v2 DAG contracts, durable node/publication
+status and authorized multi-output results. Pipeline request envelopes allow 512 KiB; other families
+retain 64 KiB. React execution observation includes publication/output changes. No package publication.

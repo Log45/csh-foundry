@@ -1,0 +1,148 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-6a82baf83133_default  Creating
+ Network phase15-6a82baf83133_default  Created
+ Volume "phase15-6a82baf83133_minio-data"  Creating
+ Volume "phase15-6a82baf83133_minio-data"  Created
+ Container phase15-6a82baf83133-minio-1  Creating
+ Container phase15-6a82baf83133-minio-1  Created
+ Container phase15-6a82baf83133-minio-1  Starting
+ Container phase15-6a82baf83133-minio-1  Started
+ Container phase15-6a82baf83133-minio-1  Waiting
+ Container phase15-6a82baf83133-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-6a82baf83133-minio-1  Restarting
+ Container phase15-6a82baf83133-minio-1  Started
+ Container phase15-6a82baf83133-minio-1  Running
+ Container phase15-6a82baf83133-minio-1  Waiting
+ Container phase15-6a82baf83133-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+testpaths: services/api/tests, packages/ontology-schema/tests
+plugins: anyio-4.15.1
+collected 895 items
+
+services/api/tests/test_action_models.py ............................    [  3%]
+services/api/tests/test_actions.py ..................................... [  7%]
+...................                                                      [  9%]
+services/api/tests/test_api.py ...                                       [  9%]
+services/api/tests/test_applications.py ..........................       [ 12%]
+services/api/tests/test_artifacts.py ..............                      [ 14%]
+services/api/tests/test_branching.py ................                    [ 15%]
+services/api/tests/test_capacity_acceptance.py ......                    [ 16%]
+services/api/tests/test_compatibility.py ..............                  [ 18%]
+services/api/tests/test_contracts.py ...                                 [ 18%]
+services/api/tests/test_database.py F                                    [ 18%]
+services/api/tests/test_datasets.py .................................... [ 22%]
+.                                                                        [ 22%]
+services/api/tests/test_diagnostics.py ..                                [ 23%]
+services/api/tests/test_execution.py ................................... [ 26%]
+.............                                                            [ 28%]
+services/api/tests/test_execution_large.py ................              [ 30%]
+services/api/tests/test_fixtures.py ..x..........                        [ 31%]
+services/api/tests/test_ingestion.py ................................... [ 35%]
+............                                                             [ 36%]
+services/api/tests/test_ingestion_connectors.py .......................  [ 39%]
+services/api/tests/test_ingestion_postgres.py ....                       [ 39%]
+services/api/tests/test_ingestion_recovery.py ........                   [ 40%]
+services/api/tests/test_kubernetes.py .......................            [ 43%]
+services/api/tests/test_mappings.py ...................................  [ 47%]
+services/api/tests/test_mappings_large.py F                              [ 47%]
+services/api/tests/test_mappings_recovery.py ...                         [ 47%]
+services/api/tests/test_media_functions_automations.py ................. [ 49%]
+.......................                                                  [ 52%]
+services/api/tests/test_ontology_import.py ............................. [ 55%]
+.........                                                                [ 56%]
+services/api/tests/test_operations.py .......................            [ 58%]
+services/api/tests/test_phase1.py .............................          [ 62%]
+services/api/tests/test_phase10_diagnostics_harness.py ....              [ 62%]
+services/api/tests/test_pipeline_dag.py ...................              [ 64%]
+services/api/tests/test_pipeline_dag_large.py .                          [ 64%]
+services/api/tests/test_pipeline_graphs.py ..............                [ 66%]
+services/api/tests/test_pitr_guard.py ..........                         [ 67%]
+services/api/tests/test_platform_sdk.py ...                              [ 67%]
+services/api/tests/test_production_profile.py ..                         [ 68%]
+services/api/tests/test_projects.py ............                         [ 69%]
+services/api/tests/test_queries.py ..................................... [ 73%]
+.......                                                                  [ 74%]
+services/api/tests/test_query_ast.py ..........................          [ 77%]
+services/api/tests/test_release_evidence.py ...........................  [ 80%]
+services/api/tests/test_scan_images.py ..                                [ 80%]
+services/api/tests/test_sdk.py ................                          [ 82%]
+services/api/tests/test_security_dispositions.py ......................  [ 84%]
+services/api/tests/test_security_oidc.py ............................... [ 88%]
+..............                                                           [ 89%]
+services/api/tests/test_security_platform.py .................           [ 91%]
+services/api/tests/test_security_workflows.py ......                     [ 92%]
+services/api/tests/test_semantic.py ....                                 [ 92%]
+services/api/tests/test_semantic_compiler.py ............                [ 94%]
+services/api/tests/test_semantic_platform.py ........................... [ 97%]
+....                                                                     [ 97%]
+services/api/tests/test_studio.py ...                                    [ 97%]
+packages/ontology-schema/tests/test_models.py ..................         [100%]
+
+=================================== FAILURES ===================================
+___________________ test_database_transaction_and_readiness ____________________
+services/api/tests/test_database.py:27: in test_database_transaction_and_readiness
+    assert (
+E   AssertionError: assert '0026_pipeline_dag' == '0025_applications'
+E     
+E     - 0025_applications
+E     + 0026_pipeline_dag
+___________________ test_representative_gib_materialization ____________________
+services/api/tests/test_mappings_large.py:163: in test_representative_gib_materialization
+    assert recovery.state == "SUCCEEDED" and recovery.metrics.get("created", 0) == 0, recovery
+E   AssertionError: ExecutionJobView(id=UUID('b7cc108c-77da-4c53-9ad2-b5f38c818e17'), resource_id=UUID('cc3868db-c908-4cee-ae7b-f47bdf88c1...Etc/UTC')), completed_at=None, plan_digest=None, publication_state=None, prepared_output_count=0, nodes=[], outputs=[])
+E   assert ('RUNNING' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + RUNNING)
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+services/api/tests/test_capacity_acceptance.py::test_cross_tenant_mixed_http_admission_and_cancel[2]
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py:2346: UnsupportedFieldAttributeWarning: The 'alias' attribute with value 'ontology_id' was provided to the `Field()` function, which has no effect in the context it was used. 'alias' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+XFAIL services/api/tests/test_fixtures.py::test_raw_pyshacl_compatibility - Raw pySHACL/RDFLib simple/xsd:string mismatch; see semantic-compatibility.md
+FAILED services/api/tests/test_database.py::test_database_transaction_and_readiness
+FAILED services/api/tests/test_mappings_large.py::test_representative_gib_materialization
+====== 2 failed, 892 passed, 1 xfailed, 2 warnings in 1276.05s (0:21:16) =======
+No new upgrade operations detected.
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase11.py", line 35, in <module>
+    subprocess.run(["uv", "run", "pytest", "-ra", "--tb=short"], cwd=root, env=env, check=True)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['uv', 'run', 'pytest', '-ra', '--tb=short']' returned non-zero exit status 1.
+ Container phase15-6a82baf83133-minio-1  Stopping
+ Container phase15-6a82baf83133-minio-1  Stopped
+ Container phase15-6a82baf83133-minio-1  Removing
+ Container phase15-6a82baf83133-minio-1  Removed
+ Network phase15-6a82baf83133_default  Removing
+ Volume phase15-6a82baf83133_minio-data  Removing
+ Network phase15-6a82baf83133_default  Removed
+ Volume phase15-6a82baf83133_minio-data  Removed
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 156, in <module>
+    run("uv", "run", "python", "scripts/validate_phase11.py")
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 99, in run
+    raise subprocess.CalledProcessError(code, cmd)
+subprocess.CalledProcessError: Command '('uv', 'run', 'python', 'scripts/validate_phase11.py')' returned non-zero exit status 1.

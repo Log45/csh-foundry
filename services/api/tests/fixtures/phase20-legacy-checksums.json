@@ -1,0 +1,140 @@
+{
+  "base_revision": "495e4611cdc5898dd654ae76df03d885fe7f2180",
+  "polars_version": "1.44.2",
+  "cases": [
+    {
+      "inputs": {
+        "source": {
+          "id": [
+            1,
+            2,
+            3
+          ],
+          "value": [
+            30,
+            20,
+            10
+          ]
+        }
+      },
+      "steps": [
+        {
+          "op": "filter",
+          "expression": {
+            "op": "gt",
+            "args": [
+              {
+                "op": "column",
+                "column": "id"
+              },
+              {
+                "op": "literal",
+                "value": 1
+              }
+            ]
+          }
+        },
+        {
+          "op": "select",
+          "columns": [
+            "id",
+            "value"
+          ]
+        },
+        {
+          "op": "sort",
+          "columns": [
+            "value"
+          ]
+        }
+      ],
+      "checksum": "8b2083911c4d35a6c1aeb068d27dce9b7d8d10ba0f3ab05745192d051f1db4a3",
+      "row_count": 2
+    },
+    {
+      "inputs": {
+        "source": {
+          "id": [
+            1,
+            1,
+            2
+          ],
+          "value": [
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "steps": [
+        {
+          "op": "derive",
+          "name": "doubled",
+          "expression": {
+            "op": "multiply",
+            "args": [
+              {
+                "op": "column",
+                "column": "value"
+              },
+              {
+                "op": "literal",
+                "value": 2
+              }
+            ]
+          }
+        },
+        {
+          "op": "aggregate",
+          "columns": [
+            "id"
+          ],
+          "aggregates": [
+            {
+              "column": "doubled",
+              "function": "sum",
+              "alias": "total"
+            }
+          ]
+        }
+      ],
+      "checksum": "162799cc295b7e9c4ac404dd68914e6b18569d27ca01ac3ba427a99f79585ea1",
+      "row_count": 2
+    },
+    {
+      "inputs": {
+        "source": {
+          "id": [
+            1,
+            2
+          ],
+          "value": [
+            3,
+            4
+          ]
+        },
+        "right": {
+          "id": [
+            1,
+            2
+          ],
+          "other": [
+            5,
+            6
+          ]
+        }
+      },
+      "steps": [
+        {
+          "op": "join",
+          "input": "right",
+          "columns": [
+            "id"
+          ]
+        }
+      ],
+      "checksum": "5461a60c815a3adf935542967f3e257cca44c06ce0fb177a91db0857e73ac296",
+      "row_count": 2
+    }
+  ]
+}

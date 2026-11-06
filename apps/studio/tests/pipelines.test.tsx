@@ -108,3 +108,58 @@ it("hashes file slices without reading the whole source", async () => {
   );
   expect(all).not.toHaveBeenCalled();
 });
+
+it("reopens a published DAG using exact pins without schema-only input fields", async () => {
+  const definition = {
+    id: "definition",
+    sequence: 1,
+    specification: {
+      format_version: 2,
+      inputs: [
+        {
+          name: "source",
+          dataset_id: "dataset",
+          version_id: "version",
+          columns: { id: "Int64" },
+        },
+      ],
+      nodes: [],
+      outputs: [],
+    },
+  };
+  const api = vi.fn(async (path: string, method = "GET") => {
+    if (path.includes("graph/draft")) return null;
+    if (path.includes("/resources")) return [];
+    if (path.includes("/definitions")) return [definition];
+    if (path.includes("/runs") && method === "POST")
+      return { id: "run", state: "QUEUED", attempts: 0, metrics: {} };
+    return [];
+  });
+  render(
+    <PipelinePanel
+      api={api as Client}
+      project="project"
+      pipeline="pipeline"
+      writable={true}
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Refresh pipeline" }));
+  await screen.findByRole("option", { name: "1 · definition" });
+  fireEvent.change(screen.getByLabelText("Published definition"), {
+    target: { value: "definition" },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Launch run" }));
+  await vi.waitFor(() =>
+    expect(api).toHaveBeenCalledWith(
+      "/api/v1/pipelines/pipeline/runs",
+      "POST",
+      {
+        definition_id: "definition",
+        inputs: [
+          { name: "source", dataset_id: "dataset", version_id: "version" },
+        ],
+        output_dataset_id: null,
+      },
+    ),
+  );
+});

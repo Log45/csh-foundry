@@ -1,8 +1,9 @@
 """Polars adapter for portable specifications, using lazy plans and streaming sinks."""
 
 import hashlib
+import re
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Literal, Protocol, cast
 
 import polars as pl
 import polars.selectors as cs
@@ -22,6 +23,36 @@ TYPES: dict[str, pl.DataType | type[pl.DataType]] = {
     "Datetime": pl.Datetime("us"),
     "Decimal": pl.Decimal(38, 9),
 }
+
+
+def schema_dtype(value: str) -> pl.DataType | type[pl.DataType]:
+    """Closed parser for committed scalar schema metadata; never evaluates type text."""
+    scalars = TYPES | {
+        "Null": pl.Null,
+        "Int8": pl.Int8,
+        "Int16": pl.Int16,
+        "Int32": pl.Int32,
+        "Int128": pl.Int128,
+        "UInt8": pl.UInt8,
+        "UInt16": pl.UInt16,
+        "UInt32": pl.UInt32,
+        "Float32": pl.Float32,
+        "Time": pl.Time,
+    }
+    if value in scalars:
+        return scalars[value]
+    temporal = re.fullmatch(
+        r"Datetime\(time_unit='(?P<unit>ns|us|ms)', time_zone=(?:None|'(?P<zone>[^']+)')\)", value
+    )
+    if temporal:
+        return pl.Datetime(cast(Literal["ns", "us", "ms"], temporal["unit"]), temporal["zone"])
+    decimal = re.fullmatch(r"Decimal\(precision=(None|[0-9]{1,2}), scale=([0-9]{1,2})\)", value)
+    if decimal:
+        precision = None if decimal[1] == "None" else int(decimal[1])
+        scale = int(decimal[2])
+        if 0 <= scale <= (precision or 38) and (precision is None or 1 <= precision <= 38):
+            return pl.Decimal(precision, scale)
+    raise InvalidDataset("Unsupported source schema type")
 
 
 class ExecutionEngine(Protocol):
@@ -255,9 +286,17 @@ class PolarsEngine:
                 if count != item["row_count"]:
                     raise InvalidDataset("Input row count differs from its immutable snapshot")
         lazy = plan(spec, inputs)
-        output = directory / "output.parquet"
-        lazy.sink_parquet(output, row_group_size=8192, maintain_order=True, engine="streaming")
-        result = validate_path(output, "parquet", limits)
+        output_format = request.get("output_format", "parquet")
+        output = directory / ("output." + output_format)
+        if output_format == "parquet":
+            lazy.sink_parquet(output, row_group_size=8192, maintain_order=True, engine="streaming")
+        elif output_format == "csv":
+            lazy.sink_csv(output, maintain_order=True, engine="streaming")
+        elif output_format == "ndjson":
+            lazy.sink_ndjson(output, maintain_order=True, engine="streaming")
+        else:
+            raise InvalidDataset("Unsupported output format")
+        result = validate_path(output, output_format, limits)
         if [(c["name"], c["logical_type"]) for c in result["schema"]] != [
             (name, str(dtype)) for name, dtype in lazy.collect_schema().items()
         ]:
@@ -273,3 +312,40 @@ class PolarsEngine:
             "engine": self.name,
             "engine_version": self.version,
         }
+
+
+def dag_frames(
+    spec: Any, inputs: dict[str, pl.LazyFrame], *, schema_only: bool = False
+) -> dict[str, pl.LazyFrame]:
+    """Schema propagation uses the same operation adapter as legacy execution."""
+    from ontology_platform.pipelines.contracts import InputContract
+    from ontology_platform.pipelines.dag import topology
+
+    frames = dict(inputs)
+    for contract in spec.inputs:
+        plan(
+            Definition(inputs=[InputContract(name=contract.name, columns=contract.columns)]), frames
+        )
+    nodes = {node.id: node for node in spec.nodes}
+    for key in topology(spec):
+        node = nodes[key]
+        bindings = {port: frames[source] for port, source in node.inputs.items()}
+        frames[key] = plan(
+            Definition(
+                inputs=[
+                    InputContract(name=port) for port in ["input", "right"] if port in bindings
+                ],
+                steps=[node.config],
+            ),
+            bindings,
+        )
+        if schema_only:
+            # Schema-only planning must not retain exponentially nested branch plans.
+            frames[key] = pl.LazyFrame(schema=frames[key].collect_schema())
+    for output in spec.outputs:
+        schema = {
+            name: str(dtype) for name, dtype in frames[output.source].collect_schema().items()
+        }
+        if output.columns and output.columns != schema:
+            raise InvalidDataset("Output schema contract mismatch")
+    return frames

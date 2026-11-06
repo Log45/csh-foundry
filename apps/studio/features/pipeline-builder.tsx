@@ -130,7 +130,7 @@ function defaultStep(op: Operation): Record<string, unknown> {
   return { op, input: "right" };
 }
 
-const emptyGraph: Graph = { format_version: 1, nodes: [], edges: [] };
+const emptyGraph: Graph = { format_version: 2, nodes: [], edges: [] };
 
 function label(node: GraphNode) {
   if (node.kind === "transform") return node.config.op;
@@ -425,7 +425,12 @@ function Inspector({
 
   async function chooseDataset(datasetId: string) {
     if (active.kind === "dataset_output") {
-      update({ ...active.config, dataset_id: datasetId || null });
+      update({
+        ...active.config,
+        dataset_id: datasetId || null,
+        project_id: null,
+        name: null,
+      });
       return;
     }
     if (active.kind !== "dataset_source") return;
@@ -538,19 +543,57 @@ function Inspector({
         </>
       )}
       {active.kind === "dataset_output" && (
-        <Field label="Output dataset">
-          <select
-            value={active.config.dataset_id ?? ""}
-            onChange={(event) => void chooseDataset(event.target.value)}
-          >
-            <option value="">Select an authorized dataset</option>
-            {datasets.map((dataset) => (
-              <option key={dataset.id} value={dataset.id}>
-                {dataset.name}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <>
+          <Field label="Output format">
+            <select
+              value={active.config.format ?? "parquet"}
+              onChange={(event) =>
+                update({ ...active.config, format: event.target.value })
+              }
+            >
+              <option value="parquet">Parquet</option>
+              <option value="csv">CSV</option>
+              <option value="ndjson">NDJSON</option>
+            </select>
+          </Field>
+          <Field label="New output Project ID">
+            <input
+              value={active.config.project_id ?? ""}
+              onChange={(event) =>
+                update({
+                  ...active.config,
+                  dataset_id: null,
+                  project_id: event.target.value || null,
+                })
+              }
+            />
+          </Field>
+          <Field label="New output dataset name">
+            <input
+              value={active.config.name ?? ""}
+              onChange={(event) =>
+                update({
+                  ...active.config,
+                  dataset_id: null,
+                  name: event.target.value || null,
+                })
+              }
+            />
+          </Field>
+          <Field label="Output dataset">
+            <select
+              value={active.config.dataset_id ?? ""}
+              onChange={(event) => void chooseDataset(event.target.value)}
+            >
+              <option value="">Select an authorized dataset</option>
+              {datasets.map((dataset) => (
+                <option key={dataset.id} value={dataset.id}>
+                  {dataset.name}
+                </option>
+              ))}
+            </select>
+          </Field>
+        </>
       )}
       {active.kind === "function_reference" && (
         <>
@@ -943,6 +986,19 @@ export function PipelineBuilder({
             ? `Saved draft revision ${revision}`
             : "No saved draft"
           : "Unsaved changes"}
+      </p>
+      {graph.format_version === 1 && (
+        <button
+          type="button"
+          disabled={!writable}
+          onClick={() => change({ ...graph, format_version: 2 })}
+        >
+          Upgrade draft to DAG v2
+        </button>
+      )}
+      <p>
+        Graph format {graph.format_version}. Outputs publish together after
+        every output is prepared and verified.
       </p>
       <ReactFlowProvider>
         <Canvas

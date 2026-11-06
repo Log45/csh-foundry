@@ -1,0 +1,513 @@
+E501 Line too long (110 > 100)
+  --> services/api/migrations/versions/0026_pipeline_dag.py:23:101
+   |
+21 |       SELECT pg_get_functiondef('guard_execution_job()'::regprocedure) INTO body;
+22 |       body := replace(body, 'NEW.kind = ''PIPELINE'' AND NOT EXISTS',
+23 |         'NEW.kind = ''PIPELINE'' AND NEW.request->>''format_version'' IS DISTINCT FROM ''2'' AND NOT EXISTS');
+   |                                                                                                     ^^^^^^^^^^
+24 |       EXECUTE body;
+25 |     END $$""")
+   |
+
+E501 Line too long (112 > 100)
+  --> services/api/migrations/versions/0026_pipeline_dag.py:33:101
+   |
+31 |       PRIMARY KEY (tenant_id,job_id),
+32 |       FOREIGN KEY (tenant_id,job_id) REFERENCES execution_jobs(tenant_id,id),
+33 |       CONSTRAINT ck_dag_run_state CHECK (state IN ('EXECUTING','PREPARING','PREPARED','COMMITTED','ABANDONED')),
+   |                                                                                                     ^^^^^^^^^^^^
+34 |       CONSTRAINT ck_dag_commit CHECK ((state='COMMITTED')=(commit_id IS NOT NULL))
+35 |     )""")
+   |
+
+E501 Line too long (102 > 100)
+  --> services/api/migrations/versions/0026_pipeline_dag.py:70:101
+   |
+68 |         END IF;
+69 |       ELSE
+70 |         IF OLD.tenant_id IS DISTINCT FROM NEW.tenant_id OR OLD.job_id IS DISTINCT FROM NEW.job_id THEN
+   |                                                                                                     ^^
+71 |           RAISE EXCEPTION 'Immutable DAG identity' USING ERRCODE='23514';
+72 |         END IF;
+   |
+
+E501 Line too long (113 > 100)
+  --> services/api/migrations/versions/0026_pipeline_dag.py:78:101
+   |
+76 |         END IF;
+77 |         IF TG_TABLE_NAME='dag_runs' THEN
+78 |           IF (OLD.plan,OLD.plan_digest) IS DISTINCT FROM (NEW.plan,NEW.plan_digest) OR OLD.state='COMMITTED' THEN
+   |                                                                                                     ^^^^^^^^^^^^^
+79 |             RAISE EXCEPTION 'Immutable execution plan/commit' USING ERRCODE='23514';
+80 |           END IF;
+   |
+
+E501 Line too long (140 > 100)
+  --> services/api/migrations/versions/0026_pipeline_dag.py:94:101
+   |
+92 | …s"):
+93 | …
+94 | …NSERT OR UPDATE OR DELETE ON {table} FOR EACH ROW EXECUTE FUNCTION guard_dag_record()"
+   |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+95 | …
+96 | …RETURNS trigger LANGUAGE plpgsql AS $$
+   |
+
+E501 Line too long (119 > 100)
+   --> services/api/migrations/versions/0026_pipeline_dag.py:98:101
+    |
+ 96 |     op.execute("""CREATE FUNCTION guard_dag_success() RETURNS trigger LANGUAGE plpgsql AS $$
+ 97 |     BEGIN
+ 98 |       IF NEW.state='SUCCEEDED' AND EXISTS (SELECT 1 FROM dag_runs WHERE tenant_id=NEW.tenant_id AND job_id=NEW.id) THEN
+    |                                                                                                     ^^^^^^^^^^^^^^^^^^^
+ 99 |         IF NOT EXISTS (SELECT 1 FROM dag_runs WHERE tenant_id=NEW.tenant_id AND job_id=NEW.id AND state='COMMITTED') OR
+100 |            EXISTS (SELECT 1 FROM dag_outputs o LEFT JOIN dataset_versions d ON
+    |
+
+E501 Line too long (119 > 100)
+   --> services/api/migrations/versions/0026_pipeline_dag.py:99:101
+    |
+ 97 |     BEGIN
+ 98 |       IF NEW.state='SUCCEEDED' AND EXISTS (SELECT 1 FROM dag_runs WHERE tenant_id=NEW.tenant_id AND job_id=NEW.id) THEN
+ 99 |         IF NOT EXISTS (SELECT 1 FROM dag_runs WHERE tenant_id=NEW.tenant_id AND job_id=NEW.id AND state='COMMITTED') OR
+    |                                                                                                     ^^^^^^^^^^^^^^^^^^^
+100 |            EXISTS (SELECT 1 FROM dag_outputs o LEFT JOIN dataset_versions d ON
+101 |              (d.tenant_id,d.artifact_id,d.id)=(o.tenant_id,o.dataset_id,o.version_id)
+    |
+
+E501 Line too long (118 > 100)
+   --> services/api/migrations/versions/0026_pipeline_dag.py:102:101
+    |
+100 |            EXISTS (SELECT 1 FROM dag_outputs o LEFT JOIN dataset_versions d ON
+101 |              (d.tenant_id,d.artifact_id,d.id)=(o.tenant_id,o.dataset_id,o.version_id)
+102 |              LEFT JOIN artifact_versions a ON (a.tenant_id,a.artifact_id,a.id)=(o.tenant_id,o.dataset_id,o.version_id)
+    |                                                                                                     ^^^^^^^^^^^^^^^^^^
+103 |              WHERE o.tenant_id=NEW.tenant_id AND o.job_id=NEW.id AND
+104 |              (o.state<>'COMMITTED' OR d.state IS DISTINCT FROM 'COMMITTED' OR a.state IS DISTINCT FROM 'COMMITTED')) THEN
+    |
+
+E501 Line too long (121 > 100)
+   --> services/api/migrations/versions/0026_pipeline_dag.py:104:101
+    |
+102 |              LEFT JOIN artifact_versions a ON (a.tenant_id,a.artifact_id,a.id)=(o.tenant_id,o.dataset_id,o.version_id)
+103 |              WHERE o.tenant_id=NEW.tenant_id AND o.job_id=NEW.id AND
+104 |              (o.state<>'COMMITTED' OR d.state IS DISTINCT FROM 'COMMITTED' OR a.state IS DISTINCT FROM 'COMMITTED')) THEN
+    |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^
+105 |           RAISE EXCEPTION 'Success requires all committed outputs' USING ERRCODE='23514';
+106 |         END IF;
+    |
+
+E501 Line too long (124 > 100)
+   --> services/api/migrations/versions/0026_pipeline_dag.py:111:101
+    |
+109 |     END $$""")
+110 |     op.execute(
+111 |         "CREATE TRIGGER guard_dag_success BEFORE UPDATE ON execution_jobs FOR EACH ROW EXECUTE FUNCTION guard_dag_success()"
+    |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
+112 |     )
+113 |     op.execute("""CREATE OR REPLACE FUNCTION require_execution_publication(t uuid, r uuid, v uuid)
+    |
+
+E501 Line too long (113 > 100)
+   --> services/api/migrations/versions/0026_pipeline_dag.py:115:101
+    |
+113 |     op.execute("""CREATE OR REPLACE FUNCTION require_execution_publication(t uuid, r uuid, v uuid)
+114 |     RETURNS void LANGUAGE plpgsql AS $$ BEGIN
+115 |       IF (EXISTS (SELECT 1 FROM execution_jobs WHERE tenant_id=t AND output_dataset_id=r AND output_version_id=v)
+    |                                                                                                     ^^^^^^^^^^^^^
+116 |           OR EXISTS (SELECT 1 FROM dag_outputs WHERE tenant_id=t AND dataset_id=r AND version_id=v))
+117 |         AND NOT EXISTS (SELECT 1 FROM execution_jobs j WHERE j.tenant_id=t AND j.state='RUNNING'
+    |
+
+E501 Line too long (113 > 100)
+   --> services/api/migrations/versions/0026_pipeline_dag.py:118:101
+    |
+116 |           OR EXISTS (SELECT 1 FROM dag_outputs WHERE tenant_id=t AND dataset_id=r AND version_id=v))
+117 |         AND NOT EXISTS (SELECT 1 FROM execution_jobs j WHERE j.tenant_id=t AND j.state='RUNNING'
+118 |           AND j.lease_until > clock_timestamp() AND j.token::text=current_setting('foundry.execution_token',true)
+    |                                                                                                     ^^^^^^^^^^^^^
+119 |           AND ((j.output_dataset_id=r AND j.output_version_id=v) OR EXISTS
+120 |             (SELECT 1 FROM dag_outputs o WHERE o.tenant_id=t AND o.job_id=j.id AND o.dataset_id=r AND o.version_id=v))) THEN
+    |
+
+E501 Line too long (124 > 100)
+   --> services/api/migrations/versions/0026_pipeline_dag.py:120:101
+    |
+118 |           AND j.lease_until > clock_timestamp() AND j.token::text=current_setting('foundry.execution_token',true)
+119 |           AND ((j.output_dataset_id=r AND j.output_version_id=v) OR EXISTS
+120 |             (SELECT 1 FROM dag_outputs o WHERE o.tenant_id=t AND o.job_id=j.id AND o.dataset_id=r AND o.version_id=v))) THEN
+    |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
+121 |         RAISE EXCEPTION 'Output requires live fenced publication' USING ERRCODE='23514';
+122 |       END IF;
+    |
+
+F811 Redefinition of unused `world` from line 18
+   --> services/api/tests/test_pipeline_dag.py:128:15
+    |
+128 | def setup_run(world, store, new=False):
+    |               ^^^^^ `world` redefined here
+129 |     datasets = make_service(world, store)
+130 |     source = dataset(datasets, world.actor)
+    |
+   ::: services/api/tests/test_pipeline_dag.py:18:35
+    |
+ 16 | from test_artifacts import store  # noqa: F401, F811
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |                                   ----- previous definition of `world` here
+help: Remove definition: `world`
+
+F811 Redefinition of unused `store` from line 16
+   --> services/api/tests/test_pipeline_dag.py:128:22
+    |
+128 | def setup_run(world, store, new=False):
+    |                      ^^^^^ `store` redefined here
+129 |     datasets = make_service(world, store)
+130 |     source = dataset(datasets, world.actor)
+    |
+   ::: services/api/tests/test_pipeline_dag.py:16:28
+    |
+ 14 | from pydantic import ValidationError
+ 15 | from sqlalchemy import select
+ 16 | from test_artifacts import store  # noqa: F401, F811
+    |                            ----- previous definition of `store` here
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |
+help: Remove definition: `store`
+
+F811 Redefinition of unused `world` from line 18
+   --> services/api/tests/test_pipeline_dag.py:154:44
+    |
+153 | @pytest.mark.parametrize("new", [False, True])
+154 | def test_real_dag_atomic_outputs_and_reuse(world, store, new):
+    |                                            ^^^^^ `world` redefined here
+155 |     svc, datasets, run, spec, targets = setup_run(world, store, new)
+156 |     worker = ExecutionWorker(svc)
+    |
+   ::: services/api/tests/test_pipeline_dag.py:18:35
+    |
+ 16 | from test_artifacts import store  # noqa: F401, F811
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |                                   ----- previous definition of `world` here
+help: Remove definition: `world`
+
+F811 Redefinition of unused `store` from line 16
+   --> services/api/tests/test_pipeline_dag.py:154:51
+    |
+153 | @pytest.mark.parametrize("new", [False, True])
+154 | def test_real_dag_atomic_outputs_and_reuse(world, store, new):
+    |                                                   ^^^^^ `store` redefined here
+155 |     svc, datasets, run, spec, targets = setup_run(world, store, new)
+156 |     worker = ExecutionWorker(svc)
+    |
+   ::: services/api/tests/test_pipeline_dag.py:16:28
+    |
+ 14 | from pydantic import ValidationError
+ 15 | from sqlalchemy import select
+ 16 | from test_artifacts import store  # noqa: F401, F811
+    |                            ----- previous definition of `store` here
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |
+help: Remove definition: `store`
+
+F811 Redefinition of unused `world` from line 18
+   --> services/api/tests/test_pipeline_dag.py:178:54
+    |
+178 | def test_atomic_publication_rolls_back_audit_failure(world, store, monkeypatch):
+    |                                                      ^^^^^ `world` redefined here
+179 |     svc, datasets, run, spec, targets = setup_run(world, store)
+180 |     original = svc.audit
+    |
+   ::: services/api/tests/test_pipeline_dag.py:18:35
+    |
+ 16 | from test_artifacts import store  # noqa: F401, F811
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |                                   ----- previous definition of `world` here
+help: Remove definition: `world`
+
+F811 Redefinition of unused `store` from line 16
+   --> services/api/tests/test_pipeline_dag.py:178:61
+    |
+178 | def test_atomic_publication_rolls_back_audit_failure(world, store, monkeypatch):
+    |                                                             ^^^^^ `store` redefined here
+179 |     svc, datasets, run, spec, targets = setup_run(world, store)
+180 |     original = svc.audit
+    |
+   ::: services/api/tests/test_pipeline_dag.py:16:28
+    |
+ 14 | from pydantic import ValidationError
+ 15 | from sqlalchemy import select
+ 16 | from test_artifacts import store  # noqa: F401, F811
+    |                            ----- previous definition of `store` here
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |
+help: Remove definition: `store`
+
+F811 Redefinition of unused `world` from line 18
+   --> services/api/tests/test_pipeline_dag.py:196:49
+    |
+196 | def test_staged_outputs_invisible_before_commit(world, store, monkeypatch):
+    |                                                 ^^^^^ `world` redefined here
+197 |     svc, datasets, run, spec, targets = setup_run(world, store)
+198 |     from ontology_platform.pipelines import dag_worker
+    |
+   ::: services/api/tests/test_pipeline_dag.py:18:35
+    |
+ 16 | from test_artifacts import store  # noqa: F401, F811
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |                                   ----- previous definition of `world` here
+help: Remove definition: `world`
+
+F811 Redefinition of unused `store` from line 16
+   --> services/api/tests/test_pipeline_dag.py:196:56
+    |
+196 | def test_staged_outputs_invisible_before_commit(world, store, monkeypatch):
+    |                                                        ^^^^^ `store` redefined here
+197 |     svc, datasets, run, spec, targets = setup_run(world, store)
+198 |     from ontology_platform.pipelines import dag_worker
+    |
+   ::: services/api/tests/test_pipeline_dag.py:16:28
+    |
+ 14 | from pydantic import ValidationError
+ 15 | from sqlalchemy import select
+ 16 | from test_artifacts import store  # noqa: F401, F811
+    |                            ----- previous definition of `store` here
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |
+help: Remove definition: `store`
+
+F811 Redefinition of unused `world` from line 18
+   --> services/api/tests/test_pipeline_dag.py:255:60
+    |
+255 | def test_dag_recovery_after_all_prepared_and_stale_fencing(world, store, monkeypatch):
+    |                                                            ^^^^^ `world` redefined here
+256 |     from datetime import timedelta
+257 |     from ontology_platform.db.session import clock
+    |
+   ::: services/api/tests/test_pipeline_dag.py:18:35
+    |
+ 16 | from test_artifacts import store  # noqa: F401, F811
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |                                   ----- previous definition of `world` here
+help: Remove definition: `world`
+
+F811 Redefinition of unused `store` from line 16
+   --> services/api/tests/test_pipeline_dag.py:255:67
+    |
+255 | def test_dag_recovery_after_all_prepared_and_stale_fencing(world, store, monkeypatch):
+    |                                                                   ^^^^^ `store` redefined here
+256 |     from datetime import timedelta
+257 |     from ontology_platform.db.session import clock
+    |
+   ::: services/api/tests/test_pipeline_dag.py:16:28
+    |
+ 14 | from pydantic import ValidationError
+ 15 | from sqlalchemy import select
+ 16 | from test_artifacts import store  # noqa: F401, F811
+    |                            ----- previous definition of `store` here
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |
+help: Remove definition: `store`
+
+I001 [*] Import block is un-sorted or un-formatted
+   --> services/api/tests/test_pipeline_dag.py:256:5
+    |
+255 |   def test_dag_recovery_after_all_prepared_and_stale_fencing(world, store, monkeypatch):
+256 | /     from datetime import timedelta
+257 | |     from ontology_platform.db.session import clock
+258 | |     from ontology_platform.pipelines import dag_worker
+259 | |     from sqlalchemy import update
+260 | |     from ontology_platform.errors import ApplicationError
+    | |_________________________________________________________^
+261 |
+262 |       svc, datasets, run, spec, targets = setup_run(world, store)
+    |
+help: Organize imports
+    |
+256 |     from datetime import timedelta
+257 +
+258 |     from ontology_platform.db.session import clock
+259 +     from ontology_platform.errors import ApplicationError
+260 |     from ontology_platform.pipelines import dag_worker
+261 |     from sqlalchemy import update
+    -     from ontology_platform.errors import ApplicationError
+262 |
+    |
+
+F821 Undefined name `ExecutionJob`
+   --> services/api/tests/test_pipeline_dag.py:277:20
+    |
+275 |     with world.sessions.begin() as s:
+276 |         s.execute(
+277 |             update(ExecutionJob)
+    |                    ^^^^^^^^^^^^
+278 |             .where(ExecutionJob.id == run.id)
+279 |             .values(lease_until=clock(s) - timedelta(seconds=1))
+    |
+
+F821 Undefined name `ExecutionJob`
+   --> services/api/tests/test_pipeline_dag.py:278:20
+    |
+276 |         s.execute(
+277 |             update(ExecutionJob)
+278 |             .where(ExecutionJob.id == run.id)
+    |                    ^^^^^^^^^^^^
+279 |             .values(lease_until=clock(s) - timedelta(seconds=1))
+280 |         )
+    |
+
+F811 Redefinition of unused `world` from line 18
+   --> services/api/tests/test_pipeline_dag.py:295:41
+    |
+295 | def test_cancel_wins_before_publication(world, store, monkeypatch):
+    |                                         ^^^^^ `world` redefined here
+296 |     from ontology_platform.pipelines import dag_worker
+    |
+   ::: services/api/tests/test_pipeline_dag.py:18:35
+    |
+ 16 | from test_artifacts import store  # noqa: F401, F811
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |                                   ----- previous definition of `world` here
+help: Remove definition: `world`
+
+F811 Redefinition of unused `store` from line 16
+   --> services/api/tests/test_pipeline_dag.py:295:48
+    |
+295 | def test_cancel_wins_before_publication(world, store, monkeypatch):
+    |                                                ^^^^^ `store` redefined here
+296 |     from ontology_platform.pipelines import dag_worker
+    |
+   ::: services/api/tests/test_pipeline_dag.py:16:28
+    |
+ 14 | from pydantic import ValidationError
+ 15 | from sqlalchemy import select
+ 16 | from test_artifacts import store  # noqa: F401, F811
+    |                            ----- previous definition of `store` here
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |
+help: Remove definition: `store`
+
+F811 Redefinition of unused `world` from line 18
+   --> services/api/tests/test_pipeline_dag.py:311:60
+    |
+311 | def test_lineage_excludes_siblings_and_preserves_ancestors(world, store):
+    |                                                            ^^^^^ `world` redefined here
+312 |     svc, datasets, run, spec, targets = setup_run(world, store)
+313 |     ExecutionWorker(svc).run_one()
+    |
+   ::: services/api/tests/test_pipeline_dag.py:18:35
+    |
+ 16 | from test_artifacts import store  # noqa: F401, F811
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |                                   ----- previous definition of `world` here
+help: Remove definition: `world`
+
+F811 Redefinition of unused `store` from line 16
+   --> services/api/tests/test_pipeline_dag.py:311:67
+    |
+311 | def test_lineage_excludes_siblings_and_preserves_ancestors(world, store):
+    |                                                                   ^^^^^ `store` redefined here
+312 |     svc, datasets, run, spec, targets = setup_run(world, store)
+313 |     ExecutionWorker(svc).run_one()
+    |
+   ::: services/api/tests/test_pipeline_dag.py:16:28
+    |
+ 14 | from pydantic import ValidationError
+ 15 | from sqlalchemy import select
+ 16 | from test_artifacts import store  # noqa: F401, F811
+    |                            ----- previous definition of `store` here
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |
+help: Remove definition: `store`
+
+F811 Redefinition of unused `world` from line 18
+   --> services/api/tests/test_pipeline_dag.py:322:36
+    |
+322 | def test_three_outputs_and_formats(world, store):
+    |                                    ^^^^^ `world` redefined here
+323 |     svc, datasets, _, spec, targets = setup_run(world, store)
+324 |     # Cancel the queued setup run before publishing a different explicit definition.
+    |
+   ::: services/api/tests/test_pipeline_dag.py:18:35
+    |
+ 16 | from test_artifacts import store  # noqa: F401, F811
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |                                   ----- previous definition of `world` here
+help: Remove definition: `world`
+
+F811 Redefinition of unused `store` from line 16
+   --> services/api/tests/test_pipeline_dag.py:322:43
+    |
+322 | def test_three_outputs_and_formats(world, store):
+    |                                           ^^^^^ `store` redefined here
+323 |     svc, datasets, _, spec, targets = setup_run(world, store)
+324 |     # Cancel the queued setup run before publishing a different explicit definition.
+    |
+   ::: services/api/tests/test_pipeline_dag.py:16:28
+    |
+ 14 | from pydantic import ValidationError
+ 15 | from sqlalchemy import select
+ 16 | from test_artifacts import store  # noqa: F401, F811
+    |                            ----- previous definition of `store` here
+ 17 | from test_datasets import commit, dataset, make_service
+ 18 | from test_phase1 import database, world  # noqa: F401, F811
+    |
+help: Remove definition: `store`
+
+F821 Undefined name `ExecutionJob`
+   --> services/api/tests/test_pipeline_dag.py:326:34
+    |
+324 |     # Cancel the queued setup run before publishing a different explicit definition.
+325 |     with world.sessions() as s:
+326 |         queued = s.scalar(select(ExecutionJob).where(ExecutionJob.resource_id != None))
+    |                                  ^^^^^^^^^^^^
+327 |         pipeline_id = queued.resource_id
+328 |     svc.change(world.actor, queued.id)
+    |
+
+F821 Undefined name `ExecutionJob`
+   --> services/api/tests/test_pipeline_dag.py:326:54
+    |
+324 |     # Cancel the queued setup run before publishing a different explicit definition.
+325 |     with world.sessions() as s:
+326 |         queued = s.scalar(select(ExecutionJob).where(ExecutionJob.resource_id != None))
+    |                                                      ^^^^^^^^^^^^
+327 |         pipeline_id = queued.resource_id
+328 |     svc.change(world.actor, queued.id)
+    |
+
+E711 Comparison to `None` should be `cond is not None`
+   --> services/api/tests/test_pipeline_dag.py:326:82
+    |
+324 |     # Cancel the queued setup run before publishing a different explicit definition.
+325 |     with world.sessions() as s:
+326 |         queued = s.scalar(select(ExecutionJob).where(ExecutionJob.resource_id != None))
+    |                                                                                  ^^^^
+327 |         pipeline_id = queued.resource_id
+328 |     svc.change(world.actor, queued.id)
+    |
+help: Replace with `cond is not None`
+    |
+325 |     with world.sessions() as s:
+    -         queued = s.scalar(select(ExecutionJob).where(ExecutionJob.resource_id != None))
+326 +         queued = s.scalar(select(ExecutionJob).where(ExecutionJob.resource_id is not None))
+327 |         pipeline_id = queued.resource_id
+    |
+note: This is an unsafe fix and may change runtime behavior
+
+Found 35 errors.
+[*] 1 fixable with `--fix` (1 unsafe fix available with `--fix --unsafe-fixes`).

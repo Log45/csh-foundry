@@ -1,7 +1,7 @@
 """Dataset metadata publication composes the governed immutable artifact transport."""
 
 from datetime import UTC, datetime
-from typing import BinaryIO
+from typing import Any, BinaryIO
 from uuid import UUID, uuid4
 
 from sqlalchemy import select, text
@@ -214,3 +214,59 @@ class DatasetService(ArtifactService):
             self.audit(s, p, "dataset_preview", version)
             preview.rows = preview.rows[:limit]
             return preview
+
+    def publish_prepared(
+        self,
+        s: Session,
+        p: Principal,
+        dataset_id: UUID,
+        version_id: UUID,
+        output_format: str,
+        size: int,
+        checksum: str,
+        result: dict[str, Any],
+        run_id: UUID,
+    ) -> None:
+        """Register already verified immutable bytes inside the caller's fenced transaction."""
+        from sqlalchemy import func
+
+        from ontology_platform.artifacts.storage import ObjectKey
+        from ontology_platform.db.models import ArtifactVersion
+        from ontology_platform.db.session import clock
+
+        self.artifact(s, p, dataset_id, True)
+        sequence = (
+            s.scalar(
+                select(func.max(ArtifactVersion.sequence)).where(
+                    ArtifactVersion.tenant_id == p.tenant_id,
+                    ArtifactVersion.artifact_id == dataset_id,
+                )
+            )
+            or 0
+        )
+        physical = ArtifactVersion(
+            tenant_id=p.tenant_id,
+            artifact_id=dataset_id,
+            id=version_id,
+            sequence=sequence + 1,
+            backend=self.storage().backend,
+            bucket=self.settings.bucket,
+            object_key=str(ObjectKey(p.tenant_id, dataset_id, version_id)),
+            size=size,
+            checksum=checksum,
+            filename=f"pipeline-output.{output_format}",
+            created_by=p.principal_id,
+            provenance={"source": "pipeline-run:" + str(run_id)},
+        )
+        s.add(physical)
+        s.flush()
+        logical = DatasetVersion(
+            tenant_id=p.tenant_id, artifact_id=dataset_id, id=version_id, format=output_format
+        )
+        s.add(logical)
+        s.flush()
+        physical.state, physical.committed_at = "COMMITTED", clock(s)
+        s.flush()
+        logical.state, logical.result, logical.finalized_at = "COMMITTED", result, clock(s)
+        s.flush()
+        self.audit(s, p, "dataset_pipeline_committed", version_id)

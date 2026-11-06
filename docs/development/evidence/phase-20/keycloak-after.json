@@ -1,0 +1,39 @@
+[
+  {
+    "id": "352ae233e8cb29856593440399e330387a43311119ed74367441d961ebabfa33",
+    "name": "/foundry-keycloak",
+    "started_at": "2026-11-03T02:24:28.100799334Z",
+    "running": true,
+    "mounts": [],
+    "database": {},
+    "network": "csh-foundry_default"
+  },
+  {
+    "id": "026ca27afa2b1072402a06de5f77f2da3e8eac2330d08eedf6f0c6a4c22f5662",
+    "name": "/foundry-keycloak-tls",
+    "started_at": "2026-11-03T02:27:32.412283336Z",
+    "running": true,
+    "mounts": [
+      {
+        "type": "bind",
+        "source": "/Users/log/Documents/code/csh-foundry/artifacts/keycloak-local/issuer-key.pem",
+        "destination": "/certs/issuer-key.pem",
+        "rw": false
+      },
+      {
+        "type": "bind",
+        "source": "/Users/log/Documents/code/csh-foundry/artifacts/keycloak-local/issuer.pem",
+        "destination": "/certs/issuer.pem",
+        "rw": false
+      },
+      {
+        "type": "bind",
+        "source": "/Users/log/Documents/code/csh-foundry/artifacts/keycloak-recovered-20261102/nginx.conf",
+        "destination": "/etc/nginx/nginx.conf",
+        "rw": false
+      }
+    ],
+    "database": {},
+    "network": "csh-foundry_default"
+  }
+]

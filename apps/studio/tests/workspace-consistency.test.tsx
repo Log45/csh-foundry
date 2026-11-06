@@ -29,7 +29,10 @@ it("keeps the newest ontology read when an older request completes after activat
     csrf: "test",
     tenant: "tenant",
     tenants: [{ id: "tenant", name: "Tenant" }],
-    me: { permissions: ["schema:read"] },
+    me: {
+      principal: { principal_id: "principal" },
+      permissions: ["schema:read"],
+    },
   });
   const ontology = { id: "m", name: "M", active_version: null };
   mocks.api.mockResolvedValueOnce([ontology]);

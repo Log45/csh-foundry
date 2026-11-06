@@ -1,0 +1,318 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 759B done
+#1 DONE 0.0s
+
+#2 [api internal] load build definition from api.Dockerfile
+#2 transferring dockerfile: 1.19kB done
+#2 DONE 0.0s
+
+#3 [studio internal] load build definition from studio.Dockerfile
+#3 transferring dockerfile: 1.50kB done
+#3 DONE 0.0s
+
+#4 [api internal] load metadata for docker.io/library/python:3.12.16-slim-trixie@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
+#4 DONE 0.0s
+
+#5 [api internal] load metadata for ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7
+#5 DONE 0.0s
+
+#6 [studio internal] load metadata for docker.io/library/node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446
+#6 DONE 0.0s
+
+#7 [studio internal] load .dockerignore
+#7 transferring context: 173B done
+#7 DONE 0.0s
+
+#8 [api internal] load build context
+#8 DONE 0.0s
+
+#9 [studio internal] load build context
+#9 DONE 0.0s
+
+#10 [api] FROM ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7
+#10 resolve ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7 0.0s done
+#10 DONE 0.0s
+
+#11 [studio build  1/13] FROM docker.io/library/node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446
+#11 resolve docker.io/library/node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446
+#11 resolve docker.io/library/node:24-trixie-slim@sha256:54f84b4cf8432b21aaffd5d3ce8d41e12cea0d10d33c09d2f3c9879d49d6b446 0.0s done
+#11 DONE 0.0s
+
+#12 [api build 1/5] FROM docker.io/library/python:3.12.16-slim-trixie@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
+#12 resolve docker.io/library/python:3.12.16-slim-trixie@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30 0.0s done
+#12 DONE 0.0s
+
+#9 [studio internal] load build context
+#9 transferring context: 7.92kB 0.0s done
+#9 DONE 0.1s
+
+#13 [studio build 10/13] COPY apps/studio/package.json apps/studio/package-lock.json ./
+#13 CACHED
+
+#14 [studio build  5/13] COPY packages/react-sdk/ ./packages/react-sdk/
+#14 CACHED
+
+#15 [studio build  6/13] COPY apps/sdk-example/package.json ./apps/sdk-example/package.json
+#15 CACHED
+
+#16 [studio build  2/13] WORKDIR /repo
+#16 CACHED
+
+#17 [studio build  3/13] COPY package.json package-lock.json ./
+#17 CACHED
+
+#18 [studio build  7/13] RUN npm ci --no-audit --no-fund
+#18 CACHED
+
+#19 [studio build  4/13] COPY packages/typescript-sdk/ ./packages/typescript-sdk/
+#19 CACHED
+
+#20 [studio build  9/13] WORKDIR /repo/apps/studio
+#20 CACHED
+
+#21 [studio build 11/13] RUN npm ci --no-audit --no-fund
+#21 CACHED
+
+#22 [studio build  8/13] RUN npm run build -w @foundry/sdk
+#22 CACHED
+
+#23 [studio build 12/13] COPY apps/studio/ ./
+#23 CACHED
+
+#24 [studio build 13/13] RUN npm run build
+#24 ...
+
+#8 [api internal] load build context
+#8 transferring context: 31.79MB 0.9s done
+#8 DONE 0.9s
+
+#25 [api build 2/5] COPY --from=ghcr.io/astral-sh/uv:0.9.5@sha256:f459f6f73a8c4ef5d69f4e6fbbdb8af751d6fa40ec34b39a1ab469acd6e289b7 /uv /usr/local/bin/uv
+#25 CACHED
+
+#26 [api build 3/5] WORKDIR /app
+#26 CACHED
+
+#27 [api build 4/5] COPY . .
+#27 DONE 1.9s
+
+#24 [studio build 13/13] RUN npm run build
+#24 1.015 
+#24 1.015 > @foundry/studio@0.8.0 build
+#24 1.015 > next build --webpack
+#24 1.015 
+#24 1.798 ▲ Next.js 16.4.3 (webpack)
+#24 1.971 ✓ Running next.config.ts took 173ms
+#24 1.991 
+#24 2.034   Creating an optimized production build ...
+#24 ...
+
+#28 [api build 5/5] RUN uv sync --frozen --no-dev
+#28 0.800 Using CPython 3.12.16 interpreter at: /usr/local/bin/python3.12
+#28 0.802 Creating virtual environment at: .venv
+#28 0.928    Building ontology-schema @ file:///app/packages/ontology-schema
+#28 0.929    Building ontology-platform-api @ file:///app/services/api
+#28 1.115 Downloading botocore (15.4MiB)
+#28 1.118 Downloading sqlalchemy (3.3MiB)
+#28 1.141 Downloading pyarrow (42.4MiB)
+#28 1.142 Downloading psycopg-binary (6.5MiB)
+#28 1.142 Downloading pillow (6.2MiB)
+#28 1.143 Downloading cryptography (4.5MiB)
+#28 1.144 Downloading av (37.1MiB)
+#28 1.145 Downloading polars-runtime-32 (44.4MiB)
+#28 1.164 Downloading pydantic-core (2.0MiB)
+#28 2.203  Downloading pydantic-core
+#28 3.039  Downloading psycopg-binary
+#28 3.059  Downloading pillow
+#28 3.153  Downloading cryptography
+#28 3.179  Downloading sqlalchemy
+#28 3.520       Built ontology-schema @ file:///app/packages/ontology-schema
+#28 3.526       Built ontology-platform-api @ file:///app/services/api
+#28 5.305  Downloading botocore
+#28 5.414  Downloading av
+#28 5.758  Downloading polars-runtime-32
+#28 5.961  Downloading pyarrow
+#28 5.963 Prepared 51 packages in 5.06s
+#28 6.339 Installed 51 packages in 375ms
+#28 6.339  + alembic==1.20.1
+#28 6.339  + annotated-doc==0.0.5
+#28 6.339  + annotated-types==0.8.0
+#28 6.339  + anyio==4.15.1
+#28 6.339  + av==16.0.1
+#28 6.339  + boto3==1.43.123
+#28 6.339  + boto3-stubs==1.43.123
+#28 6.339  + botocore==1.43.123
+#28 6.339  + botocore-stubs==1.43.123
+#28 6.339  + certifi==2026.10.23
+#28 6.339  + cffi==2.1.1
+#28 6.339  + click==8.5.0
+#28 6.339  + cryptography==50.0.2
+#28 6.339  + fastapi==0.162.0
+#28 6.339  + greenlet==3.5.6
+#28 6.339  + h11==0.16.0
+#28 6.339  + httpcore==1.0.9
+#28 6.339  + httpx==0.28.1
+#28 6.340  + idna==3.20
+#28 6.340  + jmespath==1.1.0
+#28 6.340  + mako==1.4.3
+#28 6.340  + markupsafe==3.0.4
+#28 6.340  + mypy-boto3-s3==1.43.106
+#28 6.340  + ontology-platform-api==0.0.1 (from file:///app/services/api)
+#28 6.340  + ontology-schema==0.0.1 (from file:///app/packages/ontology-schema)
+#28 6.340  + opentelemetry-api==1.45.1
+#28 6.340  + pillow==13.0.0
+#28 6.340  + polars==1.44.2
+#28 6.340  + polars-runtime-32==1.44.2
+#28 6.340  + psycopg==3.3.6
+#28 6.340  + psycopg-binary==3.3.6
+#28 6.340  + pyarrow==23.0.1
+#28 6.340  + pycparser==3.12
+#28 6.340  + pydantic==2.14.1
+#28 6.340  + pydantic-core==2.50.1
+#28 6.340  + pydantic-settings==2.16.2
+#28 6.340  + pyjwt==2.15.0
+#28 6.340  + pyparsing==3.3.3
+#28 6.340  + pypdf==6.12.0
+#28 6.340  + python-dateutil==2.9.0.post0
+#28 6.340  + python-dotenv==1.2.4
+#28 6.340  + rdflib==7.1.4
+#28 6.340  + s3transfer==0.19.3
+#28 6.340  + six==1.17.0
+#28 6.340  + sqlalchemy==2.0.55
+#28 6.340  + starlette==1.10.0
+#28 6.340  + types-s3transfer==0.19.3
+#28 6.340  + typing-extensions==4.16.0
+#28 6.340  + typing-inspection==0.4.4
+#28 6.340  + urllib3==2.8.0
+#28 6.340  + uvicorn==0.54.0
+#28 DONE 7.1s
+
+#24 [studio build 13/13] RUN npm run build
+#24 ...
+
+#29 [api runtime 2/5] WORKDIR /app
+#29 CACHED
+
+#30 [api runtime 3/5] COPY --from=build /app /app
+#30 ...
+
+#24 [studio build 13/13] RUN npm run build
+#24 22.82 ✓ Compiled successfully in 16.2s
+#24 22.83   Running TypeScript ...
+#24 ...
+
+#30 [api runtime 3/5] COPY --from=build /app /app
+#30 DONE 10.8s
+
+#31 [api runtime 4/5] RUN apt-get purge -y mount && apt-get clean && rm -rf /var/lib/apt/lists/*
+#31 0.581 Reading package lists...
+#31 0.600 Building dependency tree...
+#31 0.600 Reading state information...
+#31 0.618 The following packages will be REMOVED:
+#31 0.618   mount*
+#31 0.812 0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
+#31 0.812 After this operation, 673 kB disk space will be freed.
+#31 0.826 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 5655 files and directories currently installed.)
+#31 0.861 Removing mount (2.41.5-0+deb13u1) ...
+#31 DONE 1.0s
+
+#24 [studio build 13/13] RUN npm run build
+#24 ...
+
+#32 [api runtime 5/5] RUN groupadd --gid 10001 foundry && useradd --uid 10001 --gid 10001 --create-home foundry
+#32 DONE 0.3s
+
+#24 [studio build 13/13] RUN npm run build
+#24 ...
+
+#33 [api] exporting to image
+#33 exporting layers
+#33 ...
+
+#24 [studio build 13/13] RUN npm run build
+#24 33.88   Finished TypeScript in 11.0s ...
+#24 33.90   Collecting page data using 9 workers ...
+#24 36.16   Generating static pages using 9 workers (0/5) ...
+#24 36.36   Generating static pages using 9 workers (1/5) 
+#24 36.36   Generating static pages using 9 workers (2/5) 
+#24 36.36   Generating static pages using 9 workers (3/5) 
+#24 36.40 ✓ Generating static pages using 9 workers (5/5) in 236ms
+#24 36.64   Finalizing page optimization ...
+#24 36.64   Collecting build traces ...
+#24 ...
+
+#33 [api] exporting to image
+#33 exporting layers 20.9s done
+#33 exporting manifest sha256:3548f60e771f5db577b94d5decc1b3fc9bde788cca1f029fec2b4d69c0083586 0.0s done
+#33 exporting config sha256:ef2218a0d55634c4dee5baa715856aab8e9a8cdaf587fc9f6151ff6a309851a3 0.0s done
+#33 exporting attestation manifest sha256:1c2ae75431a302117979ed559412599a2db844bdbc5aa36a06f17652b997e3e5 0.0s done
+#33 exporting manifest list sha256:d51be61ee529f458939f5a1c3118a5010c42033278b651ac772255c28abf2b16 done
+#33 naming to docker.io/library/csh-foundry-phase20-api:validation done
+#33 unpacking to docker.io/library/csh-foundry-phase20-api:validation
+#33 unpacking to docker.io/library/csh-foundry-phase20-api:validation 7.1s done
+#33 DONE 28.2s
+
+#24 [studio build 13/13] RUN npm run build
+#24 59.02 
+#24 59.03 Route (app)
+#24 59.03 ┌ ƒ /
+#24 59.03 ├ ƒ /_not-found
+#24 59.03 ├ ƒ /applications/[application]/versions/[version]
+#24 59.03 ├ ƒ /auth/[operation]
+#24 59.03 ├ ƒ /bff
+#24 59.03 ├ ƒ /bff/artifacts
+#24 59.03 ├ ƒ /health/live
+#24 59.03 └ ƒ /health/ready
+#24 59.03 
+#24 59.03 
+#24 59.03 ƒ Proxy (Middleware)
+#24 59.03 
+#24 59.03 ƒ  (Dynamic)  server-rendered on demand
+#24 59.03 
+#24 ...
+
+#34 [api] resolving provenance for metadata file
+#34 DONE 0.2s
+
+#24 [studio build 13/13] RUN npm run build
+#24 DONE 60.0s
+
+#35 [studio runtime 2/9] WORKDIR /app
+#35 CACHED
+
+#36 [studio runtime 3/9] RUN apt-get purge -y mount && apt-get clean && rm -rf /var/lib/apt/lists/*
+#36 CACHED
+
+#37 [studio runtime 4/9] RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /opt/yarn-* /usr/local/bin/yarn* /usr/local/bin/corepack
+#37 CACHED
+
+#38 [studio runtime 5/9] COPY --from=build --chown=node:node /repo/apps/studio/.next/standalone ./
+#38 DONE 1.1s
+
+#39 [studio runtime 6/9] COPY --from=build --chown=node:node /repo/apps/studio/.next/static ./.next/static
+#39 DONE 0.1s
+
+#40 [studio runtime 7/9] COPY --from=build --chown=node:node /repo/apps/studio/public ./public
+#40 DONE 0.2s
+
+#41 [studio runtime 8/9] COPY --chown=node:node infrastructure/docker/studio-entry.mjs ./
+#41 DONE 0.0s
+
+#42 [studio runtime 9/9] RUN rm -rf /app/.next/cache && ln -s /tmp/next-cache /app/.next/cache
+#42 DONE 0.3s
+
+#43 [studio] exporting to image
+#43 exporting layers
+#43 exporting layers 3.1s done
+#43 exporting manifest sha256:0f305979f55e211682e12071dbb132886529e4d373011b8c109830cb81b0c06f 0.0s done
+#43 exporting config sha256:fe376f8bccfad6946d372e9b5122428b2d762ccff9a4a5a72ee71a7524df8efc 0.0s done
+#43 exporting attestation manifest sha256:cc10dca52814f2483bfd788ffe67421a8129f33517d5b1614a5d592554924907 0.1s done
+#43 exporting manifest list sha256:09ea48aaed67bf9c7ded1b2cd50a6174723feaa3195f010e0e8d572e1ab4e7eb 0.0s done
+#43 naming to docker.io/library/csh-foundry-phase20-studio:validation 0.0s done
+#43 unpacking to docker.io/library/csh-foundry-phase20-studio:validation
+#43 unpacking to docker.io/library/csh-foundry-phase20-studio:validation 0.9s done
+#43 DONE 4.2s
+
+#44 [studio] resolving provenance for metadata file
+#44 DONE 0.0s
+ studio  Built
+ api  Built

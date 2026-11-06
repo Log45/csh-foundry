@@ -1,0 +1,18 @@
+{
+  "cleanup": "PASS",
+  "metrics": {
+    "intermediate_bytes": 74229,
+    "output_rows": 524160,
+    "peak_memory_bytes": 1453408256,
+    "seconds": 46.74596383300377,
+    "staged_output_bytes": 49486,
+    "temporary_bytes": 1074251547
+  },
+  "output_checksums": [
+    "23e5d6d7585aa51a64db0d3a1c7f2145e380f299e59755b5c508f4ccffa4eff3",
+    "23e5d6d7585aa51a64db0d3a1c7f2145e380f299e59755b5c508f4ccffa4eff3"
+  ],
+  "source_bytes": 1073741824,
+  "source_checksum": "9df705da678f9418b4a8e9601677fb6eb234b5c91850ff34d871a21cea91b158",
+  "source_rows": 262080
+}

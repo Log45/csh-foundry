@@ -1,0 +1,7 @@
+services/api/src/ontology_platform/pipelines/dag_service.py:238: error: No overload variant of "__getitem__" of "list" matches argument type "str"  [call-overload]
+services/api/src/ontology_platform/pipelines/dag_service.py:238: note: Possible overload variants:
+services/api/src/ontology_platform/pipelines/dag_service.py:238: note:     def __getitem__(self, SupportsIndex, /) -> JsonValue
+services/api/src/ontology_platform/pipelines/dag_service.py:238: note:     def __getitem__(self, slice[SupportsIndex | None, SupportsIndex | None, SupportsIndex | None], /) -> list[JsonValue]
+services/api/src/ontology_platform/pipelines/dag_service.py:238: error: Value of type "list[JsonValue] | dict[str, JsonValue] | str | bool | int | float | None" is not indexable  [index]
+services/api/src/ontology_platform/pipelines/dag_service.py:238: error: Invalid index type "str" for "str"; expected type "SupportsIndex | slice[SupportsIndex | None, SupportsIndex | None, SupportsIndex | None]"  [index]
+Found 3 errors in 1 file (checked 157 source files)

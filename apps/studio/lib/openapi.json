@@ -5112,7 +5112,15 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Definition-Input"
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/Definition-Input"
+                  },
+                  {
+                    "$ref": "#/components/schemas/DAGDefinition-Input"
+                  }
+                ],
+                "title": "Body"
               }
             }
           }
@@ -5123,7 +5131,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Definition-Output"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/Definition-Output"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DAGDefinition-Output"
+                    }
+                  ],
+                  "title": "Response Validate Api V1 Pipelines  Pipeline Id  Validate Post"
                 }
               }
             }
@@ -5170,7 +5186,15 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Definition-Input"
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/Definition-Input"
+                  },
+                  {
+                    "$ref": "#/components/schemas/DAGDefinition-Input"
+                  }
+                ],
+                "title": "Body"
               }
             }
           }
@@ -16355,9 +16379,20 @@
                 "$ref": "#/components/schemas/Definition-Output"
               },
               {
+                "$ref": "#/components/schemas/DAGDefinition-Output"
+              },
+              {
                 "type": "null"
               }
-            ]
+            ],
+            "title": "Specification"
+          },
+          "outputs": {
+            "items": {
+              "$ref": "#/components/schemas/DAGOutput"
+            },
+            "type": "array",
+            "title": "Outputs"
           },
           "inputs": {
             "items": {
@@ -16609,6 +16644,297 @@
           "name"
         ],
         "title": "CreateResource"
+      },
+      "DAGDefinition-Input": {
+        "properties": {
+          "format_version": {
+            "type": "integer",
+            "const": 2,
+            "title": "Format Version"
+          },
+          "engine": {
+            "type": "string",
+            "const": "polars",
+            "title": "Engine",
+            "default": "polars"
+          },
+          "inputs": {
+            "items": {
+              "$ref": "#/components/schemas/DAGInput"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "minItems": 1,
+            "title": "Inputs"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/DAGNode-Input"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Nodes"
+          },
+          "outputs": {
+            "items": {
+              "$ref": "#/components/schemas/DAGOutput"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "minItems": 1,
+            "title": "Outputs"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "format_version",
+          "inputs",
+          "nodes",
+          "outputs"
+        ],
+        "title": "DAGDefinition"
+      },
+      "DAGDefinition-Output": {
+        "properties": {
+          "format_version": {
+            "type": "integer",
+            "const": 2,
+            "title": "Format Version"
+          },
+          "engine": {
+            "type": "string",
+            "const": "polars",
+            "title": "Engine",
+            "default": "polars"
+          },
+          "inputs": {
+            "items": {
+              "$ref": "#/components/schemas/DAGInput"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "minItems": 1,
+            "title": "Inputs"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/DAGNode-Output"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Nodes"
+          },
+          "outputs": {
+            "items": {
+              "$ref": "#/components/schemas/DAGOutput"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "minItems": 1,
+            "title": "Outputs"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "format_version",
+          "inputs",
+          "nodes",
+          "outputs"
+        ],
+        "title": "DAGDefinition"
+      },
+      "DAGInput": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,80}$",
+            "title": "Name"
+          },
+          "columns": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 256,
+            "title": "Columns"
+          },
+          "dataset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Dataset Id"
+          },
+          "version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Version Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "dataset_id",
+          "version_id"
+        ],
+        "title": "DAGInput"
+      },
+      "DAGNode-Input": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,80}$",
+            "title": "Id"
+          },
+          "inputs": {
+            "additionalProperties": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,80}$"
+            },
+            "propertyNames": {
+              "enum": [
+                "input",
+                "right"
+              ]
+            },
+            "type": "object",
+            "maxProperties": 2,
+            "minProperties": 1,
+            "title": "Inputs"
+          },
+          "config": {
+            "$ref": "#/components/schemas/Step-Input"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "inputs",
+          "config"
+        ],
+        "title": "DAGNode"
+      },
+      "DAGNode-Output": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,80}$",
+            "title": "Id"
+          },
+          "inputs": {
+            "additionalProperties": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,80}$"
+            },
+            "propertyNames": {
+              "enum": [
+                "input",
+                "right"
+              ]
+            },
+            "type": "object",
+            "maxProperties": 2,
+            "minProperties": 1,
+            "title": "Inputs"
+          },
+          "config": {
+            "$ref": "#/components/schemas/Step-Output"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "inputs",
+          "config"
+        ],
+        "title": "DAGNode"
+      },
+      "DAGOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,80}$",
+            "title": "Id"
+          },
+          "source": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,80}$",
+            "title": "Source"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "parquet",
+              "csv",
+              "ndjson"
+            ],
+            "title": "Format",
+            "default": "parquet"
+          },
+          "columns": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 256,
+            "title": "Columns"
+          },
+          "dataset_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset Id"
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "source"
+        ],
+        "title": "DAGOutput"
       },
       "DatasetPreview": {
         "properties": {
@@ -16867,7 +17193,15 @@
             "title": "Sequence"
           },
           "specification": {
-            "$ref": "#/components/schemas/Definition-Output"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Definition-Output"
+              },
+              {
+                "$ref": "#/components/schemas/DAGDefinition-Output"
+              }
+            ],
+            "title": "Specification"
           },
           "created_by": {
             "type": "string",
@@ -17317,6 +17651,47 @@
               }
             ],
             "title": "Completed At"
+          },
+          "plan_digest": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Digest"
+          },
+          "publication_state": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publication State"
+          },
+          "prepared_output_count": {
+            "type": "integer",
+            "title": "Prepared Output Count",
+            "default": 0
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/NodeExecutionView"
+            },
+            "type": "array",
+            "title": "Nodes"
+          },
+          "outputs": {
+            "items": {
+              "$ref": "#/components/schemas/OutputPublicationView"
+            },
+            "type": "array",
+            "title": "Outputs"
           }
         },
         "additionalProperties": false,
@@ -18043,7 +18418,10 @@
         "properties": {
           "format_version": {
             "type": "integer",
-            "const": 1,
+            "enum": [
+              1,
+              2
+            ],
             "title": "Format Version",
             "default": 1
           },
@@ -18098,7 +18476,10 @@
         "properties": {
           "format_version": {
             "type": "integer",
-            "const": 1,
+            "enum": [
+              1,
+              2
+            ],
             "title": "Format Version",
             "default": 1
           },
@@ -20117,6 +20498,41 @@
         ],
         "title": "Negation"
       },
+      "NodeExecutionView": {
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "attempt": {
+            "type": "integer",
+            "title": "Attempt"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "node_id",
+          "state",
+          "attempt"
+        ],
+        "title": "NodeExecutionView"
+      },
       "ObjectInput": {
         "properties": {
           "object_id": {
@@ -20460,6 +20876,41 @@
       },
       "OutputConfig": {
         "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "parquet",
+              "csv",
+              "ndjson"
+            ],
+            "title": "Format",
+            "default": "parquet"
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
           "dataset_id": {
             "anyOf": [
               {
@@ -20512,6 +20963,37 @@
           "config"
         ],
         "title": "OutputNode"
+      },
+      "OutputPublicationView": {
+        "properties": {
+          "output_id": {
+            "type": "string",
+            "title": "Output Id"
+          },
+          "dataset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Dataset Id"
+          },
+          "version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Version Id"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "output_id",
+          "dataset_id",
+          "version_id",
+          "state"
+        ],
+        "title": "OutputPublicationView"
       },
       "ParameterDefinition": {
         "properties": {
@@ -22654,8 +23136,15 @@
             "title": "Inputs"
           },
           "output_dataset_id": {
-            "type": "string",
-            "format": "uuid",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Output Dataset Id"
           },
           "parameters": {
@@ -22671,8 +23160,7 @@
         "type": "object",
         "required": [
           "definition_id",
-          "inputs",
-          "output_dataset_id"
+          "inputs"
         ],
         "title": "StartRun"
       },

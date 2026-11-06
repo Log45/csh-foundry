@@ -1,0 +1,83 @@
+
+> @foundry/studio@0.8.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /Users/log/Documents/code/csh-foundry/apps/studio
+
+stderr | tests/workspace-consistency.test.tsx > keeps the newest ontology read when an older request completes after activation
+An error occurred in the <Workspace> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+
+ ❯ tests/workspace-consistency.test.tsx (1 test | 1 failed) 1032ms
+   × keeps the newest ontology read when an older request completes after activation 1031ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/workspace-consistency.test.tsx > keeps the newest ontology read when an older request completes after activation
+TestingLibraryElementError: Unable to find role="button" and name "Refresh ontology"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ tests/workspace-consistency.test.tsx:37:16
+     35|   mocks.api.mockResolvedValueOnce([ontology]);
+     36|   render(<Workspace />);
+     37|   await screen.findByRole("button", { name: "Refresh ontology" });
+       |                ^
+     38|   let stale!: (value: unknown) => void;
+     39|   let fresh!: (value: unknown) => void;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+⎯⎯⎯⎯⎯⎯ Unhandled Errors ⎯⎯⎯⎯⎯⎯
+
+Vitest caught 1 unhandled error during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+TypeError: Cannot read properties of undefined (reading 'principal_id')
+ ❯ Workspace components/workspace.tsx:35:65
+     33|     }),
+     34|     [offset, setOffset] = useState(0);
+     35|   const projectScope = `${session?.tenant ?? ""}:${session?.me?.princi…
+       |                                                                 ^
+     36|   const [projectContext, setProjectContext] = useState({ scope: "", id…
+     37|   const rememberProject = useCallback(
+ ❯ Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:28571:20
+ ❯ renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:8030:22
+ ❯ updateFunctionComponent node_modules/react-dom/cjs/react-dom-client.development.js:10569:19
+ ❯ beginWork node_modules/react-dom/cjs/react-dom-client.development.js:12205:18
+ ❯ runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:1048:13
+ ❯ performUnitOfWork node_modules/react-dom/cjs/react-dom-client.development.js:19176:22
+ ❯ workLoopSync node_modules/react-dom/cjs/react-dom-client.development.js:19004:41
+ ❯ renderRootSync node_modules/react-dom/cjs/react-dom-client.development.js:18985:11
+ ❯ performWorkOnRoot node_modules/react-dom/cjs/react-dom-client.development.js:18094:35
+
+This error originated in "tests/workspace-consistency.test.tsx" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "keeps the newest ontology read when an older request completes after activation". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+
+ Test Files  1 failed | 12 passed (13)
+      Tests  1 failed | 54 passed (55)
+     Errors  1 error
+   Start at  10:09:46
+   Duration  4.02s (environment 62%, tests 16%, transform 12%, import 9%)
+
+    Isolate  13 workers spawned · ~1.43s startup each (spawn + environment, per file)
+             at least ~635ms faster with isolate: false — reuses workers across files instead of one per file
+

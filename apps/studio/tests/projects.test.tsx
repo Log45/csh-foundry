@@ -79,3 +79,29 @@ it("rejects stale Project list results after a newer refresh", async () => {
   });
   expect(screen.queryByRole("option", { name: /Project A/ })).toBeNull();
 });
+
+it("restores an authorized selected Project instead of the first discovery result", async () => {
+  const second = { ...project, id: "second", name: "Project B" };
+  const api = vi.fn(async (path: string) =>
+    path.includes("?limit") &&
+    !path.includes("/folders") &&
+    !path.includes("/resources")
+      ? [project, second]
+      : [],
+  );
+  const selected = vi.fn();
+  render(
+    <Projects
+      api={api as Client}
+      can={() => false}
+      open={() => {}}
+      initialProjectId="second"
+      onSelectionChange={selected}
+    />,
+  );
+  await screen.findByRole("heading", { name: "Project B" });
+  expect((screen.getByLabelText("Project") as HTMLSelectElement).value).toBe(
+    "second",
+  );
+  expect(selected).toHaveBeenCalledWith("second");
+});

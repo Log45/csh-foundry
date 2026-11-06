@@ -426,3 +426,13 @@ canonical query/action services. See [authoring and manufacturing walkthrough](d
 [limits](docs/development/phase-19-limits.md) and [validation report](docs/development/phase-19-report.md).
 Migration `0025_applications` is forward-only; shared developer data is never automatically migrated.
 Phase 20 and production certification remain outside this authorization.
+
+Phase 20 extends the governed pipeline engine with versioned general DAG definitions, shared
+Parquet intermediates, persisted node execution, and multiple atomically published output datasets.
+The existing visual builder authors branches, transformed joins/unions and per-output targets.
+Historical linear definitions and v1 graphs retain their original execution/compilation path.
+See [DAG execution](docs/development/pipeline-dag-execution.md),
+[atomic publication](docs/development/atomic-multi-output-publication.md),
+[limits](docs/development/phase-20-limits.md) and the
+[Phase 20 report](docs/development/phase-20-report.md) for actual acceptance status and evidence.
+The shared developer database is not automatically migrated; production remains BLOCKED under §23B.

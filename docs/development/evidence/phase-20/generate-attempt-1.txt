@@ -1,0 +1,6 @@
+
+> generate
+> python3 scripts/generate_platform_sdk.py && openapi-typescript apps/studio/lib/openapi.json -o packages/typescript-sdk/src/schema.ts --default-non-nullable false
+
+✨ openapi-typescript 7.13.0
+🚀 apps/studio/lib/openapi.json → packages/typescript-sdk/src/schema.ts [214.8ms]

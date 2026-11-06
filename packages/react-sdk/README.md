@@ -79,3 +79,7 @@ Visual application hooks are generated alongside the existing capability hooks, 
 `useApplicationsVersions`, `useApplicationsRuntime` and `useApplicationsQuery`.
 Use the same session-scoped provider and cache invalidation contract. See
 [applications](../../docs/api/applications.md) for publication and core SDK examples.
+
+Phase 20: useExecution retains its bounded polling/session/cancellation behavior and now observes
+persisted DAG node attempts, publication state and committed output references. executionState exposes
+nodes, outputs, planDigest and publicationState. Prepared output bytes are never a dataset result.

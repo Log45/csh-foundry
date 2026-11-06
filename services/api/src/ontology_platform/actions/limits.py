@@ -13,10 +13,12 @@ class ActionPayloadLimit:
         methods: tuple[str, ...] = ("POST",),
         code: str = "action_payload_too_large",
         message: str = "Action payload exceeds 64 KiB",
+        max_bytes: int = 65536,
     ):
         self.app = app
         self.paths, self.code, self.message = paths, code, message
         self.methods = methods
+        self.max_bytes = max_bytes
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if (
@@ -34,7 +36,7 @@ class ActionPayloadLimit:
                 return
             chunk = message.get("body", b"")
             size += len(chunk)
-            if size > 65536:
+            if size > self.max_bytes:
                 await JSONResponse(
                     status_code=413,
                     content={

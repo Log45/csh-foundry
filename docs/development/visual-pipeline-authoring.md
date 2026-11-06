@@ -118,3 +118,17 @@ if (compiled.valid) {
 Job-level states are backend-reported. Phase 14 exposes no trustworthy per-node runtime progress, so
 Studio does not invent it. Multiple output publication, executable Functions, arbitrary Python, Code
 Workspaces and production deployment remain unsupported.
+
+## Phase 20 DAG authoring
+
+New drafts use graph format 2. Existing v1 drafts can be opened unchanged or explicitly upgraded
+with **Upgrade draft to DAG v2**; published historical versions are never overwritten. Transformation
+outputs can feed multiple consumers; join/union right ports accept transformed streams. Add multiple
+Dataset output nodes, each connected to an input or transformation, choose a format, then select
+an existing authorized dataset or enter the target Project and new dataset name. New resources
+appear only after atomic publication. All outputs share the parent job's success/failure decision.
+Validate on the backend before publishing. A bad branch, schema, cycle, output or permission blocks
+publication; canvas positions do not change the semantic digest. Node states/attempts come from
+persisted worker records. Prepared output counts do not grant dataset navigation until commit.
+Use each committed output's preview/lineage controls; siblings and private inputs remain independently
+authorized. See pipeline-dag-execution.md and atomic-multi-output-publication.md for precise contracts.

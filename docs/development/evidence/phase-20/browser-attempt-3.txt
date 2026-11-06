@@ -1,0 +1,50 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-033cf0675911_default  Creating
+ Network phase15-033cf0675911_default  Created
+ Volume "phase15-033cf0675911_minio-data"  Creating
+ Volume "phase15-033cf0675911_minio-data"  Created
+ Container phase15-033cf0675911-minio-1  Creating
+ Container phase15-033cf0675911-minio-1  Created
+ Container phase15-033cf0675911-minio-1  Starting
+ Container phase15-033cf0675911-minio-1  Started
+ Container phase15-033cf0675911-minio-1  Waiting
+ Container phase15-033cf0675911-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-033cf0675911-minio-1  Restarting
+ Container phase15-033cf0675911-minio-1  Started
+ Container phase15-033cf0675911-minio-1  Running
+ Container phase15-033cf0675911-minio-1  Waiting
+ Container phase15-033cf0675911-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+Python suite NOT RUN in this explicit browser-only selection
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test --grep visual DAG
+
+
+Running 1 test using 1 worker
+
+(node:89504) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/pipeline-dag.spec.ts:4:1 › visual DAG branches converge and two outputs commit together (30.0s)
+
+  1 passed (31.7s)
+ Container phase15-033cf0675911-minio-1  Stopping
+ Container phase15-033cf0675911-minio-1  Stopped
+ Container phase15-033cf0675911-minio-1  Removing
+ Container phase15-033cf0675911-minio-1  Removed
+ Network phase15-033cf0675911_default  Removing
+ Volume phase15-033cf0675911_minio-data  Removing
+ Volume phase15-033cf0675911_minio-data  Removed
+ Network phase15-033cf0675911_default  Removed

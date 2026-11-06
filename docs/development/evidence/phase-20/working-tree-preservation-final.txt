@@ -1,0 +1,1 @@
+PASS: index identical to initial staged patch (empty); fixtures unchanged; historical migrations unchanged; no commits or staging performed.

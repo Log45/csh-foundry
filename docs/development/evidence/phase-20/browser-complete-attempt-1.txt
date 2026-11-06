@@ -1,0 +1,418 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-4d1ebdfb359f_default  Creating
+ Network phase15-4d1ebdfb359f_default  Created
+ Volume "phase15-4d1ebdfb359f_minio-data"  Creating
+ Volume "phase15-4d1ebdfb359f_minio-data"  Created
+ Container phase15-4d1ebdfb359f-minio-1  Creating
+ Container phase15-4d1ebdfb359f-minio-1  Created
+ Container phase15-4d1ebdfb359f-minio-1  Starting
+ Container phase15-4d1ebdfb359f-minio-1  Started
+ Container phase15-4d1ebdfb359f-minio-1  Waiting
+ Container phase15-4d1ebdfb359f-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-4d1ebdfb359f-minio-1  Restarting
+ Container phase15-4d1ebdfb359f-minio-1  Started
+ Container phase15-4d1ebdfb359f-minio-1  Running
+ Container phase15-4d1ebdfb359f-minio-1  Waiting
+ Container phase15-4d1ebdfb359f-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+Python suite NOT RUN in this explicit browser-only selection
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test
+
+
+Running 15 tests using 1 worker
+
+(node:94763) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/application-security.spec.ts:25:1 › another signed-in principal cannot borrow application, object or action authority (2.7s)
+  ✓   2 tests/e2e/governed-processing.spec.ts:4:1 › governed media, typed functions and manual automations use the authenticated Studio (14.5s)
+  ✘   3 tests/e2e/pipeline-dag.spec.ts:4:1 › visual DAG branches converge and two outputs commit together (46.7s)
+(node:95234) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   4 tests/e2e/workflow.spec.ts:21:1 › verified browser reference workflow (5.6s)
+(node:95304) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   5 tests/e2e/workflow.spec.ts:211:1 › CSRF and unauthenticated proxy requests fail closed (5.6s)
+(node:95385) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   6 tests/e2e/workflow.spec.ts:226:1 › native authoring, OWL diagnostics, tenant isolation and session loss (5.3s)
+(node:95438) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   7 tests/e2e/workflow.spec.ts:310:1 › schema branching, resolved merge and private SDK download (5.4s)
+(node:95490) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   8 tests/e2e/workflow.spec.ts:411:3 › durable sessions survive replica restart and logout revokes every replica (2.6s)
+  ✘   9 tests/e2e/workflow.spec.ts:474:1 › Project workspace navigates folders and governed canonical references (6.5s)
+(node:95570) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  10 tests/e2e/workflow.spec.ts:535:1 › Project artifacts upload immutable versions and download exact bytes (2.1s)
+  ✓  11 tests/e2e/workflow.spec.ts:595:1 › Project dataset uploads, discovers schema and previews historical versions (5.6s)
+  ✓  12 tests/e2e/workflow.spec.ts:666:1 › governed pipeline publishes immutable output and real lineage (8.7s)
+  ✘  13 tests/e2e/workflow.spec.ts:790:1 › governed mapping validates materializes and records source provenance (1.3s)
+(node:95752) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  14 tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action (5.7m)
+(node:95781) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  15 tests/e2e/maximum.spec.ts:6:1 › exact 1 GiB browser upload streams through BFF and asynchronous validation (5.9s)
+
+
+  1) tests/e2e/maximum.spec.ts:6:1 › exact 1 GiB browser upload streams through BFF and asynchronous validation 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByLabel('Tenant', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByLabel('Tenant', { exact: true }) with timeout 5000ms
+      - waiting for getByLabel('Tenant', { exact: true })
+
+
+       at login.ts:23
+
+      21 |     .getByRole("button", { name: "Sign in with OpenID Connect" })
+      22 |     .click();
+    > 23 |   await expect(page.getByLabel("Tenant", { exact: true })).toBeVisible();
+         |                                                            ^
+      24 |   const option = page
+      25 |     .getByLabel("Tenant", { exact: true })
+      26 |     .locator("option")
+        at login (/Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/login.ts:23:60)
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/maximum.spec.ts:38:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/maximum-exact-1-GiB-browse-4f3a7-and-asynchronous-validation/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/maximum-exact-1-GiB-browse-4f3a7-and-asynchronous-validation/error-context.md
+
+  2) tests/e2e/pipeline-dag.spec.ts:4:1 › visual DAG branches converge and two outputs commit together 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('article.panel').filter({ has: getByRole('heading', { name: 'Diamond DAG', exact: true }) }).getByText(/· SUCCEEDED · attempt/)
+    Expected: visible
+    Timeout: 30000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('article.panel').filter({ has: getByRole('heading', { name: 'Diamond DAG', exact: true }) }).getByText(/· SUCCEEDED · attempt/) with timeout 30000ms
+      - waiting for locator('article.panel').filter({ has: getByRole('heading', { name: 'Diamond DAG', exact: true }) }).getByText(/· SUCCEEDED · attempt/)
+
+
+      156 |   ).toBeVisible();
+      157 |   await scoped.getByRole("button", { name: "Launch run", exact: true }).click();
+    > 158 |   await expect(scoped.getByText(/· SUCCEEDED · attempt/)).toBeVisible({
+          |                                                           ^
+      159 |     timeout: 30000,
+      160 |   });
+      161 |   await expect(scoped.getByText(/Publication: COMMITTED/)).toBeVisible();
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/pipeline-dag.spec.ts:158:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/pipeline-dag-visual-DAG-br-1261d-two-outputs-commit-together/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/pipeline-dag-visual-DAG-br-1261d-two-outputs-commit-together/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/pipeline-dag-visual-DAG-br-1261d-two-outputs-commit-together/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/pipeline-dag-visual-DAG-br-1261d-two-outputs-commit-together/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/e2e/workflow.spec.ts:21:1 › verified browser reference workflow ─────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByLabel('Tenant', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByLabel('Tenant', { exact: true }) with timeout 5000ms
+      - waiting for getByLabel('Tenant', { exact: true })
+
+
+       at login.ts:23
+
+      21 |     .getByRole("button", { name: "Sign in with OpenID Connect" })
+      22 |     .click();
+    > 23 |   await expect(page.getByLabel("Tenant", { exact: true })).toBeVisible();
+         |                                                            ^
+      24 |   const option = page
+      25 |     .getByLabel("Tenant", { exact: true })
+      26 |     .locator("option")
+        at login (/Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/login.ts:23:60)
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/workflow.spec.ts:48:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/workflow-verified-browser-reference-workflow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/workflow-verified-browser-reference-workflow/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/workflow-verified-browser-reference-workflow/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/workflow-verified-browser-reference-workflow/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/e2e/workflow.spec.ts:211:1 › CSRF and unauthenticated proxy requests fail closed ────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByLabel('Tenant', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByLabel('Tenant', { exact: true }) with timeout 5000ms
+      - waiting for getByLabel('Tenant', { exact: true })
+
+
+       at login.ts:23
+
+      21 |     .getByRole("button", { name: "Sign in with OpenID Connect" })
+      22 |     .click();
+    > 23 |   await expect(page.getByLabel("Tenant", { exact: true })).toBeVisible();
+         |                                                            ^
+      24 |   const option = page
+      25 |     .getByLabel("Tenant", { exact: true })
+      26 |     .locator("option")
+        at login (/Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/login.ts:23:60)
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/workflow.spec.ts:219:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/workflow-CSRF-and-unauthenticated-proxy-requests-fail-closed/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/workflow-CSRF-and-unauthenticated-proxy-requests-fail-closed/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/workflow-CSRF-and-unauthenticated-proxy-requests-fail-closed/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/workflow-CSRF-and-unauthenticated-proxy-requests-fail-closed/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests/e2e/workflow.spec.ts:226:1 › native authoring, OWL diagnostics, tenant isolation and session loss 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByLabel('Tenant', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByLabel('Tenant', { exact: true }) with timeout 5000ms
+      - waiting for getByLabel('Tenant', { exact: true })
+
+
+       at login.ts:23
+
+      21 |     .getByRole("button", { name: "Sign in with OpenID Connect" })
+      22 |     .click();
+    > 23 |   await expect(page.getByLabel("Tenant", { exact: true })).toBeVisible();
+         |                                                            ^
+      24 |   const option = page
+      25 |     .getByLabel("Tenant", { exact: true })
+      26 |     .locator("option")
+        at login (/Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/login.ts:23:60)
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/workflow.spec.ts:231:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/workflow-native-authoring--1b3b2--isolation-and-session-loss/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/workflow-native-authoring--1b3b2--isolation-and-session-loss/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/workflow-native-authoring--1b3b2--isolation-and-session-loss/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/workflow-native-authoring--1b3b2--isolation-and-session-loss/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) tests/e2e/workflow.spec.ts:310:1 › schema branching, resolved merge and private SDK download ──
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByLabel('Tenant', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByLabel('Tenant', { exact: true }) with timeout 5000ms
+      - waiting for getByLabel('Tenant', { exact: true })
+
+
+       at login.ts:23
+
+      21 |     .getByRole("button", { name: "Sign in with OpenID Connect" })
+      22 |     .click();
+    > 23 |   await expect(page.getByLabel("Tenant", { exact: true })).toBeVisible();
+         |                                                            ^
+      24 |   const option = page
+      25 |     .getByLabel("Tenant", { exact: true })
+      26 |     .locator("option")
+        at login (/Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/login.ts:23:60)
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/workflow.spec.ts:314:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/workflow-schema-branching--693d3-ge-and-private-SDK-download/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/workflow-schema-branching--693d3-ge-and-private-SDK-download/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/workflow-schema-branching--693d3-ge-and-private-SDK-download/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/workflow-schema-branching--693d3-ge-and-private-SDK-download/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) tests/e2e/workflow.spec.ts:474:1 › Project workspace navigates folders and governed canonical references 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Machine (OBJECT_TYPE)', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Machine (OBJECT_TYPE)', exact: true }) with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'Machine (OBJECT_TYPE)', exact: true })
+
+
+      506 |   await expect(
+      507 |     page.getByRole("heading", { name: "Machine (OBJECT_TYPE)", exact: true }),
+    > 508 |   ).toBeVisible();
+          |     ^
+      509 |   const machine = page.locator("article").filter({
+      510 |     has: page.getByRole("heading", {
+      511 |       name: "Machine (OBJECT_TYPE)",
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/workflow.spec.ts:508:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/workflow-Project-workspace-109ff-verned-canonical-references/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/workflow-Project-workspace-109ff-verned-canonical-references/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/workflow-Project-workspace-109ff-verned-canonical-references/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/workflow-Project-workspace-109ff-verned-canonical-references/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) tests/e2e/workflow.spec.ts:790:1 › governed mapping validates materializes and records source provenance 
+
+    TypeError: catalog.find is not a function
+
+      814 |   await page.getByRole("button", { name: "Register catalog page" }).click();
+      815 |   const catalog = await (await catalogResponse).json();
+    > 816 |   const target = catalog.find(
+          |                          ^
+      817 |     (r: { resource_type: string }) => r.resource_type === "ONTOLOGY_VERSION",
+      818 |   );
+      819 |   expect(target).toBeTruthy();
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/workflow.spec.ts:816:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/workflow-governed-mapping--578af-d-records-source-provenance/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/workflow-governed-mapping--578af-d-records-source-provenance/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/workflow-governed-mapping--578af-d-records-source-provenance/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/workflow-governed-mapping--578af-d-records-source-provenance/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 
+
+    Test timeout of 120000ms exceeded.
+
+    Error: page.evaluate: Error: /api/v1/ontologies/manufacturing: 502 {"error":{"code":"backend_unavailable"}}
+        at eval (eval at evaluate (:370:30), <anonymous>:21:29)
+        at async <anonymous>:396:30
+        at eval (eval at evaluate (:370:30), <anonymous>:21:29)
+        at async <anonymous>:396:30
+        at api (/Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/zz-applications.spec.ts:4:15)
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/zz-applications.spec.ts:33:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  Slow test file: tests/e2e/zz-applications.spec.ts (5.7m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  9 failed
+    tests/e2e/maximum.spec.ts:6:1 › exact 1 GiB browser upload streams through BFF and asynchronous validation 
+    tests/e2e/pipeline-dag.spec.ts:4:1 › visual DAG branches converge and two outputs commit together 
+    tests/e2e/workflow.spec.ts:21:1 › verified browser reference workflow ──────────────────────────
+    tests/e2e/workflow.spec.ts:211:1 › CSRF and unauthenticated proxy requests fail closed ─────────
+    tests/e2e/workflow.spec.ts:226:1 › native authoring, OWL diagnostics, tenant isolation and session loss 
+    tests/e2e/workflow.spec.ts:310:1 › schema branching, resolved merge and private SDK download ───
+    tests/e2e/workflow.spec.ts:474:1 › Project workspace navigates folders and governed canonical references 
+    tests/e2e/workflow.spec.ts:790:1 › governed mapping validates materializes and records source provenance 
+    tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 
+  6 passed (8.0m)
+ Container phase15-4d1ebdfb359f-minio-1  Stopping
+ Container phase15-4d1ebdfb359f-minio-1  Stopped
+ Container phase15-4d1ebdfb359f-minio-1  Removing
+ Container phase15-4d1ebdfb359f-minio-1  Removed
+ Volume phase15-4d1ebdfb359f_minio-data  Removing
+ Network phase15-4d1ebdfb359f_default  Removing
+ Volume phase15-4d1ebdfb359f_minio-data  Removed
+ Network phase15-4d1ebdfb359f_default  Removed
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 171, in <module>
+    run("uv", "run", "python", "scripts/test_studio.py")
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 99, in run
+    raise subprocess.CalledProcessError(code, cmd)
+subprocess.CalledProcessError: Command '('uv', 'run', 'python', 'scripts/test_studio.py')' returned non-zero exit status 1.

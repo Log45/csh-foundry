@@ -17,6 +17,10 @@ export function executionState(job: Job) {
         : undefined,
     possiblePartialCommits: job.kind === "MATERIALIZATION",
     metrics: job.metrics,
+    planDigest: job.plan_digest,
+    nodes: job.nodes ?? [],
+    outputs: job.outputs ?? [],
+    publicationState: job.publication_state,
   };
 }
 export interface ExecutionOptions {
@@ -81,6 +85,8 @@ export function useExecution(jobId: string, options: ExecutionOptions = {}) {
         result.data.state,
         result.data.metrics,
         result.data.output_version_id,
+        result.data.publication_state,
+        result.data.outputs,
       ])
     : undefined;
   useEffect(() => {
