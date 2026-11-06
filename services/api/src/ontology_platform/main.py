@@ -16,6 +16,7 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 from ontology_platform.actions.limits import ActionPayloadLimit
 from ontology_platform.actions.routes import router as action_router
 from ontology_platform.api.v1.routes import router
+from ontology_platform.applications.routes import router as application_router
 from ontology_platform.artifacts.config import StorageSettings
 from ontology_platform.artifacts.routes import router as artifact_router
 from ontology_platform.artifacts.s3 import S3ArtifactStore
@@ -101,6 +102,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.include_router(router)
     app.include_router(project_router)
+    app.include_router(application_router)
+    app.add_middleware(
+        ActionPayloadLimit,
+        paths=("/applications",),
+        methods=("POST", "PUT"),
+        code="application_payload_too_large",
+        message="Application payload exceeds 64 KiB",
+    )
     app.include_router(artifact_router)
     app.include_router(dataset_router)
     app.include_router(pipeline_router)

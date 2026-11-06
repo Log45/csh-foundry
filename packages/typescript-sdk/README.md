@@ -112,3 +112,8 @@ reference that same job model. Only trusted pure implementations are supported; 
 ReadableStreams through the fixed binary BFF, with tenant/CSRF/session protections. Consume/cancel
 the stream yourself; never put media bytes in a query cache. Snapshot/item pages can be short after
 authorization filtering; advance explicit offsets. Sharing a set does not grant source artifact access.
+
+Visual application authoring/publication/runtime operations are generated under `client.applications`.
+Discovery retains the Project resource registry. See [application examples](../../docs/api/applications.md).
+Runtime gateways call the existing governed query/action services in the application transaction;
+registration or publication never grants ontology/data/action access.

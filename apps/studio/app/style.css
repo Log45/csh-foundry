@@ -581,3 +581,105 @@ aside .row:has(button:disabled + button:disabled) {
     display: none;
   }
 }
+
+.application-runtime,
+.application-editor {
+  padding: 1rem;
+  max-width: 100%;
+}
+.app-editor-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 1.5rem;
+}
+.app-layout {
+  display: flex;
+  gap: 1rem;
+  min-width: 0;
+}
+.app-layout.column {
+  flex-direction: column;
+}
+.app-layout.row {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.app-layout.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+}
+.app-layout.compact {
+  gap: 0.5rem;
+}
+.app-layout.large {
+  gap: 2rem;
+}
+.app-layout.align-start {
+  align-items: start;
+}
+.app-layout.align-center {
+  align-items: center;
+}
+.app-widget {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid var(--line, #777);
+  border-radius: 0.4rem;
+  padding: 1rem;
+}
+.app-table {
+  overflow-x: auto;
+}
+.app-table table {
+  width: 100%;
+}
+.application-runtime nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.application-runtime [aria-current="page"] {
+  outline: 2px solid currentColor;
+}
+.application-runtime button:focus-visible,
+.application-editor button:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+@media (max-width: 700px) {
+  .app-editor-grid {
+    grid-template-columns: 1fr;
+  }
+  .app-layout.row {
+    flex-direction: column;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .application-runtime *,
+  .application-editor * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.application-runtime > header {
+  display: block;
+  margin-bottom: 1.5rem;
+}
+.application-runtime > header h1 {
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  max-width: 100%;
+}
+.application-runtime > header p {
+  max-width: 60ch;
+  margin: 0.5rem 0;
+}
+.app-table table {
+  min-width: 40rem;
+}
+.app-table th,
+.app-table td,
+.app-table th button {
+  white-space: nowrap;
+  word-break: normal;
+}

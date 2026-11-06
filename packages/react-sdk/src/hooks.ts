@@ -60,6 +60,17 @@ export function useObjectsQuery(
     options,
   );
 }
+export function useObjectsAggregate(
+  input: EndpointInput["objects.aggregate"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "objects.aggregate",
+    input,
+    (c, signal) => c.objects.aggregate(input, { signal }),
+    options,
+  );
+}
 export function useObjectsGet(
   input: EndpointInput["objects.get"],
   options?: QueryOptions,
@@ -499,6 +510,108 @@ export function usePipelinesVisualize(
     (c, signal) => c.pipelines.visualize(input, { signal }),
     options,
   );
+}
+export function useApplicationsCreate() {
+  return useFoundryMutation<
+    EndpointInput["applications.create"],
+    EndpointOutput["applications.create"]
+  >((c, input) => c.applications.create(input));
+}
+export function useApplicationsGet(
+  input: EndpointInput["applications.get"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "applications.get",
+    input,
+    (c, signal) => c.applications.get(input, { signal }),
+    options,
+  );
+}
+export function useApplicationsDraft(
+  input: EndpointInput["applications.draft"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "applications.draft",
+    input,
+    (c, signal) => c.applications.draft(input, { signal }),
+    options,
+  );
+}
+export function useApplicationsSaveDraft() {
+  return useFoundryMutation<
+    EndpointInput["applications.saveDraft"],
+    EndpointOutput["applications.saveDraft"]
+  >((c, input) => c.applications.saveDraft(input));
+}
+export function useApplicationsValidate() {
+  return useFoundryMutation<
+    EndpointInput["applications.validate"],
+    EndpointOutput["applications.validate"]
+  >((c, input) => c.applications.validate(input));
+}
+export function useApplicationsPublish() {
+  return useFoundryMutation<
+    EndpointInput["applications.publish"],
+    EndpointOutput["applications.publish"]
+  >((c, input) => c.applications.publish(input));
+}
+export function useApplicationsVersions(
+  input: EndpointInput["applications.versions"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "applications.versions",
+    input,
+    (c, signal) => c.applications.versions(input, { signal }),
+    options,
+  );
+}
+export function useApplicationsVersion(
+  input: EndpointInput["applications.version"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "applications.version",
+    input,
+    (c, signal) => c.applications.version(input, { signal }),
+    options,
+  );
+}
+export function useApplicationsRuntime(
+  input: EndpointInput["applications.runtime"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "applications.runtime",
+    input,
+    (c, signal) => c.applications.runtime(input, { signal }),
+    options,
+  );
+}
+export function useApplicationsQuery(
+  input: EndpointInput["applications.query"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "applications.query",
+    input,
+    (c, signal) => c.applications.query(input, { signal }),
+    options,
+  );
+}
+export function useApplicationsPreview() {
+  return useFoundryMutation<
+    EndpointInput["applications.preview"],
+    EndpointOutput["applications.preview"]
+  >((c, input) => c.applications.preview(input));
+}
+export function useApplicationsExecute() {
+  return useFoundryMutation<
+    EndpointInput["applications.execute"],
+    EndpointOutput["applications.execute"]
+  >((c, input) => c.applications.execute(input));
 }
 export function useFunctionsCreate() {
   return useFoundryMutation<

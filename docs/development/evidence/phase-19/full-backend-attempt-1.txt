@@ -1,0 +1,140 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-859d9595de8b_default  Creating
+ Network phase15-859d9595de8b_default  Created
+ Volume "phase15-859d9595de8b_minio-data"  Creating
+ Volume "phase15-859d9595de8b_minio-data"  Created
+ Container phase15-859d9595de8b-minio-1  Creating
+ Container phase15-859d9595de8b-minio-1  Created
+ Container phase15-859d9595de8b-minio-1  Starting
+ Container phase15-859d9595de8b-minio-1  Started
+ Container phase15-859d9595de8b-minio-1  Waiting
+ Container phase15-859d9595de8b-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-859d9595de8b-minio-1  Restarting
+ Container phase15-859d9595de8b-minio-1  Started
+ Container phase15-859d9595de8b-minio-1  Running
+ Container phase15-859d9595de8b-minio-1  Waiting
+ Container phase15-859d9595de8b-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-8.4.2, pluggy-1.7.0
+rootdir: /Users/log/Documents/code/csh-foundry
+configfile: pyproject.toml
+testpaths: services/api/tests, packages/ontology-schema/tests
+plugins: anyio-4.15.1
+collected 864 items
+
+services/api/tests/test_action_models.py ............................    [  3%]
+services/api/tests/test_actions.py ..................................... [  7%]
+...................                                                      [  9%]
+services/api/tests/test_api.py ...                                       [ 10%]
+services/api/tests/test_applications.py ...............                  [ 11%]
+services/api/tests/test_artifacts.py ..............                      [ 13%]
+services/api/tests/test_branching.py ................                    [ 15%]
+services/api/tests/test_capacity_acceptance.py ......                    [ 15%]
+services/api/tests/test_compatibility.py ..............                  [ 17%]
+services/api/tests/test_contracts.py ...                                 [ 17%]
+services/api/tests/test_database.py .                                    [ 18%]
+services/api/tests/test_datasets.py .................................... [ 22%]
+.                                                                        [ 22%]
+services/api/tests/test_diagnostics.py ..                                [ 22%]
+services/api/tests/test_execution.py ................................... [ 26%]
+.............                                                            [ 28%]
+services/api/tests/test_execution_large.py ................              [ 29%]
+services/api/tests/test_fixtures.py ..x..........                        [ 31%]
+services/api/tests/test_ingestion.py ................................... [ 35%]
+............                                                             [ 36%]
+services/api/tests/test_ingestion_connectors.py .......................  [ 39%]
+services/api/tests/test_ingestion_postgres.py ....                       [ 40%]
+services/api/tests/test_ingestion_recovery.py ........                   [ 40%]
+services/api/tests/test_kubernetes.py .......................            [ 43%]
+services/api/tests/test_mappings.py .............................F.....  [ 47%]
+services/api/tests/test_mappings_large.py .                              [ 47%]
+services/api/tests/test_mappings_recovery.py ...                         [ 48%]
+services/api/tests/test_media_functions_automations.py ................. [ 50%]
+...........F......F....                                                  [ 52%]
+services/api/tests/test_ontology_import.py ............................. [ 56%]
+.........                                                                [ 57%]
+services/api/tests/test_operations.py .......................            [ 59%]
+services/api/tests/test_phase1.py ...............
+
+=================================== FAILURES ===================================
+_______________ test_upgrade_from_phase14_preserves_definitions ________________
+services/api/tests/test_mappings.py:485: in test_upgrade_from_phase14_preserves_definitions
+    assert (
+E   AssertionError: assert '0025_applications' == '0024_pipeline_graphs'
+E     
+E     - 0024_pipeline_graphs
+E     + 0025_applications
+----------------------------- Captured stdout call -----------------------------
+No new upgrade operations detected.
+__________ test_g_migration_upgrade_preserves_previous_data_and_drift __________
+services/api/tests/test_media_functions_automations.py:374: in test_g_migration_upgrade_preserves_previous_data_and_drift
+    assert c.scalar(text("SELECT version_num FROM alembic_version")) == "0024_pipeline_graphs"
+E   AssertionError: assert '0025_applications' == '0024_pipeline_graphs'
+E     
+E     - 0024_pipeline_graphs
+E     + 0025_applications
+______ test_built_sdk_consumer_real_governed_media_functions_automations _______
+services/api/tests/test_media_functions_automations.py:667: in test_built_sdk_consumer_real_governed_media_functions_automations
+    exercise(
+services/api/tests/test_platform_sdk.py:138: in exercise
+    assert code == 0, process.stderr.read() if process.stderr else "node failed"
+E   AssertionError: file:///Users/log/Documents/code/csh-foundry/packages/typescript-sdk/dist/index.js:18
+E             cacheId: globalThis.crypto.randomUUID(),
+E                                        ^
+E     
+E     TypeError: Cannot read property 'randomUUID' of undefined
+E         at createFoundryClient (file:///Users/log/Documents/code/csh-foundry/packages/typescript-sdk/dist/index.js:18:36)
+E         at client (file:///Users/log/Documents/code/csh-foundry/tests/sdk/integration.mjs:13:10)
+E         at file:///Users/log/Documents/code/csh-foundry/tests/sdk/integration.mjs:29:11
+E         at processTicksAndRejections (node:internal/process/task_queues:96:5)
+E     
+E   assert 1 == 0
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+XFAIL services/api/tests/test_fixtures.py::test_raw_pyshacl_compatibility - Raw pySHACL/RDFLib simple/xsd:string mismatch; see semantic-compatibility.md
+FAILED services/api/tests/test_mappings.py::test_upgrade_from_phase14_preserves_definitions
+FAILED services/api/tests/test_media_functions_automations.py::test_g_migration_upgrade_preserves_previous_data_and_drift
+FAILED services/api/tests/test_media_functions_automations.py::test_built_sdk_consumer_real_governed_media_functions_automations
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)
+======= 3 failed, 528 passed, 1 xfailed, 1 warning in 1021.46s (0:17:01) =======
+No new upgrade operations detected.
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase11.py", line 35, in <module>
+    subprocess.run(["uv", "run", "pytest", "-ra", "--tb=short"], cwd=root, env=env, check=True)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['uv', 'run', 'pytest', '-ra', '--tb=short']' returned non-zero exit status 2.
+ Container phase15-859d9595de8b-minio-1  Stopping
+ Container phase15-859d9595de8b-minio-1  Stopped
+ Container phase15-859d9595de8b-minio-1  Removing
+ Container phase15-859d9595de8b-minio-1  Removed
+ Volume phase15-859d9595de8b_minio-data  Removing
+ Network phase15-859d9595de8b_default  Removing
+ Network phase15-859d9595de8b_default  Removed
+ Volume phase15-859d9595de8b_minio-data  Removed
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 156, in <module>
+    run("uv", "run", "python", "scripts/validate_phase11.py")
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 99, in run
+    raise subprocess.CalledProcessError(code, cmd)
+subprocess.CalledProcessError: Command '('uv', 'run', 'python', 'scripts/validate_phase11.py')' returned non-zero exit status 1.

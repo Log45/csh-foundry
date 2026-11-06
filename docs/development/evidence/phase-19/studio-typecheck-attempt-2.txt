@@ -1,0 +1,22 @@
+
+> @foundry/studio@0.8.0 typecheck
+> tsc --noEmit
+
+features/applications.tsx(54,221): error TS18048: 'v.definition.object_types' is possibly 'undefined'.
+features/applications.tsx(54,274): error TS18048: 'v.definition.action_types' is possibly 'undefined'.
+features/applications.tsx(66,25): error TS2740: Type '{ id: string; kind: "property" | "status" | "select" | "heading" | "text" | "label" | "metric" | "detail" | "table" | "list" | "navigation" | "section" | "text_input" | "number_input" | "checkbox" | "date_input" | "form" | "action"; ... 6 more ...; align: "stretch"; }' is missing the following properties from type '{ id: string; kind: "property" | "status" | "select" | "heading" | "text" | "label" | "metric" | "detail" | "table" | "list" | "navigation" | "section" | "text_input" | "number_input" | "checkbox" | "date_input" | "form" | "action"; ... 13 more ...; visible: { ...; } | null; }': parent, source, state, property, and 3 more.
+features/applications.tsx(67,81): error TS2339: Property 'State' does not exist on type '{ "Action-Input": { id: string; dependency: string; action_id: string; parameters?: { [key: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | ... 1 more ... | undefined; property?: string | ... 1 more ... | undefined; }; } | undefin...'.
+features/applications.tsx(103,126): error TS2322: Type '{ state: string; operator: "not_empty"; } | null' is not assignable to type '{ state: string; operator: "equals" | "not_empty"; value: string | number | boolean | null; } | null | undefined'.
+  Property 'value' is missing in type '{ state: string; operator: "not_empty"; }' but required in type '{ state: string; operator: "equals" | "not_empty"; value: string | number | boolean | null; }'.
+features/applications.tsx(108,129): error TS18048: 'schema.object_types' is possibly 'undefined'.
+features/applications.tsx(108,278): error TS2345: Argument of type '{ id: string; kind: "query"; dependency: string; filters: {}; query: { object_type: string; limit: number; order_by: never[]; traverse: never[]; pagination: "cursor"; offset: number; }; }' is not assignable to parameter of type '{ id: string; dependency: string; kind: "query" | "aggregate"; query: { object_type: string; filter?: { property: string; operator: "eq" | "ne" | "lt" | "gt" | "is_null" | "gte" | "lte" | "is_not_null" | "contains" | "starts_with" | "ends_with"; value?: unknown; } | ... 4 more ... | undefined; ... 7 more ...; cursor...'.
+  Property 'aggregate' is missing in type '{ id: string; kind: "query"; dependency: string; filters: {}; query: { object_type: string; limit: number; order_by: never[]; traverse: never[]; pagination: "cursor"; offset: number; }; }' but required in type '{ id: string; dependency: string; kind: "query" | "aggregate"; query: { object_type: string; filter?: { property: string; operator: "eq" | "ne" | "lt" | "gt" | "is_null" | "gte" | "lte" | "is_not_null" | "contains" | "starts_with" | "ends_with"; value?: unknown; } | ... 4 more ... | undefined; ... 7 more ...; cursor...'.
+features/applications.tsx(110,116): error TS18048: 'schema.action_types' is possibly 'undefined'.
+features/applications.tsx(110,281): error TS18048: 'schema.action_types' is possibly 'undefined'.
+features/applications.tsx(110,430): error TS18048: 'a.parameters' is possibly 'undefined'.
+features/applications.tsx(110,496): error TS2322: Type '{} | null' is not assignable to type 'string | number | boolean | null'.
+  Type '{}' is not assignable to type 'string | number | boolean | null'.
+features/applications.tsx(119,123): error TS2345: Argument of type '{ kind: Value["kind"]; value: null; state: string | null; }' is not assignable to parameter of type '{ kind: "state" | "literal" | "selected"; value: string | number | boolean | null; state: string | null; property: string | null; }'.
+  Property 'property' is missing in type '{ kind: Value["kind"]; value: null; state: string | null; }' but required in type '{ kind: "state" | "literal" | "selected"; value: string | number | boolean | null; state: string | null; property: string | null; }'.
+features/applications.tsx(130,251): error TS18048: 'schema.link_types' is possibly 'undefined'.
+features/applications.tsx(131,165): error TS2739: Type '{ kind: "literal"; value: string; }' is missing the following properties from type '{ kind: "state" | "literal" | "selected"; value: string | number | boolean | null; state: string | null; property: string | null; }': state, property

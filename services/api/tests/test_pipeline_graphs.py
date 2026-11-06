@@ -305,7 +305,7 @@ def test_phase18_migration_preserves_previous_head_and_has_no_drift(
     with engine.begin() as connection:
         assert connection.scalar(text("SELECT value FROM phase18_sentinel")) == "preserved"
         assert connection.scalar(text("SELECT version_num FROM alembic_version")) == (
-            "0024_pipeline_graphs"
+            "0025_applications"
         )
         assert connection.scalar(text("SELECT to_regclass('pipeline_drafts')")) == (
             "pipeline_drafts"

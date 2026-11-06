@@ -13,3 +13,7 @@ No npm publication, repository creation, deployment or production certification 
 
 Add generated governed media, function and automation APIs, typed definitions and results, durable
 execution integration, and authenticated media original/preview streaming. Existing APIs remain.
+
+Phase 19 (unreleased local workspace): generated application resource/draft/validation/publication/
+runtime gateways and canonical object aggregate capability. Existing sessions, tenant scoping,
+mutation retry policy, request limits and typed errors remain authoritative.

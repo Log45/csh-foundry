@@ -12,7 +12,7 @@ from ontology_platform.errors import ApplicationError
 from ontology_platform.security.interfaces import Authorizer, Principal
 from ontology_platform.security.query import TransactionAuthorizer
 
-SCHEMA_REVISION = "0024_pipeline_graphs"
+SCHEMA_REVISION = "0025_applications"
 
 
 def missing(resource: str) -> ApplicationError:

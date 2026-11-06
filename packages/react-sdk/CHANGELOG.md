@@ -13,3 +13,6 @@ No npm publication, repository creation, deployment or production certification 
 
 Generate typed media metadata, function and automation hooks using the existing isolated cache,
 confirmation and execution polling contracts. Binary media stays outside query caches.
+
+Phase 19 (unreleased local workspace): generated application capability hooks and object aggregate
+hook, retaining provider-owned session-isolated caches and conservative mutation invalidation.

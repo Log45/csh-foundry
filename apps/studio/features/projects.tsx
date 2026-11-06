@@ -1,4 +1,5 @@
 "use client";
+import { ApplicationPanel, CreateApplicationPanel } from "./applications";
 import { CreateGovernedPanel, GovernedPanel } from "./governed-processing";
 import { CreateMappingPanel, MappingPanel } from "@/features/mappings";
 import { CreatePipelinePanel, PipelinePanel } from "@/features/pipelines";
@@ -338,6 +339,14 @@ function ProjectBrowser({
       )}
       <h3>Resources</h3>
       {writable && (
+        <CreateApplicationPanel
+          api={api}
+          project={project.id}
+          folder={folder ?? null}
+          reload={reload}
+        />
+      )}
+      {writable && (
         <CreateGovernedPanel
           api={api}
           project={project.id}
@@ -435,6 +444,12 @@ function ProjectBrowser({
             <MappingPanel
               api={api}
               mapping={r.id}
+              writable={r.project_id === project.id && writable}
+            />
+          ) : r.resource_type === "APPLICATION" ? (
+            <ApplicationPanel
+              application={r.id}
+              project={project.id}
               writable={r.project_id === project.id && writable}
             />
           ) : r.resource_type === "PIPELINE" ? (

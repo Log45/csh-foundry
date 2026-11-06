@@ -17,6 +17,7 @@
     "format:check": "prettier --check \"app/**/*.{ts,tsx,css}\" \"components/**/*.tsx\" \"features/**/*.tsx\" lib/api.ts lib/server.ts \"tests/**/*.{ts,tsx,mjs}\" next.config.ts playwright.config.ts vitest.config.ts proxy.ts instrumentation.ts"
   },
   "dependencies": {
+    "@foundry/sdk": "file:../../packages/typescript-sdk",
     "@noble/hashes": "2.0.1",
     "@xyflow/react": "12.12.1",
     "jose": "6.2.14",

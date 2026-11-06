@@ -1,0 +1,160 @@
+PASS disabled Compose profile requires no MinIO services
+ Network phase15-2ceb1123aa2b_default  Creating
+ Network phase15-2ceb1123aa2b_default  Created
+ Volume "phase15-2ceb1123aa2b_minio-data"  Creating
+ Volume "phase15-2ceb1123aa2b_minio-data"  Created
+ Container phase15-2ceb1123aa2b-minio-1  Creating
+ Container phase15-2ceb1123aa2b-minio-1  Created
+ Container phase15-2ceb1123aa2b-minio-1  Starting
+ Container phase15-2ceb1123aa2b-minio-1  Started
+ Container phase15-2ceb1123aa2b-minio-1  Waiting
+ Container phase15-2ceb1123aa2b-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+ Container phase15-2ceb1123aa2b-minio-1  Restarting
+ Container phase15-2ceb1123aa2b-minio-1  Started
+ Container phase15-2ceb1123aa2b-minio-1  Running
+ Container phase15-2ceb1123aa2b-minio-1  Waiting
+ Container phase15-2ceb1123aa2b-minio-1  Healthy
+Bucket created successfully `local/foundry-artifacts`.
+Bucket created successfully `local/foundry-datasets`.
+Bucket created successfully `local/foundry-media`.
+Created policy `foundry-artifacts` successfully.
+PASS MinIO initialization repeated and bytes retained after restart
+Python suite NOT RUN in this explicit browser-only selection
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test
+
+
+Running 14 tests using 1 worker
+
+(node:91843) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/e2e/application-security.spec.ts:25:1 › another signed-in principal cannot borrow application, object or action authority (8.1s)
+(node:92042) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 tests/e2e/governed-processing.spec.ts:4:1 › governed media, typed functions and manual automations use the authenticated Studio (14.5s)
+  ✓   3 tests/e2e/workflow.spec.ts:21:1 › verified browser reference workflow (15.0s)
+  ✓   4 tests/e2e/workflow.spec.ts:211:1 › CSRF and unauthenticated proxy requests fail closed (956ms)
+  ✓   5 tests/e2e/workflow.spec.ts:226:1 › native authoring, OWL diagnostics, tenant isolation and session loss (3.0s)
+  ✓   6 tests/e2e/workflow.spec.ts:310:1 › schema branching, resolved merge and private SDK download (3.4s)
+  ✓   7 tests/e2e/workflow.spec.ts:411:3 › durable sessions survive replica restart and logout revokes every replica (2.6s)
+  ✓   8 tests/e2e/workflow.spec.ts:474:1 › Project workspace navigates folders and governed canonical references (2.4s)
+  ✓   9 tests/e2e/workflow.spec.ts:535:1 › Project artifacts upload immutable versions and download exact bytes (2.9s)
+  ✓  10 tests/e2e/workflow.spec.ts:595:1 › Project dataset uploads, discovers schema and previews historical versions (6.6s)
+  ✓  11 tests/e2e/workflow.spec.ts:666:1 › governed pipeline publishes immutable output and real lineage (12.7s)
+  ✓  12 tests/e2e/workflow.spec.ts:790:1 › governed mapping validates materializes and records source provenance (16.3s)
+  ✘  13 tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action (8.8s)
+(node:92748) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS_BROWSER_MAXIMUM {"source_bytes":1073741824,"rows":262144,"format":"csv","asynchronous_validation":true}
+  ✓  14 tests/e2e/maximum.spec.ts:6:1 › exact 1 GiB browser upload streams through BFF and asynchronous validation (1.3m)
+
+
+  1) tests/e2e/application-security.spec.ts:25:1 › another signed-in principal cannot borrow application, object or action authority 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'manufacturing', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'manufacturing', exact: true }) with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'manufacturing', exact: true })
+
+
+       at login.ts:33
+
+      31 |   await expect(
+      32 |     page.getByRole("heading", { name: "manufacturing", exact: true }),
+    > 33 |   ).toBeVisible();
+         |     ^
+      34 | }
+      35 |
+        at login (/Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/login.ts:33:5)
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/application-security.spec.ts:72:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/application-security-anoth-8ea1e--object-or-action-authority/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/application-security-anoth-8ea1e--object-or-action-authority/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/application-security-anoth-8ea1e--object-or-action-authority/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/application-security-anoth-8ea1e--object-or-action-authority/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/application-security-anoth-8ea1e--object-or-action-authority/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('main').getByRole('alert')
+    Expected pattern: /session|Access/
+    Received string:  "Session expired. Sign in again. Workspace"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('main').getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('main').getByRole('alert')
+        11 × locator resolved to <p role="alert">…</p>
+           - unexpected value "Session expired. Sign in again. Workspace"
+
+
+      230 |   });
+      231 |   await page.getByRole("button", { name: "Refresh application data" }).click();
+    > 232 |   await expect(page.getByRole("main").getByRole("alert")).toContainText(
+          |                                                           ^
+      233 |     /session|Access/,
+      234 |   );
+      235 |   await expect(page.getByRole("table")).toHaveCount(0);
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/zz-applications.spec.ts:232:59
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests/e2e/application-security.spec.ts:25:1 › another signed-in principal cannot borrow application, object or action authority 
+    tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 
+  12 passed (2.9m)
+ Container phase15-2ceb1123aa2b-minio-1  Stopping
+ Container phase15-2ceb1123aa2b-minio-1  Stopped
+ Container phase15-2ceb1123aa2b-minio-1  Removing
+ Container phase15-2ceb1123aa2b-minio-1  Removed
+ Network phase15-2ceb1123aa2b_default  Removing
+ Volume phase15-2ceb1123aa2b_minio-data  Removing
+ Volume phase15-2ceb1123aa2b_minio-data  Removed
+ Network phase15-2ceb1123aa2b_default  Removed
+Traceback (most recent call last):
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 171, in <module>
+    run("uv", "run", "python", "scripts/test_studio.py")
+  File "/Users/log/Documents/code/csh-foundry/scripts/validate_phase15.py", line 99, in run
+    raise subprocess.CalledProcessError(code, cmd)
+subprocess.CalledProcessError: Command '('uv', 'run', 'python', 'scripts/test_studio.py')' returned non-zero exit status 1.

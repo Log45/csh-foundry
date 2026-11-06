@@ -1,0 +1,140 @@
+{
+  "python-quality": {
+    "command": [
+      "uv",
+      "run",
+      "ruff",
+      "check",
+      "."
+    ],
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "python-format": {
+    "command": [
+      "uv",
+      "run",
+      "ruff",
+      "format",
+      "--check",
+      "."
+    ],
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "mypy": {
+    "command": [
+      "uv",
+      "run",
+      "mypy"
+    ],
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "openapi-export": {
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/export_openapi.py"
+    ],
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "generated": {
+    "command": [
+      "npm",
+      "run",
+      "check:generated"
+    ],
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "sdk-format": {
+    "command": [
+      "npm",
+      "run",
+      "format:check"
+    ],
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "sdk-build": {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "sdk-typecheck": {
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "sdk-tests": {
+    "command": [
+      "npm",
+      "test"
+    ],
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "sdk-consumer": {
+    "command": [
+      "npm",
+      "run",
+      "test:consumer"
+    ],
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "studio-format": {
+    "command": [
+      "npm",
+      "run",
+      "format:check",
+      "--prefix",
+      "apps/studio"
+    ],
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "studio-typecheck": {
+    "command": [
+      "npm",
+      "run",
+      "typecheck",
+      "--prefix",
+      "apps/studio"
+    ],
+    "exit_code": 2,
+    "result": "FAIL"
+  },
+  "studio-tests": {
+    "command": [
+      "npm",
+      "test",
+      "--prefix",
+      "apps/studio"
+    ],
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "studio-build": {
+    "command": [
+      "npm",
+      "run",
+      "build",
+      "--prefix",
+      "apps/studio"
+    ],
+    "exit_code": 1,
+    "result": "FAIL"
+  }
+}

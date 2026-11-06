@@ -20,6 +20,7 @@ manifest = {
     ],
     "objects": [
         ("query", "post", "/ontologies/{ontology_id}/objects/{type_id}/query"),
+        ("aggregate", "post", "/ontologies/{ontology_id}/aggregate"),
         ("get", "get", "/ontologies/{ontology_id}/objects/{type_id}"),
         ("create", "post", "/ontologies/{ontology_id}/objects/{type_id}"),
         ("update", "patch", "/ontologies/{ontology_id}/objects/{type_id}"),
@@ -65,6 +66,28 @@ manifest = {
     ],
     "pipelines": [],
 }
+manifest["applications"] = [
+    ("create", "post", "/projects/{project_id}/applications"),
+    ("get", "get", "/applications/{application_id}"),
+    ("draft", "get", "/applications/{application_id}/draft"),
+    ("saveDraft", "put", "/applications/{application_id}/draft"),
+    ("validate", "post", "/applications/{application_id}/validate"),
+    ("publish", "post", "/applications/{application_id}/versions"),
+    ("versions", "get", "/applications/{application_id}/versions"),
+    ("version", "get", "/applications/{application_id}/versions/{version_id}"),
+    ("runtime", "get", "/applications/{application_id}/versions/{version_id}/runtime"),
+    ("query", "post", "/applications/{application_id}/versions/{version_id}/query"),
+    (
+        "preview",
+        "post",
+        "/applications/{application_id}/versions/{version_id}/actions/{binding_id}/preview",
+    ),
+    (
+        "execute",
+        "post",
+        "/applications/{application_id}/versions/{version_id}/actions/{binding_id}/execute",
+    ),
+]
 for family, ident in [("pipelines", "pipeline_id"), ("mappings", "mapping_id")]:
     base = "/" + family + "/{" + ident + "}"
     manifest[family] += [
@@ -121,7 +144,9 @@ for family, ident, group in [
         ]
 manifest["mappings"].append(("preview", "post", "/mappings/{mapping_id}/preview"))
 read_posts = {
+    ("applications", "query"),
     ("objects", "query"),
+    ("objects", "aggregate"),
     ("actions", "preview"),
     ("pipelines", "validate"),
     ("pipelines", "compileGraph"),

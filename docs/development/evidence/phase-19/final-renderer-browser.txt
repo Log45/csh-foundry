@@ -1,0 +1,55 @@
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test application-security.spec.ts zz-applications.spec.ts
+
+
+Running 2 tests using 1 worker
+
+(node:4329) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/application-security.spec.ts:25:1 › another signed-in principal cannot borrow application, object or action authority (5.5s)
+  ✘  2 tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action (13.0s)
+
+
+  1) tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('main').getByRole('alert')
+    Expected substring: "Application unavailable"
+    Received string:    "selection_required"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('main').getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('main').getByRole('alert')
+        9 × locator resolved to <p role="alert">selection_required</p>
+          - unexpected value "selection_required"
+
+
+      248 |   ).toBeVisible();
+      249 |   await page.goto(url!);
+    > 250 |   await expect(page.getByRole("main").getByRole("alert")).toContainText(
+          |                                                           ^
+      251 |     "Application unavailable",
+      252 |   );
+      253 |   await expect(page.getByRole("table")).toHaveCount(0);
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/zz-applications.spec.ts:250:59
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 
+  1 passed (19.7s)

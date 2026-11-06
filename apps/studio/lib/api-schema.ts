@@ -498,6 +498,178 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{project_id}/applications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create */
+        post: operations["create_api_v1_projects__project_id__applications_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get */
+        get: operations["get_api_v1_applications__application_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Draft */
+        get: operations["draft_api_v1_applications__application_id__draft_get"];
+        /** Save */
+        put: operations["save_api_v1_applications__application_id__draft_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/validate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Validate */
+        post: operations["validate_api_v1_applications__application_id__validate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Versions */
+        get: operations["versions_api_v1_applications__application_id__versions_get"];
+        put?: never;
+        /** Publish */
+        post: operations["publish_api_v1_applications__application_id__versions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/versions/{version_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Version */
+        get: operations["version_api_v1_applications__application_id__versions__version_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/versions/{version_id}/runtime": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Runtime */
+        get: operations["runtime_api_v1_applications__application_id__versions__version_id__runtime_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/versions/{version_id}/query": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Query */
+        post: operations["query_api_v1_applications__application_id__versions__version_id__query_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/versions/{version_id}/actions/{binding_id}/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Preview */
+        post: operations["preview_api_v1_applications__application_id__versions__version_id__actions__binding_id__preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{application_id}/versions/{version_id}/actions/{binding_id}/execute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Execute */
+        post: operations["execute_api_v1_applications__application_id__versions__version_id__actions__binding_id__execute_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{project_id}/artifacts": {
         parameters: {
             query?: never;
@@ -2923,6 +3095,576 @@ export interface components {
             /** Or */
             or: (components["schemas"]["Predicate"] | components["schemas"]["All"] | components["schemas"]["AnyOf"] | components["schemas"]["Negation"])[];
         };
+        /** ApplicationActionBinding */
+        "ApplicationActionBinding-Input": {
+            /** Id */
+            id: string;
+            /** Dependency */
+            dependency: string;
+            /** Action Id */
+            action_id: string;
+            /** Parameters */
+            parameters?: {
+                [key: string]: components["schemas"]["ApplicationValue-Input"];
+            };
+            /** Parameter Types */
+            parameter_types?: {
+                [key: string]: string;
+            };
+            /**
+             * Confirm
+             * @default true
+             */
+            confirm?: boolean;
+            /** Refresh */
+            refresh?: string[];
+        };
+        /** ApplicationActionBinding */
+        "ApplicationActionBinding-Output": {
+            /** Id */
+            id: string;
+            /** Dependency */
+            dependency: string;
+            /** Action Id */
+            action_id: string;
+            /** Parameters */
+            parameters: {
+                [key: string]: components["schemas"]["ApplicationValue-Output"];
+            };
+            /** Parameter Types */
+            parameter_types: {
+                [key: string]: string;
+            };
+            /**
+             * Confirm
+             * @default true
+             */
+            confirm: boolean;
+            /** Refresh */
+            refresh: string[];
+        };
+        /** ApplicationDependency */
+        "ApplicationDependency-Input": {
+            /** Id */
+            id: string;
+            /**
+             * Resource Id
+             * Format: uuid
+             */
+            resource_id: string;
+            /** Ontology Id */
+            ontology_id: string;
+            /** Schema Version */
+            schema_version: string;
+            /**
+             * Policy
+             * @default exact_active
+             * @constant
+             */
+            policy?: "exact_active";
+        };
+        /** ApplicationDependency */
+        "ApplicationDependency-Output": {
+            /** Id */
+            id: string;
+            /**
+             * Resource Id
+             * Format: uuid
+             */
+            resource_id: string;
+            /** Ontology Id */
+            ontology_id: string;
+            /** Schema Version */
+            schema_version: string;
+            /**
+             * Policy
+             * @default exact_active
+             * @constant
+             */
+            policy: "exact_active";
+        };
+        /** ApplicationDiagnostic */
+        ApplicationDiagnostic: {
+            /** Code */
+            code: string;
+            /** Message */
+            message: string;
+            /** Node */
+            node: string | null;
+        };
+        /** ApplicationDocument */
+        "ApplicationDocument-Input": {
+            /**
+             * Format Version
+             * @default 1
+             * @constant
+             */
+            format_version?: 1;
+            /** Title */
+            title: string;
+            /**
+             * Description
+             * @default
+             */
+            description?: string;
+            /** Home */
+            home: string;
+            /** Pages */
+            pages?: components["schemas"]["ApplicationPage-Input"][];
+            /** States */
+            states?: components["schemas"]["ApplicationState-Input"][];
+            /** Dependencies */
+            dependencies?: components["schemas"]["ApplicationDependency-Input"][];
+            /** Sources */
+            sources?: components["schemas"]["ApplicationSource-Input"][];
+            /** Actions */
+            actions?: components["schemas"]["ApplicationActionBinding-Input"][];
+            /** Interactions */
+            interactions?: components["schemas"]["ApplicationInteraction"][];
+        };
+        /** ApplicationDocument */
+        "ApplicationDocument-Output": {
+            /**
+             * Format Version
+             * @default 1
+             * @constant
+             */
+            format_version: 1;
+            /** Title */
+            title: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Home */
+            home: string;
+            /** Pages */
+            pages: components["schemas"]["ApplicationPage-Output"][];
+            /** States */
+            states: components["schemas"]["ApplicationState-Output"][];
+            /** Dependencies */
+            dependencies: components["schemas"]["ApplicationDependency-Output"][];
+            /** Sources */
+            sources: components["schemas"]["ApplicationSource-Output"][];
+            /** Actions */
+            actions: components["schemas"]["ApplicationActionBinding-Output"][];
+            /** Interactions */
+            interactions: components["schemas"]["ApplicationInteraction"][];
+        };
+        /** ApplicationDraftView */
+        ApplicationDraftView: {
+            /** Revision */
+            revision: number;
+            document: components["schemas"]["ApplicationDocument-Output"];
+        };
+        /** ApplicationInteraction */
+        ApplicationInteraction: {
+            /** Id */
+            id: string;
+            /** Widget */
+            widget: string;
+            /**
+             * Event
+             * @enum {string}
+             */
+            event: "select" | "change" | "click";
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "set" | "navigate" | "refresh";
+            /** Target */
+            target: string;
+        };
+        /** ApplicationPage */
+        "ApplicationPage-Input": {
+            /** Id */
+            id: string;
+            /** Title */
+            title: string;
+            /**
+             * Description
+             * @default
+             */
+            description?: string;
+            /** Parameters */
+            parameters?: string[];
+            /** Widgets */
+            widgets?: components["schemas"]["ApplicationWidget-Input"][];
+        };
+        /** ApplicationPage */
+        "ApplicationPage-Output": {
+            /** Id */
+            id: string;
+            /** Title */
+            title: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Parameters */
+            parameters: string[];
+            /** Widgets */
+            widgets: components["schemas"]["ApplicationWidget-Output"][];
+        };
+        /** ApplicationRuntimeQuery */
+        ApplicationRuntimeQuery: {
+            /** Source Id */
+            source_id: string;
+            /** State */
+            state?: {
+                [key: string]: components["schemas"]["JsonValue"];
+            };
+            /** Order By */
+            order_by?: components["schemas"]["Sort"][] | null;
+            /** Cursor */
+            cursor?: string | null;
+        };
+        /** ApplicationSource */
+        "ApplicationSource-Input": {
+            /** Id */
+            id: string;
+            /** Dependency */
+            dependency: string;
+            /**
+             * Kind
+             * @default query
+             * @enum {string}
+             */
+            kind?: "query" | "aggregate";
+            query: components["schemas"]["ApplicationSourceQuery"];
+            aggregate?: components["schemas"]["ApplicationSourceAggregate"] | null;
+            /** Filters */
+            filters?: {
+                [key: string]: components["schemas"]["ApplicationValue-Input"];
+            };
+        };
+        /** ApplicationSource */
+        "ApplicationSource-Output": {
+            /** Id */
+            id: string;
+            /** Dependency */
+            dependency: string;
+            /**
+             * Kind
+             * @default query
+             * @enum {string}
+             */
+            kind: "query" | "aggregate";
+            query: components["schemas"]["ApplicationSourceQuery"];
+            aggregate: components["schemas"]["ApplicationSourceAggregate"] | null;
+            /** Filters */
+            filters: {
+                [key: string]: components["schemas"]["ApplicationValue-Output"];
+            };
+        };
+        /**
+         * ApplicationSourceAggregate
+         * @description Stored aggregate configuration.
+         * @example {
+         *       "group_by": "operationalStatus",
+         *       "metrics": [
+         *         {
+         *           "name": "machines",
+         *           "operator": "count"
+         *         }
+         *       ],
+         *       "object_type": "Machine"
+         *     }
+         */
+        ApplicationSourceAggregate: {
+            /** Object Type */
+            object_type: string;
+            /** Filter */
+            filter?: components["schemas"]["Predicate"] | components["schemas"]["All"] | components["schemas"]["AnyOf"] | components["schemas"]["Negation"] | null;
+            /**
+             * Traverse
+             * @default []
+             */
+            traverse?: components["schemas"]["TraversalStep"][];
+            /** Result Filter */
+            result_filter?: components["schemas"]["Predicate"] | components["schemas"]["All"] | components["schemas"]["AnyOf"] | components["schemas"]["Negation"] | null;
+            /** Metrics */
+            metrics: components["schemas"]["Metric"][];
+            /** Group By */
+            group_by?: string | null;
+            /**
+             * Max Groups
+             * @default 100
+             */
+            max_groups?: number;
+        };
+        /**
+         * ApplicationSourceQuery
+         * @description Stored request configuration; preserve canonical query component identities.
+         * @example {
+         *       "filter": {
+         *         "and": [
+         *           {
+         *             "operator": "eq",
+         *             "property": "operationalStatus",
+         *             "value": "RUNNING"
+         *           },
+         *           {
+         *             "operator": "gt",
+         *             "property": "temperatureCelsius",
+         *             "value": "80"
+         *           }
+         *         ]
+         *       },
+         *       "limit": 50,
+         *       "object_type": "Machine",
+         *       "order_by": [
+         *         {
+         *           "direction": "desc",
+         *           "property": "temperatureCelsius"
+         *         }
+         *       ],
+         *       "select": [
+         *         "machineId",
+         *         "machineName"
+         *       ]
+         *     }
+         */
+        ApplicationSourceQuery: {
+            /** Object Type */
+            object_type: string;
+            /** Filter */
+            filter?: components["schemas"]["Predicate"] | components["schemas"]["All"] | components["schemas"]["AnyOf"] | components["schemas"]["Negation"] | null;
+            /**
+             * Traverse
+             * @default []
+             */
+            traverse?: components["schemas"]["TraversalStep"][];
+            /** Result Filter */
+            result_filter?: components["schemas"]["Predicate"] | components["schemas"]["All"] | components["schemas"]["AnyOf"] | components["schemas"]["Negation"] | null;
+            /**
+             * Pagination
+             * @default cursor
+             * @enum {string}
+             */
+            pagination?: "cursor" | "offset";
+            /**
+             * Order By
+             * @default []
+             */
+            order_by?: components["schemas"]["Sort"][];
+            /** Select */
+            select?: string[] | null;
+            /**
+             * Limit
+             * @default 50
+             */
+            limit?: number;
+            /**
+             * Offset
+             * @default 0
+             */
+            offset?: number;
+            /** Cursor */
+            cursor?: string | null;
+        };
+        /** ApplicationState */
+        "ApplicationState-Input": {
+            /** Id */
+            id: string;
+            /**
+             * Data Type
+             * @default string
+             * @enum {string}
+             */
+            data_type?: "string" | "integer" | "float" | "boolean" | "date" | "selection";
+            /** Initial */
+            initial?: string | number | boolean | null;
+        };
+        /** ApplicationState */
+        "ApplicationState-Output": {
+            /** Id */
+            id: string;
+            /**
+             * Data Type
+             * @default string
+             * @enum {string}
+             */
+            data_type: "string" | "integer" | "float" | "boolean" | "date" | "selection";
+            /** Initial */
+            initial: string | number | boolean | null;
+        };
+        /** ApplicationValidation */
+        ApplicationValidation: {
+            /** Valid */
+            valid: boolean;
+            /** Diagnostics */
+            diagnostics: components["schemas"]["ApplicationDiagnostic"][];
+        };
+        /** ApplicationValue */
+        "ApplicationValue-Input": {
+            /**
+             * Kind
+             * @default literal
+             * @enum {string}
+             */
+            kind?: "literal" | "state" | "selected";
+            /** Value */
+            value?: string | number | boolean | null;
+            /** State */
+            state?: string | null;
+            /** Property */
+            property?: string | null;
+        };
+        /** ApplicationValue */
+        "ApplicationValue-Output": {
+            /**
+             * Kind
+             * @default literal
+             * @enum {string}
+             */
+            kind: "literal" | "state" | "selected";
+            /** Value */
+            value: string | number | boolean | null;
+            /** State */
+            state: string | null;
+            /** Property */
+            property: string | null;
+        };
+        /** ApplicationVisibility */
+        "ApplicationVisibility-Input": {
+            /** State */
+            state: string;
+            /**
+             * Operator
+             * @default not_empty
+             * @enum {string}
+             */
+            operator?: "equals" | "not_empty";
+            /** Value */
+            value?: string | number | boolean | null;
+        };
+        /** ApplicationVisibility */
+        "ApplicationVisibility-Output": {
+            /** State */
+            state: string;
+            /**
+             * Operator
+             * @default not_empty
+             * @enum {string}
+             */
+            operator: "equals" | "not_empty";
+            /** Value */
+            value: string | number | boolean | null;
+        };
+        /** ApplicationWidget */
+        "ApplicationWidget-Input": {
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "heading" | "text" | "label" | "metric" | "property" | "detail" | "table" | "list" | "status" | "navigation" | "section" | "text_input" | "number_input" | "checkbox" | "select" | "date_input" | "form" | "action";
+            /**
+             * Label
+             * @default
+             */
+            label?: string;
+            /**
+             * Text
+             * @default
+             */
+            text?: string;
+            /** Parent */
+            parent?: string | null;
+            /**
+             * Layout
+             * @default column
+             * @enum {string}
+             */
+            layout?: "row" | "column" | "grid";
+            /**
+             * Spacing
+             * @default normal
+             * @enum {string}
+             */
+            spacing?: "compact" | "normal" | "large";
+            /**
+             * Align
+             * @default stretch
+             * @enum {string}
+             */
+            align?: "start" | "center" | "stretch";
+            /** Source */
+            source?: string | null;
+            /** State */
+            state?: string | null;
+            /** Property */
+            property?: string | null;
+            /** Columns */
+            columns?: string[];
+            /** Options */
+            options?: string[];
+            /** Page */
+            page?: string | null;
+            /** Action */
+            action?: string | null;
+            visible?: components["schemas"]["ApplicationVisibility-Input"] | null;
+        };
+        /** ApplicationWidget */
+        "ApplicationWidget-Output": {
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "heading" | "text" | "label" | "metric" | "property" | "detail" | "table" | "list" | "status" | "navigation" | "section" | "text_input" | "number_input" | "checkbox" | "select" | "date_input" | "form" | "action";
+            /**
+             * Label
+             * @default
+             */
+            label: string;
+            /**
+             * Text
+             * @default
+             */
+            text: string;
+            /** Parent */
+            parent: string | null;
+            /**
+             * Layout
+             * @default column
+             * @enum {string}
+             */
+            layout: "row" | "column" | "grid";
+            /**
+             * Spacing
+             * @default normal
+             * @enum {string}
+             */
+            spacing: "compact" | "normal" | "large";
+            /**
+             * Align
+             * @default stretch
+             * @enum {string}
+             */
+            align: "start" | "center" | "stretch";
+            /** Source */
+            source: string | null;
+            /** State */
+            state: string | null;
+            /** Property */
+            property: string | null;
+            /** Columns */
+            columns: string[];
+            /** Options */
+            options: string[];
+            /** Page */
+            page: string | null;
+            /** Action */
+            action: string | null;
+            visible: components["schemas"]["ApplicationVisibility-Output"] | null;
+        };
         /** ApprovalEvent */
         ApprovalEvent: {
             /**
@@ -5203,6 +5945,44 @@ export interface components {
             nulls?: "reject" | "null" | "default" | "omit";
             default?: components["schemas"]["JsonValue"];
         };
+        /** PublishApplication */
+        PublishApplication: {
+            /** Expected Revision */
+            expected_revision: number;
+        };
+        /** PublishedApplicationVersion */
+        PublishedApplicationVersion: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Application Id
+             * Format: uuid
+             */
+            application_id: string;
+            /** Sequence */
+            sequence: number;
+            /**
+             * Format Version
+             * @default 1
+             * @constant
+             */
+            format_version: 1;
+            document: components["schemas"]["ApplicationDocument-Output"];
+            /** Digest */
+            digest: string;
+            /** Manifest */
+            manifest: components["schemas"]["ApplicationDependency-Output"][];
+            /** Created By */
+            created_by: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
         /** QueryObject */
         QueryObject: {
             /**
@@ -5377,7 +6157,7 @@ export interface components {
         /** ResourceView */
         ResourceView: {
             /** Resource Type */
-            resource_type: ("ONTOLOGY_OBJECT_TYPE" | "ONTOLOGY_LINK_TYPE" | "ONTOLOGY_ACTION" | "ONTOLOGY_VERSION") | ("ARTIFACT" | "DATASET" | "PIPELINE" | "MAPPING" | "MEDIA_SET" | "FUNCTION" | "AUTOMATION");
+            resource_type: ("ONTOLOGY_OBJECT_TYPE" | "ONTOLOGY_LINK_TYPE" | "ONTOLOGY_ACTION" | "ONTOLOGY_VERSION") | ("ARTIFACT" | "DATASET" | "PIPELINE" | "MAPPING" | "MEDIA_SET" | "FUNCTION" | "AUTOMATION" | "APPLICATION");
             /** Ontology Id */
             ontology_id: string | null;
             /** Schema Version */
@@ -5587,6 +6367,12 @@ export interface components {
             migration_required: boolean;
             /** Diagnostics */
             diagnostics?: string[];
+        };
+        /** SaveApplicationDraft */
+        SaveApplicationDraft: {
+            /** Expected Revision */
+            expected_revision: number;
+            document: components["schemas"]["ApplicationDocument-Input"];
         };
         /** SaveDraft */
         SaveDraft: {
@@ -7745,6 +8531,416 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ResourceView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_api_v1_projects__project_id__applications_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateArtifact"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResourceView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_api_v1_applications__application_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResourceView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    draft_api_v1_applications__application_id__draft_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApplicationDraftView"] | null;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    save_api_v1_applications__application_id__draft_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveApplicationDraft"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApplicationDraftView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    validate_api_v1_applications__application_id__validate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApplicationDocument-Input"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApplicationValidation"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    versions_api_v1_applications__application_id__versions_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                application_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublishedApplicationVersion"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    publish_api_v1_applications__application_id__versions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PublishApplication"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublishedApplicationVersion"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    version_api_v1_applications__application_id__versions__version_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: string;
+                version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublishedApplicationVersion"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    runtime_api_v1_applications__application_id__versions__version_id__runtime_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: string;
+                version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublishedApplicationVersion"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    query_api_v1_applications__application_id__versions__version_id__query_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: string;
+                version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApplicationRuntimeQuery"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QueryPage"] | components["schemas"]["AggregateResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_api_v1_applications__application_id__versions__version_id__actions__binding_id__preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: string;
+                version_id: string;
+                binding_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExecuteRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActionResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    execute_api_v1_applications__application_id__versions__version_id__actions__binding_id__execute_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                application_id: string;
+                version_id: string;
+                binding_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExecuteRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActionResult"];
                 };
             };
             /** @description Validation Error */

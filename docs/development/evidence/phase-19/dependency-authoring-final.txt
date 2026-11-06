@@ -1,0 +1,13 @@
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test application-security.spec.ts zz-applications.spec.ts
+
+
+Running 2 tests using 1 worker
+
+(node:14667) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/application-security.spec.ts:25:1 › another signed-in principal cannot borrow application, object or action authority (2.6s)
+  ✓  2 tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action (5.7s)
+
+  2 passed (9.2s)

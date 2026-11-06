@@ -1,0 +1,47 @@
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test zz-applications.spec.ts
+
+
+Running 1 test using 1 worker
+
+(node:84489) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action (6.7s)
+
+
+  1) tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 
+
+    Error: locator.selectOption: Error: Element is not a <select> element
+    Call log:
+      - waiting for getByLabel('Operational status filter', { exact: true })
+        - locator resolved to <section class="app-widget" aria-label="Operational status filter">…</section>
+      - attempting select option action
+        - waiting for element to be visible and enabled
+
+
+      143 |   await page
+      144 |     .getByLabel("Operational status filter", { exact: true })
+    > 145 |     .selectOption("RUNNING");
+          |      ^
+      146 |   // Fixture can contain more than one page; the new machine sorts before MCH IDs.
+      147 |   await page
+      148 |     .getByRole("button", { name: `Select ${key}`, exact: true })
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/zz-applications.spec.ts:145:6
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 

@@ -6,6 +6,7 @@ import shutil
 import signal
 import socket
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -119,7 +120,11 @@ try:
             else:
                 raise RuntimeError("Second replica readiness timed out")
             env["STUDIO_E2E_REPLICA_PID"] = str(replica.pid)
-        raise SystemExit(subprocess.call(["npm", "run", "test:e2e"], cwd=app_directory, env=env))
+        raise SystemExit(
+            subprocess.call(
+                ["npm", "run", "test:e2e", "--", *sys.argv[1:]], cwd=app_directory, env=env
+            )
+        )
 finally:
     for process in reversed(processes):
         if process.poll() is None:

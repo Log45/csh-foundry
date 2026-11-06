@@ -1,0 +1,10 @@
+{
+  "base_revision": "9b30e3ab443e44a1ee92be5377f3529f3e066c57",
+  "baseline_components": 187,
+  "current_components": 215,
+  "missing_baseline_components": [],
+  "changed_baseline_schemas": [
+    "ResourceView"
+  ],
+  "resource_view_only_adds_APPLICATION": true
+}

@@ -1,0 +1,87 @@
+
+> test:consumer
+> node scripts/smoke_sdk_consumer.mjs
+
+node:internal/errors:999
+  const err = new Error(message);
+              ^
+
+Error: Command failed: npm install --ignore-scripts --no-audit --no-fund /var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/foundry-consumer-pU4Thu/foundry-sdk-0.17.0.tgz /var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/foundry-consumer-pU4Thu/foundry-react-0.17.0.tgz react@19.3.1 typescript@5.9.3 @types/react@19.3.0
+npm warn ERESOLVE overriding peer dependency
+npm warn While resolving: undefined@undefined
+npm warn Found: react@19.3.1
+npm warn node_modules/react
+npm warn   react@"19.3.1" from the root project
+npm warn   1 more (@foundry/react)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer react@"^18.3.0 || ^19.0.0" from @foundry/react@0.17.0
+npm warn node_modules/@foundry/react
+npm warn   @foundry/react@"file:../../../../../../../var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/foundry-consumer-pU4Thu/foundry-react-0.17.0.tgz" from the root project
+npm error code ENOTFOUND
+npm error syscall getaddrinfo
+npm error errno ENOTFOUND
+npm error network request to https://registry.npmjs.org/typescript failed, reason: getaddrinfo ENOTFOUND registry.npmjs.org
+npm error network This is a problem related to network connectivity.
+npm error network In most cases you are behind a proxy or have bad network settings.
+npm error network
+npm error network If you are behind a proxy, please make sure that the 'proxy' config is set properly.  See: 'npm help config'
+npm error A complete log of this run can be found in: /tmp/foundry-phase19-npm-cache/_logs/2026-11-06T00_19_59_703Z-debug-0.log
+
+    at genericNodeError (node:internal/errors:999:15)
+    at wrappedFn (node:internal/errors:544:14)
+    at checkExecSyncError (node:child_process:942:11)
+    at execFileSync (node:child_process:978:15)
+    at run (file:///Users/log/Documents/code/csh-foundry/scripts/smoke_sdk_consumer.mjs:8:3)
+    at file:///Users/log/Documents/code/csh-foundry/scripts/smoke_sdk_consumer.mjs:33:3 {
+  status: 1,
+  signal: null,
+  output: [
+    null,
+    '',
+    'npm warn ERESOLVE overriding peer dependency\n' +
+      'npm warn While resolving: undefined@undefined\n' +
+      'npm warn Found: react@19.3.1\n' +
+      'npm warn node_modules/react\n' +
+      'npm warn   react@"19.3.1" from the root project\n' +
+      'npm warn   1 more (@foundry/react)\n' +
+      'npm warn\n' +
+      'npm warn Could not resolve dependency:\n' +
+      'npm warn peer react@"^18.3.0 || ^19.0.0" from @foundry/react@0.17.0\n' +
+      'npm warn node_modules/@foundry/react\n' +
+      'npm warn   @foundry/react@"file:../../../../../../../var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/foundry-consumer-pU4Thu/foundry-react-0.17.0.tgz" from the root project\n' +
+      'npm error code ENOTFOUND\n' +
+      'npm error syscall getaddrinfo\n' +
+      'npm error errno ENOTFOUND\n' +
+      'npm error network request to https://registry.npmjs.org/typescript failed, reason: getaddrinfo ENOTFOUND registry.npmjs.org\n' +
+      'npm error network This is a problem related to network connectivity.\n' +
+      'npm error network In most cases you are behind a proxy or have bad network settings.\n' +
+      'npm error network\n' +
+      "npm error network If you are behind a proxy, please make sure that the 'proxy' config is set properly.  See: 'npm help config'\n" +
+      'npm error A complete log of this run can be found in: /tmp/foundry-phase19-npm-cache/_logs/2026-11-06T00_19_59_703Z-debug-0.log\n'
+  ],
+  pid: 81492,
+  stdout: '',
+  stderr: 'npm warn ERESOLVE overriding peer dependency\n' +
+    'npm warn While resolving: undefined@undefined\n' +
+    'npm warn Found: react@19.3.1\n' +
+    'npm warn node_modules/react\n' +
+    'npm warn   react@"19.3.1" from the root project\n' +
+    'npm warn   1 more (@foundry/react)\n' +
+    'npm warn\n' +
+    'npm warn Could not resolve dependency:\n' +
+    'npm warn peer react@"^18.3.0 || ^19.0.0" from @foundry/react@0.17.0\n' +
+    'npm warn node_modules/@foundry/react\n' +
+    'npm warn   @foundry/react@"file:../../../../../../../var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/foundry-consumer-pU4Thu/foundry-react-0.17.0.tgz" from the root project\n' +
+    'npm error code ENOTFOUND\n' +
+    'npm error syscall getaddrinfo\n' +
+    'npm error errno ENOTFOUND\n' +
+    'npm error network request to https://registry.npmjs.org/typescript failed, reason: getaddrinfo ENOTFOUND registry.npmjs.org\n' +
+    'npm error network This is a problem related to network connectivity.\n' +
+    'npm error network In most cases you are behind a proxy or have bad network settings.\n' +
+    'npm error network\n' +
+    "npm error network If you are behind a proxy, please make sure that the 'proxy' config is set properly.  See: 'npm help config'\n" +
+    'npm error A complete log of this run can be found in: /tmp/foundry-phase19-npm-cache/_logs/2026-11-06T00_19_59_703Z-debug-0.log\n'
+}
+
+Node.js v26.7.0

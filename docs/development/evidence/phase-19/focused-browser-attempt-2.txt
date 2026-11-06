@@ -1,0 +1,38 @@
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test zz-applications.spec.ts
+
+
+Running 1 test using 1 worker
+
+(node:83711) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action (2.6s)
+
+
+  1) tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 
+
+    Error: page.evaluate: Error: /api/v1/ontologies/manufacturing/objects/Machine: 422 {"error":{"code":"invalid_request"}}
+        at eval (eval at evaluate (:370:30), <anonymous>:21:29)
+        at async <anonymous>:396:30
+        at eval (eval at evaluate (:370:30), <anonymous>:21:29)
+        at async <anonymous>:396:30
+        at api (/Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/zz-applications.spec.ts:4:15)
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/zz-applications.spec.ts:49:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 

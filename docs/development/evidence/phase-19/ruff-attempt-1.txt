@@ -1,0 +1,34 @@
+E501 Line too long (105 > 100)
+  --> services/api/migrations/versions/0025_applications.py:16:101
+   |
+14 |     op.drop_constraint("ck_resource_type", "platform_resources")
+15 |     op.drop_constraint("ck_resource_authority_kind", "platform_resources")
+16 |     kinds = "'ARTIFACT','DATASET','PIPELINE','MAPPING','MEDIA_SET','FUNCTION','AUTOMATION','APPLICATION'"
+   |                                                                                                     ^^^^^
+17 |     op.create_check_constraint(
+18 |         "ck_resource_type",
+   |
+
+E501 Line too long (101 > 100)
+   --> services/api/src/ontology_platform/applications/service.py:147:101
+    |
+145 |                 Diagnostic(
+146 |                     code="dependency_unavailable_or_incompatible",
+147 |                     message="A dependency is unavailable, unauthorized or incompatible; reselect it",
+    |                                                                                                     ^
+148 |                 )
+149 |             ]
+    |
+
+E501 Line too long (108 > 100)
+    --> services/api/src/ontology_platform/db/models.py:1423:101
+     |
+1421 |             "AND schema_version IS NULL "
+1422 |             "AND entity_id IS NULL) OR (resource_type NOT IN "
+1423 |             "('ARTIFACT','DATASET','PIPELINE','MAPPING','MEDIA_SET','FUNCTION','AUTOMATION','APPLICATION') "
+     |                                                                                                     ^^^^^^^^
+1424 |             "AND ontology_id IS NOT NULL "
+1425 |             "AND schema_version IS NOT NULL AND entity_id IS NOT NULL)",
+     |
+
+Found 3 errors.

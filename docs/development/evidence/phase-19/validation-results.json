@@ -1,0 +1,244 @@
+{
+  "local_functional_acceptance": "PASS",
+  "checks": {
+    "python-quality": {
+      "command": [
+        "uv",
+        "run",
+        "ruff",
+        "check",
+        "."
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/python-quality.txt"
+    },
+    "python-format": {
+      "command": [
+        "uv",
+        "run",
+        "ruff",
+        "format",
+        "--check",
+        "."
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/python-format.txt"
+    },
+    "mypy": {
+      "command": [
+        "uv",
+        "run",
+        "mypy"
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/mypy.txt"
+    },
+    "openapi-export": {
+      "command": [
+        "uv",
+        "run",
+        "python",
+        "scripts/export_openapi.py"
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/openapi-export.txt"
+    },
+    "generated": {
+      "command": [
+        "npm",
+        "run",
+        "check:generated"
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/generated.txt"
+    },
+    "sdk-format": {
+      "command": [
+        "npm",
+        "run",
+        "format:check"
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/sdk-format.txt"
+    },
+    "sdk-build": {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/sdk-build.txt"
+    },
+    "sdk-typecheck": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/sdk-typecheck.txt"
+    },
+    "sdk-tests": {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/sdk-tests.txt"
+    },
+    "sdk-consumer": {
+      "command": [
+        "npm",
+        "run",
+        "test:consumer"
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/sdk-consumer.txt"
+    },
+    "studio-format": {
+      "command": [
+        "npm",
+        "run",
+        "format:check",
+        "--prefix",
+        "apps/studio"
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/studio-format.txt"
+    },
+    "studio-typecheck": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck",
+        "--prefix",
+        "apps/studio"
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/studio-typecheck.txt"
+    },
+    "studio-tests": {
+      "command": [
+        "npm",
+        "test",
+        "--prefix",
+        "apps/studio"
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/studio-tests.txt"
+    },
+    "studio-build": {
+      "command": [
+        "npm",
+        "run",
+        "build",
+        "--prefix",
+        "apps/studio"
+      ],
+      "exit_code": 0,
+      "result": "PASS",
+      "evidence": "quality-complete/studio-build.txt"
+    },
+    "full-python-regression": {
+      "result": "PASS",
+      "evidence": "full-backend-final.txt",
+      "passed": 871,
+      "expected_failures": 1,
+      "skips": 0,
+      "seconds": 1224.44
+    },
+    "final-applications": {
+      "result": "PASS",
+      "evidence": "applications-action-contract-final.txt",
+      "passed": 26
+    },
+    "application-query-api-integration": {
+      "result": "PASS",
+      "evidence": "identity-query-integration-final.txt",
+      "passed": 71
+    },
+    "full-durable-browser": {
+      "result": "PASS",
+      "evidence": "browser-complete.txt",
+      "passed": 14,
+      "seconds_reported": "3.0m"
+    },
+    "final-manual-authoring-and-principal-browser": {
+      "result": "PASS",
+      "evidence": "dependency-authoring-final.txt",
+      "passed": 2
+    },
+    "final-studio-build": {
+      "result": "PASS",
+      "evidence": "studio-build-dependencies.txt"
+    },
+    "final-studio-typecheck": {
+      "result": "PASS",
+      "evidence": "studio-typecheck-dependencies.txt"
+    },
+    "final-studio-tests": {
+      "result": "PASS",
+      "evidence": "studio-tests-complete.txt",
+      "passed": 53
+    },
+    "final-sdk-tests": {
+      "result": "PASS",
+      "evidence": "sdk-tests-last.txt",
+      "passed": 63
+    },
+    "final-sdk-consumer": {
+      "result": "PASS",
+      "evidence": "sdk-consumer-last.txt"
+    },
+    "final-generated-contracts": {
+      "result": "PASS",
+      "evidence": "generated-verified.txt"
+    },
+    "reference-closure": {
+      "result": "PASS",
+      "evidence": "openapi-reference-final.txt",
+      "passed": 1
+    },
+    "container-build": {
+      "result": "NOT RUN",
+      "attempt_result": "INTERRUPTED",
+      "evidence": "studio-container-build.txt",
+      "reason": "Pinned Node base image was not cached; registry metadata resolution stalled and was cancelled before build steps."
+    },
+    "shared-database": {
+      "result": "PASS",
+      "evidence": "shared-database-final.txt",
+      "baseline": "0024_pipeline_graphs",
+      "final": "0024_pipeline_graphs"
+    },
+    "production-certification": {
+      "result": "NOT RUN",
+      "status": "BLOCKED",
+      "reason": "Outside Phase 19 authorization; PLANS.md section 23B remains mandatory."
+    },
+    "final-studio-format": {
+      "result": "PASS",
+      "evidence": "studio-format-final-inspector.txt"
+    },
+    "browser-bundle-inspection": {
+      "result": "PASS",
+      "evidence": "browser-bundle-inspection.json",
+      "scope": "Targeted check only; not production certification"
+    }
+  },
+  "note": "Full regression collected 872 cases before three additional dedicated application checks; the final 26-case application suite and focused query/API/browser suites cover subsequent changes. Counts overlap and must not be summed."
+}

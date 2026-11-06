@@ -1412,15 +1412,16 @@ class Resource(Base):
         CheckConstraint(
             "resource_type IN ('ONTOLOGY_OBJECT_TYPE','ONTOLOGY_LINK_TYPE',"
             "'ONTOLOGY_ACTION','ONTOLOGY_VERSION','ARTIFACT','DATASET','PIPELINE','MAPPING',"
-            "'MEDIA_SET','FUNCTION','AUTOMATION')",
+            "'MEDIA_SET','FUNCTION','AUTOMATION','APPLICATION')",
             name="ck_resource_type",
         ),
         CheckConstraint(
             "(resource_type IN ('ARTIFACT','DATASET','PIPELINE','MAPPING',"
-            "'MEDIA_SET','FUNCTION','AUTOMATION') AND ontology_id IS NULL "
+            "'MEDIA_SET','FUNCTION','AUTOMATION','APPLICATION') AND ontology_id IS NULL "
             "AND schema_version IS NULL "
             "AND entity_id IS NULL) OR (resource_type NOT IN "
-            "('ARTIFACT','DATASET','PIPELINE','MAPPING','MEDIA_SET','FUNCTION','AUTOMATION') "
+            "('ARTIFACT','DATASET','PIPELINE','MAPPING','MEDIA_SET',"
+            "'FUNCTION','AUTOMATION','APPLICATION') "
             "AND ontology_id IS NOT NULL "
             "AND schema_version IS NOT NULL AND entity_id IS NOT NULL)",
             name="ck_resource_authority_kind",
@@ -1975,4 +1976,49 @@ class AutomationReceipt(Base):
         ),
         UniqueConstraint("tenant_id", "automation_id", "dedup_key", name="uq_automation_trigger"),
         CheckConstraint("(job_id IS NULL) <> (error IS NULL)", name="ck_automation_outcome"),
+    )
+
+
+class ApplicationDraft(Base):
+    __tablename__ = "application_drafts"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    application_id: Mapped[UUID] = mapped_column(primary_key=True)
+    actor_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    revision: Mapped[int]
+    document: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "application_id"],
+            ["platform_resources.tenant_id", "platform_resources.id"],
+        ),
+        CheckConstraint("revision > 0", name="ck_application_draft_revision"),
+        CheckConstraint(
+            "octet_length(document::text) <= 131072", name="ck_application_draft_bytes"
+        ),
+    )
+
+
+class ApplicationVersion(Base):
+    __tablename__ = "application_versions"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    application_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    sequence: Mapped[int]
+    format_version: Mapped[int]
+    document: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    digest: Mapped[str] = mapped_column(String(64))
+    manifest: Mapped[list[dict[str, JsonValue]]] = mapped_column(JSONB)
+    created_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "application_id"],
+            ["platform_resources.tenant_id", "platform_resources.id"],
+        ),
+        UniqueConstraint("tenant_id", "application_id", "sequence", name="uq_application_sequence"),
+        UniqueConstraint("tenant_id", "application_id", "digest", name="uq_application_digest"),
+        CheckConstraint("sequence > 0 AND format_version = 1", name="ck_application_version"),
+        CheckConstraint(
+            "octet_length(document::text) <= 131072", name="ck_application_version_bytes"
+        ),
     )

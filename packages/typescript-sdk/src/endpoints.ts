@@ -35,6 +35,9 @@ export interface EndpointInput {
   "objects.query": Input<
     operations["query_objects_api_v1_ontologies__ontology_id__objects__type_id__query_post"]
   >;
+  "objects.aggregate": Input<
+    operations["aggregate_api_v1_ontologies__ontology_id__aggregate_post"]
+  >;
   "objects.get": Input<
     operations["get_object_api_v1_ontologies__ontology_id__objects__type_id__get"]
   >;
@@ -162,6 +165,42 @@ export interface EndpointInput {
   "pipelines.visualize": Input<
     operations["graph_visualize_api_v1_pipelines__pipeline_id__definitions__definition_id__visualize_post"]
   >;
+  "applications.create": Input<
+    operations["create_api_v1_projects__project_id__applications_post"]
+  >;
+  "applications.get": Input<
+    operations["get_api_v1_applications__application_id__get"]
+  >;
+  "applications.draft": Input<
+    operations["draft_api_v1_applications__application_id__draft_get"]
+  >;
+  "applications.saveDraft": Input<
+    operations["save_api_v1_applications__application_id__draft_put"]
+  >;
+  "applications.validate": Input<
+    operations["validate_api_v1_applications__application_id__validate_post"]
+  >;
+  "applications.publish": Input<
+    operations["publish_api_v1_applications__application_id__versions_post"]
+  >;
+  "applications.versions": Input<
+    operations["versions_api_v1_applications__application_id__versions_get"]
+  >;
+  "applications.version": Input<
+    operations["version_api_v1_applications__application_id__versions__version_id__get"]
+  >;
+  "applications.runtime": Input<
+    operations["runtime_api_v1_applications__application_id__versions__version_id__runtime_get"]
+  >;
+  "applications.query": Input<
+    operations["query_api_v1_applications__application_id__versions__version_id__query_post"]
+  >;
+  "applications.preview": Input<
+    operations["preview_api_v1_applications__application_id__versions__version_id__actions__binding_id__preview_post"]
+  >;
+  "applications.execute": Input<
+    operations["execute_api_v1_applications__application_id__versions__version_id__actions__binding_id__execute_post"]
+  >;
   "functions.create": Input<
     operations["create_api_v1_projects__project_id__functions_post"]
   >;
@@ -264,6 +303,9 @@ export interface EndpointOutput {
   >;
   "objects.query": Output<
     operations["query_objects_api_v1_ontologies__ontology_id__objects__type_id__query_post"]
+  >;
+  "objects.aggregate": Output<
+    operations["aggregate_api_v1_ontologies__ontology_id__aggregate_post"]
   >;
   "objects.get": Output<
     operations["get_object_api_v1_ontologies__ontology_id__objects__type_id__get"]
@@ -391,6 +433,42 @@ export interface EndpointOutput {
   >;
   "pipelines.visualize": Output<
     operations["graph_visualize_api_v1_pipelines__pipeline_id__definitions__definition_id__visualize_post"]
+  >;
+  "applications.create": Output<
+    operations["create_api_v1_projects__project_id__applications_post"]
+  >;
+  "applications.get": Output<
+    operations["get_api_v1_applications__application_id__get"]
+  >;
+  "applications.draft": Output<
+    operations["draft_api_v1_applications__application_id__draft_get"]
+  >;
+  "applications.saveDraft": Output<
+    operations["save_api_v1_applications__application_id__draft_put"]
+  >;
+  "applications.validate": Output<
+    operations["validate_api_v1_applications__application_id__validate_post"]
+  >;
+  "applications.publish": Output<
+    operations["publish_api_v1_applications__application_id__versions_post"]
+  >;
+  "applications.versions": Output<
+    operations["versions_api_v1_applications__application_id__versions_get"]
+  >;
+  "applications.version": Output<
+    operations["version_api_v1_applications__application_id__versions__version_id__get"]
+  >;
+  "applications.runtime": Output<
+    operations["runtime_api_v1_applications__application_id__versions__version_id__runtime_get"]
+  >;
+  "applications.query": Output<
+    operations["query_api_v1_applications__application_id__versions__version_id__query_post"]
+  >;
+  "applications.preview": Output<
+    operations["preview_api_v1_applications__application_id__versions__version_id__actions__binding_id__preview_post"]
+  >;
+  "applications.execute": Output<
+    operations["execute_api_v1_applications__application_id__versions__version_id__actions__binding_id__execute_post"]
   >;
   "functions.create": Output<
     operations["create_api_v1_projects__project_id__functions_post"]
@@ -523,6 +601,17 @@ export function endpoints(send: Transport) {
         send(
           "POST",
           "/api/v1/ontologies/{ontology_id}/objects/{type_id}/query",
+          input,
+          true,
+          options,
+        ),
+      aggregate: (
+        input: EndpointInput["objects.aggregate"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["objects.aggregate"]> =>
+        send(
+          "POST",
+          "/api/v1/ontologies/{ontology_id}/aggregate",
           input,
           true,
           options,
@@ -996,6 +1085,140 @@ export function endpoints(send: Transport) {
           "/api/v1/pipelines/{pipeline_id}/definitions/{definition_id}/visualize",
           input,
           true,
+          options,
+        ),
+    },
+    applications: {
+      create: (
+        input: EndpointInput["applications.create"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["applications.create"]> =>
+        send(
+          "POST",
+          "/api/v1/projects/{project_id}/applications",
+          input,
+          false,
+          options,
+        ),
+      get: (
+        input: EndpointInput["applications.get"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["applications.get"]> =>
+        send(
+          "GET",
+          "/api/v1/applications/{application_id}",
+          input,
+          true,
+          options,
+        ),
+      draft: (
+        input: EndpointInput["applications.draft"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["applications.draft"]> =>
+        send(
+          "GET",
+          "/api/v1/applications/{application_id}/draft",
+          input,
+          true,
+          options,
+        ),
+      saveDraft: (
+        input: EndpointInput["applications.saveDraft"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["applications.saveDraft"]> =>
+        send(
+          "PUT",
+          "/api/v1/applications/{application_id}/draft",
+          input,
+          false,
+          options,
+        ),
+      validate: (
+        input: EndpointInput["applications.validate"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["applications.validate"]> =>
+        send(
+          "POST",
+          "/api/v1/applications/{application_id}/validate",
+          input,
+          false,
+          options,
+        ),
+      publish: (
+        input: EndpointInput["applications.publish"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["applications.publish"]> =>
+        send(
+          "POST",
+          "/api/v1/applications/{application_id}/versions",
+          input,
+          false,
+          options,
+        ),
+      versions: (
+        input: EndpointInput["applications.versions"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["applications.versions"]> =>
+        send(
+          "GET",
+          "/api/v1/applications/{application_id}/versions",
+          input,
+          true,
+          options,
+        ),
+      version: (
+        input: EndpointInput["applications.version"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["applications.version"]> =>
+        send(
+          "GET",
+          "/api/v1/applications/{application_id}/versions/{version_id}",
+          input,
+          true,
+          options,
+        ),
+      runtime: (
+        input: EndpointInput["applications.runtime"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["applications.runtime"]> =>
+        send(
+          "GET",
+          "/api/v1/applications/{application_id}/versions/{version_id}/runtime",
+          input,
+          true,
+          options,
+        ),
+      query: (
+        input: EndpointInput["applications.query"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["applications.query"]> =>
+        send(
+          "POST",
+          "/api/v1/applications/{application_id}/versions/{version_id}/query",
+          input,
+          true,
+          options,
+        ),
+      preview: (
+        input: EndpointInput["applications.preview"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["applications.preview"]> =>
+        send(
+          "POST",
+          "/api/v1/applications/{application_id}/versions/{version_id}/actions/{binding_id}/preview",
+          input,
+          false,
+          options,
+        ),
+      execute: (
+        input: EndpointInput["applications.execute"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["applications.execute"]> =>
+        send(
+          "POST",
+          "/api/v1/applications/{application_id}/versions/{version_id}/actions/{binding_id}/execute",
+          input,
+          false,
           options,
         ),
     },

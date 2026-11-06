@@ -10,16 +10,18 @@ class ActionPayloadLimit:
         app: ASGIApp,
         *,
         paths: tuple[str, ...] = ("/actions/",),
+        methods: tuple[str, ...] = ("POST",),
         code: str = "action_payload_too_large",
         message: str = "Action payload exceeds 64 KiB",
     ):
         self.app = app
         self.paths, self.code, self.message = paths, code, message
+        self.methods = methods
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if (
             scope["type"] != "http"
-            or scope.get("method") != "POST"
+            or scope.get("method") not in self.methods
             or not any(path in scope.get("path", "") for path in self.paths)
         ):
             await self.app(scope, receive, send)

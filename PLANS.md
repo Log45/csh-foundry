@@ -3669,3 +3669,12 @@ boundaries. Scalar Phase 17 Functions are authoring-only references and cannot e
 transformations. No second pipeline engine, arbitrary code, Code Workspace, application hosting,
 Spark/Rust work, Phase 19 or production certification is authorized. Section 23B remains BLOCKED.
 Local acceptance must be established in phase-18-report.md.
+
+## Phase 19 authorization addendum — 2026-11-05
+
+The explicit Phase 19 request authorizes milestone I only: governed declarative applications,
+immutable publication, built-in authenticated runtime, structured visual editor and local validation.
+ADR 0044 records reuse of Project governance, canonical query/action services, SDK and BFF. Minimum
+visual application registration is included; external OAuth registration and standalone Action Builder
+expansion remain deferred. No Phase 20, workspace, arbitrary code, hosting, Spark/Rust or §23B work.
+Production remains BLOCKED. Local acceptance requires executed evidence in phase-19-report.md.

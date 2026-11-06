@@ -1,0 +1,51 @@
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test zz-applications.spec.ts
+
+
+Running 1 test using 1 worker
+
+(node:83092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action (6.5s)
+
+
+  1) tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('PUBLISHED', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('PUBLISHED', { exact: true }) with timeout 5000ms
+      - waiting for getByText('PUBLISHED', { exact: true })
+
+
+      39 |       .getByRole("button", { name: "Publish schema", exact: true })
+      40 |       .click();
+    > 41 |     await expect(page.getByText("PUBLISHED", { exact: true })).toBeVisible();
+         |                                                                ^
+      42 |     await page
+      43 |       .getByRole("button", { name: "Activate schema", exact: true })
+      44 |       .click();
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/zz-applications.spec.ts:41:64
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 

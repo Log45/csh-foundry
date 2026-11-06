@@ -1,0 +1,47 @@
+
+> @foundry/studio@0.8.0 test:e2e
+> playwright test zz-applications.spec.ts
+
+
+Running 1 test using 1 worker
+
+(node:84110) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action (3.3s)
+
+
+  1) tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 
+
+    Error: locator.click: Error: strict mode violation: getByText('Create application', { exact: true }) resolved to 2 elements:
+        1) <summary>Create application</summary> aka locator('summary').filter({ hasText: 'Create application' })
+        2) <button>Create application</button> aka locator('button').filter({ hasText: 'Create application' })
+
+    Call log:
+      - waiting for getByText('Create application', { exact: true })
+
+
+      81 |     },
+      82 |   );
+    > 83 |   await page.getByText("Create application", { exact: true }).click();
+         |                                                               ^
+      84 |   await page
+      85 |     .getByLabel("Application name", { exact: true })
+      86 |     .fill("Manufacturing Operations Dashboard");
+        at /Users/log/Documents/code/csh-foundry/apps/studio/tests/e2e/zz-applications.spec.ts:83:63
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/zz-applications-visual-man-0df54-an-audited-canonical-action/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/e2e/zz-applications.spec.ts:28:1 › visual manufacturing application publishes and invokes an audited canonical action 

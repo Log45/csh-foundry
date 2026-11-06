@@ -1,0 +1,31 @@
+.......s......F                                                          [100%]
+=================================== FAILURES ===================================
+_______ test_existing_public_openapi_component_identities_are_preserved ________
+
+    def test_existing_public_openapi_component_identities_are_preserved():
+        from ontology_platform.main import create_app
+    
+        schemas = create_app().openapi()["components"]["schemas"]
+>       assert {
+            "QueryRequest",
+            "AggregateRequest",
+            "All",
+            "AnyOf",
+            "Negation",
+            "TraversalStep",
+            "Value",
+        } <= schemas.keys()
+E       AssertionError: assert {'AggregateRequest', 'All', 'AnyOf', 'Negation', 'QueryRequest', 'TraversalStep', ...} <= dict_keys(['ActionBinding', 'ActionOperation', 'ActionPrecondition', 'ActionRequest', 'ActionResult', 'ActionTypeDefin...ctView', 'ontology_platform__semantic__contracts__ArtifactView', 'ontology_platform__semantic__contracts__Diagnostic'])
+E        +  where dict_keys(['ActionBinding', 'ActionOperation', 'ActionPrecondition', 'ActionRequest', 'ActionResult', 'ActionTypeDefin...ctView', 'ontology_platform__semantic__contracts__ArtifactView', 'ontology_platform__semantic__contracts__Diagnostic']) = <built-in method keys of dict object at 0x12788b8c0>()
+E        +    where <built-in method keys of dict object at 0x12788b8c0> = {'ActionBinding': {'additionalProperties': False, 'properties': {'id': {'minLength': 1, 'title': 'Id', 'type': 'string... 32, 'propertyNames': {'minLength': 1}, 'title': 'Parameters', ...}}, 'title': 'ActionRequest', 'type': 'object'}, ...}.keys
+
+services/api/tests/test_applications.py:443: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/log/Documents/code/csh-foundry/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED services/api/tests/test_applications.py::test_existing_public_openapi_component_identities_are_preserved
+1 failed, 13 passed, 1 skipped, 9 deselected, 1 warning in 2.61s

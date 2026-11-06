@@ -1,0 +1,13 @@
+
+> test
+> vitest run
+
+
+ RUN  v5.0.5 /Users/log/Documents/code/csh-foundry
+
+
+ Test Files  3 passed (3)
+      Tests  63 passed (63)
+   Start at  19:19:21
+   Duration  4.71s (tests 70%, environment 20%, transform 6%, import 4%)
+

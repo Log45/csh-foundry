@@ -31,7 +31,12 @@ from ontology_platform.metadata.service import RegistryService
 from ontology_platform.security.admin import SecurityAdministration
 from ontology_platform.security.bootstrap import bootstrap
 from ontology_platform.security.browser import BrowserStore
-from ontology_platform.security.contracts import AssignmentInput, DelegationInput, IdentityInput
+from ontology_platform.security.contracts import (
+    AssignmentInput,
+    DelegationInput,
+    IdentityInput,
+    RoleInput,
+)
 from ontology_platform.security.identity import resolve
 from ontology_platform.security.oidc import OIDCVerifier, Provider
 from ontology_platform.security.service import PlatformAuthorizer
@@ -108,6 +113,8 @@ def main():
             or params.get("code_challenge_method") != "S256"
         ):
             return {"error": "invalid_client"}
+        if params.get("login_hint", "operator") not in {"operator", "application-viewer"}:
+            return {"error": "invalid_subject"}
         code = token_urlsafe(32)
         codes[code] = params
         return RedirectResponse(
@@ -139,7 +146,12 @@ def main():
 
             return JSONResponse({"error": "invalid_grant"}, status_code=400)
         now = int(time.time())
-        common = {"iss": ISSUER, "sub": "operator", "iat": now, "exp": now + 1800}
+        common = {
+            "iss": ISSUER,
+            "sub": login.get("login_hint", "operator"),
+            "iat": now,
+            "exp": now + 1800,
+        }
         return {
             "token_type": "Bearer",
             "id_token": jwt.encode(
@@ -220,6 +232,15 @@ def main():
             )
         catalog = SourceCatalog(bindings)
         admin = SecurityAdministration(auth)
+        viewer_id = admin.identity(p, IdentityInput(issuer=ISSUER, subject="application-viewer"))
+        admin.role(
+            p,
+            RoleInput(
+                id="application-viewer",
+                permissions=("tenant:read", "ontology:read", "schema:read", "project:read"),
+            ),
+        )
+        admin.assign(p, AssignmentInput(principal_id=viewer_id, role_id="application-viewer"))
         workers = {}
         for kind in ["ingestion", "semantic"]:
             wid = admin.identity(

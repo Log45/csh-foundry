@@ -96,7 +96,14 @@ class ResourceView(Model):
     resource_type: (
         Kind
         | Literal[
-            "ARTIFACT", "DATASET", "PIPELINE", "MAPPING", "MEDIA_SET", "FUNCTION", "AUTOMATION"
+            "ARTIFACT",
+            "DATASET",
+            "PIPELINE",
+            "MAPPING",
+            "MEDIA_SET",
+            "FUNCTION",
+            "AUTOMATION",
+            "APPLICATION",
         ]
     )
     ontology_id: str | None

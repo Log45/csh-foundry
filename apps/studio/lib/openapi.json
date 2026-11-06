@@ -2938,6 +2938,760 @@
         }
       }
     },
+    "/api/v1/projects/{project_id}/applications": {
+      "post": {
+        "tags": [
+          "applications"
+        ],
+        "summary": "Create",
+        "operationId": "create_api_v1_projects__project_id__applications_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateArtifact"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/applications/{application_id}": {
+      "get": {
+        "tags": [
+          "applications"
+        ],
+        "summary": "Get",
+        "operationId": "get_api_v1_applications__application_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Application Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/applications/{application_id}/draft": {
+      "get": {
+        "tags": [
+          "applications"
+        ],
+        "summary": "Draft",
+        "operationId": "draft_api_v1_applications__application_id__draft_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Application Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ApplicationDraftView"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Draft Api V1 Applications  Application Id  Draft Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "applications"
+        ],
+        "summary": "Save",
+        "operationId": "save_api_v1_applications__application_id__draft_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Application Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveApplicationDraft"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationDraftView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/applications/{application_id}/validate": {
+      "post": {
+        "tags": [
+          "applications"
+        ],
+        "summary": "Validate",
+        "operationId": "validate_api_v1_applications__application_id__validate_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Application Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplicationDocument-Input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationValidation"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/applications/{application_id}/versions": {
+      "post": {
+        "tags": [
+          "applications"
+        ],
+        "summary": "Publish",
+        "operationId": "publish_api_v1_applications__application_id__versions_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Application Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishApplication"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishedApplicationVersion"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "applications"
+        ],
+        "summary": "Versions",
+        "operationId": "versions_api_v1_applications__application_id__versions_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Application Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublishedApplicationVersion"
+                  },
+                  "title": "Response Versions Api V1 Applications  Application Id  Versions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/applications/{application_id}/versions/{version_id}": {
+      "get": {
+        "tags": [
+          "applications"
+        ],
+        "summary": "Version",
+        "operationId": "version_api_v1_applications__application_id__versions__version_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Application Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishedApplicationVersion"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/applications/{application_id}/versions/{version_id}/runtime": {
+      "get": {
+        "tags": [
+          "applications"
+        ],
+        "summary": "Runtime",
+        "operationId": "runtime_api_v1_applications__application_id__versions__version_id__runtime_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Application Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishedApplicationVersion"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/applications/{application_id}/versions/{version_id}/query": {
+      "post": {
+        "tags": [
+          "applications"
+        ],
+        "summary": "Query",
+        "operationId": "query_api_v1_applications__application_id__versions__version_id__query_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Application Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplicationRuntimeQuery"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/QueryPage"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AggregateResult"
+                    }
+                  ],
+                  "title": "Response Query Api V1 Applications  Application Id  Versions  Version Id  Query Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/applications/{application_id}/versions/{version_id}/actions/{binding_id}/preview": {
+      "post": {
+        "tags": [
+          "applications"
+        ],
+        "summary": "Preview",
+        "operationId": "preview_api_v1_applications__application_id__versions__version_id__actions__binding_id__preview_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Application Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          },
+          {
+            "name": "binding_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Binding Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExecuteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActionResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/applications/{application_id}/versions/{version_id}/actions/{binding_id}/execute": {
+      "post": {
+        "tags": [
+          "applications"
+        ],
+        "summary": "Execute",
+        "operationId": "execute_api_v1_applications__application_id__versions__version_id__actions__binding_id__execute_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Application Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          },
+          {
+            "name": "binding_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Binding Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExecuteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActionResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/projects/{project_id}/artifacts": {
       "post": {
         "tags": [
@@ -12903,6 +13657,1746 @@
         ],
         "title": "AnyOf"
       },
+      "ApplicationActionBinding-Input": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Id"
+          },
+          "dependency": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Dependency"
+          },
+          "action_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Action Id"
+          },
+          "parameters": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ApplicationValue-Input"
+            },
+            "type": "object",
+            "maxProperties": 32,
+            "title": "Parameters"
+          },
+          "parameter_types": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "maxProperties": 32,
+            "title": "Parameter Types"
+          },
+          "confirm": {
+            "type": "boolean",
+            "title": "Confirm",
+            "default": true
+          },
+          "refresh": {
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Refresh"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "dependency",
+          "action_id"
+        ],
+        "title": "ApplicationActionBinding"
+      },
+      "ApplicationActionBinding-Output": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Id"
+          },
+          "dependency": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Dependency"
+          },
+          "action_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Action Id"
+          },
+          "parameters": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ApplicationValue-Output"
+            },
+            "type": "object",
+            "maxProperties": 32,
+            "title": "Parameters"
+          },
+          "parameter_types": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "maxProperties": 32,
+            "title": "Parameter Types"
+          },
+          "confirm": {
+            "type": "boolean",
+            "title": "Confirm",
+            "default": true
+          },
+          "refresh": {
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Refresh"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "dependency",
+          "action_id",
+          "parameters",
+          "parameter_types",
+          "confirm",
+          "refresh"
+        ],
+        "title": "ApplicationActionBinding"
+      },
+      "ApplicationDependency-Input": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Id"
+          },
+          "resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Resource Id"
+          },
+          "ontology_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Ontology Id"
+          },
+          "schema_version": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Schema Version"
+          },
+          "policy": {
+            "type": "string",
+            "const": "exact_active",
+            "title": "Policy",
+            "default": "exact_active"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "resource_id",
+          "ontology_id",
+          "schema_version"
+        ],
+        "title": "ApplicationDependency"
+      },
+      "ApplicationDependency-Output": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Id"
+          },
+          "resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Resource Id"
+          },
+          "ontology_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Ontology Id"
+          },
+          "schema_version": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Schema Version"
+          },
+          "policy": {
+            "type": "string",
+            "const": "exact_active",
+            "title": "Policy",
+            "default": "exact_active"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "resource_id",
+          "ontology_id",
+          "schema_version",
+          "policy"
+        ],
+        "title": "ApplicationDependency"
+      },
+      "ApplicationDiagnostic": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "node": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Node"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "node"
+        ],
+        "title": "ApplicationDiagnostic"
+      },
+      "ApplicationDocument-Input": {
+        "properties": {
+          "format_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Format Version",
+            "default": 1
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Description",
+            "default": ""
+          },
+          "home": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Home"
+          },
+          "pages": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationPage-Input"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Pages"
+          },
+          "states": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationState-Input"
+            },
+            "type": "array",
+            "maxItems": 64,
+            "title": "States"
+          },
+          "dependencies": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationDependency-Input"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Dependencies"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationSource-Input"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Sources"
+          },
+          "actions": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationActionBinding-Input"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Actions"
+          },
+          "interactions": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationInteraction"
+            },
+            "type": "array",
+            "maxItems": 128,
+            "title": "Interactions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title",
+          "home"
+        ],
+        "title": "ApplicationDocument"
+      },
+      "ApplicationDocument-Output": {
+        "properties": {
+          "format_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Format Version",
+            "default": 1
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Description",
+            "default": ""
+          },
+          "home": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Home"
+          },
+          "pages": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationPage-Output"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Pages"
+          },
+          "states": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationState-Output"
+            },
+            "type": "array",
+            "maxItems": 64,
+            "title": "States"
+          },
+          "dependencies": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationDependency-Output"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Dependencies"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationSource-Output"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Sources"
+          },
+          "actions": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationActionBinding-Output"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Actions"
+          },
+          "interactions": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationInteraction"
+            },
+            "type": "array",
+            "maxItems": 128,
+            "title": "Interactions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "format_version",
+          "title",
+          "description",
+          "home",
+          "pages",
+          "states",
+          "dependencies",
+          "sources",
+          "actions",
+          "interactions"
+        ],
+        "title": "ApplicationDocument"
+      },
+      "ApplicationDraftView": {
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "document": {
+            "$ref": "#/components/schemas/ApplicationDocument-Output"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "revision",
+          "document"
+        ],
+        "title": "ApplicationDraftView"
+      },
+      "ApplicationInteraction": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Id"
+          },
+          "widget": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Widget"
+          },
+          "event": {
+            "type": "string",
+            "enum": [
+              "select",
+              "change",
+              "click"
+            ],
+            "title": "Event"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "set",
+              "navigate",
+              "refresh"
+            ],
+            "title": "Kind"
+          },
+          "target": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Target"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "widget",
+          "event",
+          "kind",
+          "target"
+        ],
+        "title": "ApplicationInteraction"
+      },
+      "ApplicationPage-Input": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Description",
+            "default": ""
+          },
+          "parameters": {
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Parameters"
+          },
+          "widgets": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationWidget-Input"
+            },
+            "type": "array",
+            "maxItems": 64,
+            "title": "Widgets"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "ApplicationPage"
+      },
+      "ApplicationPage-Output": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Description",
+            "default": ""
+          },
+          "parameters": {
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Parameters"
+          },
+          "widgets": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationWidget-Output"
+            },
+            "type": "array",
+            "maxItems": 64,
+            "title": "Widgets"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "description",
+          "parameters",
+          "widgets"
+        ],
+        "title": "ApplicationPage"
+      },
+      "ApplicationRuntimeQuery": {
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Source Id"
+          },
+          "state": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "maxProperties": 64,
+            "title": "State"
+          },
+          "order_by": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Sort"
+                },
+                "type": "array",
+                "maxItems": 4
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Order By"
+          },
+          "cursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 16384
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cursor"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source_id"
+        ],
+        "title": "ApplicationRuntimeQuery"
+      },
+      "ApplicationSource-Input": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Id"
+          },
+          "dependency": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Dependency"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "query",
+              "aggregate"
+            ],
+            "title": "Kind",
+            "default": "query"
+          },
+          "query": {
+            "$ref": "#/components/schemas/ApplicationSourceQuery"
+          },
+          "aggregate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ApplicationSourceAggregate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "filters": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ApplicationValue-Input"
+            },
+            "type": "object",
+            "maxProperties": 16,
+            "title": "Filters"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "dependency",
+          "query"
+        ],
+        "title": "ApplicationSource"
+      },
+      "ApplicationSource-Output": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Id"
+          },
+          "dependency": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Dependency"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "query",
+              "aggregate"
+            ],
+            "title": "Kind",
+            "default": "query"
+          },
+          "query": {
+            "$ref": "#/components/schemas/ApplicationSourceQuery"
+          },
+          "aggregate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ApplicationSourceAggregate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "filters": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ApplicationValue-Output"
+            },
+            "type": "object",
+            "maxProperties": 16,
+            "title": "Filters"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "dependency",
+          "kind",
+          "query",
+          "aggregate",
+          "filters"
+        ],
+        "title": "ApplicationSource"
+      },
+      "ApplicationSourceAggregate": {
+        "properties": {
+          "object_type": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Object Type"
+          },
+          "filter": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Predicate"
+              },
+              {
+                "$ref": "#/components/schemas/All"
+              },
+              {
+                "$ref": "#/components/schemas/AnyOf"
+              },
+              {
+                "$ref": "#/components/schemas/Negation"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filter"
+          },
+          "traverse": {
+            "items": {
+              "$ref": "#/components/schemas/TraversalStep"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "title": "Traverse",
+            "default": []
+          },
+          "result_filter": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Predicate"
+              },
+              {
+                "$ref": "#/components/schemas/All"
+              },
+              {
+                "$ref": "#/components/schemas/AnyOf"
+              },
+              {
+                "$ref": "#/components/schemas/Negation"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result Filter"
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/Metric"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 1,
+            "title": "Metrics"
+          },
+          "group_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Group By"
+          },
+          "max_groups": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Max Groups",
+            "default": 100
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "object_type",
+          "metrics"
+        ],
+        "title": "ApplicationSourceAggregate",
+        "description": "Stored aggregate configuration.",
+        "examples": [
+          {
+            "group_by": "operationalStatus",
+            "metrics": [
+              {
+                "name": "machines",
+                "operator": "count"
+              }
+            ],
+            "object_type": "Machine"
+          }
+        ]
+      },
+      "ApplicationSourceQuery": {
+        "properties": {
+          "object_type": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Object Type"
+          },
+          "filter": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Predicate"
+              },
+              {
+                "$ref": "#/components/schemas/All"
+              },
+              {
+                "$ref": "#/components/schemas/AnyOf"
+              },
+              {
+                "$ref": "#/components/schemas/Negation"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filter"
+          },
+          "traverse": {
+            "items": {
+              "$ref": "#/components/schemas/TraversalStep"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "title": "Traverse",
+            "default": []
+          },
+          "result_filter": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Predicate"
+              },
+              {
+                "$ref": "#/components/schemas/All"
+              },
+              {
+                "$ref": "#/components/schemas/AnyOf"
+              },
+              {
+                "$ref": "#/components/schemas/Negation"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result Filter"
+          },
+          "pagination": {
+            "type": "string",
+            "enum": [
+              "cursor",
+              "offset"
+            ],
+            "title": "Pagination",
+            "default": "cursor"
+          },
+          "order_by": {
+            "items": {
+              "$ref": "#/components/schemas/Sort"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "title": "Order By",
+            "default": []
+          },
+          "select": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "maxLength": 200,
+                  "minLength": 1
+                },
+                "type": "array",
+                "maxItems": 32
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Select"
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 200.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "default": 50
+          },
+          "offset": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Offset",
+            "default": 0
+          },
+          "cursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 16384,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cursor"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "object_type"
+        ],
+        "title": "ApplicationSourceQuery",
+        "description": "Stored request configuration; preserve canonical query component identities.",
+        "examples": [
+          {
+            "filter": {
+              "and": [
+                {
+                  "operator": "eq",
+                  "property": "operationalStatus",
+                  "value": "RUNNING"
+                },
+                {
+                  "operator": "gt",
+                  "property": "temperatureCelsius",
+                  "value": "80"
+                }
+              ]
+            },
+            "limit": 50,
+            "object_type": "Machine",
+            "order_by": [
+              {
+                "direction": "desc",
+                "property": "temperatureCelsius"
+              }
+            ],
+            "select": [
+              "machineId",
+              "machineName"
+            ]
+          }
+        ]
+      },
+      "ApplicationState-Input": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Id"
+          },
+          "data_type": {
+            "type": "string",
+            "enum": [
+              "string",
+              "integer",
+              "float",
+              "boolean",
+              "date",
+              "selection"
+            ],
+            "title": "Data Type",
+            "default": "string"
+          },
+          "initial": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Initial"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "ApplicationState"
+      },
+      "ApplicationState-Output": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Id"
+          },
+          "data_type": {
+            "type": "string",
+            "enum": [
+              "string",
+              "integer",
+              "float",
+              "boolean",
+              "date",
+              "selection"
+            ],
+            "title": "Data Type",
+            "default": "string"
+          },
+          "initial": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Initial"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "data_type",
+          "initial"
+        ],
+        "title": "ApplicationState"
+      },
+      "ApplicationValidation": {
+        "properties": {
+          "valid": {
+            "type": "boolean",
+            "title": "Valid"
+          },
+          "diagnostics": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationDiagnostic"
+            },
+            "type": "array",
+            "maxItems": 128,
+            "title": "Diagnostics"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "valid",
+          "diagnostics"
+        ],
+        "title": "ApplicationValidation"
+      },
+      "ApplicationValue-Input": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "literal",
+              "state",
+              "selected"
+            ],
+            "title": "Kind",
+            "default": "literal"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          },
+          "property": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Property"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ApplicationValue"
+      },
+      "ApplicationValue-Output": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "literal",
+              "state",
+              "selected"
+            ],
+            "title": "Kind",
+            "default": "literal"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          },
+          "property": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Property"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind",
+          "value",
+          "state",
+          "property"
+        ],
+        "title": "ApplicationValue"
+      },
+      "ApplicationVisibility-Input": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "State"
+          },
+          "operator": {
+            "type": "string",
+            "enum": [
+              "equals",
+              "not_empty"
+            ],
+            "title": "Operator",
+            "default": "not_empty"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "state"
+        ],
+        "title": "ApplicationVisibility"
+      },
+      "ApplicationVisibility-Output": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "State"
+          },
+          "operator": {
+            "type": "string",
+            "enum": [
+              "equals",
+              "not_empty"
+            ],
+            "title": "Operator",
+            "default": "not_empty"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "state",
+          "operator",
+          "value"
+        ],
+        "title": "ApplicationVisibility"
+      },
+      "ApplicationWidget-Input": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "heading",
+              "text",
+              "label",
+              "metric",
+              "property",
+              "detail",
+              "table",
+              "list",
+              "status",
+              "navigation",
+              "section",
+              "text_input",
+              "number_input",
+              "checkbox",
+              "select",
+              "date_input",
+              "form",
+              "action"
+            ],
+            "title": "Kind"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 200,
+            "title": "Label",
+            "default": ""
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Text",
+            "default": ""
+          },
+          "parent": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent"
+          },
+          "layout": {
+            "type": "string",
+            "enum": [
+              "row",
+              "column",
+              "grid"
+            ],
+            "title": "Layout",
+            "default": "column"
+          },
+          "spacing": {
+            "type": "string",
+            "enum": [
+              "compact",
+              "normal",
+              "large"
+            ],
+            "title": "Spacing",
+            "default": "normal"
+          },
+          "align": {
+            "type": "string",
+            "enum": [
+              "start",
+              "center",
+              "stretch"
+            ],
+            "title": "Align",
+            "default": "stretch"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          },
+          "property": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Property"
+          },
+          "columns": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 32,
+            "title": "Columns"
+          },
+          "options": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Options"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page"
+          },
+          "action": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Action"
+          },
+          "visible": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ApplicationVisibility-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind"
+        ],
+        "title": "ApplicationWidget"
+      },
+      "ApplicationWidget-Output": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "heading",
+              "text",
+              "label",
+              "metric",
+              "property",
+              "detail",
+              "table",
+              "list",
+              "status",
+              "navigation",
+              "section",
+              "text_input",
+              "number_input",
+              "checkbox",
+              "select",
+              "date_input",
+              "form",
+              "action"
+            ],
+            "title": "Kind"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 200,
+            "title": "Label",
+            "default": ""
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Text",
+            "default": ""
+          },
+          "parent": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent"
+          },
+          "layout": {
+            "type": "string",
+            "enum": [
+              "row",
+              "column",
+              "grid"
+            ],
+            "title": "Layout",
+            "default": "column"
+          },
+          "spacing": {
+            "type": "string",
+            "enum": [
+              "compact",
+              "normal",
+              "large"
+            ],
+            "title": "Spacing",
+            "default": "normal"
+          },
+          "align": {
+            "type": "string",
+            "enum": [
+              "start",
+              "center",
+              "stretch"
+            ],
+            "title": "Align",
+            "default": "stretch"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          },
+          "property": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Property"
+          },
+          "columns": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 32,
+            "title": "Columns"
+          },
+          "options": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Options"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page"
+          },
+          "action": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Action"
+          },
+          "visible": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ApplicationVisibility-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "label",
+          "text",
+          "parent",
+          "layout",
+          "spacing",
+          "align",
+          "source",
+          "state",
+          "property",
+          "columns",
+          "options",
+          "page",
+          "action",
+          "visible"
+        ],
+        "title": "ApplicationWidget"
+      },
       "ApprovalEvent": {
         "properties": {
           "id": {
@@ -18667,6 +21161,82 @@
         ],
         "title": "PropertyMapping"
       },
+      "PublishApplication": {
+        "properties": {
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_revision"
+        ],
+        "title": "PublishApplication"
+      },
+      "PublishedApplicationVersion": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "application_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Application Id"
+          },
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "format_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Format Version",
+            "default": 1
+          },
+          "document": {
+            "$ref": "#/components/schemas/ApplicationDocument-Output"
+          },
+          "digest": {
+            "type": "string",
+            "title": "Digest"
+          },
+          "manifest": {
+            "items": {
+              "$ref": "#/components/schemas/ApplicationDependency-Output"
+            },
+            "type": "array",
+            "title": "Manifest"
+          },
+          "created_by": {
+            "type": "string",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "application_id",
+          "sequence",
+          "format_version",
+          "document",
+          "digest",
+          "manifest",
+          "created_by",
+          "created_at"
+        ],
+        "title": "PublishedApplicationVersion"
+      },
       "QueryObject": {
         "properties": {
           "tenant_id": {
@@ -19077,7 +21647,8 @@
                   "MAPPING",
                   "MEDIA_SET",
                   "FUNCTION",
-                  "AUTOMATION"
+                  "AUTOMATION",
+                  "APPLICATION"
                 ]
               }
             ],
@@ -19598,6 +22169,25 @@
           "migration_required"
         ],
         "title": "SDKCompatibility"
+      },
+      "SaveApplicationDraft": {
+        "properties": {
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Revision"
+          },
+          "document": {
+            "$ref": "#/components/schemas/ApplicationDocument-Input"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_revision",
+          "document"
+        ],
+        "title": "SaveApplicationDraft"
       },
       "SaveDraft": {
         "properties": {

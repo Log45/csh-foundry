@@ -24,10 +24,16 @@ class QueryModel(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True, allow_inf_nan=False)
 
 
+class QueryInputModel(QueryModel):
+    # Stored query requests preserve the existing public recursive AST schema identities.
+    # Responses retain their normal serialization schema; runtime serialization is unchanged.
+    model_config = ConfigDict(json_schema_mode_override="validation")
+
+
 Name = Annotated[str, Field(strict=True, min_length=1, max_length=200)]
 
 
-class Predicate(QueryModel):
+class Predicate(QueryInputModel):
     property: Name
     operator: Literal[
         "eq",
@@ -63,15 +69,15 @@ class Predicate(QueryModel):
         return self
 
 
-class All(QueryModel):
+class All(QueryInputModel):
     conditions: tuple[Filter, ...] = Field(alias="and", min_length=1, max_length=64)
 
 
-class AnyOf(QueryModel):
+class AnyOf(QueryInputModel):
     conditions: tuple[Filter, ...] = Field(alias="or", min_length=1, max_length=64)
 
 
-class Negation(QueryModel):
+class Negation(QueryInputModel):
     condition: Filter = Field(alias="not")
 
 
@@ -99,18 +105,18 @@ def complexity(*filters: Filter | None) -> None:
         raise ValueError("Too many query predicates")
 
 
-class TraversalStep(QueryModel):
+class TraversalStep(QueryInputModel):
     link: Name
     direction: Literal["forward", "inverse"] = "forward"
     filter: Filter | None = None
 
 
-class Sort(QueryModel):
+class Sort(QueryInputModel):
     property: Name
     direction: Literal["asc", "desc"] = "asc"
 
 
-class ObjectSetRequest(QueryModel):
+class ObjectSetRequest(QueryInputModel):
     object_type: Name
     filter: Filter | None = None
     traverse: tuple[TraversalStep, ...] = Field(default=(), max_length=MAX_TRAVERSAL)
@@ -189,7 +195,7 @@ class QueryRequest(ObjectSetRequest):
         return self
 
 
-class Metric(QueryModel):
+class Metric(QueryInputModel):
     name: Name
     operator: Literal["count", "sum", "avg", "min", "max"]
     property: Name | None = None

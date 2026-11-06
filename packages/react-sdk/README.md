@@ -73,3 +73,9 @@ monitoring. Successful admission is not execution success. `useFunctionsResult` 
 for bounded typed results after success. Download/preview media with the client's streaming methods,
 outside React query caches, and cancel streams on unmount. Existing private cache invalidation and
 session isolation apply unchanged. Automation retries/cancellation use the receipt's execution job ID.
+
+Visual application hooks are generated alongside the existing capability hooks, including
+`useApplicationsDraft`, `useApplicationsSaveDraft`, `useApplicationsPublish`,
+`useApplicationsVersions`, `useApplicationsRuntime` and `useApplicationsQuery`.
+Use the same session-scoped provider and cache invalidation contract. See
+[applications](../../docs/api/applications.md) for publication and core SDK examples.

@@ -1,0 +1,7 @@
+csh-foundry-studio-1
+csh-foundry-api-1
+csh-foundry-postgres-1
+foundry-keycloak
+foundry-keycloak-tls
+language_app_db
+language_app_neo4j

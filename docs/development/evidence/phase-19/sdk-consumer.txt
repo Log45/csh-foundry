@@ -1,0 +1,72 @@
+
+> test:consumer
+> node scripts/smoke_sdk_consumer.mjs
+
+node:internal/errors:999
+  const err = new Error(message);
+              ^
+
+Error: Command failed: npm pack --json --pack-destination /var/folders/d8/nv204w292cjdg6mkpdjgpm2c0000gn/T/foundry-consumer-nLPPsD
+npm error code EPERM
+npm error syscall open
+npm error path /Users/log/.npm/_cacache/tmp/***
+npm error errno -1
+npm error
+npm error Your cache folder contains root-owned files, due to a bug in previous versions of npm which has since been addressed.
+npm error
+npm error To permanently fix this problem, please run:
+npm error   sudo chown -R 501:20 "/Users/log/.npm"
+npm error Log files were not written due to an error writing to the directory: /Users/log/.npm/_logs
+npm error You can rerun the command with `--loglevel=verbose` to see the logs in your terminal
+
+    at genericNodeError (node:internal/errors:999:15)
+    at wrappedFn (node:internal/errors:544:14)
+    at checkExecSyncError (node:child_process:942:11)
+    at execFileSync (node:child_process:978:15)
+    at run (file:///Users/log/Documents/code/csh-foundry/scripts/smoke_sdk_consumer.mjs:8:3)
+    at file:///Users/log/Documents/code/csh-foundry/scripts/smoke_sdk_consumer.mjs:17:7 {
+  status: 255,
+  signal: null,
+  output: [
+    null,
+    '{\n' +
+      '  "error": {\n' +
+      '    "code": "EPERM",\n' +
+      '    "summary": "Your cache folder contains root-owned files, due to a bug in previous versions of npm which has since been addressed.\\n\\nTo permanently fix this problem, please run:\\n  sudo chown -R 501:20 \\"/Users/log/.npm\\"",\n' +
+      '    "detail": ""\n' +
+      '  }\n' +
+      '}\n',
+    'npm error code EPERM\n' +
+      'npm error syscall open\n' +
+      'npm error path /Users/log/.npm/_cacache/tmp/***\n' +
+      'npm error errno -1\n' +
+      'npm error\n' +
+      'npm error Your cache folder contains root-owned files, due to a bug in previous versions of npm which has since been addressed.\n' +
+      'npm error\n' +
+      'npm error To permanently fix this problem, please run:\n' +
+      'npm error   sudo chown -R 501:20 "/Users/log/.npm"\n' +
+      'npm error Log files were not written due to an error writing to the directory: /Users/log/.npm/_logs\n' +
+      'npm error You can rerun the command with `--loglevel=verbose` to see the logs in your terminal\n'
+  ],
+  pid: 81168,
+  stdout: '{\n' +
+    '  "error": {\n' +
+    '    "code": "EPERM",\n' +
+    '    "summary": "Your cache folder contains root-owned files, due to a bug in previous versions of npm which has since been addressed.\\n\\nTo permanently fix this problem, please run:\\n  sudo chown -R 501:20 \\"/Users/log/.npm\\"",\n' +
+    '    "detail": ""\n' +
+    '  }\n' +
+    '}\n',
+  stderr: 'npm error code EPERM\n' +
+    'npm error syscall open\n' +
+    'npm error path /Users/log/.npm/_cacache/tmp/***\n' +
+    'npm error errno -1\n' +
+    'npm error\n' +
+    'npm error Your cache folder contains root-owned files, due to a bug in previous versions of npm which has since been addressed.\n' +
+    'npm error\n' +
+    'npm error To permanently fix this problem, please run:\n' +
+    'npm error   sudo chown -R 501:20 "/Users/log/.npm"\n' +
+    'npm error Log files were not written due to an error writing to the directory: /Users/log/.npm/_logs\n' +
+    'npm error You can rerun the command with `--loglevel=verbose` to see the logs in your terminal\n'
+}
+
+Node.js v26.7.0

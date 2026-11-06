@@ -1,0 +1,103 @@
+
+> @foundry/studio@0.8.0 typecheck
+> tsc --noEmit
+
+features/application-runtime.tsx(8,36): error TS2339: Property 'Value' does not exist on type '{ Action: { id: string; dependency: string; action_id: string; parameters?: { [key: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | ... 1 more ... | undefined; property?: string | ... 1 more ... | undefined; }; } | undefined; para...'.
+features/application-runtime.tsx(68,70): error TS18048: 'doc.states' is possibly 'undefined'.
+features/application-runtime.tsx(78,16): error TS18048: 'doc.pages' is possibly 'undefined'.
+features/application-runtime.tsx(79,54): error TS18048: 'page.widgets' is possibly 'undefined'.
+features/application-runtime.tsx(89,24): error TS18048: 'doc.sources' is possibly 'undefined'.
+features/application-runtime.tsx(96,25): error TS18048: 'doc.dependencies' is possibly 'undefined'.
+features/application-runtime.tsx(97,44): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(o: { [s: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | ArrayLike<...>): [...][]', gave the following error.
+    Argument of type '{ [key: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | undefined' is not assignable to parameter of type '{ [s: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | ArrayLike<...>'.
+      Type 'undefined' is not assignable to type '{ [s: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | ArrayLike<...>'.
+  Overload 2 of 2, '(o: {}): [string, any][]', gave the following error.
+    Argument of type '{ [key: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | undefined' is not assignable to parameter of type '{}'.
+      Type 'undefined' is not assignable to type '{}'.
+features/application-runtime.tsx(115,25): error TS18048: 'doc.interactions' is possibly 'undefined'.
+features/application-runtime.tsx(122,20): error TS18048: 'doc.actions' is possibly 'undefined'.
+features/application-runtime.tsx(127,60): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(o: { [s: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | ArrayLike<...>): [...][]', gave the following error.
+    Argument of type '{ [key: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | undefined' is not assignable to parameter of type '{ [s: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | ArrayLike<...>'.
+      Type 'undefined' is not assignable to type '{ [s: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | ArrayLike<...>'.
+  Overload 2 of 2, '(o: {}): [string, any][]', gave the following error.
+    Argument of type '{ [key: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | undefined' is not assignable to parameter of type '{}'.
+      Type 'undefined' is not assignable to type '{}'.
+features/application-runtime.tsx(135,21): error TS18048: 'doc.dependencies' is possibly 'undefined'.
+features/application-runtime.tsx(140,122): error TS18048: 'doc.states' is possibly 'undefined'.
+features/application-runtime.tsx(145,12): error TS18048: 'page.widgets' is possibly 'undefined'.
+features/application-runtime.tsx(165,42): error TS18048: 'doc.pages' is possibly 'undefined'.
+features/application-runtime.tsx(186,19): error TS2532: Object is possibly 'undefined'.
+features/application-runtime.tsx(186,20): error TS18048: 'w.columns' is possibly 'undefined'.
+features/application-runtime.tsx(196,201): error TS18048: 'w.options' is possibly 'undefined'.
+features/applications.tsx(9,36): error TS2339: Property 'Value' does not exist on type '{ Action: { id: string; dependency: string; action_id: string; parameters?: { [key: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | ... 1 more ... | undefined; property?: string | ... 1 more ... | undefined; }; } | undefined; para...'.
+features/applications.tsx(24,72): error TS2339: Property 'Diagnostic' does not exist on type '{ Action: { id: string; dependency: string; action_id: string; parameters?: { [key: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | ... 1 more ... | undefined; property?: string | ... 1 more ... | undefined; }; } | undefined; para...'.
+features/applications.tsx(30,16): error TS18048: 'doc.pages' is possibly 'undefined'.
+features/applications.tsx(30,56): error TS18048: 'doc.pages' is possibly 'undefined'.
+features/applications.tsx(30,85): error TS18048: 'page.widgets' is possibly 'undefined'.
+features/applications.tsx(54,221): error TS18048: 'v.definition.object_types' is possibly 'undefined'.
+features/applications.tsx(54,274): error TS18048: 'v.definition.action_types' is possibly 'undefined'.
+features/applications.tsx(57,78): error TS18048: 'd.pages' is possibly 'undefined'.
+features/applications.tsx(57,78): error TS2532: Object is possibly 'undefined'.
+features/applications.tsx(60,15): error TS18048: 'd.dependencies' is possibly 'undefined'.
+features/applications.tsx(61,149): error TS18048: 'd.dependencies' is possibly 'undefined'.
+features/applications.tsx(68,59): error TS18048: 'd.states' is possibly 'undefined'.
+features/applications.tsx(69,7): error TS18048: 'd.pages' is possibly 'undefined'.
+features/applications.tsx(69,7): error TS2532: Object is possibly 'undefined'.
+features/applications.tsx(72,61): error TS18048: 'd.pages' is possibly 'undefined'.
+features/applications.tsx(72,118): error TS18048: 'list' is possibly 'undefined'.
+features/applications.tsx(72,197): error TS18048: 'list' is possibly 'undefined'.
+features/applications.tsx(72,211): error TS18048: 'list' is possibly 'undefined'.
+features/applications.tsx(72,220): error TS18048: 'list' is possibly 'undefined'.
+features/applications.tsx(72,232): error TS18048: 'list' is possibly 'undefined'.
+features/applications.tsx(72,241): error TS18048: 'list' is possibly 'undefined'.
+features/applications.tsx(73,24): error TS18048: 'doc.states' is possibly 'undefined'.
+features/applications.tsx(77,188): error TS2345: Argument of type '{ code: string; message: string; node?: string | null | undefined; }[] | undefined' is not assignable to parameter of type 'SetStateAction<any[]>'.
+  Type 'undefined' is not assignable to type 'SetStateAction<any[]>'.
+features/applications.tsx(84,193): error TS18048: 'doc.pages' is possibly 'undefined'.
+features/applications.tsx(85,72): error TS18048: 'd.pages' is possibly 'undefined'.
+features/applications.tsx(85,111): error TS18048: 'd.pages' is possibly 'undefined'.
+features/applications.tsx(86,52): error TS18048: 'doc.pages' is possibly 'undefined'.
+features/applications.tsx(86,116): error TS18048: 'd.pages' is possibly 'undefined'.
+features/applications.tsx(87,101): error TS18048: 'd.pages' is possibly 'undefined'.
+features/applications.tsx(89,14): error TS18048: 'page.widgets' is possibly 'undefined'.
+features/applications.tsx(90,228): error TS18048: 'd.pages' is possibly 'undefined'.
+features/applications.tsx(90,279): error TS18048: 'p.widgets' is possibly 'undefined'.
+features/applications.tsx(93,177): error TS18048: 'page.widgets' is possibly 'undefined'.
+features/applications.tsx(96,167): error TS18048: 'doc.sources' is possibly 'undefined'.
+features/applications.tsx(99,70): error TS18048: 'widget.columns' is possibly 'undefined'.
+features/applications.tsx(100,71): error TS18048: 'widget.options' is possibly 'undefined'.
+features/applications.tsx(101,168): error TS18048: 'doc.pages' is possibly 'undefined'.
+features/applications.tsx(102,170): error TS18048: 'doc.actions' is possibly 'undefined'.
+features/applications.tsx(105,63): error TS18048: 'doc.interactions' is possibly 'undefined'.
+features/applications.tsx(105,175): error TS18048: 'd.interactions' is possibly 'undefined'.
+features/applications.tsx(105,400): error TS18048: 'doc.sources' is possibly 'undefined'.
+features/applications.tsx(108,129): error TS18048: 'schema.object_types' is possibly 'undefined'.
+features/applications.tsx(108,263): error TS18048: 'd.sources' is possibly 'undefined'.
+features/applications.tsx(109,46): error TS18048: 'd.sources' is possibly 'undefined'.
+features/applications.tsx(110,116): error TS18048: 'schema.action_types' is possibly 'undefined'.
+features/applications.tsx(110,281): error TS18048: 'schema.action_types' is possibly 'undefined'.
+features/applications.tsx(110,430): error TS18048: 'a.parameters' is possibly 'undefined'.
+features/applications.tsx(110,565): error TS18048: 'd.actions' is possibly 'undefined'.
+features/applications.tsx(110,704): error TS18048: 'd.sources' is possibly 'undefined'.
+features/applications.tsx(112,8): error TS18048: 'doc.sources' is possibly 'undefined'.
+features/applications.tsx(113,8): error TS18048: 'doc.actions' is possibly 'undefined'.
+features/applications.tsx(113,132): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(o: { [s: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | ArrayLike<...>): [...][]', gave the following error.
+    Argument of type '{ [key: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | undefined' is not assignable to parameter of type '{ [s: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | ArrayLike<...>'.
+      Type 'undefined' is not assignable to type '{ [s: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | ArrayLike<...>'.
+  Overload 2 of 2, '(o: {}): [string, any][]', gave the following error.
+    Argument of type '{ [key: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | null | undefined; property?: string | null | undefined; }; } | undefined' is not assignable to parameter of type '{}'.
+      Type 'undefined' is not assignable to type '{}'.
+features/applications.tsx(113,219): error TS18048: 'action.parameter_types' is possibly 'undefined'.
+features/applications.tsx(113,304): error TS18048: 'd.actions' is possibly 'undefined'.
+features/applications.tsx(113,304): error TS2532: Object is possibly 'undefined'.
+features/applications.tsx(113,428): error TS18048: 'd.actions' is possibly 'undefined'.
+features/applications.tsx(119,222): error TS18048: 'doc.states' is possibly 'undefined'.
+features/applications.tsx(120,461): error TS18048: 'doc.states' is possibly 'undefined'.
+features/applications.tsx(123,92): error TS2537: Type '{ id: string; dependency: string; kind?: "query" | "aggregate" | undefined; query: { object_type: string; filter?: { property: string; operator: "eq" | "ne" | "lt" | "gt" | "is_null" | "gte" | ... 4 more ... | "ends_with"; value?: unknown; } | ... 4 more ... | undefined; ... 7 more ...; cursor?: string | ... 1 more ...' has no matching index signature for type 'number'.
+features/applications.tsx(125,68): error TS18048: 'd.sources' is possibly 'undefined'.
+features/applications.tsx(130,251): error TS18048: 'schema.link_types' is possibly 'undefined'.
+features/applications.tsx(133,54): error TS18048: 'd.sources' is possibly 'undefined'.
+lib/api.ts(8,43): error TS2339: Property 'QueryRequest' does not exist on type '{ Action: { id: string; dependency: string; action_id: string; parameters?: { [key: string]: { kind?: "state" | "literal" | "selected" | undefined; value?: string | number | boolean | null | undefined; state?: string | ... 1 more ... | undefined; property?: string | ... 1 more ... | undefined; }; } | undefined; para...'.

@@ -1,0 +1,5 @@
+
+> test:consumer
+> node scripts/smoke_sdk_consumer.mjs
+
+PASS packed ESM imports, declarations, peer resolution and negative public types

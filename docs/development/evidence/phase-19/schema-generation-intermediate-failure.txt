@@ -1,0 +1,13 @@
+Historical tool-output excerpt; this file records the failed intermediate attempt, not a fresh rerun.
+Commands: npm run generate; npm run generate:api --prefix apps/studio
+Runtime: Node v26.7.0, openapi-typescript 7.13.0
+Result: FAIL
+
+Can't resolve $ref at #/components/schemas/AggregateGroup/properties/key/anyOf/0
+Can't resolve $ref at #/components/schemas/AggregateGroup/properties/values/additionalProperties
+Error: Can't resolve $ref at #/components/schemas/AggregateGroup/properties/values/additionalProperties
+
+The intermediate shared validation-mode override also affected response models. The final change
+limits the override to query inputs; application models are namespaced. Subsequent generation,
+complete reference-closure checks and baseline component/shape preservation checks pass. The failed
+intermediate schemas are not the delivered contract.

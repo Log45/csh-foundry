@@ -562,6 +562,7 @@ class ProjectService(GovernedService):
             "MEDIA_SET",
             "FUNCTION",
             "AUTOMATION",
+            "APPLICATION",
         ):
             self.authorizer.require(p, "schema:read", f"{p.tenant_id}/{row.ontology_id}")
         return row
@@ -620,6 +621,7 @@ class ProjectService(GovernedService):
                             "MEDIA_SET",
                             "FUNCTION",
                             "AUTOMATION",
+                            "APPLICATION",
                         ]
                     )
                 )
@@ -647,6 +649,7 @@ class ProjectService(GovernedService):
                     "MEDIA_SET",
                     "FUNCTION",
                     "AUTOMATION",
+                    "APPLICATION",
                 ):
                     self.authorizer.require(p, "schema:read", f"{p.tenant_id}/{item.ontology_id}")
             return [ResourceView.model_validate(item) for item in rows]

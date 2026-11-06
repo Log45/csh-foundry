@@ -418,3 +418,11 @@ Phase 17 adds governed Media Sets, trusted typed functions and durable automatio
 [resource limits and trust boundary](docs/development/phase-17-limits.md), and the
 [Phase 17 validation report](docs/development/phase-17-report.md). Use disposable test schemas;
 `0023_media_functions` is not automatically applied to the shared developer database.
+
+Phase 19 adds Project-governed visual applications: private revisioned drafts, a declarative widget
+renderer, structured visual authoring and immutable publication through the existing BFF/SDK and
+canonical query/action services. See [authoring and manufacturing walkthrough](docs/development/visual-application-authoring.md),
+[application API](docs/api/applications.md), [ADR 0044](docs/decisions/0044-visual-applications.md),
+[limits](docs/development/phase-19-limits.md) and [validation report](docs/development/phase-19-report.md).
+Migration `0025_applications` is forward-only; shared developer data is never automatically migrated.
+Phase 20 and production certification remain outside this authorization.

@@ -1,12 +1,17 @@
 import type { Page } from "@playwright/test";
 import { expect } from "@playwright/test";
-export async function login(page: Page) {
+export async function login(page: Page, subject = "operator") {
   await page.route("https://127.0.0.1/oidc/**", async (route) => {
-    const result = await route.fetch({
-      url: route
+    const target = new URL(
+      route
         .request()
         .url()
         .replace("https://127.0.0.1/", "https://127.0.0.1:8443/"),
+    );
+    if (subject !== "operator" && target.pathname.endsWith("/authorize"))
+      target.searchParams.set("login_hint", subject);
+    const result = await route.fetch({
+      url: target.toString(),
       maxRedirects: 0,
     });
     await route.fulfill({ response: result });

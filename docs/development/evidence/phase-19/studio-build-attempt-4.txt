@@ -1,0 +1,13 @@
+
+> @foundry/studio@0.8.0 build
+> next build --webpack
+
+▲ Next.js 16.4.3 (webpack)
+✓ Running next.config.ts took 75ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1581ms
+  Running TypeScript ...
+features/application-runtime.tsx(297,19): error TS1117: An object literal cannot have multiple properties with the same name.
+Failed to type check.
+
