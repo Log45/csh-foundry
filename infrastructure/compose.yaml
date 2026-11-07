@@ -15,13 +15,17 @@ services:
       interval: 2s
       timeout: 3s
       retries: 20
-  api:
+  api: &foundry-api
+    image: ${FOUNDRY_API_IMAGE:-csh-foundry-api:development}
     build:
       context: ..
       dockerfile: infrastructure/docker/api.Dockerfile
     profiles: ["api", "studio"]
     environment:
       FOUNDRY_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-foundry}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-foundry}
+      FOUNDRY_ARTIFACT_BUCKET: ${FOUNDRY_ARTIFACT_BUCKET:-foundry-artifacts}
+      FOUNDRY_ARTIFACT_REGION: ${FOUNDRY_ARTIFACT_REGION:-us-east-1}
+      FOUNDRY_ARTIFACT_ADDRESSING: ${FOUNDRY_ARTIFACT_ADDRESSING:-path}
       FOUNDRY_ARTIFACT_BACKEND: ${FOUNDRY_ARTIFACT_BACKEND:-disabled}
       FOUNDRY_ARTIFACT_ENDPOINT: ${FOUNDRY_ARTIFACT_ENDPOINT:-http://minio:9000}
       FOUNDRY_ARTIFACT_DEVELOPMENT_HTTP: ${FOUNDRY_ARTIFACT_DEVELOPMENT_HTTP:-true}
@@ -41,6 +45,11 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+  worker:
+    <<: *foundry-api
+    profiles: ["worker"]
+    ports: []
+    command: ["python", "scripts/run_execution_worker.py"]
   studio:
     build:
       context: ..

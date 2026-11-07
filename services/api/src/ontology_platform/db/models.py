@@ -2085,3 +2085,97 @@ class DAGPreparedOutput(Base):
         UniqueConstraint("tenant_id", "job_id", "dataset_id", name="uq_dag_output_target"),
         CheckConstraint("state IN ('PENDING','PREPARED','COMMITTED')", name="ck_dag_output_state"),
     )
+
+
+class LineageEdge(Base):
+    """Recoverable metadata index; endpoints and origin are independently authorized."""
+
+    __tablename__ = "lineage_edges"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    origin_id: Mapped[UUID]
+    source_resource_id: Mapped[UUID]
+    target_resource_id: Mapped[UUID]
+    source_key: Mapped[str] = mapped_column(String(500))
+    target_key: Mapped[str] = mapped_column(String(500))
+    source: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    target: Mapped[dict[str, JsonValue]] = mapped_column(JSONB)
+    relation: Mapped[str] = mapped_column(String(40))
+    mode: Mapped[str] = mapped_column(String(20))
+    certainty: Mapped[str] = mapped_column(String(30))
+    provenance: Mapped[str] = mapped_column(String(80))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "origin_id"], ["platform_resources.tenant_id", "platform_resources.id"]
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "source_resource_id"],
+            ["platform_resources.tenant_id", "platform_resources.id"],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "target_resource_id"],
+            ["platform_resources.tenant_id", "platform_resources.id"],
+        ),
+        CheckConstraint("mode IN ('DESIGN','EXECUTION')", name="ck_lineage_mode"),
+        Index("ix_lineage_source", "tenant_id", "source_key", "id"),
+        Index("ix_lineage_target", "tenant_id", "target_key", "id"),
+    )
+
+
+class LineagePending(Base):
+    __tablename__ = "lineage_pending"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    resource_id: Mapped[UUID] = mapped_column(primary_key=True)
+    generation: Mapped[int] = mapped_column(BigInteger, default=1)
+    indexed_generation: Mapped[int] = mapped_column(BigInteger, default=0)
+    cursor: Mapped[str] = mapped_column(String(500), default="")
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "resource_id"], ["platform_resources.tenant_id", "platform_resources.id"]
+        ),
+    )
+
+
+class FreshnessPolicy(Base):
+    __tablename__ = "freshness_policies"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    resource_id: Mapped[UUID] = mapped_column(primary_key=True)
+    enabled: Mapped[bool] = mapped_column(default=True)
+    expected_interval_seconds: Mapped[int | None]
+    max_age_seconds: Mapped[int | None]
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "resource_id"], ["platform_resources.tenant_id", "platform_resources.id"]
+        ),
+        CheckConstraint(
+            "(expected_interval_seconds IS NULL OR "
+            "expected_interval_seconds BETWEEN 60 AND 31536000) AND "
+            "(max_age_seconds IS NULL OR max_age_seconds BETWEEN 60 AND 31536000)",
+            name="ck_freshness_bounds",
+        ),
+    )
+
+
+class OperationalEvent(Base):
+    __tablename__ = "operational_events"
+    tenant_id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    resource_id: Mapped[UUID]
+    execution_id: Mapped[UUID]
+    event_type: Mapped[str] = mapped_column(String(40))
+    severity: Mapped[str] = mapped_column(String(10))
+    state: Mapped[str] = mapped_column(String(20))
+    attempt: Mapped[int]
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "resource_id"], ["platform_resources.tenant_id", "platform_resources.id"]
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "execution_id"], ["execution_jobs.tenant_id", "execution_jobs.id"]
+        ),
+        Index("ix_operational_events_page", "tenant_id", "resource_id", "created_at", "id"),
+    )

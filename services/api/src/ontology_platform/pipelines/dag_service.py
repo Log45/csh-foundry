@@ -172,7 +172,16 @@ def enrich(
     if run is None:
         return view
     view.plan_digest, view.publication_state = run.plan_digest, run.state
-    # Labels/configuration are never exposed through output-only lineage or staged manifests.
+    from ontology_platform.errors import ApplicationError
+
+    bindings_visible = True
+    try:
+        read_bindings(svc, s, p, DAGDefinition.model_validate(run.plan["specification"]))
+    except ApplicationError as exc:
+        if exc.status_code not in {403, 404}:
+            raise
+        bindings_visible = False
+    # Node identities and staging counts must not disclose hidden bindings or siblings.
     view.nodes = [
         NodeExecutionView(node_id=n.node_id, state=n.state, attempt=n.attempt, error=n.error)
         for n in s.scalars(
@@ -182,13 +191,16 @@ def enrich(
             .limit(100)
         )
     ]
+    if not bindings_visible:
+        view.nodes = []
+        view.plan_digest = None
     for output in s.scalars(
         select(DAGPreparedOutput)
         .where(DAGPreparedOutput.tenant_id == p.tenant_id, DAGPreparedOutput.job_id == job.id)
         .order_by(DAGPreparedOutput.output_id)
         .limit(16)
     ):
-        if output.state in {"PREPARED", "COMMITTED"}:
+        if bindings_visible and output.state in {"PREPARED", "COMMITTED"}:
             view.prepared_output_count += 1
         if output.state != "COMMITTED":
             continue

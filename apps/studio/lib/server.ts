@@ -518,6 +518,9 @@ export function allowed(path: string, method: string) {
     [...new URLSearchParams(search).keys()].some(
       (k) =>
         ![
+          "days",
+          "batch",
+          "output",
           "limit",
           "offset",
           "cursor",

@@ -19,7 +19,7 @@ from test_datasets import dataset, make_service
 from test_phase1 import database, world  # noqa: F401
 
 
-def test_exact_gib_shared_branch_multi_output(world, store, tmp_path):
+def test_exact_gib_shared_branch_multi_output(world, store, tmp_path, monkeypatch):
     size = 1024**3
     path = tmp_path / "source.csv"
     count, checksum = generate(path, "csv", size)
@@ -102,6 +102,42 @@ def test_exact_gib_shared_branch_multi_output(world, store, tmp_path):
             n.attempt == 1 and not store.exists(ObjectKey(p.tenant_id, run.id, n.result_id))
             for n in nodes
         )
+    # Phase 21 metadata queries must work without loading the 1 GiB artifact again.
+    import time
+
+    from ontology_platform.observability.contracts import Traversal
+    from ontology_platform.observability.index import node, tick
+    from ontology_platform.observability.service import ObservabilityService
+
+    observations = ObservabilityService(world.sessions, svc.authorizer, store.settings, store)
+    for _ in range(20):
+        tick(world.sessions)
+
+    def forbidden_bytes(*args, **kwargs):
+        raise AssertionError("Metadata lineage must not read dataset bytes")
+
+    monkeypatch.setattr(store, "chunks", forbidden_bytes)
+    started = time.perf_counter()
+    output = status.outputs[0]
+    graph = observations.graph(
+        p, Traversal(root=node("DATASET_VERSION", output.dataset_id, output.version_id), depth=8)
+    )
+    elapsed = time.perf_counter() - started
+    assert graph.edges and graph.indexing.complete
+    assert observations.columns(p, pipeline.id, definition.id).status == "EXACT"
+    assert observations.execution(p, run.id).execution.publication_state == "COMMITTED"
+    print(
+        "LINEAGE_LARGE "
+        + json.dumps(
+            {
+                "query_seconds": elapsed,
+                "nodes": len(graph.nodes),
+                "edges": len(graph.edges),
+                "reads_dataset_bytes": False,
+            }
+        ),
+        flush=True,
+    )
     print(
         "DAG_LARGE "
         + json.dumps(

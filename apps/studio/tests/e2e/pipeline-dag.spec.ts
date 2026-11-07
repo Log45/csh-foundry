@@ -226,4 +226,77 @@ test("visual DAG branches converge and two outputs commit together", async ({
       exact: true,
     }),
   ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Lineage & observability", exact: true })
+    .click();
+  const observations = page.getByRole("region", {
+    name: "Lineage and observability",
+  });
+  await observations
+    .getByLabel("Lineage Project", { exact: true })
+    .selectOption({ label: project });
+  await observations
+    .getByLabel("Lineage resource", { exact: true })
+    .selectOption(outB.id);
+  await expect(
+    observations.getByLabel("Immutable lineage version").locator("option"),
+  ).toHaveCount(2);
+  await observations
+    .getByRole("button", { name: "Explore lineage", exact: true })
+    .click();
+  await expect(
+    observations.getByRole("table", { name: "Dependency evidence" }),
+  ).toContainText("PRODUCES");
+  await expect(
+    observations.getByRole("table", { name: "Accessible lineage node list" }),
+  ).toContainText("EXECUTION");
+  await observations
+    .getByRole("button", { name: "Select lineage node" })
+    .first()
+    .focus();
+  await expect(
+    observations.getByRole("button", { name: "Select lineage node" }).first(),
+  ).toBeFocused();
+  await observations.getByLabel("Maximum version age in seconds").fill("3600");
+  await observations
+    .getByRole("button", { name: "Save freshness policy", exact: true })
+    .click();
+  await expect(
+    observations.getByRole("heading", { name: "Dataset freshness: FRESH" }),
+  ).toBeVisible();
+  await observations
+    .getByLabel("Lineage resource", { exact: true })
+    .selectOption(pipeline.id);
+  await expect(
+    observations.getByRole("table", { name: "Persisted executions" }),
+  ).toContainText("CANCELLED");
+  await observations
+    .getByRole("button", { name: "Inspect execution" })
+    .first()
+    .click();
+  await expect(
+    observations.getByRole("region", { name: "Execution detail" }),
+  ).toContainText("CANCELLED");
+  await observations
+    .getByRole("button", { name: "Inspect column lineage", exact: true })
+    .click();
+  await expect(
+    observations.getByRole("table", { name: "Column lineage" }),
+  ).toContainText("VALUE");
+  await observations
+    .getByRole("button", { name: "Analyze downstream impact", exact: true })
+    .click();
+  await expect(
+    observations.getByRole("table", { name: "Downstream impact paths" }),
+  ).toBeVisible();
+  await observations
+    .getByRole("button", { name: "Load operational events", exact: true })
+    .click();
+  await expect(
+    observations.getByRole("table", { name: "Recent operational events" }),
+  ).toContainText("SUCCEEDED");
+  await page.screenshot({
+    path: "../../artifacts/phase21/lineage-observability.png",
+    fullPage: true,
+  });
 });

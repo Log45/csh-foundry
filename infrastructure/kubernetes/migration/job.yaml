@@ -62,7 +62,7 @@ spec:
       - name: credentials
         secret:
           secretName: foundry-migration
-          defaultMode: 288
+          defaultMode: 292
       - name: trust
         secret:
           secretName: foundry-trust

@@ -445,6 +445,13 @@ class ExecutionWorker:
             sweep(self)
         except (ApplicationError, SQLAlchemyError):
             pass
+        from ontology_platform.observability.index import tick
+
+        try:
+            tick(self.sessions)
+        except SQLAlchemyError:
+            # Canonical execution remains available; pending generations expose index lag.
+            pass
         claim = self.claim()
         if claim is None:
             return None

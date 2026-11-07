@@ -287,6 +287,42 @@ export interface EndpointInput {
   "mediaSets.lineage": Input<
     operations["lineage_api_v1_media_sets__set_id__items__item_id__lineage_get"]
   >;
+  "observability.traverse": Input<
+    operations["traverse_api_v1_lineage_traverse_post"]
+  >;
+  "observability.impact": Input<
+    operations["impact_api_v1_lineage_impact_post"]
+  >;
+  "observability.index": Input<
+    operations["indexing_api_v1_resources__resource_id__lineage_index_get"]
+  >;
+  "observability.reconcile": Input<
+    operations["backfill_api_v1_resources__resource_id__lineage_reconcile_post"]
+  >;
+  "observability.columns": Input<
+    operations["columns_api_v1_pipelines__pipeline_id__definitions__definition_id__columns_get"]
+  >;
+  "observability.freshness": Input<
+    operations["freshness_api_v1_datasets__dataset_id__freshness_get"]
+  >;
+  "observability.setFreshness": Input<
+    operations["policy_api_v1_datasets__dataset_id__freshness_put"]
+  >;
+  "observability.dependencyFreshness": Input<
+    operations["dependency_freshness_api_v1_datasets__dataset_id__freshness_dependencies_get"]
+  >;
+  "observability.health": Input<
+    operations["health_api_v1_resources__resource_id__health_get"]
+  >;
+  "observability.events": Input<
+    operations["events_api_v1_resources__resource_id__events_get"]
+  >;
+  "observability.execution": Input<
+    operations["execution_api_v1_observability_executions__job_id__get"]
+  >;
+  "observability.dashboard": Input<
+    operations["dashboard_api_v1_observability_dashboard_get"]
+  >;
 }
 export interface EndpointOutput {
   "ontologies.list": Output<
@@ -555,6 +591,42 @@ export interface EndpointOutput {
   >;
   "mediaSets.lineage": Output<
     operations["lineage_api_v1_media_sets__set_id__items__item_id__lineage_get"]
+  >;
+  "observability.traverse": Output<
+    operations["traverse_api_v1_lineage_traverse_post"]
+  >;
+  "observability.impact": Output<
+    operations["impact_api_v1_lineage_impact_post"]
+  >;
+  "observability.index": Output<
+    operations["indexing_api_v1_resources__resource_id__lineage_index_get"]
+  >;
+  "observability.reconcile": Output<
+    operations["backfill_api_v1_resources__resource_id__lineage_reconcile_post"]
+  >;
+  "observability.columns": Output<
+    operations["columns_api_v1_pipelines__pipeline_id__definitions__definition_id__columns_get"]
+  >;
+  "observability.freshness": Output<
+    operations["freshness_api_v1_datasets__dataset_id__freshness_get"]
+  >;
+  "observability.setFreshness": Output<
+    operations["policy_api_v1_datasets__dataset_id__freshness_put"]
+  >;
+  "observability.dependencyFreshness": Output<
+    operations["dependency_freshness_api_v1_datasets__dataset_id__freshness_dependencies_get"]
+  >;
+  "observability.health": Output<
+    operations["health_api_v1_resources__resource_id__health_get"]
+  >;
+  "observability.events": Output<
+    operations["events_api_v1_resources__resource_id__events_get"]
+  >;
+  "observability.execution": Output<
+    operations["execution_api_v1_observability_executions__job_id__get"]
+  >;
+  "observability.dashboard": Output<
+    operations["dashboard_api_v1_observability_dashboard_get"]
   >;
 }
 export function endpoints(send: Transport) {
@@ -1539,6 +1611,122 @@ export function endpoints(send: Transport) {
           true,
           options,
         ),
+    },
+    observability: {
+      traverse: (
+        input: EndpointInput["observability.traverse"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["observability.traverse"]> =>
+        send("POST", "/api/v1/lineage/traverse", input, true, options),
+      impact: (
+        input: EndpointInput["observability.impact"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["observability.impact"]> =>
+        send("POST", "/api/v1/lineage/impact", input, true, options),
+      index: (
+        input: EndpointInput["observability.index"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["observability.index"]> =>
+        send(
+          "GET",
+          "/api/v1/resources/{resource_id}/lineage/index",
+          input,
+          true,
+          options,
+        ),
+      reconcile: (
+        input: EndpointInput["observability.reconcile"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["observability.reconcile"]> =>
+        send(
+          "POST",
+          "/api/v1/resources/{resource_id}/lineage/reconcile",
+          input,
+          false,
+          options,
+        ),
+      columns: (
+        input: EndpointInput["observability.columns"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["observability.columns"]> =>
+        send(
+          "GET",
+          "/api/v1/pipelines/{pipeline_id}/definitions/{definition_id}/columns",
+          input,
+          true,
+          options,
+        ),
+      freshness: (
+        input: EndpointInput["observability.freshness"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["observability.freshness"]> =>
+        send(
+          "GET",
+          "/api/v1/datasets/{dataset_id}/freshness",
+          input,
+          true,
+          options,
+        ),
+      setFreshness: (
+        input: EndpointInput["observability.setFreshness"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["observability.setFreshness"]> =>
+        send(
+          "PUT",
+          "/api/v1/datasets/{dataset_id}/freshness",
+          input,
+          false,
+          options,
+        ),
+      dependencyFreshness: (
+        input: EndpointInput["observability.dependencyFreshness"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["observability.dependencyFreshness"]> =>
+        send(
+          "GET",
+          "/api/v1/datasets/{dataset_id}/freshness/dependencies",
+          input,
+          true,
+          options,
+        ),
+      health: (
+        input: EndpointInput["observability.health"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["observability.health"]> =>
+        send(
+          "GET",
+          "/api/v1/resources/{resource_id}/health",
+          input,
+          true,
+          options,
+        ),
+      events: (
+        input: EndpointInput["observability.events"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["observability.events"]> =>
+        send(
+          "GET",
+          "/api/v1/resources/{resource_id}/events",
+          input,
+          true,
+          options,
+        ),
+      execution: (
+        input: EndpointInput["observability.execution"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["observability.execution"]> =>
+        send(
+          "GET",
+          "/api/v1/observability/executions/{job_id}",
+          input,
+          true,
+          options,
+        ),
+      dashboard: (
+        input: EndpointInput["observability.dashboard"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["observability.dashboard"]> =>
+        send("GET", "/api/v1/observability/dashboard", input, true, options),
     },
   };
 }

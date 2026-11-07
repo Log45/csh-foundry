@@ -893,3 +893,125 @@ export function useMediaSetsLineage(
     options,
   );
 }
+export function useObservabilityTraverse(
+  input: EndpointInput["observability.traverse"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "observability.traverse",
+    input,
+    (c, signal) => c.observability.traverse(input, { signal }),
+    options,
+  );
+}
+export function useObservabilityImpact(
+  input: EndpointInput["observability.impact"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "observability.impact",
+    input,
+    (c, signal) => c.observability.impact(input, { signal }),
+    options,
+  );
+}
+export function useObservabilityIndex(
+  input: EndpointInput["observability.index"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "observability.index",
+    input,
+    (c, signal) => c.observability.index(input, { signal }),
+    options,
+  );
+}
+export function useObservabilityReconcile() {
+  return useFoundryMutation<
+    EndpointInput["observability.reconcile"],
+    EndpointOutput["observability.reconcile"]
+  >((c, input) => c.observability.reconcile(input));
+}
+export function useObservabilityColumns(
+  input: EndpointInput["observability.columns"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "observability.columns",
+    input,
+    (c, signal) => c.observability.columns(input, { signal }),
+    options,
+  );
+}
+export function useObservabilityFreshness(
+  input: EndpointInput["observability.freshness"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "observability.freshness",
+    input,
+    (c, signal) => c.observability.freshness(input, { signal }),
+    options,
+  );
+}
+export function useObservabilitySetFreshness() {
+  return useFoundryMutation<
+    EndpointInput["observability.setFreshness"],
+    EndpointOutput["observability.setFreshness"]
+  >((c, input) => c.observability.setFreshness(input));
+}
+export function useObservabilityDependencyFreshness(
+  input: EndpointInput["observability.dependencyFreshness"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "observability.dependencyFreshness",
+    input,
+    (c, signal) => c.observability.dependencyFreshness(input, { signal }),
+    options,
+  );
+}
+export function useObservabilityHealth(
+  input: EndpointInput["observability.health"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "observability.health",
+    input,
+    (c, signal) => c.observability.health(input, { signal }),
+    options,
+  );
+}
+export function useObservabilityEvents(
+  input: EndpointInput["observability.events"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "observability.events",
+    input,
+    (c, signal) => c.observability.events(input, { signal }),
+    options,
+  );
+}
+export function useObservabilityExecution(
+  input: EndpointInput["observability.execution"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "observability.execution",
+    input,
+    (c, signal) => c.observability.execution(input, { signal }),
+    options,
+  );
+}
+export function useObservabilityDashboard(
+  input: EndpointInput["observability.dashboard"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "observability.dashboard",
+    input,
+    (c, signal) => c.observability.dashboard(input, { signal }),
+    options,
+  );
+}

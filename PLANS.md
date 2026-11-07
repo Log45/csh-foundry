@@ -3688,3 +3688,14 @@ the design. Phase 20 is locally accepted with executed evidence and limits recor
 docs/development/phase-20-report.md; no shared Phase 20 migration/deployment was performed.
 Existing shared developer data and the protected Keycloak environment must remain unchanged.
 No arbitrary code, Code Workspaces, Spark, Rust or §23B work. Production remains BLOCKED.
+
+## Phase 21 authorization addendum — 2026-11-06
+
+The explicit Phase 21 request authorizes the integrated shared development rollout and governed
+lineage/impact/freshness/observability vertical slice. ADR 0046 records the design and preservation
+boundary. Targeted Foundry API/worker/Studio/storage changes and backed-up forward migrations are
+permitted only after target verification and isolated restore rehearsal. Keycloak and its dependencies
+must remain uninterrupted and unchanged. Migration 0027 requires disposable validation before shared
+application. This does not complete unrelated milestone J work or authorize production certification,
+Code Workspaces, arbitrary code, external connectors, Spark, Rust or streaming. Acceptance remains
+pending; §23B remains BLOCKED / NOT PRODUCTION-CERTIFIED.

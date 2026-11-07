@@ -1253,6 +1253,194 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/lineage/traverse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Traverse */
+        post: operations["traverse_api_v1_lineage_traverse_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/lineage/impact": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Impact */
+        post: operations["impact_api_v1_lineage_impact_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resources/{resource_id}/lineage/index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Indexing */
+        get: operations["indexing_api_v1_resources__resource_id__lineage_index_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resources/{resource_id}/lineage/reconcile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Backfill */
+        post: operations["backfill_api_v1_resources__resource_id__lineage_reconcile_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/pipelines/{pipeline_id}/definitions/{definition_id}/columns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Columns */
+        get: operations["columns_api_v1_pipelines__pipeline_id__definitions__definition_id__columns_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/datasets/{dataset_id}/freshness": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Freshness */
+        get: operations["freshness_api_v1_datasets__dataset_id__freshness_get"];
+        /** Policy */
+        put: operations["policy_api_v1_datasets__dataset_id__freshness_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resources/{resource_id}/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Health */
+        get: operations["health_api_v1_resources__resource_id__health_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resources/{resource_id}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Events */
+        get: operations["events_api_v1_resources__resource_id__events_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/observability/executions/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Execution */
+        get: operations["execution_api_v1_observability_executions__job_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/observability/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dashboard */
+        get: operations["dashboard_api_v1_observability_dashboard_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/datasets/{dataset_id}/freshness/dependencies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dependency Freshness */
+        get: operations["dependency_freshness_api_v1_datasets__dataset_id__freshness_dependencies_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{project_id}/mappings": {
         parameters: {
             query?: never;
@@ -4004,6 +4192,41 @@ export interface components {
             /** Outcome */
             outcome: string;
         };
+        /** ColumnDependency */
+        ColumnDependency: {
+            /** Output */
+            output: string;
+            /** Input Name */
+            input_name: string;
+            /** Input Column */
+            input_column: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "VALUE" | "ROW" | "ORDER";
+        };
+        /** ColumnLineage */
+        ColumnLineage: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "EXACT" | "PARTIAL" | "UNSUPPORTED";
+            /** Reason */
+            reason: string;
+            /** Records */
+            records: components["schemas"]["ColumnDependency"][];
+            /** Inputs */
+            inputs: {
+                [key: string]: components["schemas"]["LineageNode"];
+            };
+            /**
+             * Truncated
+             * @default false
+             */
+            truncated?: boolean;
+        };
         /** ComparisonInput */
         ComparisonInput: {
             /** Source Revision */
@@ -4250,6 +4473,26 @@ export interface components {
             /** Name */
             name?: string | null;
         };
+        /** Dashboard */
+        Dashboard: {
+            /**
+             * Checked At
+             * Format: date-time
+             */
+            checked_at: string;
+            /** Days */
+            days: number;
+            /** Execution Counts */
+            execution_counts: {
+                [key: string]: number;
+            };
+            /** Recent Failures */
+            recent_failures: components["schemas"]["ExecutionObservation"][];
+            /** Sampled Resources */
+            sampled_resources: number;
+            /** Truncated */
+            truncated: boolean;
+        };
         /** DatasetPreview */
         DatasetPreview: {
             /** Columns */
@@ -4391,6 +4634,27 @@ export interface components {
              */
             enabled?: boolean;
         };
+        /** DependencyEdge */
+        DependencyEdge: {
+            /** Id */
+            id: string;
+            source: components["schemas"]["LineageNode"];
+            target: components["schemas"]["LineageNode"];
+            /** Relation */
+            relation: string;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "DESIGN" | "EXECUTION";
+            /**
+             * Certainty
+             * @enum {string}
+             */
+            certainty: "EXACT_VERSION" | "RESOURCE" | "POTENTIAL" | "HISTORICAL";
+            /** Provenance */
+            provenance: string;
+        };
         /** DiagnosticView */
         DiagnosticView: {
             /** Mapping Id */
@@ -4483,6 +4747,37 @@ export interface components {
             object_type: string;
             identity: components["schemas"]["Identity"];
         };
+        /** EventView */
+        EventView: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Resource Id
+             * Format: uuid
+             */
+            resource_id: string;
+            /**
+             * Execution Id
+             * Format: uuid
+             */
+            execution_id: string;
+            /** Event Type */
+            event_type: string;
+            /** Severity */
+            severity: string;
+            /** State */
+            state: string;
+            /** Attempt */
+            attempt: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
         /**
          * ExecuteRequest
          * @example {
@@ -4554,6 +4849,23 @@ export interface components {
             nodes?: components["schemas"]["NodeExecutionView"][];
             /** Outputs */
             outputs?: components["schemas"]["OutputPublicationView"][];
+        };
+        /** ExecutionObservation */
+        ExecutionObservation: {
+            execution: components["schemas"]["ExecutionJobView"];
+            /** Node Timeline */
+            node_timeline?: components["schemas"]["NodeTimeline"][];
+            /** Duration Seconds */
+            duration_seconds: number | null;
+            /** Queue Delay Seconds */
+            queue_delay_seconds: number | null;
+            /**
+             * Metric Status
+             * @enum {string}
+             */
+            metric_status: "MEASURED" | "UNAVAILABLE";
+            /** Error Category */
+            error_category: string | null;
         };
         /** ExecutionView */
         ExecutionView: {
@@ -4709,6 +5021,58 @@ export interface components {
             state: string;
             /** Revision */
             revision: number;
+        };
+        /** FreshnessDependencies */
+        FreshnessDependencies: {
+            /** Statuses */
+            statuses: components["schemas"]["FreshnessStatus"][];
+            /** Indexing Complete */
+            indexing_complete: boolean;
+            /** Truncated */
+            truncated: boolean;
+        };
+        /** FreshnessInput */
+        FreshnessInput: {
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled?: boolean;
+            /** Expected Interval Seconds */
+            expected_interval_seconds?: number | null;
+            /** Max Age Seconds */
+            max_age_seconds?: number | null;
+        };
+        /** FreshnessStatus */
+        FreshnessStatus: {
+            /**
+             * Resource Id
+             * Format: uuid
+             */
+            resource_id: string;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "FRESH" | "STALE" | "UNKNOWN" | "DISABLED";
+            /** Reason */
+            reason: string;
+            policy: components["schemas"]["FreshnessInput"] | null;
+            /**
+             * Checked At
+             * Format: date-time
+             */
+            checked_at: string;
+            /** Last Committed At */
+            last_committed_at: string | null;
+            /** Last Version Id */
+            last_version_id: string | null;
+            /** Age Seconds */
+            age_seconds: number | null;
+            /** Last Successful Run Id */
+            last_successful_run_id?: string | null;
+            /** Last Failed Run Id */
+            last_failed_run_id?: string | null;
         };
         /** FunctionDefinition */
         FunctionDefinition: {
@@ -4868,6 +5232,26 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** HealthSummary */
+        HealthSummary: {
+            /**
+             * Resource Id
+             * Format: uuid
+             */
+            resource_id: string;
+            /** Executions */
+            executions: components["schemas"]["ExecutionObservation"][];
+            /** Consecutive Failures */
+            consecutive_failures: number;
+            /** History Truncated */
+            history_truncated: boolean;
+            /** Last Success Id */
+            last_success_id: string | null;
+            /** Last Failure Id */
+            last_failure_id: string | null;
+            /** Active Ids */
+            active_ids: string[];
+        };
         /** HistoryPage */
         HistoryPage: {
             /** Items */
@@ -4901,6 +5285,22 @@ export interface components {
             attributes?: {
                 [key: string]: components["schemas"]["JsonValue"];
             };
+        };
+        /** ImpactPath */
+        ImpactPath: {
+            target: components["schemas"]["LineageNode"];
+            /** Edges */
+            edges: components["schemas"]["DependencyEdge"][];
+            /** Certainty */
+            certainty: string;
+            /** Reason */
+            reason: string;
+        };
+        /** ImpactResult */
+        ImpactResult: {
+            graph: components["schemas"]["LineageGraph"];
+            /** Paths */
+            paths: components["schemas"]["ImpactPath"][];
         };
         /** ImportInput */
         ImportInput: {
@@ -4987,6 +5387,17 @@ export interface components {
             changes: string[];
             /** Draft Version */
             draft_version: string | null;
+        };
+        /** IndexStatus */
+        IndexStatus: {
+            /** Complete */
+            complete: boolean;
+            /** Generation */
+            generation: number;
+            /** Indexed Generation */
+            indexed_generation: number;
+            /** Cursor */
+            cursor: string;
         };
         /** InitiateDataset */
         InitiateDataset: {
@@ -5175,6 +5586,42 @@ export interface components {
         LifecycleInput: {
             /** Plan Id */
             plan_id?: string | null;
+        };
+        /** LineageGraph */
+        LineageGraph: {
+            /**
+             * Format Version
+             * @default 1
+             * @constant
+             */
+            format_version?: 1;
+            /** Nodes */
+            nodes: components["schemas"]["LineageNode"][];
+            /** Edges */
+            edges: components["schemas"]["DependencyEdge"][];
+            /** Truncated */
+            truncated: boolean;
+            indexing: components["schemas"]["IndexStatus"];
+        };
+        /** LineageNode */
+        LineageNode: {
+            /** Key */
+            key: string;
+            /** Kind */
+            kind: string;
+            /**
+             * Resource Id
+             * Format: uuid
+             */
+            resource_id: string;
+            /** Version Id */
+            version_id?: string | null;
+            /** Local Id */
+            local_id?: string | null;
+            /** Ontology Id */
+            ontology_id?: string | null;
+            /** Schema Version */
+            schema_version?: string | null;
         };
         /** LinkInput */
         LinkInput: {
@@ -5649,6 +6096,27 @@ export interface components {
             attempt: number;
             /** Error */
             error?: string | null;
+        };
+        /** NodeTimeline */
+        NodeTimeline: {
+            /** Node Id */
+            node_id: string;
+            /** State */
+            state: string;
+            /** Attempt */
+            attempt: number;
+            /** Started At */
+            started_at: string | null;
+            /** Completed At */
+            completed_at: string | null;
+            /** Duration Seconds */
+            duration_seconds: number | null;
+            /** Error Category */
+            error_category: string | null;
+            /** Measured Metrics */
+            measured_metrics: {
+                [key: string]: number;
+            };
         };
         /** ObjectInput */
         ObjectInput: {
@@ -6851,6 +7319,31 @@ export interface components {
             kind: "transform";
             position?: components["schemas"]["Position"];
             config: components["schemas"]["Step-Output"];
+        };
+        /** Traversal */
+        Traversal: {
+            root: components["schemas"]["LineageNode"];
+            /**
+             * Direction
+             * @default upstream
+             * @enum {string}
+             */
+            direction?: "upstream" | "downstream";
+            /**
+             * Depth
+             * @default 3
+             */
+            depth?: number;
+            /**
+             * Max Nodes
+             * @default 100
+             */
+            max_nodes?: number;
+            /**
+             * Max Edges
+             * @default 200
+             */
+            max_edges?: number;
         };
         /** TraversalStep */
         TraversalStep: {
@@ -10404,6 +10897,397 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Visualization"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    traverse_api_v1_lineage_traverse_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Traversal"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LineageGraph"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    impact_api_v1_lineage_impact_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Traversal"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImpactResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    indexing_api_v1_resources__resource_id__lineage_index_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                resource_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IndexStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    backfill_api_v1_resources__resource_id__lineage_reconcile_post: {
+        parameters: {
+            query?: {
+                batch?: number;
+            };
+            header?: never;
+            path: {
+                resource_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IndexStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    columns_api_v1_pipelines__pipeline_id__definitions__definition_id__columns_get: {
+        parameters: {
+            query?: {
+                output?: string | null;
+            };
+            header?: never;
+            path: {
+                pipeline_id: string;
+                definition_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ColumnLineage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    freshness_api_v1_datasets__dataset_id__freshness_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dataset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FreshnessStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    policy_api_v1_datasets__dataset_id__freshness_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dataset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FreshnessInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FreshnessStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    health_api_v1_resources__resource_id__health_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                resource_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HealthSummary"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    events_api_v1_resources__resource_id__events_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                resource_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventView"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    execution_api_v1_observability_executions__job_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExecutionObservation"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dashboard_api_v1_observability_dashboard_get: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Dashboard"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dependency_freshness_api_v1_datasets__dataset_id__freshness_dependencies_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dataset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FreshnessDependencies"];
                 };
             };
             /** @description Validation Error */

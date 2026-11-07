@@ -13,6 +13,7 @@ import { Field, Notice, Task, useTask } from "./ui";
 import { Projects } from "@/features/projects";
 import { Manager } from "@/features/manager";
 import { Explorer, Actions } from "@/features/explorer";
+import { Observability } from "@/features/observability";
 import { Operations } from "@/features/operations";
 import { Brand } from "./brand";
 const navigate = () =>
@@ -158,6 +159,7 @@ export function Workspace() {
     );
   const navigation = [
     ["projects", "Projects", "project:read"],
+    ["observability", "Lineage & observability", "project:read"],
     ["manager", "Ontology Manager", "schema:read"],
     ["explorer", "Objects & Object Sets", "object:query"],
     ["actions", "Actions", "action:invoke"],
@@ -174,6 +176,7 @@ export function Workspace() {
         <Brand subtitle="DEVELOPER WORKSPACE" />
         <Field label="Tenant">
           <select
+            disabled={task.busy}
             value={session.tenant ?? ""}
             onChange={(e) => {
               if (!navigate()) return;
@@ -368,6 +371,9 @@ export function Workspace() {
               }}
             />
           </ArtifactContext.Provider>
+        )}
+        {tab === "observability" && session.tenant && can("project:read") && (
+          <Observability key={projectScope} api={api} />
         )}
         {id && session.tenant && (
           <div key={`${session.tenant}-${id}-${tab}`}>

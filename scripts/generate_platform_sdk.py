@@ -143,7 +143,23 @@ for family, ident, group in [
             ("lineage", "get", base + "/items/{item_id}/lineage"),
         ]
 manifest["mappings"].append(("preview", "post", "/mappings/{mapping_id}/preview"))
+manifest["observability"] = [
+    ("traverse", "post", "/lineage/traverse"),
+    ("impact", "post", "/lineage/impact"),
+    ("index", "get", "/resources/{resource_id}/lineage/index"),
+    ("reconcile", "post", "/resources/{resource_id}/lineage/reconcile"),
+    ("columns", "get", "/pipelines/{pipeline_id}/definitions/{definition_id}/columns"),
+    ("freshness", "get", "/datasets/{dataset_id}/freshness"),
+    ("setFreshness", "put", "/datasets/{dataset_id}/freshness"),
+    ("dependencyFreshness", "get", "/datasets/{dataset_id}/freshness/dependencies"),
+    ("health", "get", "/resources/{resource_id}/health"),
+    ("events", "get", "/resources/{resource_id}/events"),
+    ("execution", "get", "/observability/executions/{job_id}"),
+    ("dashboard", "get", "/observability/dashboard"),
+]
 read_posts = {
+    ("observability", "traverse"),
+    ("observability", "impact"),
     ("applications", "query"),
     ("objects", "query"),
     ("objects", "aggregate"),

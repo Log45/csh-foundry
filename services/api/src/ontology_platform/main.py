@@ -34,6 +34,7 @@ from ontology_platform.ingestion.routes import router as ingestion_router
 from ontology_platform.interoperability.routes import router as interchange_router
 from ontology_platform.mappings.routes import router as mapping_router
 from ontology_platform.media.routes import router as media_router
+from ontology_platform.observability.routes import router as observability_router
 from ontology_platform.operations import RequestTelemetry, Telemetry, TransportBounds
 from ontology_platform.pipelines.routes import router as pipeline_router
 from ontology_platform.projects.routes import router as project_router
@@ -113,6 +114,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(artifact_router)
     app.include_router(dataset_router)
     app.include_router(pipeline_router)
+    app.include_router(observability_router)
     app.add_middleware(
         ActionPayloadLimit,
         paths=("/pipelines",),

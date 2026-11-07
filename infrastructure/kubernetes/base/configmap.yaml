@@ -10,7 +10,6 @@ data:
   FOUNDRY_OIDC_PROVIDERS: '[{"id":"keycloak","issuer":"https://identity.example.test/realms/foundry","audience":"foundry-api","clients":["studio","worker"],"algorithms":["RS256"]}]'
   FOUNDRY_SECRETS_DIRECTORY: /run/secrets
   FOUNDRY_DATABASE_TLS_REQUIRED: 'true'
-  FOUNDRY_OIDC_CA_BUNDLE: /run/trust/oidc-ca.pem
   FOUNDRY_DATABASE_POOL_SIZE: '3'
   FOUNDRY_DATABASE_POOL_OVERFLOW: '0'
   FOUNDRY_WORKER_PROVIDER_ID: keycloak
@@ -25,6 +24,5 @@ data:
   STUDIO_API_AUDIENCE: foundry-api
   STUDIO_BROKER_LOGOUT: 'true'
   STUDIO_STATE_SECRET_FILE: /run/secrets/FOUNDRY_BROWSER_STATE_SECRET
-  NODE_EXTRA_CA_CERTS: /run/trust/oidc-ca.pem
   HOME: /tmp
   TMPDIR: /tmp

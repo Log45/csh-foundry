@@ -6068,6 +6068,679 @@
         }
       }
     },
+    "/api/v1/lineage/traverse": {
+      "post": {
+        "tags": [
+          "observability"
+        ],
+        "summary": "Traverse",
+        "operationId": "traverse_api_v1_lineage_traverse_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Traversal"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LineageGraph"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/lineage/impact": {
+      "post": {
+        "tags": [
+          "observability"
+        ],
+        "summary": "Impact",
+        "operationId": "impact_api_v1_lineage_impact_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Traversal"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImpactResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/resources/{resource_id}/lineage/index": {
+      "get": {
+        "tags": [
+          "observability"
+        ],
+        "summary": "Indexing",
+        "operationId": "indexing_api_v1_resources__resource_id__lineage_index_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "resource_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Resource Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/resources/{resource_id}/lineage/reconcile": {
+      "post": {
+        "tags": [
+          "observability"
+        ],
+        "summary": "Backfill",
+        "operationId": "backfill_api_v1_resources__resource_id__lineage_reconcile_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "resource_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Resource Id"
+            }
+          },
+          {
+            "name": "batch",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Batch"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pipelines/{pipeline_id}/definitions/{definition_id}/columns": {
+      "get": {
+        "tags": [
+          "observability"
+        ],
+        "summary": "Columns",
+        "operationId": "columns_api_v1_pipelines__pipeline_id__definitions__definition_id__columns_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Pipeline Id"
+            }
+          },
+          {
+            "name": "definition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Definition Id"
+            }
+          },
+          {
+            "name": "output",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 80
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Output"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColumnLineage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/datasets/{dataset_id}/freshness": {
+      "get": {
+        "tags": [
+          "observability"
+        ],
+        "summary": "Freshness",
+        "operationId": "freshness_api_v1_datasets__dataset_id__freshness_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Dataset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreshnessStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "observability"
+        ],
+        "summary": "Policy",
+        "operationId": "policy_api_v1_datasets__dataset_id__freshness_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Dataset Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FreshnessInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreshnessStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/resources/{resource_id}/health": {
+      "get": {
+        "tags": [
+          "observability"
+        ],
+        "summary": "Health",
+        "operationId": "health_api_v1_resources__resource_id__health_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "resource_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Resource Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthSummary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/resources/{resource_id}/events": {
+      "get": {
+        "tags": [
+          "observability"
+        ],
+        "summary": "Events",
+        "operationId": "events_api_v1_resources__resource_id__events_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "resource_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Resource Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EventView"
+                  },
+                  "title": "Response Events Api V1 Resources  Resource Id  Events Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/observability/executions/{job_id}": {
+      "get": {
+        "tags": [
+          "observability"
+        ],
+        "summary": "Execution",
+        "operationId": "execution_api_v1_observability_executions__job_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecutionObservation"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/observability/dashboard": {
+      "get": {
+        "tags": [
+          "observability"
+        ],
+        "summary": "Dashboard",
+        "operationId": "dashboard_api_v1_observability_dashboard_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 30,
+              "minimum": 1,
+              "default": 7,
+              "title": "Days"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dashboard"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/datasets/{dataset_id}/freshness/dependencies": {
+      "get": {
+        "tags": [
+          "observability"
+        ],
+        "summary": "Dependency Freshness",
+        "operationId": "dependency_freshness_api_v1_datasets__dataset_id__freshness_dependencies_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Dataset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreshnessDependencies"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/projects/{project_id}/mappings": {
       "post": {
         "tags": [
@@ -16205,6 +16878,85 @@
         ],
         "title": "CleanupResult"
       },
+      "ColumnDependency": {
+        "properties": {
+          "output": {
+            "type": "string",
+            "title": "Output"
+          },
+          "input_name": {
+            "type": "string",
+            "title": "Input Name"
+          },
+          "input_column": {
+            "type": "string",
+            "title": "Input Column"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "VALUE",
+              "ROW",
+              "ORDER"
+            ],
+            "title": "Kind"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "output",
+          "input_name",
+          "input_column",
+          "kind"
+        ],
+        "title": "ColumnDependency"
+      },
+      "ColumnLineage": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "PARTIAL",
+              "UNSUPPORTED"
+            ],
+            "title": "Status"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "records": {
+            "items": {
+              "$ref": "#/components/schemas/ColumnDependency"
+            },
+            "type": "array",
+            "title": "Records"
+          },
+          "inputs": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/LineageNode"
+            },
+            "type": "object",
+            "title": "Inputs"
+          },
+          "truncated": {
+            "type": "boolean",
+            "title": "Truncated",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "reason",
+          "records",
+          "inputs"
+        ],
+        "title": "ColumnLineage"
+      },
       "ComparisonInput": {
         "properties": {
           "source_revision": {
@@ -16936,6 +17688,52 @@
         ],
         "title": "DAGOutput"
       },
+      "Dashboard": {
+        "properties": {
+          "checked_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Checked At"
+          },
+          "days": {
+            "type": "integer",
+            "title": "Days"
+          },
+          "execution_counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Execution Counts"
+          },
+          "recent_failures": {
+            "items": {
+              "$ref": "#/components/schemas/ExecutionObservation"
+            },
+            "type": "array",
+            "title": "Recent Failures"
+          },
+          "sampled_resources": {
+            "type": "integer",
+            "title": "Sampled Resources"
+          },
+          "truncated": {
+            "type": "boolean",
+            "title": "Truncated"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "checked_at",
+          "days",
+          "execution_counts",
+          "recent_failures",
+          "sampled_resources",
+          "truncated"
+        ],
+        "title": "Dashboard"
+      },
       "DatasetPreview": {
         "properties": {
           "columns": {
@@ -17275,6 +18073,58 @@
         ],
         "title": "DelegationInput"
       },
+      "DependencyEdge": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "source": {
+            "$ref": "#/components/schemas/LineageNode"
+          },
+          "target": {
+            "$ref": "#/components/schemas/LineageNode"
+          },
+          "relation": {
+            "type": "string",
+            "title": "Relation"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "DESIGN",
+              "EXECUTION"
+            ],
+            "title": "Mode"
+          },
+          "certainty": {
+            "type": "string",
+            "enum": [
+              "EXACT_VERSION",
+              "RESOURCE",
+              "POTENTIAL",
+              "HISTORICAL"
+            ],
+            "title": "Certainty"
+          },
+          "provenance": {
+            "type": "string",
+            "title": "Provenance"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "source",
+          "target",
+          "relation",
+          "mode",
+          "certainty",
+          "provenance"
+        ],
+        "title": "DependencyEdge"
+      },
       "DiagnosticView": {
         "properties": {
           "mapping_id": {
@@ -17508,6 +18358,59 @@
         ],
         "title": "Endpoint"
       },
+      "EventView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Resource Id"
+          },
+          "execution_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Execution Id"
+          },
+          "event_type": {
+            "type": "string",
+            "title": "Event Type"
+          },
+          "severity": {
+            "type": "string",
+            "title": "Severity"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "attempt": {
+            "type": "integer",
+            "title": "Attempt"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "resource_id",
+          "execution_id",
+          "event_type",
+          "severity",
+          "state",
+          "attempt",
+          "created_at"
+        ],
+        "title": "EventView"
+      },
       "ExecuteRequest": {
         "properties": {
           "parameters": {
@@ -17712,6 +18615,71 @@
           "completed_at"
         ],
         "title": "ExecutionJobView"
+      },
+      "ExecutionObservation": {
+        "properties": {
+          "execution": {
+            "$ref": "#/components/schemas/ExecutionJobView"
+          },
+          "node_timeline": {
+            "items": {
+              "$ref": "#/components/schemas/NodeTimeline"
+            },
+            "type": "array",
+            "title": "Node Timeline"
+          },
+          "duration_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Seconds"
+          },
+          "queue_delay_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Queue Delay Seconds"
+          },
+          "metric_status": {
+            "type": "string",
+            "enum": [
+              "MEASURED",
+              "UNAVAILABLE"
+            ],
+            "title": "Metric Status"
+          },
+          "error_category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Category"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "execution",
+          "duration_seconds",
+          "queue_delay_seconds",
+          "metric_status",
+          "error_category"
+        ],
+        "title": "ExecutionObservation"
       },
       "ExecutionView": {
         "properties": {
@@ -18168,6 +19136,181 @@
         ],
         "title": "FolderView"
       },
+      "FreshnessDependencies": {
+        "properties": {
+          "statuses": {
+            "items": {
+              "$ref": "#/components/schemas/FreshnessStatus"
+            },
+            "type": "array",
+            "title": "Statuses"
+          },
+          "indexing_complete": {
+            "type": "boolean",
+            "title": "Indexing Complete"
+          },
+          "truncated": {
+            "type": "boolean",
+            "title": "Truncated"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "statuses",
+          "indexing_complete",
+          "truncated"
+        ],
+        "title": "FreshnessDependencies"
+      },
+      "FreshnessInput": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": true
+          },
+          "expected_interval_seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 31536000.0,
+                "minimum": 60.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Interval Seconds"
+          },
+          "max_age_seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 31536000.0,
+                "minimum": 60.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Age Seconds"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "FreshnessInput"
+      },
+      "FreshnessStatus": {
+        "properties": {
+          "resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Resource Id"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "FRESH",
+              "STALE",
+              "UNKNOWN",
+              "DISABLED"
+            ],
+            "title": "State"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "policy": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FreshnessInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "checked_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Checked At"
+          },
+          "last_committed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Committed At"
+          },
+          "last_version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Version Id"
+          },
+          "age_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age Seconds"
+          },
+          "last_successful_run_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Successful Run Id"
+          },
+          "last_failed_run_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Failed Run Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "resource_id",
+          "state",
+          "reason",
+          "policy",
+          "checked_at",
+          "last_committed_at",
+          "last_version_id",
+          "age_seconds"
+        ],
+        "title": "FreshnessStatus"
+      },
       "FunctionDefinition": {
         "properties": {
           "implementation": {
@@ -18556,6 +19699,74 @@
         ],
         "title": "Health"
       },
+      "HealthSummary": {
+        "properties": {
+          "resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Resource Id"
+          },
+          "executions": {
+            "items": {
+              "$ref": "#/components/schemas/ExecutionObservation"
+            },
+            "type": "array",
+            "title": "Executions"
+          },
+          "consecutive_failures": {
+            "type": "integer",
+            "title": "Consecutive Failures"
+          },
+          "history_truncated": {
+            "type": "boolean",
+            "title": "History Truncated"
+          },
+          "last_success_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success Id"
+          },
+          "last_failure_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Failure Id"
+          },
+          "active_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Active Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "resource_id",
+          "executions",
+          "consecutive_failures",
+          "history_truncated",
+          "last_success_id",
+          "last_failure_id",
+          "active_ids"
+        ],
+        "title": "HealthSummary"
+      },
       "HistoryPage": {
         "properties": {
           "items": {
@@ -18645,6 +19856,58 @@
           "subject"
         ],
         "title": "IdentityInput"
+      },
+      "ImpactPath": {
+        "properties": {
+          "target": {
+            "$ref": "#/components/schemas/LineageNode"
+          },
+          "edges": {
+            "items": {
+              "$ref": "#/components/schemas/DependencyEdge"
+            },
+            "type": "array",
+            "title": "Edges"
+          },
+          "certainty": {
+            "type": "string",
+            "title": "Certainty"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "target",
+          "edges",
+          "certainty",
+          "reason"
+        ],
+        "title": "ImpactPath"
+      },
+      "ImpactResult": {
+        "properties": {
+          "graph": {
+            "$ref": "#/components/schemas/LineageGraph"
+          },
+          "paths": {
+            "items": {
+              "$ref": "#/components/schemas/ImpactPath"
+            },
+            "type": "array",
+            "title": "Paths"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "graph",
+          "paths"
+        ],
+        "title": "ImpactResult"
       },
       "ImportInput": {
         "properties": {
@@ -18935,6 +20198,35 @@
           "draft_version"
         ],
         "title": "ImportView"
+      },
+      "IndexStatus": {
+        "properties": {
+          "complete": {
+            "type": "boolean",
+            "title": "Complete"
+          },
+          "generation": {
+            "type": "integer",
+            "title": "Generation"
+          },
+          "indexed_generation": {
+            "type": "integer",
+            "title": "Indexed Generation"
+          },
+          "cursor": {
+            "type": "string",
+            "title": "Cursor"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "complete",
+          "generation",
+          "indexed_generation",
+          "cursor"
+        ],
+        "title": "IndexStatus"
       },
       "InitiateDataset": {
         "properties": {
@@ -19370,6 +20662,116 @@
         "additionalProperties": false,
         "type": "object",
         "title": "LifecycleInput"
+      },
+      "LineageGraph": {
+        "properties": {
+          "format_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Format Version",
+            "default": 1
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/LineageNode"
+            },
+            "type": "array",
+            "title": "Nodes"
+          },
+          "edges": {
+            "items": {
+              "$ref": "#/components/schemas/DependencyEdge"
+            },
+            "type": "array",
+            "title": "Edges"
+          },
+          "truncated": {
+            "type": "boolean",
+            "title": "Truncated"
+          },
+          "indexing": {
+            "$ref": "#/components/schemas/IndexStatus"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "nodes",
+          "edges",
+          "truncated",
+          "indexing"
+        ],
+        "title": "LineageGraph"
+      },
+      "LineageNode": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Resource Id"
+          },
+          "version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Id"
+          },
+          "local_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local Id"
+          },
+          "ontology_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ontology Id"
+          },
+          "schema_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schema Version"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key",
+          "kind",
+          "resource_id"
+        ],
+        "title": "LineageNode"
       },
       "LinkInput": {
         "properties": {
@@ -20532,6 +21934,88 @@
           "attempt"
         ],
         "title": "NodeExecutionView"
+      },
+      "NodeTimeline": {
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "attempt": {
+            "type": "integer",
+            "title": "Attempt"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "duration_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Seconds"
+          },
+          "error_category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Category"
+          },
+          "measured_metrics": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Measured Metrics"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "node_id",
+          "state",
+          "attempt",
+          "started_at",
+          "completed_at",
+          "duration_seconds",
+          "error_category",
+          "measured_metrics"
+        ],
+        "title": "NodeTimeline"
       },
       "ObjectInput": {
         "properties": {
@@ -23529,6 +25013,49 @@
           "config"
         ],
         "title": "TransformNode"
+      },
+      "Traversal": {
+        "properties": {
+          "root": {
+            "$ref": "#/components/schemas/LineageNode"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "upstream",
+              "downstream"
+            ],
+            "title": "Direction",
+            "default": "upstream"
+          },
+          "depth": {
+            "type": "integer",
+            "maximum": 8.0,
+            "minimum": 1.0,
+            "title": "Depth",
+            "default": 3
+          },
+          "max_nodes": {
+            "type": "integer",
+            "maximum": 200.0,
+            "minimum": 1.0,
+            "title": "Max Nodes",
+            "default": 100
+          },
+          "max_edges": {
+            "type": "integer",
+            "maximum": 400.0,
+            "minimum": 1.0,
+            "title": "Max Edges",
+            "default": 200
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "root"
+        ],
+        "title": "Traversal"
       },
       "TraversalStep": {
         "properties": {
