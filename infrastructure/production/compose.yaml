@@ -2,6 +2,7 @@ name: csh-foundry-production
 
 x-api-environment: &api-environment
   FOUNDRY_ENVIRONMENT: production
+  FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE: "${FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE:-false}"
   FOUNDRY_PUBLIC_ORIGIN: https://${STUDIO_HOST:?Set STUDIO_HOST}
   FOUNDRY_ALLOWED_HOSTS: '["api","${API_HOST:?Set API_HOST}"]'
   FOUNDRY_AUTH_MODE: oidc

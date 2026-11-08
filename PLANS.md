@@ -3708,3 +3708,12 @@ background paths with service authentication and bounded job-scoped grants. This
 additive security migration, existing ingestion/semantic/execution/scheduler paths, tests,
 configuration and documentation. It does not authorize new roadmap subsystems or deployment.
 See `docs/operations/dynamic-workers.md` and ADR 0047 for implementation and rollout semantics.
+
+
+## Approved task — existing-owner database runtime (2026-11-08)
+
+The explicit user request authorizes consistent `FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE` handling
+through API/worker startup, validation utilities, deployment examples and tests. The existing
+PostgreSQL owner may also be the runtime account; no second application role is required. The
+exception is limited to ownership checks and does not relax application security or constraints.
+No new schema migration, roadmap subsystem or target deployment is authorized by this task.

@@ -6,14 +6,41 @@ from pathlib import Path
 
 import psycopg
 from psycopg import sql
+from pydantic import TypeAdapter
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--secrets", type=Path, required=True)
+    parser.add_argument("--secrets", type=Path)
+    parser.add_argument(
+        "--owner-runtime",
+        action="store_true",
+        default=TypeAdapter(bool).validate_python(
+            os.environ.get("FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE", "false")
+        ),
+        help="Use the existing migration/runtime owner; create no roles or databases",
+    )
     parser.add_argument("--apply", action="store_true")
     parser.add_argument("--grant-runtime", action="store_true", help="Run after owner migrations")
     args = parser.parse_args()
+    if args.owner_runtime:
+        if not args.apply:
+            print("DRY RUN: use the existing FOUNDRY_DATABASE_URL owner for migrations and runtime")
+            print("No role/database creation or separate runtime table grants required")
+            return
+        from ontology_platform.config import get_settings
+        from ontology_platform.db.session import make_engine, require_runtime_role
+        from sqlalchemy.orm import sessionmaker
+
+        engine = make_engine(get_settings())
+        try:
+            require_runtime_role(sessionmaker(engine), allow_owner_runtime_role=True)
+        finally:
+            engine.dispose()
+        print("PASS existing owner runtime account; no roles, databases or grants changed")
+        return
+    if args.secrets is None:
+        parser.error("--secrets is required for separate-role cluster provisioning")
     if not args.apply:
         print(
             "DRY RUN: create isolated foundry/keycloak databases and non-superuser "

@@ -68,25 +68,34 @@ def main() -> None:
             private, _, verifier = next(identity)
             from sqlalchemy.engine import make_url
 
-            runtime_role = "load_runtime_" + secrets.token_hex(8)
-            runtime_password = secrets.token_hex(32)
-            with world.engine.begin() as connection:
-                schema = connection.scalar(text("SELECT current_schema()"))
-                connection.exec_driver_sql(
-                    f"CREATE ROLE {runtime_role} LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE "
-                    f"PASSWORD '{runtime_password}'"
+            owner_runtime = get_settings().allow_owner_runtime_role
+            if owner_runtime:
+                with world.engine.connect() as connection:
+                    schema = connection.scalar(text("SELECT current_schema()"))
+                runtime_url = make_url(world.settings.database_url.get_secret_value())
+            else:
+                runtime_role = "load_runtime_" + secrets.token_hex(8)
+                runtime_password = secrets.token_hex(32)
+                with world.engine.begin() as connection:
+                    schema = connection.scalar(text("SELECT current_schema()"))
+                    connection.exec_driver_sql(
+                        f"CREATE ROLE {runtime_role} LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE "
+                        f"PASSWORD '{runtime_password}'"
+                    )
+                    connection.exec_driver_sql(
+                        f'GRANT USAGE ON SCHEMA "{schema}" TO {runtime_role}'
+                    )
+                    connection.exec_driver_sql(
+                        f'GRANT SELECT,INSERT,UPDATE,DELETE ON ALL TABLES IN SCHEMA "{schema}" '
+                        f"TO {runtime_role}"
+                    )
+                runtime_url = make_url(world.settings.database_url.get_secret_value()).set(
+                    username=runtime_role, password=runtime_password
                 )
-                connection.exec_driver_sql(f'GRANT USAGE ON SCHEMA "{schema}" TO {runtime_role}')
-                connection.exec_driver_sql(
-                    f'GRANT SELECT,INSERT,UPDATE,DELETE ON ALL TABLES IN SCHEMA "{schema}" '
-                    f"TO {runtime_role}"
-                )
-            runtime_url = make_url(world.settings.database_url.get_secret_value()).set(
-                username=runtime_role, password=runtime_password
-            )
             settings = Settings(
                 database_url=SecretStr(runtime_url.render_as_string(hide_password=False)),
                 database_schema=schema,
+                allow_owner_runtime_role=owner_runtime,
                 auth_mode="oidc",
                 environment="production",
                 public_origin="https://studio.example",

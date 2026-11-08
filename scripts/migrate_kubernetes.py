@@ -1,4 +1,4 @@
-"""Serialize migrations using one PostgreSQL advisory-lock session, never a runtime role."""
+"""Serialize migrations in a separate process using the configured DDL owner account."""
 
 from alembic import command
 from alembic.config import Config
@@ -8,9 +8,14 @@ from sqlalchemy.pool import NullPool
 
 
 def main() -> None:
-    engine = create_engine(get_settings().database_url.get_secret_value(), poolclass=NullPool)
+    settings = get_settings()
+    engine = create_engine(settings.database_url.get_secret_value(), poolclass=NullPool)
     try:
         with engine.connect() as connection:
+            connection.execute(
+                text("SELECT set_config('search_path', :schema, false)"),
+                {"schema": settings.database_schema},
+            )
             acquired = connection.scalar(text("SELECT pg_try_advisory_lock(7041000017)"))
             connection.commit()
             if not acquired:

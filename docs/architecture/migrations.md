@@ -140,9 +140,10 @@ uncommitted parent-history check was synchronized on the local database without 
 0016 adds encrypted browser login/session state with expiry/revision and shared request-budget
 rows. 0017 adds tenant logical artifact/staging accounting plus combined pending/running ingestion
 and semantic admission triggers. Accounting is backfilled; operational objects, memberships,
-canonical published snapshots and Phase 9 history are preserved. Production uses a non-owner DML
-role; migrations run separately under the owner. Verify backups before upgrading and regrant runtime
-table privileges afterward. Ordinary application startup never performs DDL.
+canonical published snapshots and Phase 9 history are preserved. Owner-runtime deployments use one existing database owner for migrations and runtime with
+`FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE=true`; no separate runtime grant refresh is required. Non-owner
+mode retains its DML-grants procedure. Migrations still run as a separate maintenance process.
+Verify backups before upgrading. Ordinary application startup never performs DDL.
 
 Downgrade 0017 drops accounting/admission controls without deleting artifacts; downgrade 0016
 invalidates all durable sessions and removes budget state. Earlier Phase 9 downgrades still destroy
@@ -157,7 +158,7 @@ Forward-only `0028_job_execution_grants` adds immutable, expiring tenant/job/pri
 execution grants, correlated audit job/grant/attempt IDs and shared-queue indexes. Composite FKs
 bind all three existing job families and tenant membership; one grant per job is enforced.
 Historical audit/job records are preserved. No legacy grants are backfilled: legacy queued work
-must be resubmitted through authorized admission. Runtime role grants and coordinated worker/API
-rollout are explicit operator actions; see [dynamic workers](../operations/dynamic-workers.md).
+must be resubmitted through authorized admission. Owner mode needs no runtime-role grant refresh; non-owner mode retains its grants procedure.
+Coordinated worker/API rollout remains an explicit operator action; see [dynamic workers](../operations/dynamic-workers.md).
 Audit correlation IDs deliberately have no deletion-blocking FKs so immutable audit evidence can
 outlive retained jobs and grants.

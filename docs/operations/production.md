@@ -23,7 +23,7 @@ Assign named humans to the following operational roles before deployment:
 | Role | Responsibility |
 |---|---|
 | Platform operator | Host, nginx/TLS, application releases, worker processes, quotas, alerts |
-| Database operator | Separate owner/runtime roles, encrypted backups, WAL, restoration, storage |
+| Database operator | Existing owner/runtime account (or existing non-owner mode), encrypted backups, WAL, restoration, storage |
 | Identity administrator | Keycloak, upstream organizations, explicit verified identity links, signing keys |
 | Tenant administrator | Platform membership, least-privilege roles, restrictive ABAC, deactivation |
 | Security/release reviewer | Vulnerability findings, artifact integrity, release/deployment approval |
@@ -43,11 +43,17 @@ Assign non-overlapping Docker subnets if 172.30.10.0/24 or 172.30.11.0/24 is alr
 change both nginx addresses and Keycloak trusted-proxy addresses together.
 
 Create secret files outside Git, on encrypted host storage. Use at least 32 random bytes per secret.
-File names: `postgres_password`, `migrator_password`, `runtime_password`, `keycloak_password`,
-`keycloak_admin_password`, `FOUNDRY_DATABASE_URL`, `FOUNDRY_BROWSER_STATE_SECRET`,
-`FOUNDRY_BROWSER_STATE_KEYS`, `FOUNDRY_QUERY_CURSOR_SECRET`, `FOUNDRY_WORKER_CLIENT_SECRET`.
-`FOUNDRY_DATABASE_URL` is the runtime `postgresql+psycopg://foundry_runtime:...@postgres:5432/foundry`
-URL with properly URL-encoded credentials. Do not use the superuser/migration URL at runtime.
+For the existing owner-account deployment, `FOUNDRY_DATABASE_URL` contains that same owner's
+properly URL-encoded credentials for both migration and runtime. No `migrator_password`,
+`runtime_password`, or PostgreSQL provisioning/admin credential is needed for this mode.
+Keep application secrets `FOUNDRY_BROWSER_STATE_SECRET`, `FOUNDRY_BROWSER_STATE_KEYS`,
+`FOUNDRY_QUERY_CURSOR_SECRET` and `FOUNDRY_WORKER_CLIENT_SECRET` in their existing mounts.
+
+The optional self-contained separate-role Compose profile additionally uses `postgres_password`,
+`migrator_password`, `runtime_password`, `keycloak_password`, and `keycloak_admin_password` for its
+own database/broker containers. Those files and the `foundry_runtime` URL example apply to that
+profile, not the existing owner-only OKD4 deployment. PostgreSQL superuser/role-creation flags are
+not exempted by owner mode.
 
 Generate Fernet keys with `uv run python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'`
 in a private terminal and store them directly; never paste real output into committed files.
@@ -78,16 +84,18 @@ reuse its nonpersistent filesystem. Preserve the existing local realm, user, pri
 1. Obtain explicit target-environment approval. Verify the source revision, release checksums,
    attestation identity, scan results and SBOMs. The release workflow does not deploy automatically.
 2. Start only the new PostgreSQL service and verify encrypted disk/WAL directory ownership.
-3. As the database operator, review `scripts/provision_production_database.py --secrets PATH`
-   (dry-run default). With the approved new cluster's private `FOUNDRY_ADMIN_DATABASE_URL`, run
-   `--apply`. This creates separate non-superuser `foundry_migrator`, `foundry_runtime` and
-   `keycloak` owners/runtime roles and revokes PUBLIC database access. It intentionally refuses
-   duplicate CREATE operations; it is not an in-place credential-rotation tool.
-4. Run `alembic upgrade head` as `foundry_migrator`, then `alembic check`. Use an isolated migration
-   container attached to the data network; do not start migrations in application startup.
-5. Run the provisioning script with `--apply --grant-runtime`, pointed at that same new cluster.
-   Runtime gets DML and migration-version read access, no DDL/table ownership/role creation.
-   Security audit UPDATE/DELETE/TRUNCATE are explicitly revoked. Reapply grants after migrations.
+3. For an existing owner/runtime account, set `FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE=true` in the
+   API/worker environment and configure the same existing owner URL for migrations and runtime.
+   Use the already configured broker/database resources. No second application database role,
+   `CREATEROLE` permission, provisioning admin credential or new database is required.
+   Optional verification: `uv run python scripts/provision_production_database.py --apply` with
+   owner mode enabled validates the existing account without changing roles or grants.
+4. Run `alembic upgrade head`, then `alembic check`, with that same owner account in a separate
+   maintenance process/container. Do not run migrations in application startup. Revision
+   `0028_job_execution_grants` and all its constraints/triggers work with owner runtime.
+5. Owner mode requires **no separate runtime table grants or refresh**. Existing non-owner
+   installations retain their existing approved provisioning/DML-grants procedure; this alternative
+   is not a prerequisite for owner mode. Elevated PostgreSQL role flags are rejected in both modes.
 6. Render a new broker realm as described below. Mount upstream secrets only when configured.
 7. Start nginx, Keycloak, API and Studio; startup/readiness must succeed before opening traffic.
    The ingress resolves upstream container names dynamically, permitting startup and replica changes.
@@ -96,7 +104,7 @@ reuse its nonpersistent filesystem. Preserve the existing local realm, user, pri
 9. Execute the target deployment's manufacturing, security, recovery and SSO acceptance gates.
 
 Releases use a maintenance window: stop admission, let bounded work finish or safely expire leases,
-stop workers/Studio/API, take and verify backups, migrate, regrant runtime, start broker/API/Studio,
+stop workers/Studio/API, take and verify backups, migrate, refresh grants only in non-owner mode, start broker/API/Studio,
 verify readiness/authorization/session behavior, start workers, then reopen traffic. A failed
 migration leaves the transaction rolled back; keep old services stopped until compatibility is
 understood. Do not claim mixed-version or zero-downtime migration compatibility.
@@ -237,7 +245,8 @@ Repeat for the isolated `keycloak` database with its owner. The script streams d
 writing plaintext, refuses overwrites and discards incomplete artifacts. Logical dumps of separate
 databases are not a common-point cluster snapshot. Keep physical backups/WAL for consistent PITR.
 Verify ciphertext hashes, decrypt only in a protected restore environment, restore with `pg_restore`
-into a NEW empty database, apply ownership/grants and run integrity/authorization/fixture checks.
+into a NEW empty database, restore ownership (runtime grants only in non-owner mode), and run
+integrity/authorization/fixture checks.
 Do not stream an unverified restore directly into the serving database.
 
 PITR procedure: fence traffic/workers, preserve the failed cluster, create a new isolated cluster

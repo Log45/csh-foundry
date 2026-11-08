@@ -104,9 +104,11 @@ No deployment or external resource changes are performed by this implementation.
 2. With the migration owner, run `uv run alembic -c alembic.ini upgrade head` from `services/api`.
    Revision `0028_job_execution_grants` is forward-only. It adds grants, audit correlation columns
    and shared-queue indexes; existing jobs/audit remain intact. There is no privileged backfill.
-3. Grant the runtime role SELECT/INSERT/UPDATE/DELETE on `job_execution_grants` using the existing
-   operator grant procedure; keep audit UPDATE/DELETE/TRUNCATE revoked and keep runtime non-owner.
-   Refresh normal runtime grants after migration, not from API startup.
+3. In owner-role mode, set `FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE=true` for the API and every worker
+   and use the same existing PostgreSQL owner URL for migrations and runtime. Ownership already
+   covers the new grant table: **no separate runtime table grants or refresh are required**.
+   Constraints, immutable audit/grant protections and all Foundry security checks remain active.
+   Non-owner mode retains its existing DML grants procedure after migrations.
 4. Provision/update tenant service roles with `worker:delegate`, required claim/operation permissions,
    and `automation:dispatch` if scheduling. Existing persisted roles are not silently broadened.
    Add explicit worker Project memberships for execution jobs. Provision before creating semantic

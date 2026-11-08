@@ -5,10 +5,13 @@ import os
 import subprocess
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[3]
 
 
-def test_production_profile_resolves_runtime_mounts_and_security_dependencies():
+@pytest.mark.parametrize("owner_runtime", [False, True])
+def test_production_profile_resolves_runtime_mounts_and_security_dependencies(owner_runtime):
     env = os.environ | {
         "STUDIO_HOST": "studio.accept.test",
         "API_HOST": "api.accept.test",
@@ -26,6 +29,7 @@ def test_production_profile_resolves_runtime_mounts_and_security_dependencies():
         "WORKER_CATALOG_FILE": "/disposable/catalog.json",
         "INGESTION_DIRECTORY": "/disposable/input",
     }
+    env["FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE"] = str(owner_runtime).lower()
     config = json.loads(
         subprocess.check_output(
             [
@@ -37,6 +41,8 @@ def test_production_profile_resolves_runtime_mounts_and_security_dependencies():
                 str(ROOT / "infrastructure/production/compose.yaml"),
                 "--profile",
                 "workers",
+                "--profile",
+                "outbox",
                 "config",
                 "--format",
                 "json",
@@ -47,6 +53,11 @@ def test_production_profile_resolves_runtime_mounts_and_security_dependencies():
         )
     )
     services = config["services"]
+    for name in ("api", "ingestion-worker", "semantic-worker", "outbox-worker"):
+        assert (
+            services[name]["environment"]["FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE"]
+            == str(owner_runtime).lower()
+        )
     for name in ("api", "studio", "ingestion-worker", "semantic-worker"):
         service = services[name]
         assert service["read_only"]

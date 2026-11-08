@@ -10,6 +10,8 @@ data:
   FOUNDRY_OIDC_PROVIDERS: '[{"id":"keycloak","issuer":"https://identity.example.test/realms/foundry","audience":"foundry-api","clients":["studio","worker"],"algorithms":["RS256"]}]'
   FOUNDRY_SECRETS_DIRECTORY: /run/secrets
   FOUNDRY_DATABASE_TLS_REQUIRED: 'true'
+  # Existing PostgreSQL owner is also the API/worker runtime account.
+  FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE: 'true'
   FOUNDRY_DATABASE_POOL_SIZE: '3'
   FOUNDRY_DATABASE_POOL_OVERFLOW: '0'
   FOUNDRY_WORKER_PROVIDER_ID: keycloak

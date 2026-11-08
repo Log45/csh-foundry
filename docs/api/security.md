@@ -182,6 +182,16 @@ database owners can bypass triggers. PostgreSQL remains authoritative, with tena
 predicates and FKs. RLS and hostile database-owner isolation are not claimed. Runtime DB credentials
 must be confined to the trusted backend; ordinary clients never receive direct SQL access.
 
+## PostgreSQL owner-runtime mode
+
+`FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE=true` permits the existing application database owner to serve
+as both migrator and runtime account. API and all service-worker entry points use the same narrow
+ownership exception; elevated role flags remain rejected. No Foundry authorization, OIDC/service
+identity, tenant boundary, grant, revocation, fencing or database constraint/trigger is bypassed.
+Migration and runtime use the same configured URL without runtime table-grant refresh. External
+PostgreSQL ingestion-source credentials retain their separate read-only policy. See the
+[OKD4 owner-mode instructions](../operations/okd4-deployment.md).
+
 ## Background workers
 
 Workers authenticate as provisioned OIDC service principals using client credentials and an

@@ -79,8 +79,8 @@ manager. They are intentionally absent from tracked YAML. Use private files outs
 |---|---|
 | `foundry-api` | `FOUNDRY_DATABASE_URL`, `FOUNDRY_BROWSER_STATE_SECRET`, `FOUNDRY_BROWSER_STATE_KEYS`, `FOUNDRY_QUERY_CURSOR_SECRET` |
 | `foundry-studio` | `FOUNDRY_BROWSER_STATE_SECRET` (same transport secret as API) |
-| `foundry-worker` | `FOUNDRY_DATABASE_URL` (runtime role), `FOUNDRY_WORKER_CLIENT_SECRET` |
-| `foundry-migration` | `FOUNDRY_DATABASE_URL` (separate migration owner) |
+| `foundry-worker` | `FOUNDRY_DATABASE_URL` (existing application owner in owner mode), `FOUNDRY_WORKER_CLIENT_SECRET` |
+| `foundry-migration` | `FOUNDRY_DATABASE_URL` (same existing owner in owner mode) |
 | `foundry-catalog` | `catalog.json` containing server-owned tenant registrations; `[]` if none |
 | `foundry-trust` | Public `postgres-ca.pem` and `oidc-ca.pem` roots, not private CA keys |
 
@@ -88,7 +88,7 @@ Example approved-target command (not executed here):
 
 ```bash
 kubectl --context APPROVED --namespace NAMESPACE create secret generic foundry-api \
-  --from-file=FOUNDRY_DATABASE_URL=/private/runtime-url \
+  --from-file=FOUNDRY_DATABASE_URL=/private/application-database-url \
   --from-file=FOUNDRY_BROWSER_STATE_SECRET=/private/session-transport \
   --from-file=FOUNDRY_BROWSER_STATE_KEYS=/private/session-key-ring \
   --from-file=FOUNDRY_QUERY_CURSOR_SECRET=/private/cursor-key
@@ -109,20 +109,34 @@ postgresql+psycopg://APPLICATION_ROLE:URL_ENCODED_PASSWORD@DB_HOST:5432/DB_NAME?
 ```
 
 `FOUNDRY_DATABASE_TLS_REQUIRED=true` rejects missing verify-full/CA settings. Libpq verifies chain
-and hostname; do not substitute `sslmode=require` or disable verification. Choose an existing
-dedicated database/schema. Runtime roles must not own operational tables or have superuser,
-createdb/createrole/replication privileges; production startup enforces this. A separate migrator
-owns DDL. Existing roles/grants and immutable audit restrictions are documented in
-[production operations](production.md). The new profile does not install extensions or provision
-an organizational database. The administrator must approve default privileges/new-table grants.
+and hostname; retain verify-full and the approved CA. Choose the existing dedicated database/schema.
+For this OKD4 installation, use the **same existing PostgreSQL owner account** in the API, ingestion,
+semantic/outbox workers, execution controller and migration Job's `FOUNDRY_DATABASE_URL`.
+Separate Kubernetes Secret objects may contain that same database URL; they do not require
+separate PostgreSQL roles. The profile does not provision an organizational database or roles.
 
-The API supports an explicit `FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE=true` override (default `false`).
-In the OKD web console, add `FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE: 'true'` under the `foundry-config`
-ConfigMap's `data` and restart the API Deployment using the console after rebuilding its image.
-This skips the entire API startup runtime-role check, including both table ownership and elevated
-PostgreSQL role privileges; it does not grant privileges or change database roles. A non-owner,
-least-privilege runtime role remains recommended. Worker role checks are unchanged by this flag.
-Remove the setting or set it to `'false'` and restart the API to restore enforcement.
+Set `FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE: 'true'` in `foundry-config` (as shown in the base example).
+The API and every service-worker startup/credential-refresh path honor the same ownership exception.
+Rebuild the matching API/semantic images and restart the API and worker Deployments with the
+updated ConfigMap. Existing non-owner deployments can set the flag to `'false'`, its application
+code default, and retain the existing ownership rejection.
+
+The flag permits database/schema/table ownership only. It does not skip catalog checks for
+`SUPERUSER`, `CREATEDB`, `CREATEROLE` or `REPLICATION`, and does not change Foundry OIDC verification,
+service-principal validation, tenant membership, RBAC/ABAC, Project governance, job grants,
+revocation, leases, fencing, constraints or immutable audit/grant triggers. No database trigger is
+disabled. PostgreSQL owners can alter their own schema, so the owner connection remains a trusted
+backend credential, never a user-facing credential.
+
+Run migrations through the separate maintenance Job using the same existing owner URL. Alembic
+already permits owner DDL; migration `0028_job_execution_grants` needs no role-specific changes.
+**Owner mode requires no separate runtime-role table grants or refresh after migration.** Do not
+run the separate-role `--grant-runtime` procedure for this mode. If using the provisioning helper,
+`FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE=true uv run python scripts/provision_production_database.py --apply`
+validates the configured account without creating roles/databases or changing grants; it needs no
+`FOUNDRY_ADMIN_DATABASE_URL` or `--secrets` argument. Owner mode uses the configured existing account
+throughout. The PostgreSQL ingestion connector's independent read-only external-source check
+remains in force; this application runtime setting does not change connector credential policy.
 
 Pools default to three connections per process and zero overflow, plus the existing API audit
 pool of two. Budget at least API_REPLICAS × (3+2), worker process pools and migration/admin
@@ -186,12 +200,13 @@ uv run python scripts/rollout_kubernetes.py --context APPROVED --namespace NAMES
 The tool installs configuration/service-account/policy prerequisites, stops existing application
 Deployments and waits for pods to exit, runs one migration Job and waits for success, then applies
 Deployments/Services/Route and waits for rollout. The Job has no retry, a ten-minute deadline and
-separate credentials; the migration command uses a PostgreSQL advisory lock and Alembic drift
+the same existing owner credentials in owner mode; the migration command uses a PostgreSQL advisory lock and Alembic drift
 check on the same connection. Concurrent migrations fail closed. **Do not run concurrent rollout
 commands**; the advisory lock does not coordinate two operators deleting/replacing Kubernetes Jobs.
 Migration failure keeps applications stopped for reviewed repair. Observe `logs job/foundry-migrate`
-and Job status. First installation also needs the site Secrets and administrator-approved grants.
-No new migration is introduced; head stays `0017_capacity`.
+and Job status. First installation needs the site Secrets. Owner mode needs no runtime-role grant refresh;
+non-owner mode retains its existing grants procedure. This change adds no migration; the current
+head remains `0028_job_execution_grants`.
 
 Rollback is not automatic schema downgrade. Keep traffic closed; restore the previously reviewed
 compatible images/configuration or forward-repair the schema, using verified DB restore if needed.

@@ -19,3 +19,8 @@ INGESTION_DIRECTORY=/srv/foundry/inputs
 
 # Built from infrastructure/docker/ingress.Dockerfile; do not use the unpatched base.
 INGRESS_IMAGE=registry.example.org/foundry-ingress@sha256:REPLACE_WITH_APPROVED_DIGEST
+
+# Set true when FOUNDRY_DATABASE_URL names the same existing owner for migrations and runtime.
+# Owner mode needs no second application database role and no runtime table-grant refresh.
+# This exception covers ownership only; elevated PostgreSQL role flags remain rejected.
+FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE=false

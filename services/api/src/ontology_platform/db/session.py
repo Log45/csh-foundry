@@ -45,7 +45,10 @@ def make_engine(settings: Settings, *, audit: bool = False) -> Engine:
     return engine
 
 
-def require_runtime_role(sessions: sessionmaker[Session]) -> None:
+def require_runtime_role(
+    sessions: sessionmaker[Session], *, allow_owner_runtime_role: bool = False
+) -> None:
+    """Allow opted-in table ownership only; elevated role flags are never exempted."""
     with sessions() as session:
         privileged = session.scalar(
             text("""
@@ -60,9 +63,15 @@ def require_runtime_role(sessions: sessionmaker[Session]) -> None:
               AND c.relowner=(SELECT oid FROM pg_roles WHERE rolname=current_user))
         """)
         )
-        if privileged or owner:
+        if privileged:
             raise ApplicationError(
-                "runtime_role_unsafe", "Use a non-owner runtime database role", 503
+                "runtime_role_unsafe", "Database role has elevated PostgreSQL privileges", 503
+            )
+        if owner and not allow_owner_runtime_role:
+            raise ApplicationError(
+                "runtime_role_unsafe",
+                "Database table ownership requires FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE=true",
+                503,
             )
 
 

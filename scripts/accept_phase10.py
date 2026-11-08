@@ -819,7 +819,9 @@ networks:
             "from ontology_platform.config import get_settings; "
             "from ontology_platform.db.session import make_engine,require_runtime_role; "
             "from sqlalchemy.orm import sessionmaker; "
-            "require_runtime_role(sessionmaker(make_engine(get_settings())))",
+            "settings=get_settings(); "
+            "require_runtime_role(sessionmaker(make_engine(settings)), "
+            "allow_owner_runtime_role=settings.allow_owner_runtime_role)",
         )
         self.record("actual-runtime-database-privilege-check")
         code = """import errno,os,pathlib,socket,json

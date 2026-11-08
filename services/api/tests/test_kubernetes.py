@@ -122,7 +122,10 @@ def test_migration_refuses_concurrent_session_and_checks_current_schema(world, m
     assert spec and spec.loader
     migration = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(migration)
-    monkeypatch.setattr(migration, "get_settings", lambda: world.settings)
+    with world.sessions() as session:
+        schema = session.scalar(text("SELECT current_schema()"))
+    settings = world.settings.model_copy(update={"database_schema": schema})
+    monkeypatch.setattr(migration, "get_settings", lambda: settings)
     monkeypatch.setattr(migration, "create_engine", lambda *args, **kwargs: world.engine)
     with world.engine.connect() as locked:
         locked.execute(text("SELECT pg_advisory_lock(7041000017)"))
@@ -193,3 +196,22 @@ def test_rollout_never_applies_deployments_before_migration_success(tmp_path, mo
         migration_wait = next(i for i, c in enumerate(calls) if "job/foundry-migrate" in c)
         apply = next(i for i, c in enumerate(calls) if str(configuration) in c)
         assert migration_wait < apply
+
+
+def test_okd_owner_mode_is_shared_by_api_workers_and_migration():
+    configuration = render("overlays/okd")
+    config = next(
+        r
+        for r in configuration
+        if r["kind"] == "ConfigMap" and r["metadata"]["name"] == "foundry-config"
+    )
+    assert config["data"]["FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE"] == "true"
+    # Migration is rendered separately and references the already installed shared ConfigMap.
+    for resources in (configuration, render("migration")):
+        for resource in resources:
+            if resource["kind"] not in {"Deployment", "Job"}:
+                continue
+            for container in resource["spec"]["template"]["spec"]["containers"]:
+                if container["name"] == "studio":
+                    continue
+                assert {"configMapRef": {"name": "foundry-config"}} in container["envFrom"]

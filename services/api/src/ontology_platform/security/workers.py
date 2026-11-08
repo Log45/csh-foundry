@@ -23,7 +23,7 @@ def worker_context(
     ontology: str,
 ) -> tuple[Principal, Authorizer]:
     if settings.environment == "production":
-        require_runtime_role(sessions)
+        require_runtime_role(sessions, allow_owner_runtime_role=settings.allow_owner_runtime_role)
     if settings.auth_mode in {"disabled", "local"} and settings.trusted_local_identity:
         return Principal(
             tenant_id=settings.local_tenant_id, principal_id=settings.local_principal_id
