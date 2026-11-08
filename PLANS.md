@@ -3177,6 +3177,44 @@ The original Phase 11 Rust optimization objective **remains relevant to the fina
 
 **Phase-authorization rule (current):** Phase 11 / milestone A and Phase 12 / milestone B are authorized only as separately scoped. Phase 13 / milestone C and later milestones require separate approval. Phase 10 historical acceptance statuses remain unchanged; unresolved production gates are deferred to Section 23B, not waived. Preserve existing fixture vocabulary, the historical `0017_capacity` baseline (new Phase 11 migrations may advance it), existing user data, production release policy, and historical evidence.
 
+
+## Phase 22 — Personal tenants, multi-tenant membership, cross-tenant resource sharing, and ownership transfer (PLANNED; NOT AUTHORIZED)
+
+**Status (2026-11-08):** Roadmap placeholder for future design and a separately approved coding-agent prompt. This entry records intended product behavior only; it does **not** authorize implementation, schema changes, migrations, deployment, or modifications to existing worker behavior. Review the actual repository and existing tenant/Project/security contracts before writing the implementation prompt. Historical MVP restrictions on cross-tenant access remain applicable until this phase is explicitly implemented.
+
+### Goal and ownership model
+
+- Provision a personal tenant for each user at onboarding, with that user as its initial owner. Preserve existing tenant IDs and membership/ownership records during any future migration.
+- Support **many-to-many user–tenant membership**: a tenant may have multiple users, and a user may belong to multiple tenants. Tenant roles should distinguish owner, administrator, editor/member, and viewer as appropriate to existing RBAC conventions. No user may edit another tenant by default.
+- Every Ontology and Project has **one authoritative owning tenant**. Sharing does not duplicate the resource, change its canonical identity, or transfer ownership. A user may also access explicitly shared resources without joining the owning tenant.
+- Separate `principal_id` (actor), `acting_tenant_id` (selected user context, if applicable), and `owner_tenant_id` (resource ownership). Resolve resource ownership server-side; never trust client-supplied tenant IDs as authorization.
+
+### Cross-tenant sharing
+
+- Allow authorized owners/managers to share individual **Ontologies** and **Projects** with another principal or tenant using at least **Viewer** (read) and **Collaborator** (authorized edit) grants. A tenant-level grant and a resource-level grant are distinct; access to one Ontology or Project never implies access to all resources in its owning tenant.
+- Define invitation/acceptance, grant expiry (if supported), revocation, audit history, recipient tenant membership semantics, and visibility/discovery of shared resources. Tenant-wide sharing should specify how recipient membership changes affect access.
+- Resolve an operation against the **resource's owning tenant**, then authorize through either applicable tenant membership/role **or** an explicit resource-sharing grant, subject in both cases to existing ABAC, row/property policies, resource dependencies, and operation-specific restrictions. A Viewer cannot mutate; a Collaborator cannot administer or transfer the owning tenant.
+- Define Project inheritance carefully: Project access can expose its structure and permitted contents, but must not implicitly bypass independent permissions on referenced datasets, functions, pipelines, media, or ontology objects. Avoid cross-tenant leakage through search, traversal, aggregates, exports, SDKs, and error messages.
+- Add Studio tenant selection and shared-with-me/shared-by-me discovery, permission management, and clear owning-tenant attribution; expose equivalent governed API/SDK contracts.
+
+### Optional ownership transfer
+
+- Support an explicitly initiated and **destination-accepted** transfer of an Ontology or Project between tenants. Only appropriately authorized source and destination tenant actors may approve.
+- Transfer changes the authoritative owning tenant; the original tenant loses ownership-based rights and does not retain access unless explicitly granted by the destination tenant. Preserve resource identity where safe and document any required identity or namespace migration.
+- Validate dependent resources, child Projects/folders, links, artifact ownership/storage, quotas, policies, active jobs, and existing shares before transfer. Specify atomicity, failure recovery, revocation/reconciliation, and immutable audit provenance; do not implement a naive `owner_tenant_id` update.
+
+### Existing dynamic shared workers — explicit preservation boundary
+
+- **Do not redesign or replace workers.** Preserve the current single Keycloak `worker` client/service-principal authentication, shared worker pools, tenant-scoped claiming, job-scoped delegation grants, lease/fencing/retry/revocation semantics, and execution-controller architecture. No additional Keycloak clients or PostgreSQL roles are prerequisites for this phase.
+- Treat sharing as an **API/resource authorization feature**, not as implicit permission for cross-tenant background execution. Where a collaborator submits a job on a shared resource, first audit whether existing job admission and grant checks already support the authorized operation. If not, document the precise incompatibility and propose a narrowly scoped admission/authorization compatibility change for separate approval; never silently broaden worker authority or bypass existing grant/tenant checks.
+
+### Future design decisions and acceptance criteria
+
+- Before drafting the implementation prompt, inspect current membership tables, RBAC/ABAC, Project governance/sharing, ontology ownership, job grants, migrations, API/SDK contracts, and Studio UI. Reuse existing primitives and avoid duplicate grant systems.
+- Specify behavior for personal-tenant creation, existing users, multiple tenant memberships, tenant-wide versus principal-specific shares, inherited Project access, read-only versus edit operations, ownership transfer of nested resources, and shared-resource jobs.
+- Test default-deny cross-tenant isolation; multiple users in one tenant; one user in multiple tenants; Viewer versus Collaborator; direct principal and recipient-tenant shares; revocation and membership changes; non-leakage of unshared dependencies; concurrency/transfer races; audit; and regression of existing worker processing and job grants.
+- Require a forward-only migration plan with compatibility and rollback/restore procedures, API and Studio acceptance tests, and explicit authorization before implementation or deployment. Final Production Readiness gates in §23B remain unchanged.
+
 ---
 
 
@@ -3717,3 +3755,4 @@ through API/worker startup, validation utilities, deployment examples and tests.
 PostgreSQL owner may also be the runtime account; no second application role is required. The
 exception is limited to ownership checks and does not relax application security or constraints.
 No new schema migration, roadmap subsystem or target deployment is authorized by this task.
+
