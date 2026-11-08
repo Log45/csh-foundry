@@ -73,7 +73,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         try:
-            if configuration.environment == "production":
+            if (
+                configuration.environment == "production"
+                and not configuration.allow_owner_runtime_role
+            ):
                 require_runtime_role(app.state.sessions)
             if configuration.auth_mode == "oidc":
                 # Startup must fail rather than fall back to development identity.

@@ -116,6 +116,14 @@ owns DDL. Existing roles/grants and immutable audit restrictions are documented 
 [production operations](production.md). The new profile does not install extensions or provision
 an organizational database. The administrator must approve default privileges/new-table grants.
 
+The API supports an explicit `FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE=true` override (default `false`).
+In the OKD web console, add `FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE: 'true'` under the `foundry-config`
+ConfigMap's `data` and restart the API Deployment using the console after rebuilding its image.
+This skips the entire API startup runtime-role check, including both table ownership and elevated
+PostgreSQL role privileges; it does not grant privileges or change database roles. A non-owner,
+least-privilege runtime role remains recommended. Worker role checks are unchanged by this flag.
+Remove the setting or set it to `'false'` and restart the API to restore enforcement.
+
 Pools default to three connections per process and zero overflow, plus the existing API audit
 pool of two. Budget at least API_REPLICAS × (3+2), worker process pools and migration/admin
 headroom; Keycloak has a separately owned connection budget. SQL/lock/pool/connect waits remain

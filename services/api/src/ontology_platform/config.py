@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     )
     database_url: SecretStr
     database_tls_required: bool = False
+    allow_owner_runtime_role: bool = False
     database_schema: str = Field(default="public", pattern=r"^[a-z][a-z0-9_]{0,62}$")
     auth_mode: Literal["disabled", "local", "test", "oidc"] = "disabled"
     oidc_providers: tuple[Provider, ...] = ()
