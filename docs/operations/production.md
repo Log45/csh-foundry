@@ -92,7 +92,7 @@ reuse its nonpersistent filesystem. Preserve the existing local realm, user, pri
 7. Start nginx, Keycloak, API and Studio; startup/readiness must succeed before opening traffic.
    The ingress resolves upstream container names dynamically, permitting startup and replica changes.
 8. Explicitly bootstrap verified platform issuer/subject bindings and tenant administrators through
-   the Phase 7 bootstrap/admin services. Then configure worker identities and expiring delegation.
+   the Phase 7 bootstrap/admin services. Then configure worker identities and automatic job-scoped grants.
 9. Execute the target deployment's manufacturing, security, recovery and SSO acceptance gates.
 
 Releases use a maintenance window: stop admission, let bounded work finish or safely expire leases,
@@ -180,7 +180,7 @@ database. Losing those keys invalidates sessions; do not recover by disabling en
 
 The worker profile obtains a new RFC 9068 client-credentials token for each child cycle from the
 configured trusted discovery/token endpoint. `FOUNDRY_WORKER_CLIENT_SECRET` is independent from
-browser credentials. A service principal, tenant role and expiring ontology/kind/initiator delegation
+browser credentials. A service principal, tenant role and job-scoped execution grant
 must already exist; successful broker authentication alone grants nothing. Rotate client secrets
 and mounted files through the identity operator; children reread configuration on each invocation.
 
@@ -266,7 +266,7 @@ configured. Protect log storage and redact downstream collectors; ingress logs o
 with URI-bearing nginx error output disabled. Do not re-enable callback query logging. Security audit remains append-only in PostgreSQL, not database-owner-proof archival.
 
 For a suspected identity incident: deny public traffic if necessary, disable affected platform
-principals/memberships and worker delegation, revoke broker sessions/credentials, preserve audit,
+principals/memberships and job execution grants, revoke broker sessions/credentials, preserve audit,
 rotate compromised credentials/keys and validate a clean login/authorization before reopening.
 For job/engine exhaustion: stop admission/workers, preserve fenced state, inspect redacted codes and
 resource/queue metrics, fix capacity/input policy, then restart bounded workers. Never bypass
@@ -583,3 +583,7 @@ runs the isolated combined profile; `--scope replicas` checks two ingestion work
 replicas. Put Node>=22 on PATH first. These runners preserve previous outputs and never certify
 actual Kubernetes routing/admission. Complete exact candidate supply-chain/security gates and
 independent target approval before any publication or deployment.
+
+Shared worker identity and the migration to job-scoped authority are documented in
+[dynamic worker execution](dynamic-workers.md). This supersedes historical per-user delegation
+setup for ingestion and semantic workers.

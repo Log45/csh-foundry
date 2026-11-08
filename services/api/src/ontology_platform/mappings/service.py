@@ -168,6 +168,10 @@ class MappingService(PipelineService):
         return row
 
     def publish(self, p: Principal, key: UUID, spec: MappingSpec) -> MappingDefinitionView:  # type: ignore[override]
+        if p.authentication_method == "job":
+            raise ApplicationError(
+                "forbidden", "Job grants do not authorize definition changes", 403
+            )
         with self.scope(p) as s:
             self.artifact(s, p, key, True)
             self.target(s, p, spec, True)
@@ -294,6 +298,9 @@ class MappingService(PipelineService):
                     checksum=physical.checksum,
                 )
             )
+            from ontology_platform.security.job_grants import create as create_job_grant
+
+            create_job_grant(s, self.authorizer, p, job)
             self.audit(s, p, "mapping_run_queue", job.id)
             return ExecutionJobView.model_validate(job)
 

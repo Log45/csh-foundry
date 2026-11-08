@@ -427,7 +427,9 @@ def test_private_lineage_filters_input_and_definition(security, store):  # noqa:
             output_dataset_id=output.id,
         ),
     )
-    ExecutionWorker(svc).run_one()
+    from worker_support import provision_worker
+
+    ExecutionWorker(svc, provision_worker(svc, owner)).run_one()
     done = svc.status(owner, run.id)
     assert done.state == "SUCCEEDED", done
     consumer = svc.create_project(owner, CreateProject(name="Lineage consumer"))

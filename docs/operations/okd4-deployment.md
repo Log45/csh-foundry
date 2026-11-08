@@ -70,7 +70,7 @@ Set `nodeSelector: {kubernetes.io/arch: amd64}` for semantic workers on mixed-ar
 allowlist/algorithms, explicit API allowed hosts, worker tenant/subject/provider and pool bounds.
 Set both Studio and API identity configuration consistently. The API probe Host header is `api`
 so TrustedHostMiddleware does not reject kubelet requests to pod IPs. Worker ontology arguments
-must match the explicitly provisioned ontology; no automatic tenant membership/delegation exists.
+must match the explicitly provisioned ontology; tenant membership and worker service permissions require explicit provisioning.
 
 Before release, provision these namespace Secrets through the organization’s approved secret
 manager. They are intentionally absent from tracked YAML. Use private files outside the checkout:
@@ -145,7 +145,7 @@ issuer and same-origin JWKS must match. See `security/broker.py:realm_configurat
 already tested Keycloak RFC 9068/audience/client mapper settings; it is a review reference, not
 permission to import or overwrite an existing realm. Public CA mounts extend trust without
 turning off chain/hostname verification. Workers use a confidential service client and current
-explicit PostgreSQL delegation. Platform bindings use `(issuer, sub)` and tenant membership;
+automatic PostgreSQL job-scoped grants. Platform bindings use `(issuer, sub)` and tenant membership;
 email and realm roles do not grant platform access.
 
 If administrators cannot issue this token profile, record the exact limitation and request a
@@ -247,7 +247,7 @@ operators must validate restored authorization, artifacts, sessions and queues a
 Troubleshooting: permission denied → inspect assigned UID/groups and projected volume ownership,
 never request anyuid; probe 400 → verify API Host header; OIDC startup failure → verify exact
 issuer/discovery/client/CA and egress; TLS failure → verify hostname and full CA chain, not a bypass;
-worker no progress → inspect heartbeat and redacted cycle status/delegation; missing source → check
+worker no progress → inspect heartbeat and redacted cycle status/job-grant decisions; missing source → check
 shared claim and catalog; admission failure → inspect target SCC/schema/version. Migration failure
 blocks rollout. Do not reset the developer database, Keycloak, keys or volumes to fix target issues.
 
@@ -264,3 +264,7 @@ assurances and all existing release gates. `verify_release_evidence.py --profile
 exactly API/Studio/semantic supply-chain evidence plus explicit `--service postgres=IDENTITY`,
 `--service keycloak=ISSUER` and `--deployment-sha256 HASH`; Compose still requires all six images.
 This is evidence validation, not independent approval or infrastructure security certification.
+
+Shared worker identity and the migration to job-scoped authority are documented in
+[dynamic worker execution](dynamic-workers.md). This supersedes historical per-user delegation
+setup for ingestion and semantic workers.

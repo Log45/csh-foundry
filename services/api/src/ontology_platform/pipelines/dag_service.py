@@ -160,6 +160,9 @@ def admit(
                 version_id=version_id,
             )
         )
+    from ontology_platform.security.job_grants import create as create_job_grant
+
+    create_job_grant(s, svc.authorizer, p, job)
     svc.audit(s, p, "pipeline_dag_queued", job.id)
     s.flush()
     return ExecutionJobView.model_validate(job)

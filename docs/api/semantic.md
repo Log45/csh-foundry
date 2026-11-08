@@ -93,3 +93,11 @@ production storage quotas/retention scheduling remain later operational work. Te
 state is always removed; interrupted PostgreSQL transactions roll back partial artifacts/facts.
 HTTP POST bodies are bounded at 64 KiB before JSON parsing; the internal artifact bound is 4 MiB.
 No API returns a server filesystem path, accepts SQL/SPARQL, or resolves owl:imports remotely.
+
+
+Shared workers now resolve job identity through automatic job-scoped grants; see
+[dynamic worker execution](../operations/dynamic-workers.md). `JobInput.idempotency_key` is optional.
+Use a fresh value when resubmitting expired, revoked or legacy work with the same semantic inputs.
+Omitting it retains the existing content-based deduplication fingerprint. Reusing a key and the
+same inputs returns the existing job; a new key performs a new authorized admission and creates
+a new grant. Old grant authority is never reset or extended.

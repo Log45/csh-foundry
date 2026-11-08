@@ -59,6 +59,8 @@ class ArtifactView(APIModel):
 
 
 class JobInput(APIModel):
+    # A fresh submission key permits authorized resubmission without changing semantic inputs.
+    idempotency_key: str | None = Field(default=None, min_length=1, max_length=200)
     operation: Literal["validation", "reasoning", "change"]
     primary_artifact: UUID
     secondary_artifact: UUID

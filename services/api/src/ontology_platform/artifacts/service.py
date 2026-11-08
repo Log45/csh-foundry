@@ -79,6 +79,9 @@ class ArtifactService(ProjectService):
         if self.resource_kind not in {"FUNCTION", "AUTOMATION", "PIPELINE"}:
             self.storage()
         with self.scope(p) as s:
+            from ontology_platform.security.job_grants import resource_check
+
+            resource_check(s, p, identity)
             self.project(s, p, project, write=True)
             self.destination(s, p, project, body.folder_id)
             row = Resource(

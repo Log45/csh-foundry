@@ -108,6 +108,8 @@ class AutomationService(FunctionService):
         return row
 
     def enable(self, p: Principal, key: UUID, body: Enable) -> ScheduleView:
+        if p.authentication_method == "job":
+            raise ApplicationError("forbidden", "Job grants cannot change schedule activation", 403)
         with self.scope(p) as s:
             self.artifact(s, p, key, True)
             definition = self.governed_definition(s, p, key, body.definition_id)
@@ -326,7 +328,17 @@ class AutomationService(FunctionService):
                 visible.append(ReceiptView.model_validate(row))
             return visible
 
-    def tick(self) -> int:
+    def tick(self, executor: Principal | None = None) -> int:
+        from ontology_platform.security.service import PlatformAuthorizer
+
+        if isinstance(self.authorizer, PlatformAuthorizer):
+            if executor is None or executor.principal_type != "service":
+                raise ApplicationError(
+                    "worker_identity_required", "Scheduler service required", 403
+                )
+            self.authorizer.require(
+                executor, "automation:dispatch", f"{executor.tenant_id}/projects"
+            )
         # Candidate discovery is read-only and takes no locks before security/tenant locks.
         with self.sessions() as s:
             candidates = list(
@@ -340,6 +352,7 @@ class AutomationService(FunctionService):
                     )
                     .where(
                         AutomationState.enabled.is_(True),
+                        *([AutomationState.tenant_id == executor.tenant_id] if executor else []),
                         GovernedDefinition.specification["trigger"]["kind"].astext != "manual",
                     )
                     .order_by(
@@ -360,12 +373,21 @@ class AutomationService(FunctionService):
             actor = internal_actor(principal)
             try:
                 with self.scope(actor) as s:
+                    if executor is not None:
+                        self.authorizer.require(
+                            executor, "automation:dispatch", f"{tenant}/projects"
+                        )
+                        self.artifact(s, executor, key, True)
                     row = self.state(s, actor, key, True)
                     if not row.enabled:
                         continue
                     activation = row.activation_id
+                    if row.owner != actor.principal_id or row.tenant_id != actor.tenant_id:
+                        raise ApplicationError("forbidden", "Schedule owner mismatch", 403)
                     definition = self.governed_definition(s, actor, key, row.definition_id)
                     spec = self.validate_target(s, actor, definition.specification)
+                    if executor is not None:
+                        self.validate_target(s, executor, definition.specification)
                     now = clock(s)
                     row.checked_at = now
                     if row.next_run_at is not None and row.next_run_at <= now:

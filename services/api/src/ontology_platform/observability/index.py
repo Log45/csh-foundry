@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+from contextlib import nullcontext
 from typing import Any, cast
 from uuid import UUID
 
@@ -423,21 +424,26 @@ def reconcile(s: Session, pending: LineagePending, batch: int = 50) -> bool:
     return complete
 
 
-def tick(sessions: sessionmaker[Session]) -> None:
+def tick(
+    sessions: sessionmaker[Session], tenant: UUID | None = None, *, session: Session | None = None
+) -> None:
     # The existing trusted controller calls this; no independent scheduler or queue.
-    with sessions.begin() as s:
+    with nullcontext(session) if session is not None else sessions.begin() as s:
         s.execute(
             text("""DELETE FROM operational_events WHERE (tenant_id,id) IN
           (SELECT tenant_id,id FROM operational_events WHERE created_at < now()-interval '90 days'
-           ORDER BY created_at,id LIMIT 500)""")
+           AND (CAST(:tenant AS uuid) IS NULL OR tenant_id = :tenant)
+           ORDER BY created_at,id LIMIT 500)"""),
+            {"tenant": tenant},
         )
         rows = s.scalars(
             select(LineagePending)
             .where(
+                *([LineagePending.tenant_id == tenant] if tenant else []),
                 or_(
                     LineagePending.generation != LineagePending.indexed_generation,
                     ~LineagePending.cursor.startswith(INDEX_PREFIX),
-                )
+                ),
             )
             .order_by(LineagePending.updated_at, LineagePending.resource_id)
             .limit(4)

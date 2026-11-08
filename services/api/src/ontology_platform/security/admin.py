@@ -23,6 +23,7 @@ from ontology_platform.db.models import (
     WorkerDelegation,
 )
 from ontology_platform.errors import ApplicationError
+from ontology_platform.security.audit import persist_audit
 from ontology_platform.security.contracts import (
     AssignmentInput,
     DelegationInput,
@@ -36,6 +37,23 @@ from ontology_platform.security.service import PlatformAuthorizer, denied
 
 
 class SecurityAdministration:
+    def revoke_job_grant(self, p: Principal, key: str) -> None:
+        from uuid import UUID
+
+        from ontology_platform.db.models import JobExecutionGrant
+
+        with self.operation(p, "security:delegation:manage", write=True) as session:
+            grant = session.get(JobExecutionGrant, UUID(key), with_for_update=True)
+            if grant is None or grant.tenant_id != p.tenant_id:
+                raise denied()
+            if grant.revoked_at is None:
+                grant.revoked_at = datetime.now(UTC)
+                from ontology_platform.security.job_grants import audit
+
+                job_id = grant.ingestion_id or grant.semantic_id or grant.execution_id
+                assert job_id is not None
+                audit(session, p, job_id, grant.id, "job:grant_revoked")
+
     def __init__(self, authorizer: PlatformAuthorizer):
         self.auth = authorizer
         self.sessions = authorizer.sessions
@@ -56,25 +74,28 @@ class SecurityAdministration:
                     yield session
                     if write:
                         session.flush()
-                        session.add(
-                            AuthorizationAudit(
-                                id=uuid4(),
-                                tenant_id=p.tenant_id,
-                                principal_id=p.principal_id,
-                                actor_id=p.actor_id,
-                                operation=permission + ":committed",
-                                resource_hash=hashlib.sha256(
-                                    f"{p.tenant_id}/security".encode()
-                                ).hexdigest(),
-                                allowed=True,
-                                category="administration",
-                                policy_version=session.scalar(
-                                    select(SecurityState.revision).where(
-                                        SecurityState.tenant_id == p.tenant_id
+                        persist_audit(
+                            session,
+                            [
+                                AuthorizationAudit(
+                                    id=uuid4(),
+                                    tenant_id=p.tenant_id,
+                                    principal_id=p.principal_id,
+                                    actor_id=p.actor_id,
+                                    operation=permission + ":committed",
+                                    resource_hash=hashlib.sha256(
+                                        f"{p.tenant_id}/security".encode()
+                                    ).hexdigest(),
+                                    allowed=True,
+                                    category="administration",
+                                    policy_version=session.scalar(
+                                        select(SecurityState.revision).where(
+                                            SecurityState.tenant_id == p.tenant_id
+                                        )
                                     )
+                                    or 0,
                                 )
-                                or 0,
-                            )
+                            ],
                         )
         except IntegrityError as exc:
             raise ApplicationError(
@@ -256,6 +277,11 @@ class SecurityAdministration:
                     "id": str(r.id),
                     "principal_id": r.principal_id,
                     "actor_id": r.actor_id,
+                    "job_id": str(r.job_id) if r.job_id else None,
+                    "execution_grant_id": str(r.execution_grant_id)
+                    if r.execution_grant_id
+                    else None,
+                    "execution_token": str(r.execution_token) if r.execution_token else None,
                     "operation": r.operation,
                     "resource_hash": r.resource_hash,
                     "allowed": r.allowed,

@@ -45,6 +45,7 @@ from ontology_platform.projects.contracts import (
     UpdateProject,
     UpdateResource,
 )
+from ontology_platform.security.audit import persist_audit
 from ontology_platform.security.interfaces import Principal
 from ontology_platform.security.service import PlatformAuthorizer
 
@@ -86,6 +87,10 @@ class ProjectService(GovernedService):
                 raise ApplicationError("forbidden", "Operation is not authorized", 403)
             if row.state != "ACTIVE":
                 raise conflict("Archived Project is read-only")
+        if p.authentication_method == "job":
+            from ontology_platform.security.job_grants import worker
+
+            self.project(s, worker(p), key, write=write, manage=manage)
         return row, member
 
     @staticmethod
@@ -99,25 +104,31 @@ class ProjectService(GovernedService):
 
     @staticmethod
     def audit(s: Session, p: Principal, event: str, key: UUID, details: object = None) -> None:
-        s.add(
-            AuthorizationAudit(
-                id=uuid4(),
-                tenant_id=p.tenant_id,
-                principal_id=p.principal_id,
-                actor_id=p.actor_id,
-                operation=f"project:{event}:committed",
-                allowed=True,
-                category="project",
-                policy_version=s.scalar(
-                    select(SecurityState.revision).where(SecurityState.tenant_id == p.tenant_id)
+        persist_audit(
+            s,
+            [
+                AuthorizationAudit(
+                    id=uuid4(),
+                    tenant_id=p.tenant_id,
+                    principal_id=p.principal_id,
+                    actor_id=p.actor_id,
+                    job_id=p.job_id,
+                    execution_grant_id=p.execution_grant_id,
+                    execution_token=p.execution_token,
+                    operation=f"project:{event}:committed",
+                    allowed=True,
+                    category="project",
+                    policy_version=s.scalar(
+                        select(SecurityState.revision).where(SecurityState.tenant_id == p.tenant_id)
+                    )
+                    or 0,
+                    resource_hash=hashlib.sha256(
+                        json.dumps(
+                            [str(p.tenant_id), str(key), details], sort_keys=True, default=str
+                        ).encode()
+                    ).hexdigest(),
                 )
-                or 0,
-                resource_hash=hashlib.sha256(
-                    json.dumps(
-                        [str(p.tenant_id), str(key), details], sort_keys=True, default=str
-                    ).encode()
-                ).hexdigest(),
-            )
+            ],
         )
 
     def touch(
@@ -538,6 +549,11 @@ class ProjectService(GovernedService):
         return or_(own, shared)
 
     def resource(self, s: Session, p: Principal, key: UUID) -> Resource:
+        from ontology_platform.security.job_grants import resource_check, worker
+
+        resource_check(s, p, key)
+        if p.authentication_method == "job":
+            self.resource(s, worker(p), key)
         row = s.scalar(
             select(Resource)
             .join(

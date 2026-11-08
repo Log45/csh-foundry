@@ -22,7 +22,7 @@ ingestion:diagnostics ingestion:cancel ingestion:cleanup semantic:compile semant
 semantic:export semantic:execute semantic:claim semantic:read semantic:history semantic:cancel
 semantic:approve ontology:import ontology:import:read security:role:manage security:policy:manage
 security:membership:manage security:audit:read security:read
-security:delegation:manage worker:delegate
+security:delegation:manage worker:delegate execution:claim automation:dispatch
 """.split()
 )
 

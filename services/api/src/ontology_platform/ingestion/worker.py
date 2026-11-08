@@ -26,10 +26,14 @@ from ontology_platform.ingestion.service import IngestionService
 from ontology_platform.ingestion.transform import Proposed, transform, validate_mapping
 from ontology_platform.metadata.storage import active_definition
 from ontology_platform.security.interfaces import Principal
+from ontology_platform.security.job_grants import claim_shared, reject_attempt, resolve_attempt
+from ontology_platform.security.service import PlatformAuthorizer
 
 
 class IngestionWorker(IngestionService):
     def claim(self, p: Principal, ontology: str) -> tuple[UUID, UUID] | None:
+        if isinstance(self.authorizer, PlatformAuthorizer):
+            return claim_shared(self, p, "ingestion", ontology)
         with self.operation(p, "ingestion:claim", f"{ontology}/ingestion/runs") as session:
             now = clock(session)
             run = session.scalar(
@@ -106,7 +110,8 @@ class IngestionWorker(IngestionService):
         return run
 
     def renew(self, p: Principal, ontology: str, key: UUID, token: UUID) -> None:
-        with self.operation(p, "ingestion:claim", f"{ontology}/ingestion/runs/{key}") as session:
+        p = resolve_attempt(self, p, "ingestion", ontology, key, token)
+        with self.operation(p, "ingestion:execute", f"{ontology}/ingestion/runs/{key}") as session:
             run = self.fenced(session, p, ontology, key, token)
             run.lease_until = clock(session) + timedelta(seconds=60)
 
@@ -114,6 +119,7 @@ class IngestionWorker(IngestionService):
         self, p: Principal, ontology: str, key: UUID, token: UUID
     ) -> tuple[int, Extraction, list[Proposed]] | None:
         # Network/file/Polars work occurs without an operational transaction or ontology lock.
+        p = resolve_attempt(self, p, "ingestion", ontology, key, token)
         with self.operation(p, "ingestion:execute", f"{ontology}/ingestion/runs/{key}") as session:
             self.ontology(session, p, ontology)
             run = self.fenced(session, p, ontology, key, token)
@@ -390,6 +396,7 @@ class IngestionWorker(IngestionService):
     ) -> bool:
         data = self._extract(p, ontology, key, token)
         started = time.monotonic()
+        p = resolve_attempt(self, p, "ingestion", ontology, key, token)
         with self.operation(p, "ingestion:execute", f"{ontology}/ingestion/runs/{key}") as session:
             with action_deadline(
                 session,
@@ -430,6 +437,13 @@ class IngestionWorker(IngestionService):
         *,
         retryable: bool = False,
     ) -> None:
+        if isinstance(self.authorizer, PlatformAuthorizer) and p.authentication_method == "job":
+            if not self.authorizer.authorize(
+                p, "ingestion:execute", f"{p.tenant_id}/{ontology}"
+            ).allowed:
+                reject_attempt(self, p, ontology, key, token, code)
+                return
+        p = resolve_attempt(self, p, "ingestion", ontology, key, token)
         with self.operation(p, "ingestion:execute", f"{ontology}/ingestion/runs/{key}") as session:
             run = session.get(IngestionRun, (p.tenant_id, ontology, key), with_for_update=True)
             if run is None or run.token != token or run.status != "RUNNING":
@@ -449,6 +463,7 @@ class IngestionWorker(IngestionService):
         if claimed is None:
             return None
         key, token = claimed
+        p = resolve_attempt(self, p, "ingestion", ontology, key, token)
         try:
             for _ in range(max_steps):
                 if not self.step(p, ontology, key, token):

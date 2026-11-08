@@ -192,7 +192,7 @@ def test_fresh_migration_and_drift(database):
     with engine.begin() as c:
         assert (
             c.scalar(text("select version_num from alembic_version"))
-            == "0027_lineage_observability"
+            == "0028_job_execution_grants"
         )
         config = Config(str(ROOT / "alembic.ini"))
         config.attributes["connection"] = c

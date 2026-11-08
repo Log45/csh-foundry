@@ -3,6 +3,8 @@
 import hashlib
 import tempfile
 import threading
+from collections.abc import Iterator
+from contextlib import contextmanager
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -19,24 +21,110 @@ from ontology_platform.errors import ApplicationError
 from ontology_platform.execution.config import ExecutionSettings
 from ontology_platform.execution.isolation import isolated
 from ontology_platform.pipelines.service import PipelineService
+from ontology_platform.security import job_grants
 from ontology_platform.security.interfaces import Principal
+from ontology_platform.security.service import PlatformAuthorizer
 
 ACTIVE = ["ADMITTED", "RUNNING", "CANCELLING"]
 
 
 class ExecutionWorker:
-    def __init__(self, service: PipelineService):
+    def __init__(self, service: PipelineService, actor: Principal | None = None):
         self.service = service
         self.sessions = service.sessions
         self.settings = ExecutionSettings()
+        self.actor = actor
+        if isinstance(service.authorizer, PlatformAuthorizer) and (
+            actor is None
+            or actor.principal_type != "service"
+            or actor.authentication_method not in {"oidc", "test"}
+        ):
+            raise ApplicationError(
+                "worker_identity_required", "Verified service identity required", 403
+            )
+
+    @contextmanager
+    def control_scope(self) -> Iterator[Session]:
+        if isinstance(self.service.authorizer, PlatformAuthorizer):
+            assert self.actor is not None
+            with self.service.scope(self.actor, "execution:claim") as s:
+                yield s
+        else:
+            with self.sessions.begin() as s:
+                yield s
+
+    def principal(self, s: Session, job: ExecutionJob, token: UUID | None = None) -> Principal:
+        if isinstance(self.service.authorizer, PlatformAuthorizer):
+            assert self.actor is not None
+            return job_grants.context(
+                s, self.service.authorizer, self.actor, "execution", job.id, token
+            )
+        return Principal.model_validate(job.principal)
+
+    def eligible(self, s: Session, job: ExecutionJob) -> None:
+        if not isinstance(self.service.authorizer, PlatformAuthorizer):
+            return
+        assert self.actor is not None
+        grant = job_grants.find(s, job.tenant_id, "execution", job.id)
+        if grant is None:
+            return  # Legacy quarantine remains explicit in the grant check below.
+        try:
+            for project in grant.projects:
+                self.service.project(s, self.actor, UUID(project), write=True)
+            for resource in grant.resources:
+                if resource.startswith("scope:"):
+                    continue
+                from ontology_platform.db.models import Resource
+
+                if s.get(Resource, (job.tenant_id, UUID(resource))) is not None:
+                    self.service.resource(s, self.actor, UUID(resource))
+        except ApplicationError as exc:
+            if exc.status_code not in {403, 404}:
+                raise
+            raise ApplicationError(
+                "worker_ineligible", "Worker resource scope does not cover job", 403
+            ) from exc
+
+    def check_authority(
+        self, s: Session, job: ExecutionJob, token: UUID | None = None
+    ) -> Principal:
+        p = self.principal(s, job, token)
+        if isinstance(self.service.authorizer, PlatformAuthorizer):
+            self.service.authorizer.require(p, "project:read", f"{p.tenant_id}/projects")
+            if job.kind == "FUNCTION":
+                from ontology_platform.functions.service import FunctionService
+                from ontology_platform.functions.worker import authorize
+
+                root = self.service
+                authorize(
+                    FunctionService(root.sessions, root.authorizer, root.settings, root.store),
+                    s,
+                    p,
+                    job,
+                )
+            elif job.kind == "MATERIALIZATION":
+                from ontology_platform.mappings.worker import authorize as authorize_mapping
+
+                authorize_mapping(self, s, p, job)
+            else:
+                self.authorize(s, p, job)
+        return p
 
     def claim(self) -> tuple[UUID, UUID, UUID] | None:
-        with self.sessions.begin() as s:
+        with self.control_scope() as s:
+            if self.actor is not None and isinstance(self.service.authorizer, PlatformAuthorizer):
+                self.service.authorizer.require(
+                    self.actor, "worker:delegate", f"{self.actor.tenant_id}/projects"
+                )
             s.execute(text("SELECT pg_advisory_xact_lock(14214001)"))
             now = clock(s)
             expired = s.scalars(
                 select(ExecutionJob)
-                .where(ExecutionJob.state.in_(ACTIVE), ExecutionJob.lease_until < now)
+                .where(
+                    ExecutionJob.state.in_(ACTIVE),
+                    ExecutionJob.lease_until < now,
+                    *([ExecutionJob.tenant_id == self.actor.tenant_id] if self.actor else []),
+                )
                 .with_for_update(skip_locked=True)
                 .limit(100)
             )
@@ -54,7 +142,10 @@ class ExecutionWorker:
                 return None
             candidates = s.scalars(
                 select(ExecutionJob)
-                .where(ExecutionJob.state == "QUEUED")
+                .where(
+                    ExecutionJob.state == "QUEUED",
+                    *([ExecutionJob.tenant_id == self.actor.tenant_id] if self.actor else []),
+                )
                 .order_by(ExecutionJob.created_at, ExecutionJob.id)
                 .with_for_update(skip_locked=True)
                 .limit(self.settings.queue_jobs)
@@ -75,15 +166,64 @@ class ExecutionWorker:
                     >= self.settings.project_jobs
                 ):
                     continue
+                try:
+                    self.eligible(s, row)
+                    p = self.check_authority(s, row)
+                except ApplicationError as exc:
+                    if exc.code == "worker_ineligible":
+                        assert self.actor is not None
+                        grant = job_grants.find(s, row.tenant_id, "execution", row.id)
+                        denied = self.actor.model_copy(
+                            update={
+                                "principal_id": grant.principal_id if grant else "unresolved",
+                                "actor_id": self.actor.principal_id,
+                            }
+                        )
+                        job_grants.audit(
+                            s,
+                            denied,
+                            row.id,
+                            grant.id if grant else None,
+                            "job:worker_eligibility_denied",
+                        )
+                        continue
+                    row.state, row.completed_at, row.error = (
+                        "FAILED",
+                        now,
+                        "job_authorization_denied",
+                    )
+                    if self.actor:
+                        denied_actor = self.actor.model_copy(
+                            update={
+                                "principal_id": str(
+                                    row.principal.get("principal_id", "unresolved")
+                                ),
+                                "actor_id": self.actor.principal_id,
+                            }
+                        )
+                        grant = job_grants.find(s, row.tenant_id, "execution", row.id)
+                        job_grants.audit(
+                            s, denied_actor, row.id, grant.id if grant else None, "job:claim_denied"
+                        )
+                    continue
                 row.state, row.token = "ADMITTED", uuid4()
                 row.admitted_at, row.heartbeat_at = now, now
                 row.started_at = None
                 row.attempts += 1
                 row.lease_until = now + timedelta(seconds=self.settings.lease_seconds)
+                job_grants.audit(
+                    s,
+                    p.model_copy(update={"execution_token": row.token}),
+                    row.id,
+                    p.execution_grant_id,
+                    "job:claimed",
+                )
                 return row.tenant_id, row.id, row.token
             return None
 
     def fenced(self, s: Session, tenant: UUID, key: UUID, token: UUID) -> ExecutionJob:
+        if self.actor is not None and tenant != self.actor.tenant_id:
+            raise ApplicationError("forbidden", "Worker tenant mismatch", 403)
         row = s.get(ExecutionJob, (tenant, key), with_for_update=True)
         if (
             row is None
@@ -99,22 +239,32 @@ class ExecutionWorker:
             > ExecutionSettings.model_validate(row.limits).wall_seconds
         ):
             raise ApplicationError("execution_limit", "Execution deadline exceeded", 409)
+        self.check_authority(s, row, token)
         return row
 
     def heartbeat(self, tenant: UUID, key: UUID, token: UUID) -> bool:
-        with self.sessions.begin() as s:
+        if self.actor is not None and tenant != self.actor.tenant_id:
+            raise ApplicationError("forbidden", "Worker tenant mismatch", 403)
+        with self.control_scope() as s:
             try:
                 row = self.fenced(s, tenant, key, token)
             except ApplicationError as exc:
-                if exc.code == "execution_limit":
+                if exc.code == "execution_limit" or exc.status_code in {401, 403, 404}:
                     expired = s.get(ExecutionJob, (tenant, key), with_for_update=True)
                     assert expired is not None
                     expired.state, expired.completed_at, expired.error = (
                         "FAILED",
                         clock(s),
-                        "execution_limit",
+                        "execution_limit"
+                        if exc.code == "execution_limit"
+                        else "job_authorization_denied",
                     )
                     expired.token, expired.lease_until = None, None
+                    if isinstance(self.service.authorizer, PlatformAuthorizer):
+                        denied = self.principal(s, expired, token)
+                        job_grants.audit(
+                            s, denied, key, denied.execution_grant_id, "job:execution_denied"
+                        )
                 return False
             row.heartbeat_at = clock(s)
             row.lease_until = row.heartbeat_at + timedelta(seconds=self.settings.lease_seconds)
@@ -179,13 +329,10 @@ class ExecutionWorker:
 
     def execute(self, tenant: UUID, key: UUID, token: UUID) -> None:
         svc, datasets = self.service, self.service.datasets()
-        with self.sessions.begin() as s:
+        with self.control_scope() as s:
             job = self.fenced(s, tenant, key, token)
-            p = Principal.model_validate(job.principal)
+            p = self.principal(s, job, token)
             limits = ExecutionSettings.model_validate(job.limits)
-            # Admission is a durable internal request, not a retained bearer credential.
-            # Bound the internal identity lifetime to this attempt; every scope still checks
-            # current principal/identity/tenant/Project membership and revocation in SQL.
             if p.authentication_method in {"oidc", "test"}:
                 p = p.model_copy(
                     update={
@@ -416,7 +563,9 @@ class ExecutionWorker:
         retryable: bool,
         metrics: dict[str, Any] | None = None,
     ) -> None:
-        with self.sessions.begin() as s:
+        if self.actor is not None and tenant != self.actor.tenant_id:
+            raise ApplicationError("forbidden", "Worker tenant mismatch", 403)
+        with self.control_scope() as s:
             row = s.get(ExecutionJob, (tenant, key), with_for_update=True)
             if row is None or row.token != token or row.state not in ACTIVE:
                 return
@@ -432,7 +581,7 @@ class ExecutionWorker:
             row.token, row.lease_until = None, None
             self.service.audit(
                 s,
-                Principal.model_validate(row.principal),
+                self.principal(s, row).model_copy(update={"execution_token": token}),
                 "execution_" + row.state.lower(),
                 row.id,
                 {"error": code, "attempt": row.attempts},
@@ -448,7 +597,8 @@ class ExecutionWorker:
         from ontology_platform.observability.index import tick
 
         try:
-            tick(self.sessions)
+            with self.control_scope() as session:
+                tick(self.sessions, self.actor.tenant_id if self.actor else None, session=session)
         except SQLAlchemyError:
             # Canonical execution remains available; pending generations expose index lag.
             pass

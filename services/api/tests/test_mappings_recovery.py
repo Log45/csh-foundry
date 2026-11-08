@@ -76,6 +76,9 @@ def test_revocation_between_committed_batches_prevents_more_writes(security, sto
             principal_id=other.principal_id, role="owner", expected_revision=current.revision
         ),
     )
+    from worker_support import provision_worker
+
+    executor = provision_worker(svc, owner)
     run = svc.start(owner, resource.id, body)
     boundary(
         svc,
@@ -89,7 +92,7 @@ def test_revocation_between_committed_batches_prevents_more_writes(security, sto
         ),
         monkeypatch,
     )
-    ExecutionWorker(svc).run_one()
+    ExecutionWorker(svc, executor).run_one()
     status = svc.status(owner, run.id)
     assert status.state == "FAILED" and status.metrics["created"] == 100, status
     assert len(svc.provenance(owner, run.id, 100)) == 100

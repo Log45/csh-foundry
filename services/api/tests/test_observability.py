@@ -183,7 +183,9 @@ def test_real_authorization_prunes_private_sources_and_siblings(security, store)
         sessions=w.sessions, registry=SimpleNamespace(authorizer=auth), actor=admin
     )
     pipelines, datasets, run, spec, targets = setup_run(secured, store)
-    assert ExecutionWorker(pipelines).run_one() == run.id
+    from worker_support import provision_worker
+
+    assert ExecutionWorker(pipelines, provision_worker(pipelines, admin)).run_one() == run.id
     drain(w)
     projects = ProjectService(w.sessions, auth)
     destination = projects.create_project(admin, CreateProject(name="Reader observations"))
@@ -278,7 +280,7 @@ def test_upgrade_24_26_27_preserves_registry(historical_database, store):
     datasets = make_service(w, store)
     source = dataset(datasets, w.actor)
     version = commit(datasets, w.actor, source.id)
-    migrate(engine, "0027_lineage_observability")
+    migrate(engine)
     svc = observer(w, store)
     assert svc.freshness(w.actor, source.id).last_version_id == version.id
     drain(w)

@@ -668,6 +668,9 @@ class IngestionRun(Base):
         ),
         Index("ix_ingestion_pending", "tenant_id", "status", "lease_until"),
         Index("ix_ingestion_history", "tenant_id", "ontology_id", "created_at", "id"),
+        Index(
+            "ix_ingestion_shared_claim", "tenant_id", "ontology_id", "status", "created_at", "id"
+        ),
     )
 
 
@@ -901,6 +904,7 @@ class SemanticJob(Base):
             "status != 'RUNNING' OR (token IS NOT NULL AND lease_until IS NOT NULL)",
             name="ck_semantic_lease",
         ),
+        Index("ix_semantic_shared_claim", "tenant_id", "ontology_id", "status", "created_at", "id"),
         Index(
             "ix_semantic_claim", "tenant_id", "ontology_id", "principal_id", "status", "created_at"
         ),
@@ -1129,12 +1133,16 @@ class AuthorizationAudit(Base):
     tenant_id: Mapped[UUID] = mapped_column(index=True)
     principal_id: Mapped[str] = mapped_column(Text)
     actor_id: Mapped[str | None] = mapped_column(Text)
+    job_id: Mapped[UUID | None]
+    execution_grant_id: Mapped[UUID | None]
+    execution_token: Mapped[UUID | None]
     operation: Mapped[str] = mapped_column(String(200))
     resource_hash: Mapped[str] = mapped_column(String(64))
     allowed: Mapped[bool]
     category: Mapped[str] = mapped_column(String(30))
     policy_version: Mapped[int] = mapped_column(BigInteger)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (Index("ix_audit_job", "tenant_id", "job_id"),)
 
 
 class SchemaBranch(Base):
@@ -2178,4 +2186,52 @@ class OperationalEvent(Base):
             ["tenant_id", "execution_id"], ["execution_jobs.tenant_id", "execution_jobs.id"]
         ),
         Index("ix_operational_events_page", "tenant_id", "resource_id", "created_at", "id"),
+    )
+
+
+class JobExecutionGrant(Base):
+    """Server-created authority, never a credential. One immutable job binding per grant."""
+
+    __tablename__ = "job_execution_grants"
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    tenant_id: Mapped[UUID]
+    principal_id: Mapped[str] = mapped_column(String(200))
+    ontology_id: Mapped[str | None] = mapped_column(Text)
+    ingestion_id: Mapped[UUID | None]
+    semantic_id: Mapped[UUID | None]
+    execution_id: Mapped[UUID | None]
+    operations: Mapped[list[str]] = mapped_column(JSONB)
+    resources: Mapped[list[str]] = mapped_column(JSONB)
+    projects: Mapped[list[str]] = mapped_column(JSONB)
+    ontologies: Mapped[list[str]] = mapped_column(JSONB)
+    worker_permission: Mapped[str] = mapped_column(String(100))
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "principal_id"],
+            ["tenant_memberships.tenant_id", "tenant_memberships.principal_id"],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "ingestion_id"],
+            ["ingestion_runs.tenant_id", "ingestion_runs.ontology_id", "ingestion_runs.id"],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "ontology_id", "semantic_id"],
+            ["semantic_jobs.tenant_id", "semantic_jobs.ontology_id", "semantic_jobs.id"],
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "execution_id"],
+            ["execution_jobs.tenant_id", "execution_jobs.id"],
+        ),
+        CheckConstraint(
+            "num_nonnulls(ingestion_id, semantic_id, execution_id) = 1", name="ck_job_grant_binding"
+        ),
+        CheckConstraint(
+            "(execution_id IS NOT NULL) = (ontology_id IS NULL)", name="ck_job_grant_ontology"
+        ),
+        UniqueConstraint("tenant_id", "ontology_id", "ingestion_id", name="uq_grant_ingestion"),
+        UniqueConstraint("tenant_id", "ontology_id", "semantic_id", name="uq_grant_semantic"),
+        UniqueConstraint("tenant_id", "execution_id", name="uq_grant_execution"),
     )

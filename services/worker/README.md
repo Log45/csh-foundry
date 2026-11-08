@@ -6,8 +6,10 @@ Phase 4 provides a bounded PostgreSQL ingestion runner inside the modular API pa
 uv run python -m ontology_platform.ingestion --ontology manufacturing
 ```
 
-The server-managed catalog and trusted initiating principal are required. The runner handles one
+The server-managed catalog and verified worker service principal are required in OIDC mode.
+The worker resolves each initiating principal from the automatically created job grant. The runner handles one
 eligible job and exits; operators may invoke multiple processes, with database leases/fencing and
 retained ontology locks preserving correctness. No separate microservice, broker or distributed
 orchestrator is introduced. Production process supervision/scheduling remains operator-managed.
-See [ingestion documentation](../../docs/api/ingestion.md).
+See [ingestion documentation](../../docs/api/ingestion.md) and
+[dynamic worker rollout](../../docs/operations/dynamic-workers.md).

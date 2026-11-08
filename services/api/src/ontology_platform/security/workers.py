@@ -1,8 +1,4 @@
-"""Server-configured worker credentials and explicit expiring delegation.
-
-The returned principal keeps job ownership as the initiating subject. Every service decision
-intersects that subject's current authority with the service account and delegation record.
-"""
+"""Verify worker service credentials independently of per-job initiating subjects."""
 
 from datetime import UTC, datetime
 from typing import Literal
@@ -11,7 +7,6 @@ from urllib.parse import urlsplit
 from sqlalchemy.orm import Session, sessionmaker
 
 from ontology_platform.config import Settings
-from ontology_platform.db.models import PlatformPrincipal
 from ontology_platform.db.session import require_runtime_role
 from ontology_platform.errors import ApplicationError
 from ontology_platform.security.identity import resolve
@@ -24,7 +19,7 @@ from ontology_platform.security.service import PlatformAuthorizer
 def worker_context(
     settings: Settings,
     sessions: sessionmaker[Session],
-    kind: Literal["ingestion", "semantic", "outbox"],
+    kind: Literal["ingestion", "semantic", "outbox", "execution"],
     ontology: str,
 ) -> tuple[Principal, Authorizer]:
     if settings.environment == "production":
@@ -99,23 +94,5 @@ def worker_context(
     if kind == "outbox":
         auth.require(actor, "outbox:deliver", f"{actor.tenant_id}/{ontology}")
         return actor, auth
-    if not settings.worker_subject_id:
-        raise ApplicationError(
-            "delegation_required", "Configured initiating principal required", 403
-        )
-    with sessions() as session:
-        row = session.get(PlatformPrincipal, settings.worker_subject_id)
-        if row is None:
-            raise ApplicationError("delegation_required", "Initiating principal unavailable", 403)
-        p = actor.model_copy(
-            update={
-                "principal_id": row.id,
-                "principal_type": row.principal_type,
-                "authentication_method": "delegated",
-                "actor_id": actor.principal_id,
-                "delegation_kind": kind,
-                "delegation_ontology": ontology,
-            }
-        )
-    auth.require(p, f"{kind}:claim", f"{p.tenant_id}/{ontology}")
-    return p, auth
+    auth.require(actor, f"{kind}:claim", f"{actor.tenant_id}/{ontology}")
+    return actor, auth

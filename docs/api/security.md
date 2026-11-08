@@ -184,34 +184,25 @@ must be confined to the trusted backend; ordinary clients never receive direct S
 
 ## Background workers
 
-Production worker CLIs require `FOUNDRY_WORKER_ACCESS_TOKEN` (short-lived service access token),
-`FOUNDRY_WORKER_TENANT_ID`, and for ingestion/semantic work `FOUNDRY_WORKER_SUBJECT_ID` (job initiator).
-Tokens are never saved to jobs/audit. Credential refresh is operator-managed between bounded worker
-invocations. Expiry/disabled service/membership/role/delegation stops authority; no human credential
-is replayed by a worker. Outbox uses its verified service identity and outbox:deliver directly.
+Workers authenticate as provisioned OIDC service principals using client credentials and an
+explicit `FOUNDRY_WORKER_TENANT_ID`. `FOUNDRY_WORKER_SUBJECT_ID` has been removed. Authorized job
+submission automatically creates a durable, seven-day job execution grant in the same transaction.
+No personal tokens or manual per-user worker delegations are needed. Outbox delivery continues
+to use service identity and `outbox:deliver` directly.
 
-A delegation specifies service worker, initiating principal, exact ontology, ingestion/semantic kind,
-future aware expires_at and enabled flag. Both subjects must be tenant members; worker must be a service.
-The worker additionally needs worker:delegate. Every operation intersects the worker and initiator
-permissions; row predicates/property visibility intersect too. Worker operations are further bounded
-to their job kind. Original job ownership, private semantic inputs, initiating-principal attribution,
-lease tokens, retries and checkpoint rules remain. Audit additionally records the worker actor.
-Provision memberships, roles and delegations before exporting semantic job inputs. The tenant-wide
-security revision conservatively invalidates earlier semantic export policy hashes after any
-security change, even when the effective row set appears unchanged; re-export and resubmit inputs.
-Only initiating-principal jobs can be claimed; there is no unrestricted tenant-wide worker context.
+Each claim resolves the initiating principal from the grant. Every governed transaction checks
+current user membership/RBAC/ABAC, worker membership/RBAC/ABAC, grant scope/expiry/revocation,
+job lifecycle and the attempt fencing token. Project access must be available to both principals.
+The immutable execution context carries job, tenant, initiating and executing principals, grant
+and lease token; concurrent attempts share no mutable user identity.
 
-External I/O/engine work stays outside transactions. Current authorization is checked again before
-checkpoint/output commit. Revocation during engine work leaves outputs uncommitted and a RUNNING
-lease recoverable by an authorized worker after expiration; recording a terminal status must itself
-be authorized. No privilege is retained merely to mark a revoked job failed. An external HTTP delivery
-already sent cannot be undone by a later revocation; outbox remains at-least-once. Scheduling, hard
-resource isolation, deployment and Phase 10 operational hardening remain separate work.
+See [dynamic worker execution and rollout](../operations/dynamic-workers.md) for grant lifecycle,
+worker provisioning, Alice/Bob examples, scheduled identities, upgrade and failure behavior.
+The existing manual `/delegations` API remains for explicit delegated service operations; shared
+worker execution requires job grants and does not use those records. Administrators may revoke a
+job grant through `DELETE /api/v1/security/job-grants/{id}` (`security:delegation:manage`).
+Authorization audit includes both identities, job ID, grant ID and attempt token.
 
-References: [OIDC Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html),
-[RFC 9068](https://www.rfc-editor.org/rfc/rfc9068.html),
-[PyJWT API](https://pyjwt.readthedocs.io/en/stable/api.html),
-[PyJWT license](https://github.com/jpadilla/pyjwt/blob/2.15.0/LICENSE).
 
 ## Phase 8 browser integration
 

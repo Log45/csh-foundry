@@ -18,7 +18,10 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from ontology_platform.db.models import (
     AuthorizationAudit,
+    ExecutionJob,
     ExternalIdentity,
+    IngestionRun,
+    JobExecutionGrant,
     Membership,
     Object,
     PlatformPrincipal,
@@ -27,10 +30,12 @@ from ontology_platform.db.models import (
     RoleAssignment,
     SecurityPolicy,
     SecurityState,
+    SemanticJob,
     WorkerDelegation,
 )
 from ontology_platform.errors import ApplicationError
 from ontology_platform.queries.ast import All, AnyOf, Filter, Negation, Predicate
+from ontology_platform.security.audit import persist_audit
 from ontology_platform.security.contracts import AuthorizationDecision, PolicyInput
 from ontology_platform.security.interfaces import Principal
 from ontology_platform.security.query import QueryGrant
@@ -42,6 +47,10 @@ def denied() -> ApplicationError:
 
 @dataclass
 class SecuritySnapshot:
+    job_bindings: dict[
+        UUID, tuple[IngestionRun | SemanticJob | ExecutionJob, JobExecutionGrant]
+    ] = field(default_factory=dict)
+    job_clock: tuple[datetime, float] | None = None
     tenant_id: UUID | None = None
     revision: int = 0
     members: dict[tuple[str, str | None, str | None, str, str], Membership] = field(
@@ -111,7 +120,7 @@ class PlatformAuthorizer:
 
     def identity(self, session: Session, p: Principal) -> Membership:
         if p.authentication_method not in (
-            {"oidc", "delegated", "test"} if self.test_mode else {"oidc", "delegated"}
+            {"oidc", "delegated", "job", "test"} if self.test_mode else {"oidc", "delegated", "job"}
         ):
             raise denied()
         if p.expires_at is None or p.expires_at <= datetime.now(UTC):
@@ -143,7 +152,7 @@ class PlatformAuthorizer:
             or not member.enabled
         ):
             raise denied()
-        if p.authentication_method != "delegated":
+        if p.authentication_method not in {"delegated", "job"}:
             binding = session.get(ExternalIdentity, (p.identity_provider, p.external_subject))
             if binding is None or binding.principal_id != p.principal_id:
                 raise denied()
@@ -177,6 +186,10 @@ class PlatformAuthorizer:
         return permissions
 
     def delegation(self, session: Session, p: Principal, resource: str) -> Principal | None:
+        if p.authentication_method == "job":
+            from ontology_platform.security.job_grants import validate
+
+            return validate(session, self, p, resource)
         if p.authentication_method != "delegated":
             return None
         if not p.actor_id or not p.delegation_kind or not p.delegation_ontology:
@@ -233,6 +246,9 @@ class PlatformAuthorizer:
             tenant_id=p.tenant_id,
             principal_id=p.principal_id,
             actor_id=p.actor_id,
+            job_id=p.job_id,
+            execution_grant_id=p.execution_grant_id,
+            execution_token=p.execution_token,
             operation=operation[:200],
             resource_hash=hashlib.sha256(resource.encode()).hexdigest(),
             allowed=allowed,
@@ -242,7 +258,7 @@ class PlatformAuthorizer:
         snapshot = self.snapshot.get()
         if snapshot is None:
             with self.audit_sessions.begin() as audit_session:
-                audit_session.add(row)
+                persist_audit(audit_session, [row])
         else:
             snapshot.pending_audit.append(row)
             # Independent bounded batches retain decision evidence on business rollback.
@@ -256,7 +272,7 @@ class PlatformAuthorizer:
             return
         rows, snapshot.pending_audit = snapshot.pending_audit, []
         with self.audit_sessions.begin() as audit_session:
-            audit_session.add_all(rows)
+            persist_audit(audit_session, rows)
 
     def policy_denial(self, p: Principal, operation: str, resource: str) -> None:
         snapshot = self.snapshot.get()
@@ -280,6 +296,10 @@ class PlatformAuthorizer:
             if operation not in self.permissions(session, p):
                 raise denied()
             category = "delegation"
+            if p.authentication_method == "job":
+                from ontology_platform.security.job_grants import validate
+
+                validate(session, self, p, resource, operation)
             if p.authentication_method == "delegated":
                 allowed_operations = {
                     "schema:read",
@@ -482,6 +502,10 @@ class PlatformAuthorizer:
                 "invalid_query_policy", "Policy cannot be evaluated", 503
             ) from exc
         worker = self.delegation(session, p, f"{p.tenant_id}/{ontology_id}")
+        if p.authentication_method == "job":
+            from ontology_platform.security.job_grants import validate
+
+            validate(session, self, p, f"{p.tenant_id}/{ontology_id}/objects/{object_type}")
         if worker is not None:
             other = self._grant(session, worker, ontology_id, object_type)
             visible = grant.visible_properties

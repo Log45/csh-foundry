@@ -10,8 +10,7 @@ from ontology_platform.config import get_settings
 from ontology_platform.db.session import make_engine
 from ontology_platform.execution.worker import ExecutionWorker
 from ontology_platform.pipelines.service import PipelineService
-from ontology_platform.security.local import LocalAuthorizer
-from ontology_platform.security.service import PlatformAuthorizer
+from ontology_platform.security.workers import worker_context
 from sqlalchemy.orm import sessionmaker
 
 
@@ -19,15 +18,12 @@ def main() -> None:
     settings, storage = get_settings(), StorageSettings()
     engine = make_engine(settings)
     sessions = sessionmaker(engine, expire_on_commit=False)
+    actor, auth = worker_context(settings, sessions, "execution", "projects")
     worker = ExecutionWorker(
         PipelineService(
-            sessions,
-            LocalAuthorizer(settings)
-            if settings.trusted_local_identity
-            else PlatformAuthorizer(sessions),
-            storage,
-            S3ArtifactStore(storage) if storage.backend == "s3" else None,
-        )
+            sessions, auth, storage, S3ArtifactStore(storage) if storage.backend == "s3" else None
+        ),
+        actor,
     )
     running = True
 
@@ -42,7 +38,8 @@ def main() -> None:
             sessions, worker.service.authorizer, storage, worker.service.store
         )
         while running:
-            automations.tick()
+            worker.actor, _ = worker_context(settings, sessions, "execution", "projects")
+            automations.tick(worker.actor)
             if worker.run_one() is None:
                 time.sleep(1)
     finally:

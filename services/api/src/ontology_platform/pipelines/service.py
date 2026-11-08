@@ -50,6 +50,10 @@ class PipelineService(ArtifactService):
     def publish_in(
         self, s: Session, p: Principal, key: UUID, spec: Definition | DAGDefinition
     ) -> DefinitionView:
+        if p.authentication_method == "job":
+            raise ApplicationError(
+                "forbidden", "Job grants do not authorize definition changes", 403
+            )
         self.artifact(s, p, key, True)
         if isinstance(spec, DAGDefinition):
             from ontology_platform.pipelines.dag_service import validate_in
@@ -198,6 +202,9 @@ class PipelineService(ArtifactService):
                         checksum=physical.checksum,
                     )
                 )
+            from ontology_platform.security.job_grants import create as create_job_grant
+
+            create_job_grant(s, self.authorizer, p, job)
             self.audit(s, p, "pipeline_run_queue", job.id)
             return ExecutionJobView.model_validate(job)
 
@@ -271,6 +278,16 @@ class PipelineService(ArtifactService):
             elif row.state in {"ADMITTED", "RUNNING"}:
                 row.state = "CANCELLING"
             self.audit(s, p, "execution_retry" if retry else "execution_cancel", row.id)
+            from ontology_platform.security.job_grants import control_event
+
+            control_event(
+                s,
+                self.authorizer,
+                p,
+                "execution",
+                key,
+                "job:retry_requested" if retry else "job:cancel_requested",
+            )
             s.flush()
             return self.job_view(s, p, row)
 

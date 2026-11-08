@@ -374,8 +374,11 @@ def test_private_source_filtering_readonly_shares_and_revocation(security, store
     svc, resource, spec, body = setup_mapping(
         w, store, b"id,name\nF3,Third\nF4,Fourth\n", prepared=True, actor=owner, auth=auth
     )
+    from worker_support import provision_worker
+
+    executor = provision_worker(svc, owner)
     run = svc.start(owner, resource.id, body)
-    ExecutionWorker(svc).run_one()
+    ExecutionWorker(svc, executor).run_one()
     assert svc.status(owner, run.id).state == "SUCCEEDED"
     consumer = svc.create_project(owner, CreateProject(name="Consumer"))
     svc.member(
@@ -414,7 +417,7 @@ def test_private_source_filtering_readonly_shares_and_revocation(security, store
             principal_id=owner.principal_id, role="viewer", expected_revision=current.revision
         ),
     )
-    ExecutionWorker(svc).run_one()
+    ExecutionWorker(svc, executor).run_one()
     assert svc.status(owner, queued.id).state == "FAILED"
 
 
@@ -484,7 +487,7 @@ def test_upgrade_from_phase14_preserves_definitions(historical_database, store):
         command.check(config)
         assert (
             connection.scalar(text("SELECT version_num FROM alembic_version"))
-            == "0027_lineage_observability"
+            == "0028_job_execution_grants"
         )
     assert pipelines.definitions(w.actor, pipe.id)[0].id == definition.id
     assert datasets.dataset_metadata(w.actor, source.id, version.id).checksum == version.checksum

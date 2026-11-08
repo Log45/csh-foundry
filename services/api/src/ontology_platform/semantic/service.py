@@ -431,7 +431,13 @@ class SemanticService(GovernedService):
             self.access(session, p, primary, fresh=True)
             self.access(session, p, secondary, fresh=True)
             fingerprint = digest(
-                encode([body.model_dump(mode="json"), ENGINE_VERSION, COMPILER_VERSION]).encode()
+                encode(
+                    [
+                        body.model_dump(mode="json", exclude_none=True),
+                        ENGINE_VERSION,
+                        COMPILER_VERSION,
+                    ]
+                ).encode()
             )
             row = session.scalar(
                 select(SemanticJob).where(
@@ -455,6 +461,9 @@ class SemanticService(GovernedService):
                 )
                 session.add(row)
                 session.flush()
+                from ontology_platform.security.job_grants import create as create_job_grant
+
+                create_job_grant(session, self.authorizer, p, row)
             return self.job_view(row)
 
     def job(self, p: Principal, ontology: str, key: UUID) -> JobView:
@@ -493,6 +502,9 @@ class SemanticService(GovernedService):
                 row.status, row.token, row.lease_until = "CANCELLED", None, None
                 row.completed_at = datetime.now(UTC)
                 session.flush()
+            from ontology_platform.security.job_grants import control_event
+
+            control_event(session, self.authorizer, p, "semantic", key, "job:cancel_requested")
             return self.job_view(row)
 
     def approval(self, session: Session, row: SemanticArtifact) -> str:

@@ -432,7 +432,9 @@ def commit(
 
 def cleanup(worker: Any, tenant: UUID, key: UUID, *, repeat: bool = False) -> None:
     """Only terminal jobs; run-scoped intermediates never overlap committed artifacts."""
-    with worker.sessions.begin() as s:
+    if worker.actor is not None and tenant != worker.actor.tenant_id:
+        raise ApplicationError("forbidden", "Worker tenant mismatch", 403)
+    with worker.control_scope() as s:
         job = s.get(ExecutionJob, (tenant, key), with_for_update=True)
         if job is None or job.state not in {"SUCCEEDED", "FAILED", "CANCELLED"}:
             return
@@ -481,6 +483,7 @@ def sweep(worker: Any) -> None:
                         | (DAGRun.cleaned_at < clock(s) - timedelta(seconds=86400))
                     ),
                     ExecutionJob.state.in_(["SUCCEEDED", "FAILED", "CANCELLED"]),
+                    *([ExecutionJob.tenant_id == worker.actor.tenant_id] if worker.actor else []),
                 )
                 .order_by(DAGRun.cleaned_at.asc().nulls_last())
                 .limit(10)

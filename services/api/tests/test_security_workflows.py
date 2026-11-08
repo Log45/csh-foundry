@@ -148,7 +148,9 @@ def test_delegated_manufacturing_ingestion_and_worker_intersection(database, tmp
     worker = IngestionWorker(w.sessions, auth, old_service.catalog)
     delegated = delegation(w, auth, admin, p, "ingestion")
     run = submit((w, service, worker))
-    assert worker.run_one(delegated, w.definition.id) == run.id
+    from ontology_platform.security.job_grants import worker as service_actor
+
+    assert worker.run_one(service_actor(delegated), w.definition.id) == run.id
     assert service.get(p, w.definition.id, run.id).status == "COMPLETED", service.get(
         p, w.definition.id, run.id
     ).last_error
@@ -175,7 +177,6 @@ def test_delegated_manufacturing_ingestion_and_worker_intersection(database, tmp
 
 def test_semantic_worker_rechecks_revoked_delegation_before_output_commit(database, tmp_path):
     from ontology_platform.queries.ast import QueryRequest
-    from ontology_platform.security.contracts import DelegationInput
 
     w, _, _ = setup(database, tmp_path)
     auth, admin, p = secure(w)
@@ -205,26 +206,22 @@ def test_semantic_worker_rechecks_revoked_delegation_before_output_commit(databa
         def validate_shapes(self, shapes, data):
             result = engine.validate_shapes(shapes, data)
             completed_external_work.append(True)
-            admin.delegate(
-                p,
-                DelegationInput(
-                    worker_id=delegated.actor_id,
-                    principal_id=p.principal_id,
-                    ontology_id=w.definition.id,
-                    kind="semantic",
-                    enabled=False,
-                    expires_at=datetime.now(UTC) + timedelta(hours=1),
-                ),
-            )
+            from ontology_platform.security.job_grants import find
+
+            with w.sessions() as session:
+                grant = find(session, p.tenant_id, "semantic", job.id)
+            admin.revoke_job_grant(p, str(grant.id))
             return result
 
     worker = SemanticWorker(w.sessions, auth, engine=RevokeAfterWork())
-    claim = worker.claim(delegated, w.definition.id)
+    from ontology_platform.security.job_grants import worker as service_actor
+
+    claim = worker.claim(service_actor(delegated), w.definition.id)
     assert claim[0] == job.id
     with w.sessions() as session:
         before = session.scalar(select(func.count()).select_from(SemanticArtifact))
     with pytest.raises(ApplicationError):
-        worker.execute(delegated, w.definition.id, *claim)
+        worker.execute(service_actor(delegated), w.definition.id, *claim)
     assert completed_external_work == [True]
     with w.sessions() as session:
         assert session.scalar(select(func.count()).select_from(SemanticArtifact)) == before
@@ -247,7 +244,6 @@ def test_verified_worker_factory_and_revoked_delegation(database, monkeypatch):
         auth_mode="oidc",
         oidc_providers=verifier.providers,
         worker_tenant_id=p.tenant_id,
-        worker_subject_id=p.principal_id,
         worker_access_token=token(private, claims={"sub": "worker-ingestion"}),
         _env_file=None,
     )
@@ -261,8 +257,8 @@ def test_verified_worker_factory_and_revoked_delegation(database, monkeypatch):
     monkeypatch.setattr("ontology_platform.security.workers.OIDCVerifier", verifier_factory)
     try:
         actor, actual = worker_context(settings, w.sessions, "ingestion", w.definition.id)
-        assert actor.actor_id == delegated.actor_id
-        assert actor.principal_id == p.principal_id
+        assert actor.principal_id == delegated.actor_id
+        assert actor.actor_id is None and actor.principal_type == "service"
         assert isinstance(actual, PlatformAuthorizer)
     finally:
         fixture.close()
@@ -341,7 +337,9 @@ def test_current_delegated_semantic_job_completes_and_owner_reads_result(databas
             Path(os.environ.get("OPEN_ONTOLOGIES_BIN", ".external/open-ontologies"))
         ),
     )
-    assert worker.run_one(delegated, w.definition.id) == job.id
+    from ontology_platform.security.job_grants import worker as service_actor
+
+    assert worker.run_one(service_actor(delegated), w.definition.id) == job.id
     completed = service.job(p, w.definition.id, job.id)
     assert completed.status == "COMPLETED", completed.last_error
     assert completed.outputs

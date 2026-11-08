@@ -46,6 +46,10 @@ class FunctionService(PipelineService):
     def publish_spec(
         self, s: Session, p: Principal, key: UUID, spec: dict[str, Any]
     ) -> GovernedDefinitionView:
+        if p.authentication_method == "job":
+            raise ApplicationError(
+                "forbidden", "Job grants do not authorize definition changes", 403
+            )
         self.artifact(s, p, key, True)
         count = (
             s.scalar(
@@ -213,6 +217,9 @@ class FunctionService(PipelineService):
             )
         )
         s.flush()
+        from ontology_platform.security.job_grants import create as create_job_grant
+
+        create_job_grant(s, self.authorizer, p, job)
         self.audit(s, p, "function_invoke", job.id)
         return job
 

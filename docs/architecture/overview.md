@@ -135,5 +135,6 @@ QueryGrant. Policies stay SQL-enforced through query compilation. CRUD, actions,
 ingestion/reconciliation, semantic artifacts and OWL imports reuse governed checks. Tenant security
 locks hold authorization state through commit; version/revocation changes invalidate cursor contexts.
 Transaction-local snapshots only reuse lock-protected security state. Independent redacted decision
-audit survives request rollback. Workers intersect current service/initiator authority through explicit
-expiring delegation. See ADR 0028. No frontend, RLS or production deployment is claimed.
+audit survives request rollback. Shared workers intersect current service/initiator authority through
+immutable job-scoped grants, dynamically resolved per attempt. See ADR 0047 and the
+[worker rollout guide](../operations/dynamic-workers.md). No RLS or production deployment is claimed.

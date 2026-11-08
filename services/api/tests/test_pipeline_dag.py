@@ -423,7 +423,9 @@ def test_private_sibling_and_upstream_lineage(security, store):
             inputs=[InputVersion(name="source", dataset_id=source.id, version_id=version.id)],
         ),
     )
-    ExecutionWorker(svc).run_one()
+    from worker_support import provision_worker
+
+    ExecutionWorker(svc, provision_worker(svc, owner)).run_one()
     status = svc.status(owner, run.id)
     assert status.state == "SUCCEEDED"
     consumer = svc.create_project(owner, CreateProject(name="Output reader"))

@@ -12,7 +12,7 @@ from ontology_platform.errors import ApplicationError
 from ontology_platform.security.interfaces import Authorizer, Principal
 from ontology_platform.security.query import TransactionAuthorizer
 
-SCHEMA_REVISION = "0027_lineage_observability"
+SCHEMA_REVISION = "0028_job_execution_grants"
 
 
 def missing(resource: str) -> ApplicationError:
@@ -56,6 +56,34 @@ class GovernedService:
                             "tenant_unavailable", "Tenant must be provisioned", 403
                         )
                     yield session
+                    if principal.authentication_method == "job":
+                        from ontology_platform.security.job_grants import (
+                            audit,
+                            check_commit,
+                            job_row,
+                        )
+
+                        check_commit(session, self.authorizer, principal)
+                        row = job_row(session, principal)
+                        state = getattr(row, "state", getattr(row, "status", ""))
+                        if state in {"PENDING", "QUEUED"} and principal.execution_token is not None:
+                            assert principal.job_id is not None
+                            audit(
+                                session,
+                                principal,
+                                principal.job_id,
+                                principal.execution_grant_id,
+                                "job:retry",
+                            )
+                        if state in {"COMPLETED", "SUCCEEDED", "CANCELLED", "FAILED"}:
+                            assert principal.job_id is not None
+                            audit(
+                                session,
+                                principal,
+                                principal.job_id,
+                                principal.execution_grant_id,
+                                "job:" + state.lower(),
+                            )
         except IntegrityError as exc:
             raise ApplicationError(
                 "constraint_conflict", "Persistence constraint conflict", 409

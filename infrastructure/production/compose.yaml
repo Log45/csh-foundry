@@ -188,7 +188,6 @@ services:
       FOUNDRY_PROCESS_ROLE: worker
       FOUNDRY_WORKER_PROVIDER_ID: keycloak
       FOUNDRY_WORKER_TENANT_ID: ${WORKER_TENANT_ID:?Set WORKER_TENANT_ID}
-      FOUNDRY_WORKER_SUBJECT_ID: ${WORKER_SUBJECT_ID:?Set WORKER_SUBJECT_ID}
     secrets: [FOUNDRY_DATABASE_URL, FOUNDRY_WORKER_CLIENT_SECRET]
     command: [python, -m, ontology_platform.jobs.supervisor, --kind, ingestion,
               --ontology, "${WORKER_ONTOLOGY:-manufacturing}"]
@@ -207,7 +206,6 @@ services:
       FOUNDRY_PROCESS_ROLE: worker
       FOUNDRY_WORKER_PROVIDER_ID: keycloak
       FOUNDRY_WORKER_TENANT_ID: ${WORKER_TENANT_ID}
-      FOUNDRY_WORKER_SUBJECT_ID: ${WORKER_SUBJECT_ID}
       OPEN_ONTOLOGIES_BIN: /usr/local/bin/open-ontologies
     secrets: [FOUNDRY_DATABASE_URL, FOUNDRY_WORKER_CLIENT_SECRET]
     command: [python, -m, ontology_platform.jobs.supervisor, --kind, semantic,

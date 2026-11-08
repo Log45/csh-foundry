@@ -15,6 +15,8 @@ from ontology_platform.db.models import DerivedFact, SemanticArtifact, SemanticJ
 from ontology_platform.db.session import clock
 from ontology_platform.errors import ApplicationError
 from ontology_platform.security.interfaces import Principal
+from ontology_platform.security.job_grants import claim_shared, reject_attempt, resolve_attempt
+from ontology_platform.security.service import PlatformAuthorizer
 from ontology_platform.semantic.compiler import parse, serialize, triple_id
 from ontology_platform.semantic.contracts import JobInput
 from ontology_platform.semantic.engine import (
@@ -32,6 +34,8 @@ class SemanticWorker(SemanticService):
         self.engine = engine
 
     def claim(self, p: Principal, ontology: str) -> tuple[UUID, UUID] | None:
+        if isinstance(self.authorizer, PlatformAuthorizer):
+            return claim_shared(self, p, "semantic", ontology)
         with self.operation(p, "semantic:claim", f"{ontology}/semantic/jobs") as session:
             now = clock(session)
             row = session.scalar(
@@ -86,7 +90,8 @@ class SemanticWorker(SemanticService):
         return row
 
     def renew(self, p: Principal, ontology: str, key: UUID, token: UUID) -> None:
-        with self.operation(p, "semantic:claim", f"{ontology}/semantic/jobs/{key}") as session:
+        p = resolve_attempt(self, p, "semantic", ontology, key, token)
+        with self.operation(p, "semantic:execute", f"{ontology}/semantic/jobs/{key}") as session:
             row = self.fenced(session, p, ontology, key, token)
             row.lease_until = clock(session) + timedelta(seconds=60)
 
@@ -100,6 +105,7 @@ class SemanticWorker(SemanticService):
         return primary, secondary
 
     def execute(self, p: Principal, ontology: str, key: UUID, token: UUID) -> None:
+        p = resolve_attempt(self, p, "semantic", ontology, key, token)
         with self.operation(p, "semantic:execute", f"{ontology}/semantic/jobs/{key}") as session:
             row = self.fenced(session, p, ontology, key, token)
             primary, secondary = self.inputs(session, p, row)
@@ -118,6 +124,7 @@ class SemanticWorker(SemanticService):
         duration = time.monotonic() - started
         if result.engine_version != ENGINE_VERSION or result.engine_commit != ENGINE_COMMIT:
             raise ApplicationError("semantic_version_mismatch", "Unexpected engine version", 503)
+        p = resolve_attempt(self, p, "semantic", ontology, key, token)
         with self.operation(p, "semantic:execute", f"{ontology}/semantic/jobs/{key}") as session:
             self.ontology(session, p, ontology, write=True)
             row = self.fenced(session, p, ontology, key, token)
@@ -301,6 +308,13 @@ class SemanticWorker(SemanticService):
         *,
         retryable: bool = False,
     ) -> None:
+        if isinstance(self.authorizer, PlatformAuthorizer) and p.authentication_method == "job":
+            if not self.authorizer.authorize(
+                p, "semantic:execute", f"{p.tenant_id}/{ontology}"
+            ).allowed:
+                reject_attempt(self, p, ontology, key, token, code)
+                return
+        p = resolve_attempt(self, p, "semantic", ontology, key, token)
         with self.operation(p, "semantic:execute", f"{ontology}/semantic/jobs/{key}") as session:
             row = self.job_row(session, p, ontology, key)
             session.refresh(row, with_for_update=True)
@@ -325,6 +339,7 @@ class SemanticWorker(SemanticService):
         if claim is None:
             return None
         key, token = claim
+        p = resolve_attempt(self, p, "semantic", ontology, key, token)
         try:
             self.execute(p, ontology, key, token)
         except ApplicationError as exc:

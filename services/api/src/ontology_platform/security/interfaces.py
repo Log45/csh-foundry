@@ -10,10 +10,14 @@ class Principal(BaseModel):
     principal_id: str = Field(min_length=1)
     identity_provider: str | None = None
     external_subject: str | None = None
-    authentication_method: Literal["local", "oidc", "test", "delegated"] = "local"
+    authentication_method: Literal["local", "oidc", "test", "delegated", "job"] = "local"
     principal_type: Literal["user", "service"] = "user"
     expires_at: AwareDatetime | None = None
     actor_id: str | None = None
+    job_id: UUID | None = None
+    execution_grant_id: UUID | None = None
+    job_kind: Literal["ingestion", "semantic", "execution"] | None = None
+    execution_token: UUID | None = None
     delegation_ontology: str | None = None
     delegation_kind: Literal["ingestion", "semantic"] | None = None
 

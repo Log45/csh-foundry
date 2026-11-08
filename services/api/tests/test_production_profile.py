@@ -23,7 +23,6 @@ def test_production_profile_resolves_runtime_mounts_and_security_dependencies():
         "KEYCLOAK_IMPORT_DIRECTORY": "/disposable/realm",
         "TLS_DIRECTORY": "/disposable/tls",
         "WORKER_TENANT_ID": "00000000-0000-0000-0000-000000000001",
-        "WORKER_SUBJECT_ID": "disposable",
         "WORKER_CATALOG_FILE": "/disposable/catalog.json",
         "INGESTION_DIRECTORY": "/disposable/input",
     }

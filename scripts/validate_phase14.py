@@ -24,6 +24,10 @@ parser.add_argument(
     "--browser-only", action="store_true", help="Run browser acceptance without repeating Python"
 )
 parser.add_argument("--full", action="store_true")
+parser.add_argument("--workers", action="store_true", help="Run shared-worker security regressions")
+parser.add_argument(
+    "--worker-selection", default="", help="Optional pytest expression for worker tests"
+)
 parser.add_argument("--large", action="store_true")
 parser.add_argument(
     "--large-selection", default="", help="Optional pytest expression for scale cases"
@@ -145,6 +149,46 @@ with tempfile.TemporaryDirectory(prefix="foundry-phase14-") as directory:
                 *(["-k", args.large_selection] if args.large_selection else []),
                 "-s",
                 "-x",
+                "--tb=short",
+            )
+        elif args.workers:
+            run(
+                "uv",
+                "run",
+                "pytest",
+                *[
+                    "services/api/tests/" + name
+                    for name in (
+                        "test_job_execution.py",
+                        "test_security_workflows.py",
+                        "test_security_platform.py",
+                        "test_security_dispositions.py",
+                        "test_ingestion.py",
+                        "test_ingestion_recovery.py",
+                        "test_ingestion_postgres.py",
+                        "test_ingestion_connectors.py",
+                        "test_semantic.py",
+                        "test_semantic_platform.py",
+                        "test_execution.py",
+                        "test_mappings.py",
+                        "test_mappings_recovery.py",
+                        "test_pipeline_dag.py",
+                        "test_pipeline_graphs.py",
+                        "test_media_functions_automations.py",
+                        "test_datasets.py",
+                        "test_artifacts.py",
+                        "test_projects.py",
+                        "test_observability.py",
+                        "test_kubernetes.py",
+                        "test_production_profile.py",
+                        "test_fixtures.py",
+                        "test_actions.py",
+                        "test_queries.py",
+                        "test_ontology_import.py",
+                    )
+                ],
+                *(["-k", args.worker_selection] if args.worker_selection else []),
+                "-ra",
                 "--tb=short",
             )
         elif args.full:

@@ -1,6 +1,7 @@
 """Production security administration and self introspection; no frontend login."""
 
 from typing import Annotated
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, Request, Security
 from fastapi.security import HTTPAuthorizationCredentials
@@ -123,3 +124,9 @@ def own_tenants(
 
     issuer, subject, _, _ = verified_identity(request)
     return discover(request.app.state.sessions, issuer, subject, limit, offset)
+
+
+@router.delete("/job-grants/{key}")
+def revoke_job_grant(key: UUID, p: Actor, admin: Admin) -> dict[str, str]:
+    admin.revoke_job_grant(p, str(key))
+    return {"status": "revoked"}

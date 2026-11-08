@@ -3699,3 +3699,12 @@ must remain uninterrupted and unchanged. Migration 0027 requires disposable vali
 application. This does not complete unrelated milestone J work or authorize production certification,
 Code Workspaces, arbitrary code, external connectors, Spark, Rust or streaming. Acceptance remains
 pending; §23B remains BLOCKED / NOT PRODUCTION-CERTIFIED.
+
+
+## Approved cross-cutting task — dynamic shared worker execution (2026-11-08)
+
+The explicit user task authorizes replacing fixed-subject worker execution across existing
+background paths with service authentication and bounded job-scoped grants. This includes the
+additive security migration, existing ingestion/semantic/execution/scheduler paths, tests,
+configuration and documentation. It does not authorize new roadmap subsystems or deployment.
+See `docs/operations/dynamic-workers.md` and ADR 0047 for implementation and rollout semantics.

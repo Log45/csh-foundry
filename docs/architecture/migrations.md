@@ -149,3 +149,15 @@ invalidates all durable sessions and removes budget state. Earlier Phase 9 downg
 branch/SDK history. Use a maintenance window and an approved forward-repair/restore plan rather
 than assuming destructive downgrade is a production rollback. Test schema reversals only in
 isolated databases. See the Phase 10 runbook and validation report.
+
+
+## 0028 — job-scoped worker grants
+
+Forward-only `0028_job_execution_grants` adds immutable, expiring tenant/job/principal-bound
+execution grants, correlated audit job/grant/attempt IDs and shared-queue indexes. Composite FKs
+bind all three existing job families and tenant membership; one grant per job is enforced.
+Historical audit/job records are preserved. No legacy grants are backfilled: legacy queued work
+must be resubmitted through authorized admission. Runtime role grants and coordinated worker/API
+rollout are explicit operator actions; see [dynamic workers](../operations/dynamic-workers.md).
+Audit correlation IDs deliberately have no deletion-blocking FKs so immutable audit evidence can
+outlive retained jobs and grants.

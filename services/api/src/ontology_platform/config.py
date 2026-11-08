@@ -31,7 +31,6 @@ class Settings(BaseSettings):
     worker_client_id: str = "worker"
     process_role: Literal["api", "worker"] = "api"
     worker_tenant_id: UUID | None = None
-    worker_subject_id: str | None = None
     local_tenant_id: UUID | None = None
     local_principal_id: str | None = None
     trusted_local_identity: bool = False

@@ -150,6 +150,9 @@ class DatasetService(ArtifactService):
             )
             s.add(row)
             s.flush()
+            from ontology_platform.security.job_grants import create as create_job_grant
+
+            create_job_grant(s, self.authorizer, p, row)
             self.audit(s, p, "dataset_validation_queued", row.id)
             return ExecutionJobView.model_validate(row)
 

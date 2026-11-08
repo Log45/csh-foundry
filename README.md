@@ -192,7 +192,7 @@ Bearer tokens and, for multi-tenant users, an authorized X-Tenant-ID selection.
 
 RBAC and restrictive ABAC extend the existing governed service and SQL grant interfaces. Security
 administration, policy versions, revocation, audit and worker delegation use PostgreSQL. Workers need
-service credentials plus current explicit delegation and both identities' permissions. See the
+service credentials, automatic job-scoped grants and both identities' current permissions. See the
 [Phase 7 report](docs/development/phase-7-report.md) for validation and limitations. Phase 8 adds the Studio UI; no
 production deployment is included; Phase 10 operational hardening remains separate work.
 

@@ -257,6 +257,9 @@ class IngestionService(GovernedService):
             )
             session.add(row)
             session.flush()
+            from ontology_platform.security.job_grants import create as create_job_grant
+
+            create_job_grant(session, self.authorizer, p, row)
             return RunView.model_validate(row)
 
     @staticmethod
@@ -322,6 +325,9 @@ class IngestionService(GovernedService):
                 row.completed_at = session.scalar(select(func.clock_timestamp()))
                 row.token = None
             session.flush()
+            from ontology_platform.security.job_grants import control_event
+
+            control_event(session, self.authorizer, p, "ingestion", key, "job:cancel_requested")
             return RunView.model_validate(row)
 
     def cleanup(self, p: Principal, ontology: str, days: int = 7, limit: int = 100) -> int:

@@ -373,7 +373,7 @@ def test_g_migration_upgrade_preserves_previous_data_and_drift(historical_databa
         c.execute(text("DROP TABLE phase17_sentinel"))
         assert (
             c.scalar(text("SELECT version_num FROM alembic_version"))
-            == "0027_lineage_observability"
+            == "0028_job_execution_grants"
         )
         config = Config(str(ROOT / "alembic.ini"))
         config.attributes["connection"] = c
@@ -487,11 +487,14 @@ def test_function_automation_current_owner_revocation_before_worker_and_tick(sec
     with w.sessions.begin() as s:
         state = s.get(AutomationState, (owner.tenant_id, row.id))
         state.next_run_at = clock(s) - timedelta(seconds=1)
-    assert svc.tick() == 0
+    from worker_support import provision_worker
+
+    executor = provision_worker(fn_svc, owner)
+    assert svc.tick(executor) == 0
     with w.sessions() as s:
         state = s.get(AutomationState, (owner.tenant_id, row.id))
         assert not state.enabled and state.last_error == "authorization_or_contract"
-    run_worker(fn_svc).run_one()
+    ExecutionWorker(PipelineService(w.sessions, auth, store.settings, store), executor).run_one()
     assert fn_svc.status(owner, direct.id).state == "FAILED"
     with pytest.raises(ApplicationError):
         fn_svc.result(owner, direct.id)
@@ -739,7 +742,7 @@ def test_daily_schedule_and_dispatch_rate_are_database_durable(world, store, mon
         state = s.get(AutomationState, (p.tenant_id, row.id))
         state.next_run_at = clock(s) - timedelta(days=2)
     assert svc.tick() == 1
-    next_run = svc.schedule(p, row.id).next_run_at
+    next_run = svc.schedule(p, row.id).next_run_at.astimezone(UTC)
     assert next_run.hour == 3 and next_run.minute == 30 and next_run > datetime.now(UTC)
     monkeypatch.setenv("FOUNDRY_G_DISPATCH_PER_MINUTE", "1")
     with world.sessions.begin() as s:

@@ -164,7 +164,6 @@ class Acceptance:
             "WORKER_CATALOG_FILE": str(self.root / "catalog.json"),
             "INGESTION_DIRECTORY": str(self.root / "ingestion"),
             "WORKER_TENANT_ID": str(self.tenant),
-            "WORKER_SUBJECT_ID": "unconfigured",
         }
         self.values = values
         self.env.update(values)
@@ -314,7 +313,6 @@ networks:
         from ontology_platform.security.bootstrap import bootstrap
         from ontology_platform.security.contracts import (
             AssignmentInput,
-            DelegationInput,
             IdentityInput,
         )
         from ontology_platform.security.identity import resolve
@@ -366,7 +364,6 @@ networks:
         )
         self.auth = PlatformAuthorizer(self.sessions)
         self.admin = SecurityAdministration(self.auth)
-        self.env["WORKER_SUBJECT_ID"] = self.actor.principal_id
         # Worker subject comes from a broker token; workers verify its signature.
         response = self.request(
             "identity.accept.test",
@@ -390,18 +387,7 @@ networks:
         self.admin.assign(
             self.actor, AssignmentInput(principal_id=worker_id, role_id="tenant-administrator")
         )
-        for kind in ("ingestion", "semantic"):
-            self.admin.delegate(
-                self.actor,
-                DelegationInput(
-                    worker_id=worker_id,
-                    principal_id=self.actor.principal_id,
-                    ontology_id="manufacturing",
-                    kind=kind,
-                    expires_at=datetime.now(UTC) + timedelta(hours=1),
-                ),
-            )
-        self.record("governed-manufacturing-schema-and-explicit-worker-delegations")
+        self.record("governed-manufacturing-schema-and-service-worker-identity")
 
     def request(self, host: str, path: str, method: str = "GET", **kwargs: Any) -> httpx.Response:
         # Explicit DNS mapping keeps all traffic on the disposable loopback listener.
@@ -1111,7 +1097,6 @@ for(const [settings,status] of cases){
 
     def rotate_credentials(self) -> None:
         import psycopg
-        from ontology_platform.security.contracts import DelegationInput
         from psycopg import sql
 
         def write_secret(name: str, value: str) -> None:
@@ -1183,14 +1168,9 @@ for(const [settings,status] of cases){
         self.dc("restart", "ingestion-worker", "semantic-worker")
         self.record("deployed-worker-oidc-client-secret-rotation-old-secret-rejected")
         # Exercise revocation before a queued job is claimed, independently of JWT expiry.
-        delegation = dict(
-            worker_id=self.worker_id,
-            principal_id=self.actor.principal_id,
-            ontology_id="manufacturing",
-            kind="ingestion",
-            expires_at=datetime.now(UTC) + timedelta(hours=1),
-        )
-        self.admin.delegate(self.actor, DelegationInput(**delegation, enabled=False))
+        from ontology_platform.security.contracts import MembershipInput
+
+        self.admin.member(self.actor, self.worker_id, MembershipInput(enabled=False))
         run = self.api(
             "POST",
             "/ontologies/manufacturing/ingestion/runs",
@@ -1205,7 +1185,7 @@ for(const [settings,status] of cases){
         time.sleep(5)
         job = self.api("GET", "/ontologies/manufacturing/ingestion/runs/" + run["id"])
         assert job["status"] == "PENDING" and job["attempts"] == 0
-        self.admin.delegate(self.actor, DelegationInput(**delegation, enabled=True))
+        self.admin.member(self.actor, self.worker_id, MembershipInput(enabled=True))
         for _ in range(90):
             job = self.api("GET", "/ontologies/manufacturing/ingestion/runs/" + run["id"])
             if job["status"] in ("COMPLETED", "FAILED"):
@@ -1213,7 +1193,7 @@ for(const [settings,status] of cases){
             time.sleep(1)
         assert job["status"] == "COMPLETED" and job["created"] == 0, job
         self.record(
-            "deployed-worker-reacquires-rotated-credential-queued-delegation-revocation-idempotent-continuation"
+            "deployed-worker-reacquires-rotated-credential-queued-service-revocation-idempotent-continuation"
         )
         # Rotate API/Studio internal transport credential together in a maintenance window.
         write_secret("FOUNDRY_BROWSER_STATE_SECRET", secrets.token_urlsafe(36))
