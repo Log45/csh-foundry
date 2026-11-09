@@ -1,4 +1,5 @@
 import { diagnosticFetch } from "./diagnostics";
+import type { AuthStage } from "./auth-diagnostics";
 // Server-only module: import only from route handlers. Never export tokens to components.
 import { randomBytes, createHash, timingSafeEqual } from "node:crypto";
 import { createLocalJWKSet, jwtVerify, type JSONWebKeySet } from "jose";
@@ -413,10 +414,14 @@ export async function authorization(login: ReturnType<typeof beginLogin>) {
 export async function exchange(
   code: string,
   login: ReturnType<typeof consumeLogin>,
+  stage: (value: AuthStage) => void = () => {},
 ) {
-  const c = config(),
-    metadata = await discovery();
+  stage("configuration");
+  const c = config();
+  stage("discovery");
+  const metadata = await discovery();
   if (!code || code.length > 4096) throw new BoundaryError(401, "invalid_code");
+  stage("token_exchange");
   const tokens = await document(metadata.token_endpoint, {
     method: "POST",
     headers: { "content-type": "application/x-www-form-urlencoded" },
@@ -428,6 +433,7 @@ export async function exchange(
       code_verifier: login.verifier,
     }),
   });
+  stage("token_response");
   if (
     tokens.token_type?.toLowerCase() !== "bearer" ||
     typeof tokens.access_token !== "string" ||
@@ -436,6 +442,7 @@ export async function exchange(
     tokens.id_token.length > 16384
   )
     throw new BoundaryError(401, "invalid_token_response");
+  stage("jwks");
   const jwks = (await document(metadata.jwks_uri)) as JSONWebKeySet;
   if (
     !Array.isArray(jwks.keys) ||
@@ -444,12 +451,14 @@ export async function exchange(
   )
     throw new BoundaryError(401, "invalid_jwks");
   const keys = createLocalJWKSet(jwks);
+  stage("id_token");
   const id = await jwtVerify(tokens.id_token, keys, {
     issuer: c.issuer,
     audience: c.client,
     algorithms: ["RS256", "ES256"],
     requiredClaims: ["sub", "iat", "exp", "nonce"],
   });
+  stage("id_token_binding");
   if (
     id.payload.nonce !== login.nonce ||
     (Array.isArray(id.payload.aud) &&
@@ -458,12 +467,14 @@ export async function exchange(
     (id.payload.azp !== undefined && id.payload.azp !== c.client)
   )
     throw new BoundaryError(401, "invalid_nonce");
+  stage("access_token");
   const access = await jwtVerify(tokens.access_token, keys, {
     issuer: c.issuer,
     audience: c.audience,
     algorithms: ["RS256", "ES256"],
     requiredClaims: ["sub", "exp", "iat", "jti", "client_id"],
   });
+  stage("access_token_binding");
   const p = access.payload,
     h = access.protectedHeader;
   if (
@@ -484,6 +495,7 @@ export async function exchange(
   )
     throw new BoundaryError(401, "invalid_access_token");
   // ID tokens are used only above; only the independently validated API access token is retained.
+  stage("session_store");
   return issueBrowserSession(tokens.access_token, (p.exp as number) * 1000);
 }
 export function allowed(path: string, method: string) {

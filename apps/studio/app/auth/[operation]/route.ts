@@ -1,3 +1,4 @@
+import { logCallbackFailure, type AuthStage } from "@/lib/auth-diagnostics";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import {
@@ -35,6 +36,7 @@ async function handle(
 ) {
   const jar = await cookies();
   const { operation } = await context.params;
+  let stage: AuthStage = "login_state";
   try {
     if (operation === "login" && request.method === "POST") {
       originCheck(request);
@@ -50,9 +52,17 @@ async function handle(
         jar.get(loginName)?.value ?? "",
         url.searchParams.get("state") ?? "",
       );
-      const id = await exchange(url.searchParams.get("code") ?? "", login);
+      const id = await exchange(
+        url.searchParams.get("code") ?? "",
+        login,
+        (value) => {
+          stage = value;
+        },
+      );
+      stage = "previous_session";
       const old = jar.get(sessionName)?.value;
       if (old) await revokeBrowserSession(old);
+      stage = "response";
       const result = NextResponse.redirect(config().origin, 303);
       result.cookies.set(sessionName, id, options(3600));
       result.cookies.set(loginName, "", options(0));
@@ -102,6 +112,8 @@ async function handle(
     }
     throw new BoundaryError(404, "not_found");
   } catch (error) {
+    if (operation === "callback" && request.method === "GET")
+      logCallbackFailure(stage, error);
     const failure =
       error instanceof BoundaryError
         ? error

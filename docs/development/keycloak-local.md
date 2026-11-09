@@ -157,3 +157,20 @@ Obtain the proxy address with `docker inspect foundry-keycloak-tls --format
 `restore.env` supplies the saved bootstrap environment without printing credentials; importing
 an existing realm/database does not reset its users. This is a local UX recovery, not the production
 Compose profile or production certification.
+
+## Local proxy trust correction — 2026-11-09
+
+Keycloak was running, but its trusted-proxy setting pointed to `172.24.0.3/32` while the TLS proxy
+occupied `172.24.0.2` and Keycloak itself occupied `.3`. The existing containers were reattached
+with persistent Docker network addresses: TLS proxy `172.24.0.3`, Keycloak `172.24.0.8`. The
+`keycloak.localhost` alias remains on the TLS proxy. Both existing containers were gracefully
+restarted to refresh Docker Desktop's host-port forwarding after the address changes. Neither
+container was removed/recreated, and realm/users/clients/passwords/signing keys were not changed.
+
+Verified from the host, API and Studio: HTTPS discovery and JWKS, exact issuer, certificate chain
+and hostname, Studio login initiation and Keycloak login form, rejection of missing PKCE and
+`plain` PKCE, admin route redirect, host port 8080, and API readiness. The issuer certificate expires
+2027-01-27. Password-authenticated sign-in was not performed; no user credentials were submitted.
+A PKCE error returned as a 302 redirect with `error=invalid_request` is an expected OAuth rejection.
+Private network rollback metadata and non-secret health results are retained in ignored
+`artifacts/keycloak-local/`. Use the existing-container start helper above for normal restarts.
