@@ -21,6 +21,8 @@ beforeEach(() => {
   }))
     vi.stubEnv(key, value);
   vi.stubEnv("FOUNDRY_OIDC_PROVIDERS", undefined);
+  vi.stubEnv("STUDIO_DIAGNOSTIC_OIDC_AUDIENCE", "false");
+  vi.spyOn(console, "info").mockImplementation(() => {});
   vi.spyOn(console, "error").mockImplementation(() => {});
 });
 afterEach(() => {
@@ -138,7 +140,10 @@ async function callback(
     ),
     { params: Promise.resolve({ operation: "callback" }) },
   );
-  const logs = JSON.stringify(vi.mocked(console.error).mock.calls);
+  const logs = JSON.stringify([
+    vi.mocked(console.error).mock.calls,
+    vi.mocked(console.info).mock.calls,
+  ]);
   for (const secret of [
     login.id,
     login.state,
@@ -349,4 +354,84 @@ it("uses strict defaults when profile is omitted and limits algorithms from shar
   vi.stubEnv("FOUNDRY_OIDC_PROVIDERS", JSON.stringify(providers));
   expect(config().profile).toBe("rfc9068");
   expect(config().algorithms).toEqual(["RS256"]);
+});
+
+it("does not emit audience metadata unless explicitly enabled", async () => {
+  expect((await callback("audience")).status).toBe(401);
+  expect(console.info).not.toHaveBeenCalled();
+});
+it.each(["rfc9068", "keycloak"])(
+  "reports only the verified audience and still rejects a mismatch (%s)",
+  async (profile) => {
+    vi.stubEnv("FOUNDRY_OIDC_PROVIDERS", JSON.stringify(policy(profile)));
+    vi.stubEnv("STUDIO_DIAGNOSTIC_OIDC_AUDIENCE", "true");
+    const response = await callback("audience", {
+      claims: { private_claim: "private-payload" },
+    });
+    expect(response.status).toBe(401);
+    expect(await response.json()).toEqual({
+      error: { code: "authentication_failed" },
+    });
+    expect(sessions.size).toBe(0);
+    expect(console.info).toHaveBeenCalledOnce();
+    expect(JSON.parse(vi.mocked(console.info).mock.calls[0][0])).toEqual({
+      event: "studio_oidc_access_token_audience",
+      audience: "account",
+      audience_status: "present",
+      expected_audience: "foundry-api",
+    });
+    expect(JSON.stringify(vi.mocked(console.info).mock.calls)).not.toContain(
+      "private-payload",
+    );
+  },
+);
+it("reports an audience array without changing successful authentication", async () => {
+  vi.stubEnv("STUDIO_DIAGNOSTIC_OIDC_AUDIENCE", "true");
+  expect(
+    (await callback("", { claims: { aud: ["foundry-api", "another-api"] } }))
+      .status,
+  ).toBe(303);
+  expect(JSON.parse(vi.mocked(console.info).mock.calls[0][0]).audience).toEqual(
+    ["foundry-api", "another-api"],
+  );
+});
+it.each(["signature", "issuer", "expired"])(
+  "does not report audience for %s failures",
+  async (fault) => {
+    vi.stubEnv("STUDIO_DIAGNOSTIC_OIDC_AUDIENCE", "true");
+    expect((await callback(fault)).status).toBe(401);
+    expect(console.info).not.toHaveBeenCalled();
+    expect(sessions.size).toBe(0);
+  },
+);
+it.each(["exp", "iat"])(
+  "does not report audience with missing %s",
+  async (claim) => {
+    vi.stubEnv("STUDIO_DIAGNOSTIC_OIDC_AUDIENCE", "true");
+    expect((await callback("", { omit: [claim] })).status).toBe(401);
+    expect(console.info).not.toHaveBeenCalled();
+  },
+);
+it("reports a missing audience explicitly without accepting the token", async () => {
+  vi.stubEnv("STUDIO_DIAGNOSTIC_OIDC_AUDIENCE", "true");
+  expect((await callback("", { omit: ["aud"] })).status).toBe(401);
+  expect(JSON.parse(vi.mocked(console.info).mock.calls[0][0])).toMatchObject({
+    audience: null,
+    audience_status: "missing",
+  });
+  expect(sessions.size).toBe(0);
+});
+it.each([
+  "x".repeat(257),
+  "injected\nline",
+  Array(17).fill("value"),
+  { secret: "private-value" },
+])("omits invalid or oversized audience data from logs", async (aud) => {
+  vi.stubEnv("STUDIO_DIAGNOSTIC_OIDC_AUDIENCE", "true");
+  expect((await callback("", { claims: { aud } })).status).toBe(401);
+  expect(JSON.parse(vi.mocked(console.info).mock.calls[0][0])).toMatchObject({
+    audience: null,
+    audience_status: "omitted_invalid_or_oversized",
+  });
+  expect(sessions.size).toBe(0);
 });

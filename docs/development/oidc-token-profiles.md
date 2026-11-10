@@ -192,3 +192,55 @@ Packaging verification: **PASS** local `npm run build` in `apps/studio`; **PASS*
 `docker build -f infrastructure/docker/studio.Dockerfile -t csh-foundry-studio:oidc-build-fix .`,
 including production TypeScript checking and final runtime image export; **PASS** `git diff --check`.
 Live OpenShift rebuild/deployment: **NOT RUN**. No image was pushed or deployed.
+
+## Temporary audience diagnostic without Keycloak administration
+
+Studio can temporarily report the audience returned in the token endpoint's `access_token`
+field. This is disabled by default. Build a Studio image containing
+`lib/oidc-audience-diagnostic.ts` and its call in `lib/server.ts`; changing an environment variable
+on an older image will not add this diagnostic. No API image or Keycloak change is needed.
+
+In the OKD web console, open your Studio Deployment's YAML, update its image to the diagnostic
+build, and merge this entry into the Studio container's existing `env` list:
+
+```yaml
+env:
+  - name: STUDIO_DIAGNOSTIC_OIDC_AUDIENCE
+    value: "true"
+```
+
+Preserve all existing env entries. Save and wait for the new pod to become ready. Start a fresh
+Studio login, then inspect that Studio pod's Logs for:
+
+```json
+{"event":"studio_oidc_access_token_audience","audience":"EXAMPLE-ONLY","audience_status":"present","expected_audience":"foundry-api"}
+```
+
+`audience` may instead be an array. This event is diagnostic evidence, not an authentication
+success: the original verifier still runs with the expected audience and all existing checks.
+A mismatch still gives the same sanitized authentication failure. It does not establish that
+`EXAMPLE-ONLY` (or another reported value) is an appropriate audience for Foundry.
+
+The diagnostic independently verifies signature against the already loaded trusted JWKS, allowed
+algorithms, exact issuer, required exp/iat and lifetime, including nbf when present. It omits only
+expected-audience matching for the diagnostic pass; this pass never supplies a session/auth result.
+ID-token nonce/audience/subject checks before this stage and the full access-token verifier are
+unchanged. Failed diagnostic verification emits no payload and does not replace the real error.
+It does not log codes, tokens, cookies, state, verifier, subject, other payload claims, URLs, stacks,
+or raw errors. Only the audience (maximum 16 printable ASCII strings of 256 characters each), its
+status and expected audience are included. Invalid/oversized values are omitted; a missing audience
+is reported as null with `audience_status=missing`. Logs expose audience identifiers only while
+this explicit temporary flag is enabled.
+
+Copy only the diagnostic event when requesting help. After collecting it, remove the flag or
+set it to `"false"` and let the Studio Deployment roll out again. No secrets need changing.
+
+Diagnostic validation: PASS, 69 callback/security/route tests across three files, including opt-in,
+unchanged mismatch rejection in both profiles, successful audience arrays, missing audience,
+bounded logging and suppression on signature/issuer/expiry failures; PASS, Studio typecheck.
+Live OKD/Keycloak login: NOT RUN. No database migrations or backend changes. Other platform checks
+in `fixtures/VALIDATION.md` remain outside this diagnostic-only scope and were not rerun.
+
+PASS: complete local diagnostic Docker image build, including Next production TypeScript check
+and runtime image export; PASS: Prettier on changed/new TS files and `git diff --check`.
+No image was pushed or deployed.

@@ -1,4 +1,5 @@
 import { diagnosticFetch } from "./diagnostics";
+import { diagnoseAccessTokenAudience } from "./oidc-audience-diagnostic";
 import type { AuthStage } from "./auth-diagnostics";
 // Server-only module: import only from route handlers. Never export tokens to components.
 import { randomBytes, createHash, timingSafeEqual } from "node:crypto";
@@ -505,6 +506,13 @@ export async function exchange(
   )
     throw new BoundaryError(401, "invalid_nonce");
   stage("access_token");
+  await diagnoseAccessTokenAudience(
+    tokens.access_token,
+    keys,
+    c.issuer,
+    c.algorithms,
+    c.audience,
+  );
   const access = await jwtVerify(tokens.access_token, keys, {
     issuer: c.issuer,
     audience: c.audience,
