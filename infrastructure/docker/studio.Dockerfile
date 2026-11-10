@@ -10,6 +10,8 @@ WORKDIR /repo/apps/studio
 COPY apps/studio/package.json apps/studio/package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY apps/studio/ ./
+# Next type-checks tests that import the shared API/Studio token contract.
+COPY fixtures/security/access-token-profiles.json /repo/fixtures/security/access-token-profiles.json
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 

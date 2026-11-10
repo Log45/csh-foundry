@@ -176,3 +176,19 @@ not counted as passing. Full authorization/release validation remains outstandin
 Recommended next step: review the patch, verify the actual production token shape privately, then
 roll out both updated services and the shared profile through the web console and confirm SSO/API
 behavior. Do not advance another implementation phase as part of this work.
+
+## Studio container build input
+
+Next's production TypeScript check includes `tests/auth-callback.test.ts`, which imports the shared
+JSON contract outside `apps/studio`. The Studio Docker build stage must copy
+`fixtures/security/access-token-profiles.json` to `/repo/fixtures/security/access-token-profiles.json`
+before `npm run build`. Omitting that input causes TS2307 in a clean container even when local
+builds pass because the full checkout contains the fixture. `infrastructure/docker/studio.Dockerfile`
+now includes that copy; test/type checking remains enabled. The fixture is a build-stage input,
+not a credential or a new runtime dependency. No application, authentication policy, or database
+change is involved in this packaging correction.
+
+Packaging verification: **PASS** local `npm run build` in `apps/studio`; **PASS** complete local
+`docker build -f infrastructure/docker/studio.Dockerfile -t csh-foundry-studio:oidc-build-fix .`,
+including production TypeScript checking and final runtime image export; **PASS** `git diff --check`.
+Live OpenShift rebuild/deployment: **NOT RUN**. No image was pushed or deployed.
