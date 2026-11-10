@@ -13,6 +13,42 @@ export class BoundaryError extends Error {
     super(code);
   }
 }
+type AccessTokenProfile = "rfc9068" | "keycloak";
+// Use the API's trusted provider policy rather than an independent Studio profile switch.
+function providerPolicy(issuer: string, client: string, audience: string) {
+  const raw = process.env.FOUNDRY_OIDC_PROVIDERS;
+  if (raw === undefined)
+    return {
+      profile: "rfc9068" as AccessTokenProfile,
+      algorithms: ["RS256", "ES256"],
+    };
+  try {
+    const providers = JSON.parse(raw);
+    if (!Array.isArray(providers) || providers.length > 8) throw new Error();
+    const matches = providers.filter((p) => p?.issuer === issuer);
+    if (matches.length !== 1) throw new Error();
+    const p = matches[0];
+    const profile =
+      p.access_token_profile === undefined ? "rfc9068" : p.access_token_profile;
+    const algorithms = p.algorithms === undefined ? ["RS256"] : p.algorithms;
+    if (
+      !["rfc9068", "keycloak"].includes(profile) ||
+      p.audience !== audience ||
+      !Array.isArray(p.clients) ||
+      !p.clients.includes(client) ||
+      !Array.isArray(algorithms) ||
+      algorithms.length === 0 ||
+      !algorithms.every((a: unknown) => a === "RS256" || a === "ES256")
+    )
+      throw new Error();
+    return {
+      profile: profile as AccessTokenProfile,
+      algorithms: algorithms as string[],
+    };
+  } catch {
+    throw new BoundaryError(503, "invalid_oidc_provider_configuration");
+  }
+}
 export function config() {
   const origin = new URL(process.env.STUDIO_ORIGIN ?? "http://127.0.0.1:3000");
   const issuer = process.env.STUDIO_OIDC_ISSUER;
@@ -76,6 +112,7 @@ export function config() {
     audience,
     api: api.origin,
     secure: origin.protocol === "https:",
+    ...providerPolicy(issuer, client, audience),
   };
 }
 export const random = () => randomBytes(32).toString("base64url");
@@ -471,25 +508,42 @@ export async function exchange(
   const access = await jwtVerify(tokens.access_token, keys, {
     issuer: c.issuer,
     audience: c.audience,
-    algorithms: ["RS256", "ES256"],
-    requiredClaims: ["sub", "exp", "iat", "jti", "client_id"],
+    algorithms: c.algorithms,
+    requiredClaims: [
+      "sub",
+      "exp",
+      "iat",
+      "jti",
+      ...(c.profile === "rfc9068" ? ["client_id"] : []),
+    ],
   });
   stage("access_token_binding");
   const p = access.payload,
     h = access.protectedHeader;
+  const bindings = ["client_id", "azp"]
+    .filter((key) => key in p)
+    .map((key) => p[key]);
+  const headers =
+    c.profile === "keycloak"
+      ? ["at+jwt", "application/at+jwt", "JWT"]
+      : ["at+jwt", "application/at+jwt"];
   if (
-    !["at+jwt", "application/at+jwt"].includes(h.typ ?? "") ||
+    !headers.includes(h.typ ?? "") ||
+    (c.profile === "keycloak" &&
+      ((h.typ === "JWT" && !["Bearer", "bearer"].includes(p.typ as string)) ||
+        ("typ" in p && !["Bearer", "bearer"].includes(p.typ as string)))) ||
     ["jku", "x5u", "jwk", "crit"].some((key) => key in h) ||
     p.sub !== id.payload.sub ||
-    p.client_id !== c.client ||
-    (p.azp !== undefined && p.azp !== c.client) ||
+    bindings.length === 0 ||
+    bindings.some((value) => typeof value !== "string" || value !== c.client) ||
     (p.token_use !== undefined && p.token_use !== "access") ||
     !Number.isInteger(p.iat) ||
     !Number.isInteger(p.exp) ||
     (p.iat as number) >= (p.exp as number) ||
     typeof p.jti !== "string" ||
     !p.jti ||
-    !p.sub ||
+    typeof p.sub !== "string" ||
+    !p.sub.trim() ||
     p.sub.length > 512 ||
     (p.iat as number) > Date.now() / 1000
   )

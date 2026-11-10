@@ -1,4 +1,4 @@
-"""Explicit trusted OIDC providers; RFC 9068 JWT access tokens, never ID tokens."""
+"""Trusted, explicit access-token profiles; ID tokens never authenticate API requests."""
 
 import json
 import threading
@@ -38,6 +38,7 @@ class Provider(QueryModel):
     issuer: str = Field(min_length=1, max_length=2048)
     audience: Name
     algorithms: tuple[Literal["RS256", "ES256"], ...] = ("RS256",)
+    access_token_profile: Literal["rfc9068", "keycloak"] = "rfc9068"
     clients: tuple[Name, ...] = Field(min_length=1, max_length=32)
     clock_skew: int = Field(default=30, ge=0, le=60)
     cache_seconds: int = Field(default=300, ge=30, le=3600)
@@ -154,7 +155,12 @@ class OIDCVerifier:
             alg, kid = header.get("alg"), header.get("kid")
             if (
                 alg not in provider.algorithms
-                or header.get("typ") not in ("at+jwt", "application/at+jwt")
+                or header.get("typ")
+                not in (
+                    ("at+jwt", "application/at+jwt", "JWT")
+                    if provider.access_token_profile == "keycloak"
+                    else ("at+jwt", "application/at+jwt")
+                )
                 or not isinstance(kid, str)
                 or len(kid) > 200
                 or any(k in header for k in ("jku", "x5u", "jwk", "crit"))
@@ -185,19 +191,34 @@ class OIDCVerifier:
                 issuer=provider.issuer,
                 audience=provider.audience,
                 leeway=provider.clock_skew,
-                options={"require": ["iss", "sub", "aud", "exp", "iat", "jti", "client_id"]},
+                options={
+                    "require": ["iss", "sub", "aud", "exp", "iat", "jti"]
+                    + (["client_id"] if provider.access_token_profile == "rfc9068" else [])
+                },
             )
             if any(
                 not isinstance(verified.get(k), str) or not verified[k].strip()
-                for k in ("sub", "jti", "client_id")
+                for k in ("sub", "jti")
             ):
                 raise ValueError("Missing identity")
-            if len(verified["sub"]) > 512 or verified["client_id"] not in provider.clients:
-                raise ValueError("Untrusted client")
+            # Presence matters: null/malformed claims cannot be hidden by the other claim.
+            bindings = [verified[k] for k in ("client_id", "azp") if k in verified]
             if (
-                verified.get("azp", verified["client_id"]) != verified["client_id"]
-                or verified.get("token_use", "access") != "access"
+                not bindings
+                or any(not isinstance(v, str) or not v.strip() for v in bindings)
+                or any(v != bindings[0] for v in bindings)
+                or bindings[0] not in provider.clients
+                or len(verified["sub"]) > 512
             ):
+                raise ValueError("Untrusted client")
+            # Generic JWT headers need a signed Keycloak access-token marker. ID/refresh
+            # tokens use different payload types, even with an otherwise valid signature.
+            if provider.access_token_profile == "keycloak" and (
+                (header.get("typ") == "JWT" and verified.get("typ") not in ("Bearer", "bearer"))
+                or ("typ" in verified and verified["typ"] not in ("Bearer", "bearer"))
+            ):
+                raise ValueError("Not a Keycloak access token")
+            if verified.get("token_use", "access") != "access":
                 raise ValueError("Token use mismatch")
             if any(type(verified[k]) is not int for k in ("exp", "iat")) or (
                 "nbf" in verified and type(verified["nbf"]) is not int

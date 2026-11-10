@@ -5,7 +5,8 @@ vi.mock("next/headers", () => ({
   cookies: async () => ({ get: (name: string) => ({ value: jar.get(name) }) }),
 }));
 import { GET } from "../app/auth/[operation]/route";
-import { beginLogin, session, sessions } from "../lib/server";
+import cases from "../../../fixtures/security/access-token-profiles.json";
+import { beginLogin, config, session, sessions } from "../lib/server";
 import { logCallbackFailure } from "../lib/auth-diagnostics";
 beforeEach(() => {
   for (const [key, value] of Object.entries({
@@ -19,6 +20,7 @@ beforeEach(() => {
     STUDIO_ENVIRONMENT: "development",
   }))
     vi.stubEnv(key, value);
+  vi.stubEnv("FOUNDRY_OIDC_PROVIDERS", undefined);
   vi.spyOn(console, "error").mockImplementation(() => {});
 });
 afterEach(() => {
@@ -28,7 +30,14 @@ afterEach(() => {
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
 });
-async function callback(fault = "") {
+async function callback(
+  fault = "",
+  options: {
+    claims?: Record<string, unknown>;
+    header?: Record<string, unknown>;
+    omit?: string[];
+  } = {},
+) {
   const login = beginLogin(),
     issuer = process.env.STUDIO_OIDC_ISSUER!;
   jar.set("foundry-login", fault === "cookie" ? "unknown" : login.id);
@@ -83,21 +92,39 @@ async function callback(fault = "") {
       fault === "signature"
         ? (await generateKeyPair("RS256")).privateKey
         : keys.privateKey;
-    const access = await new SignJWT({
+    const now = Math.floor(Date.now() / 1000);
+    const claims: Record<string, unknown> = {
       jti: "one",
-      ...(fault === "client_id" ? {} : { client_id: "foundry-studio" }),
-    })
-      .setProtectedHeader({
-        alg: "RS256",
-        kid: "test",
-        typ: fault === "typ" ? "JWT" : "at+jwt",
-      })
-      .setIssuer(fault === "issuer" ? "https://other.example" : issuer)
-      .setSubject("operator")
-      .setAudience(fault === "audience" ? "account" : "foundry-api")
-      .setIssuedAt()
-      .setExpirationTime(fault === "expired" ? 1 : "5m")
-      .sign(signer);
+      client_id: "foundry-studio",
+      iss: fault === "issuer" ? "https://other.example" : issuer,
+      sub: "operator",
+      aud: fault === "audience" ? "account" : "foundry-api",
+      iat: now,
+      exp: fault === "expired" ? 1 : now + 300,
+      ...options.claims,
+    };
+    for (const key of [
+      ...(options.omit ?? []),
+      ...(fault === "client_id" ? ["client_id"] : []),
+    ])
+      delete claims[key];
+    const access =
+      fault === "id_as_access"
+        ? id
+        : await new SignJWT(claims)
+            .setProtectedHeader({
+              alg: "RS256",
+              kid: "test",
+              typ: fault === "typ" ? "JWT" : "at+jwt",
+              ...options.header,
+            })
+            .sign(
+              options.header?.alg === "HS256"
+                ? new TextEncoder().encode(
+                    "test-secret-long-enough-for-hmac-sha256",
+                  )
+                : signer,
+            );
     return Response.json({
       access_token: access,
       id_token: id,
@@ -254,4 +281,72 @@ it("does not serialize arbitrary thrown objects or error messages", () => {
   expect(JSON.stringify(vi.mocked(console.error).mock.calls)).not.toContain(
     "secret",
   );
+});
+
+function policy(profile: string = "keycloak") {
+  return [
+    {
+      id: "keycloak",
+      issuer: "https://identity.example/realm",
+      audience: "foundry-api",
+      clients: ["foundry-studio", "foundry-worker"],
+      algorithms: ["RS256"],
+      access_token_profile: profile,
+    },
+  ];
+}
+it.each(["rfc9068", "keycloak"])(
+  "enforces shared client and JWT contracts: %s",
+  async (profile) => {
+    vi.stubEnv("FOUNDRY_OIDC_PROVIDERS", JSON.stringify(policy(profile)));
+    for (const entry of cases) {
+      sessions.clear();
+      vi.mocked(console.error).mockClear();
+      const response = await callback("", entry);
+      expect(response.status, entry.name).toBe(
+        entry[profile as "rfc9068" | "keycloak"] ? 303 : 401,
+      );
+      if (response.status !== 303) {
+        expect(sessions.size, entry.name).toBe(0);
+        expect(await response.json()).toHaveProperty("error.code");
+        expect(console.error).toHaveBeenCalledOnce();
+      }
+    }
+  },
+);
+it.each(["rfc9068", "keycloak"])(
+  "retains signature, algorithm, nonce and subject checks: %s",
+  async (profile) => {
+    vi.stubEnv("FOUNDRY_OIDC_PROVIDERS", JSON.stringify(policy(profile)));
+    for (const fault of ["signature", "nonce", "id_as_access"]) {
+      const response = await callback(fault);
+      expect(response.status).toBe(401);
+      expect(sessions.size).toBe(0);
+    }
+    expect(
+      (await callback("", { claims: { sub: "another-subject" } })).status,
+    ).toBe(401);
+    expect((await callback("", { header: { alg: "HS256" } })).status).toBe(401);
+    expect(sessions.size).toBe(0);
+  },
+);
+it.each([
+  "garbage",
+  "null",
+  "[]",
+  JSON.stringify(policy("unknown")),
+  JSON.stringify(policy().map((p) => ({ ...p, audience: "other" }))),
+  JSON.stringify(policy().map((p) => ({ ...p, clients: ["other"] }))),
+  JSON.stringify([...policy(), ...policy()]),
+])("fails closed on invalid shared provider configuration: %s", (raw) => {
+  vi.stubEnv("FOUNDRY_OIDC_PROVIDERS", raw);
+  expect(() => config()).toThrow("invalid_oidc_provider_configuration");
+});
+it("uses strict defaults when profile is omitted and limits algorithms from shared policy", () => {
+  expect(config().profile).toBe("rfc9068");
+  const providers: Record<string, unknown>[] = policy();
+  delete providers[0].access_token_profile;
+  vi.stubEnv("FOUNDRY_OIDC_PROVIDERS", JSON.stringify(providers));
+  expect(config().profile).toBe("rfc9068");
+  expect(config().algorithms).toEqual(["RS256"]);
 });

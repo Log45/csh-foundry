@@ -2,12 +2,17 @@
 
 import json
 import time
+from pathlib import Path
+from types import SimpleNamespace
 
 import httpx
 import jwt
 import pytest
 from cryptography.hazmat.primitives.asymmetric import rsa
+from fastapi import FastAPI, Request
+from fastapi.testclient import TestClient
 from ontology_platform.config import Settings
+from ontology_platform.dependencies import verified_identity
 from ontology_platform.errors import ApplicationError
 from ontology_platform.security.oidc import OIDCVerifier, Provider
 from pydantic import SecretStr, ValidationError
@@ -339,3 +344,140 @@ def test_explicit_compose_backchannel_preserves_issuer_and_signed_claim_checks(i
 def test_backchannel_rejects_privileged_or_invalid_port(port):
     with pytest.raises(ValueError, match="unprivileged"):
         OIDCVerifier((), backchannel_port=port)
+
+
+# Both runtimes execute this contract with independently generated signed JWTs.
+
+PROFILE_CASES = json.loads(
+    (
+        Path(__file__).resolve().parents[3] / "fixtures/security/access-token-profiles.json"
+    ).read_text()
+)
+
+
+@pytest.mark.parametrize("profile", ["rfc9068", "keycloak"])
+@pytest.mark.parametrize("case", PROFILE_CASES, ids=lambda case: case["name"])
+def test_access_token_profile_contract(idp, profile, case):
+    private, _, verifier = idp
+    verifier.providers = (
+        verifier.providers[0].model_copy(
+            update={
+                "access_token_profile": profile,
+                "clients": ("foundry-studio", "foundry-worker"),
+                "audience": "foundry-api",
+            }
+        ),
+    )
+    body = jwt.decode(token(private), options={"verify_signature": False})
+    body.update(client_id="foundry-studio", aud="foundry-api")
+    body.update(case["claims"])
+    for key in case["omit"]:
+        body.pop(key, None)
+    encoded = jwt.encode(
+        body,
+        private,
+        algorithm="RS256",
+        headers={"kid": "first", "typ": "at+jwt"} | case["header"],
+    )
+    if case[profile]:
+        assert verifier.verify(encoded)[1] == body
+    else:
+        with pytest.raises(ApplicationError) as error:
+            verifier.verify(encoded)
+        assert error.value.code == "invalid_token"
+        assert error.value.status_code == 401
+
+
+@pytest.mark.parametrize("profile", ["rfc9068", "keycloak"])
+def test_profile_signature_and_algorithm_checks(idp, profile):
+    private, _, verifier = idp
+    verifier.providers = (
+        verifier.providers[0].model_copy(update={"access_token_profile": profile}),
+    )
+    foreign = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    body = jwt.decode(token(private), options={"verify_signature": False})
+    for encoded in (
+        token(foreign),
+        jwt.encode(
+            body,
+            "test-secret-at-least-thirty-two-bytes",
+            algorithm="HS256",
+            headers={"typ": "at+jwt", "kid": "first"},
+        ),
+    ):
+        with pytest.raises(ApplicationError):
+            verifier.verify(encoded)
+
+
+@pytest.mark.parametrize("profile", ["rfc9068", "keycloak"])
+def test_fastapi_verified_identity_with_profile(idp, profile):
+    """Exercise the real FastAPI credential dependency; no DB membership shortcut is installed."""
+    private, _, verifier = idp
+    verifier.providers = (
+        verifier.providers[0].model_copy(update={"access_token_profile": profile}),
+    )
+    app = FastAPI()
+    app.state.oidc = verifier
+    app.state.settings = SimpleNamespace(auth_mode="oidc", environment="development")
+
+    @app.get("/identity")
+    def identity(request: Request):
+        issuer, subject, method, _ = verified_identity(request)
+        return {"issuer": issuer, "subject": subject, "method": method}
+
+    @app.exception_handler(ApplicationError)
+    async def auth_error(request: Request, error: ApplicationError):
+        from fastapi.responses import JSONResponse
+
+        return JSONResponse({"error": {"code": error.code}}, status_code=error.status_code)
+
+    claims = {"client_id": None, "azp": "studio", "typ": "Bearer"}
+    encoded = token(private, claims=claims, headers={"typ": "JWT"})
+    with TestClient(app) as client:
+        response = client.get("/identity", headers={"Authorization": f"Bearer {encoded}"})
+        assert response.status_code == (200 if profile == "keycloak" else 401)
+        if profile == "keycloak":
+            assert response.json() == {"issuer": ISSUER, "subject": "alice", "method": "oidc"}
+        assert (
+            client.get(
+                "/identity", headers={"Authorization": f"Bearer {token(private)}"}
+            ).status_code
+            == 200
+        )
+        bad = token(private, claims={"client_id": "wrong-client", "azp": "studio"})
+        assert client.get("/identity", headers={"Authorization": f"Bearer {bad}"}).json() == {
+            "error": {"code": "invalid_token"}
+        }
+
+
+def test_profile_is_explicit_provider_policy():
+    values = dict(id="example", issuer=ISSUER, audience="foundry", clients=("studio",))
+    assert Provider(**values).access_token_profile == "rfc9068"
+    for invalid in ("auto", "unknown", None):
+        with pytest.raises(ValidationError):
+            Provider(**values, access_token_profile=invalid)
+    strict = Provider(**values)
+    compatible = Provider(
+        **(values | {"id": "kc", "issuer": ISSUER + "/kc"}), access_token_profile="keycloak"
+    )
+    assert strict.access_token_profile == "rfc9068"
+    assert compatible.access_token_profile == "keycloak"
+
+
+def test_keycloak_policy_does_not_change_another_provider(idp):
+    private, state, verifier = idp
+    strict = verifier.providers[0]
+    verifier.verify(token(private))  # Cache the strict issuer's trusted JWKS.
+    compatible = strict.model_copy(
+        update={"id": "kc", "issuer": ISSUER + "/kc", "access_token_profile": "keycloak"}
+    )
+    verifier.providers = (strict, compatible)
+    state["metadata"]["issuer"] = compatible.issuer
+    signed = token(
+        private,
+        claims={"iss": compatible.issuer, "client_id": None, "azp": "studio", "typ": "Bearer"},
+        headers={"typ": "JWT"},
+    )
+    assert verifier.verify(signed)[0] == compatible
+    with pytest.raises(ApplicationError):
+        verifier.verify(token(private, claims={"client_id": None, "azp": "studio"}))

@@ -1,5 +1,8 @@
 # Studio OIDC callback investigation
 
+Follow-up: [explicit OIDC token profiles](oidc-token-profiles.md) now implement opt-in Keycloak
+compatibility. The investigation below records behavior before that change.
+
 Scope: targeted authentication investigation and diagnostics; no roadmap phase advancement,
 production deployment, schema migration, or authentication-policy change.
 

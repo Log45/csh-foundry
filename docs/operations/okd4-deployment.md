@@ -153,7 +153,7 @@ approved ES256 in the backend), and disable password/implicit grants. Browser to
 localStorage. No refresh token is requested; short sessions require reauthentication. Configure
 issuer logout through `STUDIO_BROKER_LOGOUT=true` when the approved discovery document supports it.
 
-API access tokens require `typ=at+jwt` (or application/at+jwt), exact issuer/audience, approved
+The default RFC 9068 profile requires API access tokens with `typ=at+jwt` (or application/at+jwt), exact issuer/audience, approved
 `client_id`, consistent azp, sub/jti/iat/exp, valid lifetime and asymmetric signature. Discovery
 issuer and same-origin JWKS must match. See `security/broker.py:realm_configuration` for the
 already tested Keycloak RFC 9068/audience/client mapper settings; it is a review reference, not
@@ -161,6 +161,10 @@ permission to import or overwrite an existing realm. Public CA mounts extend tru
 turning off chain/hostname verification. Workers use a confidential service client and current
 automatic PostgreSQL job-scoped grants. Platform bindings use `(issuer, sub)` and tenant membership;
 email and realm roles do not grant platform access.
+
+For an explicitly configured Keycloak-compatible access-token contract using `azp`, see
+[token profiles and exact web-console YAML changes](../development/oidc-token-profiles.md).
+Studio and API must load the same trusted provider policy. Strict RFC validation remains the default.
 
 If administrators cannot issue this token profile, record the exact limitation and request a
 separately approved controlled broker/upstream federation configuration. No second Keycloak is

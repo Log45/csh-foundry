@@ -22,8 +22,10 @@ STUDIO_API_AUDIENCE=foundry-api
 
 The browser client must support Authorization Code + PKCE S256 and `openid` scope, with redirect URI
 `STUDIO_ORIGIN/auth/callback`. Token exchange uses `client_id` and PKCE (a registered public client,
-no client secret). The broker must mint RFC 9068 API JWT access tokens with the API audience,
-`client_id=studio` and the documented Phase 7 claims. API configuration must trust that issuer and
+no client secret). By default the broker must mint RFC 9068 API JWT access tokens with the API
+audience, the configured `client_id` and the documented Phase 7 claims. An explicit per-provider
+`keycloak` profile also supports securely bound `azp` access tokens; Studio and API use the same
+`FOUNDRY_OIDC_PROVIDERS` policy. See [token profiles and OKD web-console setup](../../docs/development/oidc-token-profiles.md). API configuration must trust that issuer and
 allow the studio client. Browser ID tokens and API access tokens have separate audiences. Provision
 issuer/subject platform memberships through Phase 7 tooling; login grants nothing automatically.
 

@@ -1,0 +1,424 @@
+[
+  {
+    "name": "client_id only",
+    "claims": {},
+    "header": {},
+    "omit": [],
+    "rfc9068": true,
+    "keycloak": true
+  },
+  {
+    "name": "azp only",
+    "claims": {
+      "azp": "foundry-studio"
+    },
+    "header": {},
+    "omit": [
+      "client_id"
+    ],
+    "rfc9068": false,
+    "keycloak": true
+  },
+  {
+    "name": "both equal",
+    "claims": {
+      "azp": "foundry-studio"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": true,
+    "keycloak": true
+  },
+  {
+    "name": "wrong client",
+    "claims": {
+      "client_id": "wrong-client"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "wrong azp only",
+    "claims": {
+      "azp": "wrong-client"
+    },
+    "header": {},
+    "omit": [
+      "client_id"
+    ],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "conflicting client",
+    "claims": {
+      "client_id": "wrong-client",
+      "azp": "foundry-studio"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "conflicting azp",
+    "claims": {
+      "azp": "wrong-client"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "both missing",
+    "claims": {},
+    "header": {},
+    "omit": [
+      "client_id",
+      "azp"
+    ],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "client_id malformed None",
+    "claims": {
+      "client_id": null,
+      "azp": "foundry-studio"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "client_id malformed 42",
+    "claims": {
+      "client_id": 42,
+      "azp": "foundry-studio"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "client_id malformed False",
+    "claims": {
+      "client_id": false,
+      "azp": "foundry-studio"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "client_id malformed []",
+    "claims": {
+      "client_id": [],
+      "azp": "foundry-studio"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "client_id malformed {}",
+    "claims": {
+      "client_id": {},
+      "azp": "foundry-studio"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "client_id malformed ''",
+    "claims": {
+      "client_id": "",
+      "azp": "foundry-studio"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "client_id malformed ' '",
+    "claims": {
+      "client_id": " ",
+      "azp": "foundry-studio"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "azp malformed None",
+    "claims": {
+      "client_id": "foundry-studio",
+      "azp": null
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "azp malformed 42",
+    "claims": {
+      "client_id": "foundry-studio",
+      "azp": 42
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "azp malformed False",
+    "claims": {
+      "client_id": "foundry-studio",
+      "azp": false
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "azp malformed []",
+    "claims": {
+      "client_id": "foundry-studio",
+      "azp": []
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "azp malformed {}",
+    "claims": {
+      "client_id": "foundry-studio",
+      "azp": {}
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "azp malformed ''",
+    "claims": {
+      "client_id": "foundry-studio",
+      "azp": ""
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "azp malformed ' '",
+    "claims": {
+      "client_id": "foundry-studio",
+      "azp": " "
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "Keycloak JWT Bearer",
+    "claims": {
+      "azp": "foundry-studio",
+      "typ": "Bearer"
+    },
+    "header": {
+      "typ": "JWT"
+    },
+    "omit": [
+      "client_id"
+    ],
+    "rfc9068": false,
+    "keycloak": true
+  },
+  {
+    "name": "Keycloak JWT bearer lowercase",
+    "claims": {
+      "azp": "foundry-studio",
+      "typ": "bearer"
+    },
+    "header": {
+      "typ": "JWT"
+    },
+    "omit": [
+      "client_id"
+    ],
+    "rfc9068": false,
+    "keycloak": true
+  },
+  {
+    "name": "JWT without access marker",
+    "claims": {
+      "azp": "foundry-studio"
+    },
+    "header": {
+      "typ": "JWT"
+    },
+    "omit": [
+      "client_id"
+    ],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "ID token with API audience",
+    "claims": {
+      "azp": "foundry-studio",
+      "typ": "ID"
+    },
+    "header": {
+      "typ": "JWT"
+    },
+    "omit": [
+      "client_id"
+    ],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "refresh token",
+    "claims": {
+      "azp": "foundry-studio",
+      "typ": "Refresh"
+    },
+    "header": {
+      "typ": "JWT"
+    },
+    "omit": [
+      "client_id"
+    ],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "id+jwt header",
+    "claims": {},
+    "header": {
+      "typ": "id+jwt"
+    },
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "wrong audience",
+    "claims": {
+      "aud": "other-api"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "wrong issuer",
+    "claims": {
+      "iss": "https://other.example/realm"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "expired",
+    "claims": {
+      "exp": 1
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "future issued at",
+    "claims": {
+      "iat": 253402300799
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "wrong token_use",
+    "claims": {
+      "token_use": "id"
+    },
+    "header": {},
+    "omit": [],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "missing sub",
+    "claims": {},
+    "header": {},
+    "omit": [
+      "sub"
+    ],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "missing exp",
+    "claims": {},
+    "header": {},
+    "omit": [
+      "exp"
+    ],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "missing iat",
+    "claims": {},
+    "header": {},
+    "omit": [
+      "iat"
+    ],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "missing jti",
+    "claims": {},
+    "header": {},
+    "omit": [
+      "jti"
+    ],
+    "rfc9068": false,
+    "keycloak": false
+  },
+  {
+    "name": "RFC media type",
+    "claims": {},
+    "header": {
+      "typ": "application/at+jwt"
+    },
+    "omit": [],
+    "rfc9068": true,
+    "keycloak": true
+  }
+]

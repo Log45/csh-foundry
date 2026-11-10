@@ -7,7 +7,7 @@ x-api-environment: &api-environment
   FOUNDRY_ALLOWED_HOSTS: '["api","${API_HOST:?Set API_HOST}"]'
   FOUNDRY_AUTH_MODE: oidc
   FOUNDRY_OIDC_BACKCHANNEL_PORT: "8443"
-  FOUNDRY_OIDC_PROVIDERS: '[{"id":"keycloak","issuer":"https://${IDENTITY_HOST:?Set IDENTITY_HOST}/realms/${KEYCLOAK_REALM:-foundry}","audience":"foundry-api","clients":["studio","worker"],"algorithms":["RS256"]}]'
+  FOUNDRY_OIDC_PROVIDERS: &oidc-providers '[{"id":"keycloak","issuer":"https://${IDENTITY_HOST:?Set IDENTITY_HOST}/realms/${KEYCLOAK_REALM:-foundry}","audience":"foundry-api","clients":["studio","worker"],"algorithms":["RS256"],"access_token_profile":"rfc9068"}]'
   FOUNDRY_SECRETS_DIRECTORY: /run/secrets
 
 x-runtime: &runtime
@@ -82,6 +82,7 @@ services:
     <<: *runtime
     image: ${STUDIO_IMAGE:?Set a verified Studio image digest}
     environment:
+      FOUNDRY_OIDC_PROVIDERS: *oidc-providers
       STUDIO_ENVIRONMENT: production
       STUDIO_ORIGIN: https://${STUDIO_HOST}
       STUDIO_API_ORIGIN: http://api:8000

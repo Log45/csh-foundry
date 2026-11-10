@@ -287,11 +287,15 @@ def test_test_mode_uses_real_authorization_services(security):
         )
 
 
-def test_oidc_http_real_signature_membership_and_impersonation(security, idp):
+@pytest.mark.parametrize("profile", ["rfc9068", "keycloak"])
+def test_oidc_http_real_signature_membership_and_impersonation(security, idp, profile):
     from test_security_oidc import token
 
     w, auth, _, admin, reader, _ = security
     private, _, verifier = idp
+    verifier.providers = (
+        verifier.providers[0].model_copy(update={"access_token_profile": profile}),
+    )
     settings = Settings(
         database_url=w.settings.database_url,
         auth_mode="oidc",
@@ -309,7 +313,16 @@ def test_oidc_http_real_signature_membership_and_impersonation(security, idp):
         )
         headers = {
             "Authorization": "Bearer "
-            + token(private, claims={"roles": ["tenant-administrator"], "tenant_id": str(uuid4())})
+            + token(
+                private,
+                claims={"roles": ["tenant-administrator"], "tenant_id": str(uuid4())}
+                | (
+                    {"client_id": None, "azp": "studio", "typ": "Bearer"}
+                    if profile == "keycloak"
+                    else {}
+                ),
+                headers={"typ": "JWT"} if profile == "keycloak" else {},
+            )
         }
         assert (
             client.get("/api/v1/security/me", headers=headers).json()["principal"]["principal_id"]
