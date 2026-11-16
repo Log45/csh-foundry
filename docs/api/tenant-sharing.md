@@ -5,8 +5,10 @@ selection. Use `X-Tenant-ID` to select an enabled membership on all scoped opera
 
 | Request | Contract |
 | --- | --- |
-| `POST /api/v1/security/personal-tenant` | Uses the bearer token and server eligibility policy. Accepts no identity or tenant arguments. Returns `personal_tenant_id` for an eligible human, including on repeat sign-ins. Returns null for an already provisioned human outside the onboarding policy. Unprovisioned ineligible accounts, disabled identities and service accounts receive 403. |
+| `POST /api/v1/security/personal-tenant` | Uses the bearer token and server eligibility policy. Accepts an optional `{"name":"My workspace"}` body and derives identity from the token. In all-users mode, an eligible user's first request without a name returns `{"personal_tenant_id":null,"name_required":true}` without creating records. A valid name creates the workspace, and repeat requests return its ID. Returns a null ID for an already provisioned human outside the onboarding policy. Unprovisioned ineligible accounts, disabled identities and service accounts receive 403. |
 | `GET /api/v1/security/tenants` | Lists enabled memberships with personal ownership first, then stable tenant IDs. |
+| `GET /api/v1/shares/targets/{kind}?search=...` | Finds up to 25 shareable resources in the selected tenant. Use `project` to search active Projects you own by name or ID, or `ontology` to search by ontology ID. |
+| `GET /api/v1/shares/recipients?search=...` | Searches the configured Keycloak realm as an authorized share issuer. Returns usernames and corresponding Foundry principal IDs for enabled human accounts already registered in Foundry. Provide at least two letters or digits. |
 | `POST /api/v1/shares` | Supply one of `project_id` or `ontology_id`, one of `recipient_principal_id` or `recipient_tenant_id`, and `access` of `viewer` or `collaborator`. Creates a pending invitation in the resource's owning tenant. |
 | `GET /api/v1/shares?direction=incoming\|outgoing` | Lists received invitations and grants, or grants on resources the acting user manages. Supports `limit` and `offset`. |
 | `POST /api/v1/shares/{id}/accept` | The recipient or recipient tenant's membership manager accepts the invitation. Repeating acceptance returns the accepted grant. |
@@ -16,6 +18,12 @@ Project owners need Project management permission to issue or revoke invitations
 sharing requires membership management and read authority in the owning tenant. Responses
 identify `owner_tenant_id` and the canonical Project or Ontology ID. A share never grants
 ownership or tenant administration.
+
+A recipient principal ID identifies a person's Foundry account. In Studio, users can copy
+their own ID from **Sharing**. The invitation form can look up a recipient by username or
+accept the ID directly. Eligible Keycloak users register automatically when they first sign in
+to Foundry. The [deployment guide](../operations/phase-22-okd4.md#optional-keycloak-user-search)
+describes how to enable the username directory.
 
 To use the grant, send the accepted ID in `X-Resource-Share` on an operation that declares
 that header in OpenAPI. Keep `X-Tenant-ID` set to your acting tenant. The server derives
@@ -27,7 +35,8 @@ activation, actions, job submissions, semantic and OWL exports, child-resource m
 and downloads, deletion and ownership transfer are outside share authority. Independent
 membership and Project checks still apply on the ordinary tenant routes.
 
-The platform TypeScript SDK exposes `shares.list`, `invite`, `accept`, and `revoke` and the
+The platform TypeScript SDK exposes `shares.list`, `targets`, `recipients`, `invite`, `accept`,
+and `revoke` and the
 React SDK exposes matching hooks. Create a separate SDK client with `resourceShare` for
 shared operations. Its `tenantId` is the acting tenant. Generated ontology TypeScript clients
 also accept `resourceShare`. Generated Python clients accept `resource_share` with the same

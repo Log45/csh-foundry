@@ -1,8 +1,10 @@
 # 0049 Personal tenants, resource shares and shared work
 
-A verified Keycloak access token can onboard only through an operator-selected Studio client
-and signed realm role. The operator assigns that role to human accounts only and disables service
-accounts and direct grants on the Studio client. Foundry keys identities by exact issuer and
+A verified Keycloak access token can onboard only through an operator-selected Studio client.
+The operator can require a signed realm role assigned to human accounts or explicitly allow all
+users who can sign in to that client. In the all-users mode, Studio collects a workspace name
+before Foundry creates any tenant or identity records. The client uses authorization code with
+PKCE and has service accounts and direct grants disabled. Foundry keys identities by exact issuer and
 subject. Onboarding serializes creation of that binding and locks the existing principal before
 creating its tenant. A composite ownership foreign key requires an owner membership, and a
 unique principal key limits personal ownership to one tenant. Existing memberships and roles

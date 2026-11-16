@@ -36,6 +36,8 @@ manifest = {
     ],
     "shares": [
         ("list", "get", "/shares"),
+        ("targets", "get", "/shares/targets/{target}"),
+        ("recipients", "get", "/shares/recipients"),
         ("invite", "post", "/shares"),
         ("accept", "post", "/shares/{share_id}/accept"),
         ("revoke", "delete", "/shares/{share_id}"),

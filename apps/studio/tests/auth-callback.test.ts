@@ -5,7 +5,7 @@ const jar = vi.hoisted(() => new Map<string, string>());
 vi.mock("next/headers", () => ({
   cookies: async () => ({ get: (name: string) => ({ value: jar.get(name) }) }),
 }));
-import { GET } from "../app/auth/[operation]/route";
+import { GET, POST } from "../app/auth/[operation]/route";
 import cases from "../../../fixtures/security/access-token-profiles.json";
 import { beginLogin, config, session, sessions } from "../lib/server";
 import { logCallbackFailure } from "../lib/auth-diagnostics";
@@ -62,6 +62,15 @@ async function callback(
         (init?.headers as Record<string, string>)["X-Tenant-ID"],
       ).toBeUndefined();
       if (fault === "onboarding") return Response.json({}, { status: 503 });
+      if (fault === "name_required") {
+        if (init?.body === undefined) {
+          return Response.json({
+            personal_tenant_id: null,
+            name_required: true,
+          });
+        }
+        expect(JSON.parse(String(init.body))).toEqual({ name: "My Workspace" });
+      }
       return Response.json({
         personal_tenant_id: fault === "ineligible" ? null : personalTenant,
       });
@@ -469,4 +478,39 @@ it("leaves tenant selection open for existing users outside the onboarding role"
     response.headers.get("set-cookie")!,
   )![1];
   expect(session(id).tenant).toBeUndefined();
+});
+
+it("keeps sign-in pending until a CSRF-protected name submission selects the workspace", async () => {
+  const response = await callback("name_required");
+  const id = /foundry-session=([^;]+)/.exec(
+    response.headers.get("set-cookie")!,
+  )![1];
+  jar.set("foundry-session", id);
+  const origin = "https://foundry.csh.rit.edu";
+  const pending = await GET(new Request(origin + "/auth/session"), {
+    params: Promise.resolve({ operation: "session" }),
+  });
+  const state = await pending.json();
+  expect(state).toMatchObject({ nameRequired: true, tenants: [], me: null });
+  expect(state).not.toHaveProperty("token");
+  expect(session(id).tenant).toBeUndefined();
+
+  const submit = (csrf: string) =>
+    POST(
+      new Request(origin + "/auth/personal-tenant", {
+        method: "POST",
+        headers: {
+          origin,
+          "x-csrf-token": csrf,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ name: "My Workspace" }),
+      }),
+      { params: Promise.resolve({ operation: "personal-tenant" }) },
+    );
+  expect((await submit("bad")).status).toBe(403);
+  expect(session(id).nameRequired).toBe(true);
+  expect((await submit(state.csrf)).status).toBe(200);
+  expect(session(id).nameRequired).toBeUndefined();
+  expect(session(id).tenant).toBe(personalTenant);
 });

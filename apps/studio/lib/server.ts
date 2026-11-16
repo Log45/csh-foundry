@@ -129,6 +129,7 @@ export interface Session {
   expires: number;
   csrf: string;
   tenant?: string;
+  nameRequired?: boolean;
   revision?: number;
 }
 interface Login {
@@ -168,7 +169,12 @@ export function consumeLogin(id: string, value: string) {
     throw new BoundaryError(401, "invalid_login_state");
   return login;
 }
-export function issueSession(token: string, expires: number, tenant?: string) {
+export function issueSession(
+  token: string,
+  expires: number,
+  tenant?: string,
+  nameRequired?: boolean,
+) {
   prune(sessions);
   const id = random();
   sessions.set(digest(id), {
@@ -176,6 +182,7 @@ export function issueSession(token: string, expires: number, tenant?: string) {
     expires: Math.min(expires, Date.now() + 3_600_000),
     csrf: random(),
     tenant,
+    ...(nameRequired ? { nameRequired } : {}),
   });
   return id;
 }
@@ -263,12 +270,19 @@ export async function issueBrowserSession(
   token: string,
   expires: number,
   tenant?: string,
+  nameRequired?: boolean,
 ) {
-  if (!durable()) return issueSession(token, expires, tenant);
+  if (!durable()) return issueSession(token, expires, tenant, nameRequired);
   const id = random();
   const expiry = Math.min(expires, Date.now() + 3_599_000);
   await stateRequest("session", id, "PUT", {
-    data: { token, csrf: random(), expires: expiry, tenant },
+    data: {
+      token,
+      csrf: random(),
+      expires: expiry,
+      tenant,
+      ...(nameRequired ? { nameRequired } : {}),
+    },
     expires: expiry,
   });
   return id;
@@ -299,9 +313,10 @@ export async function selectBrowserTenant(
 ) {
   if (!durable()) {
     value.tenant = tenant;
+    delete value.nameRequired;
     return;
   }
-  const { revision, ...data } = value;
+  const { revision, nameRequired, ...data } = value;
   await stateRequest("session", id, "PATCH", {
     data: { ...data, tenant },
     expires: value.expires,
@@ -564,19 +579,9 @@ export async function exchange(
   // ID tokens are used only above; only the independently validated API access token is retained.
   const expires = (p.exp as number) * 1000;
   stage("personal_tenant");
-  let tenant: string | undefined;
+  let workspace: Awaited<ReturnType<typeof personalWorkspace>>;
   try {
-    const result = (await callBackend(
-      tokens.access_token,
-      "/api/v1/security/personal-tenant",
-      "POST",
-    )) as { personal_tenant_id?: unknown };
-    if (
-      result?.personal_tenant_id !== null &&
-      !isUuid(result?.personal_tenant_id)
-    )
-      throw new Error("Invalid onboarding response");
-    tenant = result.personal_tenant_id ?? undefined;
+    workspace = await personalWorkspace(tokens.access_token);
   } catch (error) {
     throw new BoundaryError(
       error instanceof BoundaryError && error.status === 403 ? 403 : 502,
@@ -584,7 +589,26 @@ export async function exchange(
     );
   }
   stage("session_store");
-  return issueBrowserSession(tokens.access_token, expires, tenant);
+  return issueBrowserSession(
+    tokens.access_token,
+    expires,
+    workspace.tenant,
+    workspace.nameRequired,
+  );
+}
+
+export async function personalWorkspace(token: string, name?: string) {
+  const result = (await callBackend(
+    token,
+    "/api/v1/security/personal-tenant",
+    "POST",
+    name === undefined ? undefined : { name },
+  )) as { personal_tenant_id?: unknown; name_required?: unknown } | null;
+  const tenant = result?.personal_tenant_id;
+  const nameRequired = result?.name_required === true;
+  if ((!isUuid(tenant) && tenant !== null) || (nameRequired && tenant !== null))
+    throw new BoundaryError(502, "personal_tenant_onboarding_failed");
+  return { tenant: tenant ?? undefined, nameRequired };
 }
 export function allowed(path: string, method: string) {
   if (

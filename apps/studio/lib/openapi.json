@@ -13755,6 +13755,23 @@
         ],
         "summary": "Personal Tenant",
         "operationId": "personal_tenant_api_v1_security_personal_tenant_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/OnboardingInput"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -13762,6 +13779,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/OnboardingResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -13879,6 +13906,124 @@
                     "type": "string"
                   },
                   "title": "Response Revoke Job Grant Api V1 Security Job Grants  Key  Delete"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shares/targets/{target}": {
+      "get": {
+        "tags": [
+          "sharing"
+        ],
+        "summary": "Share Targets",
+        "operationId": "share_targets_api_v1_shares_targets__target__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "project",
+                "ontology"
+              ],
+              "type": "string",
+              "title": "Target"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "default": "",
+              "title": "Search"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ShareOption"
+                  },
+                  "title": "Response Share Targets Api V1 Shares Targets  Target  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shares/recipients": {
+      "get": {
+        "tags": [
+          "sharing"
+        ],
+        "summary": "Share Recipients",
+        "operationId": "share_recipients_api_v1_shares_recipients_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "title": "Search"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ShareOption"
+                  },
+                  "title": "Response Share Recipients Api V1 Shares Recipients Get"
                 }
               }
             }
@@ -22808,6 +22953,22 @@
         ],
         "title": "ObjectView"
       },
+      "OnboardingInput": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "OnboardingInput"
+      },
       "OnboardingResult": {
         "properties": {
           "personal_tenant_id": {
@@ -22821,6 +22982,11 @@
               }
             ],
             "title": "Personal Tenant Id"
+          },
+          "name_required": {
+            "type": "boolean",
+            "title": "Name Required",
+            "default": false
           }
         },
         "type": "object",
@@ -24881,6 +25047,24 @@
           "enabled"
         ],
         "title": "ShareChange"
+      },
+      "ShareOption": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "title": "ShareOption"
       },
       "ShareView": {
         "properties": {

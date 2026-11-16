@@ -48,9 +48,15 @@ test("shares an ontology across tenants and revokes it from Studio", async ({
     await owner
       .getByLabel("Resource", { exact: true })
       .selectOption("ontology");
+    await owner.getByLabel("Search ontology", { exact: true }).fill("manuf");
+    const ontology = owner.getByLabel("Ontology to share", { exact: true });
+    await expect(ontology.locator("option[value=manufacturing]")).toHaveCount(
+      1,
+    );
+    await ontology.selectOption("manufacturing");
     await owner
-      .getByLabel("Ontology ID", { exact: true })
-      .fill("manufacturing");
+      .getByLabel("Recipient type", { exact: true })
+      .selectOption("principal");
     await owner
       .getByLabel("Recipient principal ID", { exact: true })
       .fill(await principal.innerText());

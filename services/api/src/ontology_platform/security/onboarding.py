@@ -1,10 +1,10 @@
 """Governed first-sign-in provisioning. Identity claims come from the API verifier."""
 
 import hashlib
-from typing import Any
+from typing import Annotated, Any
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, StringConstraints, field_validator
 from sqlalchemy.orm import Session, sessionmaker
 
 from ontology_platform.config import Settings
@@ -27,8 +27,21 @@ from ontology_platform.security.oidc import Provider
 from ontology_platform.security.service import denied
 
 
+class OnboardingInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    name: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=200)]
+
+    @field_validator("name")
+    @classmethod
+    def valid_name(cls, value: str) -> str:
+        if "\x00" in value:
+            raise ValueError("Workspace name cannot contain a null character")
+        return value
+
+
 class OnboardingResult(BaseModel):
     personal_tenant_id: UUID | None = None
+    name_required: bool = False
 
 
 PERSONAL_WORKER = INGESTION | SEMANTIC | EXECUTION | {"worker:delegate", "execution:claim"}
@@ -62,6 +75,7 @@ def onboard(
     settings: Settings,
     provider: Provider,
     claims: dict[str, Any],
+    body: OnboardingInput | None = None,
 ) -> OnboardingResult:
     subject = claims["sub"]
     client = claims.get("azp", claims.get("client_id"))
@@ -71,11 +85,13 @@ def onboard(
         raise denied()
     signed_access = claims.get("realm_access")
     roles = signed_access.get("roles") if isinstance(signed_access, dict) else None
-    eligible = (
-        provider.personal_tenant_client == client
-        and provider.personal_tenant_role is not None
-        and isinstance(roles, list)
-        and provider.personal_tenant_role in roles
+    eligible = provider.personal_tenant_client == client and (
+        provider.personal_tenant_all_users
+        or (
+            provider.personal_tenant_role is not None
+            and isinstance(roles, list)
+            and provider.personal_tenant_role in roles
+        )
     )
     with sessions.begin() as s:
         lock_binding(s, provider.issuer, subject)
@@ -88,7 +104,15 @@ def onboard(
         if not eligible:
             if principal is None:
                 raise denied()
-            return OnboardingResult()
+            return OnboardingResult(personal_tenant_id=None)
+        personal = s.get(PersonalTenant, principal.id) if principal is not None else None
+        if personal is not None and principal is not None:
+            member = s.get(Membership, (personal.tenant_id, principal.id))
+            if member is None or not member.enabled:
+                raise denied()
+            return OnboardingResult(personal_tenant_id=personal.tenant_id)
+        if provider.personal_tenant_all_users and body is None:
+            return OnboardingResult(personal_tenant_id=None, name_required=True)
         if principal is None:
             principal = PlatformPrincipal(id=str(uuid4()), principal_type="user", enabled=True)
             s.add(principal)
@@ -96,15 +120,8 @@ def onboard(
             s.add(
                 ExternalIdentity(issuer=provider.issuer, subject=subject, principal_id=principal.id)
             )
-        personal = s.get(PersonalTenant, principal.id)
-        if personal is not None:
-            member = s.get(Membership, (personal.tenant_id, principal.id))
-            if member is None or not member.enabled:
-                raise denied()
-            return OnboardingResult(personal_tenant_id=personal.tenant_id)
-
         tenant = uuid4()
-        s.add(Tenant(id=tenant, name="Personal workspace"))
+        s.add(Tenant(id=tenant, name=body.name if body is not None else "Personal workspace"))
         s.flush()
         s.add(SecurityState(tenant_id=tenant))
         s.flush()

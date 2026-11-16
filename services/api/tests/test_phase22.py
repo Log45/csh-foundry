@@ -36,6 +36,7 @@ from ontology_platform.security.contracts import (
     MembershipInput,
     RoleInput,
 )
+from ontology_platform.security.directory import DirectoryUser
 from ontology_platform.security.identity import resolve
 from ontology_platform.security.oidc import OIDCVerifier, Provider
 from ontology_platform.security.workers import WorkerPool
@@ -63,10 +64,10 @@ def profile():
     )
 
 
-def phase22(database, idp, monkeypatch):
+def phase22(database, idp, monkeypatch, provider=None):
     engine, sessions, url = database
     private, identity_state, verifier = idp
-    provider = profile()
+    provider = provider or profile()
     verifier.providers = (provider,)
     monkeypatch.setattr("ontology_platform.main.OIDCVerifier", lambda *a, **kw: verifier)
 
@@ -177,6 +178,60 @@ def test_concurrent_and_repeat_onboarding_keeps_existing_authority(database, idp
         assert s.get(ExternalIdentity, (ISSUER, "unknown")) is None
 
 
+def test_all_studio_users_can_name_one_personal_workspace(database, idp, monkeypatch):
+    provider = Provider.model_validate(
+        profile().model_dump() | {"personal_tenant_all_users": True, "personal_tenant_role": None}
+    )
+    client, sessions, _, headers = phase22(database, idp, monkeypatch, provider)
+    signed_in = headers("newcomer", realm_access=None)
+    assert client.post(ONBOARD, headers=signed_in).json() == {
+        "personal_tenant_id": None,
+        "name_required": True,
+    }
+    with sessions() as s:
+        assert s.get(ExternalIdentity, (ISSUER, "newcomer")) is None
+        assert s.scalar(select(func.count()).select_from(Tenant)) == 0
+    for name in ("   ", "x" * 201, "a\x00b"):
+        assert client.post(ONBOARD, headers=signed_in, json={"name": name}).status_code == 422
+    for subject, client_id in (("other", "other"), ("pool", "studio"), ("pool", "worker")):
+        assert (
+            client.post(
+                ONBOARD,
+                headers=headers(subject, client_id=client_id, realm_access=None),
+                json={"name": "Forbidden"},
+            ).status_code
+            == 403
+        )
+
+    def submit_name():
+        response = client.post(ONBOARD, headers=signed_in, json={"name": " My Workspace "})
+        assert response.status_code == 200, response.text
+        return response.json()
+
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        results = list(pool.map(lambda _: submit_name(), range(3)))
+    assert results[0] == results[1] == results[2]
+    tenant = results[0]["personal_tenant_id"]
+    assert client.post(ONBOARD, headers=signed_in).json() == {"personal_tenant_id": tenant}
+    assert client.post(ONBOARD, headers=signed_in, json={"name": "Overwrite"}).json() == {
+        "personal_tenant_id": tenant
+    }
+    assert client.get("/api/v1/security/tenants", headers=signed_in).json() == [
+        {"id": tenant, "name": "My Workspace"}
+    ]
+    other = client.post(
+        ONBOARD, headers=headers("second-user", realm_access=None), json={"name": "Second"}
+    )
+    assert other.status_code == 200
+    assert other.json()["personal_tenant_id"] != tenant
+    assert (
+        client.get(
+            "/api/v1/security/me", headers=headers("second-user", tenant, realm_access=None)
+        ).status_code
+        == 403
+    )
+
+
 def test_sharing_lifecycle_and_abac(database, idp, monkeypatch, tmp_path):
     client, sessions, _, headers = phase22(database, idp, monkeypatch)
     w, old, _ = setup(database, tmp_path)
@@ -200,6 +255,30 @@ def test_sharing_lifecycle_and_abac(database, idp, monkeypatch, tmp_path):
     project = client.post("/api/v1/projects", headers=owner_h, json={"name": "Private project"})
     assert project.status_code == 201, project.text
     project_id = project.json()["id"]
+    targets = "/api/v1/shares/targets"
+    assert client.get(targets + "/project?search=PRIVATE", headers=owner_h).json() == [
+        {"id": project_id, "label": "Private project"}
+    ]
+    assert client.get(targets + "/project?search=PRIVATE", headers=bob_h).json() == []
+    assert client.get(targets + "/ontology?search=manufact", headers=owner_h).json() == [
+        {"id": w.definition.id, "label": w.definition.id}
+    ]
+    assert client.get(targets + "/ontology", headers=headers("outsider", bob)).status_code == 403
+
+    def directory_search(settings, verifier, issuer, search):
+        assert issuer == ISSUER and search == "bo"
+        return [
+            DirectoryUser(subject="bob", label="bobby"),
+            DirectoryUser(subject="pool", label="service-account-worker"),
+            DirectoryUser(subject="unprovisioned", label="unknown"),
+            DirectoryUser(subject="operator", label="self"),
+        ]
+
+    recipients = "/api/v1/shares/recipients?search=bo"
+    assert client.get(recipients, headers=owner_h).status_code == 503
+    monkeypatch.setattr("ontology_platform.security.routes.search_users", directory_search)
+    assert client.get(recipients, headers=owner_h).json() == [{"id": bob_id, "label": "bobby"}]
+    assert client.get(recipients, headers=headers("outsider", bob)).status_code == 403
     project_path = f"/api/v1/projects/{project_id}"
     ontology = f"/api/v1/ontologies/{w.definition.id}"
     for h in (bob_h, headers("outsider", outsider)):

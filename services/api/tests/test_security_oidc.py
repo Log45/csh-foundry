@@ -464,6 +464,31 @@ def test_profile_is_explicit_provider_policy():
     assert compatible.access_token_profile == "keycloak"
 
 
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"personal_tenant_client": None},
+        {"personal_tenant_client": "other"},
+        {"access_token_profile": "rfc9068"},
+        {"personal_tenant_role": "human"},
+        {"personal_tenant_all_users": False},
+    ],
+)
+def test_personal_workspace_policy_requires_an_explicit_keycloak_client_and_one_mode(overrides):
+    values = dict(
+        id="example",
+        issuer=ISSUER,
+        audience="foundry",
+        clients=("studio",),
+        access_token_profile="keycloak",
+        personal_tenant_client="studio",
+        personal_tenant_all_users=True,
+    )
+    assert Provider(**values).personal_tenant_all_users
+    with pytest.raises(ValidationError):
+        Provider(**(values | overrides))
+
+
 def test_keycloak_policy_does_not_change_another_provider(idp):
     private, state, verifier = idp
     strict = verifier.providers[0]

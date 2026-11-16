@@ -16,10 +16,16 @@ from ontology_platform.security.contracts import (
     PolicyInput,
     RoleInput,
 )
+from ontology_platform.security.directory import search_users
 from ontology_platform.security.interfaces import Principal
-from ontology_platform.security.onboarding import OnboardingResult, onboard
+from ontology_platform.security.onboarding import OnboardingInput, OnboardingResult, onboard
 from ontology_platform.security.service import PlatformAuthorizer, denied
-from ontology_platform.security.sharing import SharingService, TenantShareInput, TenantShareView
+from ontology_platform.security.sharing import (
+    ShareOption,
+    SharingService,
+    TenantShareInput,
+    TenantShareView,
+)
 
 router = APIRouter(prefix="/api/v1/security", tags=["security"])
 Actor = Annotated[Principal, Depends(get_principal)]
@@ -114,16 +120,17 @@ def memberships(
     return admin.memberships(p, limit, offset)
 
 
-@router.post("/personal-tenant", response_model=OnboardingResult)
+@router.post("/personal-tenant", response_model=OnboardingResult, response_model_exclude_unset=True)
 def personal_tenant(
     request: Request,
+    body: OnboardingInput | None = None,
     credential: Annotated[HTTPAuthorizationCredentials | None, Security(bearer)] = None,
 ) -> OnboardingResult:
     settings = request.app.state.settings
     if settings.auth_mode != "oidc":
         raise denied()
     provider, claims, _ = verified_oidc(request)
-    return onboard(request.app.state.sessions, settings, provider, claims)
+    return onboard(request.app.state.sessions, settings, provider, claims, body)
 
 
 @router.get("/tenants", response_model=list[dict[str, str]])
@@ -147,6 +154,29 @@ def revoke_job_grant(key: UUID, p: Actor, admin: Admin) -> dict[str, str]:
 
 
 sharing = APIRouter(prefix="/api/v1/shares", tags=["sharing"])
+Search = Annotated[str, Query(max_length=100)]
+
+
+@sharing.get("/targets/{target}")
+def share_targets(
+    p: Actor,
+    admin: Admin,
+    target: Literal["project", "ontology"],
+    search: Search = "",
+) -> list[ShareOption]:
+    return SharingService(admin.auth).targets(p, target, search.strip())
+
+
+@sharing.get("/recipients")
+def share_recipients(p: Actor, admin: Admin, request: Request, search: Search) -> list[ShareOption]:
+    settings = request.app.state.settings
+    if settings.auth_mode != "oidc":
+        raise denied()
+    service = SharingService(admin.auth)
+    with service.scope(p) as s:
+        service.directory_access(s, p)
+    users = search_users(settings, request.app.state.oidc, p.identity_provider, search)
+    return service.recipients(p, users)
 
 
 @sharing.get("", response_model=list[TenantShareView])

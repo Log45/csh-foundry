@@ -13,6 +13,7 @@ import {
   input,
   isUuid,
   originCheck,
+  personalWorkspace,
   browserSession,
   revokeBrowserSession,
   selectBrowserTenant,
@@ -71,6 +72,15 @@ async function handle(
     }
     const value = await browserSession(jar.get(sessionName)?.value);
     if (operation === "session" && request.method === "GET") {
+      if (value.nameRequired) {
+        return NextResponse.json({
+          csrf: value.csrf,
+          nameRequired: true,
+          tenants: [],
+          me: null,
+          expires: value.expires,
+        });
+      }
       const offset = new URL(request.url).searchParams.get("offset") ?? "0";
       if (!/^[0-9]{1,5}$/.test(offset) || Number(offset) > 10000)
         throw new BoundaryError(400, "invalid_page");
@@ -103,7 +113,19 @@ async function handle(
       result.cookies.set(sessionName, "", options(0));
       return result;
     }
+    if (operation === "personal-tenant" && value.nameRequired) {
+      const { name } = await input(request);
+      if (typeof name !== "string")
+        throw new BoundaryError(422, "invalid_request");
+      const { tenant } = await personalWorkspace(value.token, name);
+      if (!tenant)
+        throw new BoundaryError(403, "personal_tenant_onboarding_failed");
+      await selectBrowserTenant(jar.get(sessionName)!.value, value, tenant);
+      return NextResponse.json({ status: "selected" });
+    }
     if (operation === "tenant") {
+      if (value.nameRequired)
+        throw new BoundaryError(403, "tenant_setup_required");
       const { tenant } = await input(request);
       if (!isUuid(tenant)) throw new BoundaryError(403, "forbidden");
       await backend(value, "/api/v1/security/me", "GET", undefined, tenant);

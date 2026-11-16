@@ -25,12 +25,15 @@ See the [OKD4 baseline](okd4-deployment.md) and [OKD 4.19 web console guide](htt
    APIs to give it only the claim and execution operations its queues need. Add explicit Project
    editor access for execution jobs and automations it serves. The service identity is reused.
 4. Configure eligibility on the trusted Keycloak provider in `FOUNDRY_OIDC_PROVIDERS` using
-   `access_token_profile: keycloak`, `personal_tenant_client` set to the existing Studio client,
-   and `personal_tenant_role` set to the approved human-only realm role. Confirm the realm
-   role is present in signed access tokens for eligible humans and unavailable to service
-   accounts. Use the Studio client's dedicated scope to limit the realm-role mapping to the
-   onboarding role. Confirm the Studio client has the authorization-code flow with PKCE and has service
-   accounts and Direct Access Grants disabled. Match version and provider policy in Studio.
+   `access_token_profile: keycloak` and `personal_tenant_client` set to the existing Studio client.
+   Set `personal_tenant_all_users: true` to let every human who can sign in to that client name
+   and create one personal workspace. Omit `personal_tenant_role` in this mode. This requires
+   no additional Keycloak role or group. Use this mode only if everyone who can authenticate to
+   the Studio client should be able to create a workspace. Confirm the existing Studio client
+   uses authorization code with PKCE and has service accounts and Direct Access Grants disabled.
+   For role-gated onboarding, omit `personal_tenant_all_users` and set `personal_tenant_role`
+   to the approved human-only realm role. Confirm it is present in signed Studio access tokens
+   for eligible humans and scoped out of service accounts. Match version and provider policy in Studio.
    Use the approved identity configuration process for any realm changes.
    [Keycloak server administration guide](https://www.keycloak.org/docs/26.8.1/server_admin/)
 5. Set `FOUNDRY_WORKER_SUBJECT` on the API and workers to the same exact verified Keycloak
@@ -39,6 +42,20 @@ See the [OKD4 baseline](okd4-deployment.md) and [OKD 4.19 web console guide](htt
    permissions are granted explicitly. Outbox-enabled tenants use the configured fixed
    server-side HTTPS receiver for new deliveries. Verify it is intended to receive those
    tenants' data. Existing pinned destinations remain with their delivery records.
+
+## Optional Keycloak user search
+
+Create a dedicated confidential OIDC client in the Foundry Keycloak realm. Enable service
+accounts and disable Standard Flow and Direct Access Grants. Assign its service account the
+`realm-management` client role `view-users` and include that role in the client's role scope.
+The API uses this credential to read directory matches and resolves each Keycloak subject
+against enabled Foundry users linked to the same issuer. [Keycloak server administration guide](https://www.keycloak.org/docs/26.8.1/server_admin/)
+
+Set `FOUNDRY_DIRECTORY_PROVIDER_ID` to the existing trusted Keycloak provider ID and
+`FOUNDRY_DIRECTORY_CLIENT_ID` to the dedicated client ID in the API's configuration. Add
+`FOUNDRY_DIRECTORY_CLIENT_SECRET` to the mounted `foundry-api` Secret. The API must be
+able to reach the issuer and its Admin REST user search endpoint over HTTPS. The manual
+principal ID option works without this configuration.
 
 ## Coordinated rollout
 
@@ -70,8 +87,9 @@ See the [OKD4 baseline](okd4-deployment.md) and [OKD 4.19 web console guide](htt
 ## Verify after rollout
 
 - In an approved empty smoke environment, start the workers before any tenants exist and
-  observe idle cycles. In Studio sign in as an eligible human and ensure the personal tenant
-  appears, then sign out and in again and verify the ID is unchanged.
+  observe idle cycles. In Studio sign in as an eligible human. With all-users onboarding,
+  enter a workspace name and verify the workspace appears with that name. Sign out and in
+  again and verify the ID is unchanged and the naming prompt does not recur.
 - Sign in as a shared-tenant member and select each workspace. Issue a Viewer and Collaborator
   invitation to a second person or an authorized recipient tenant. Verify discovery, acceptance,
   owner attribution, allowed edits, rejection of independent content and revocation.

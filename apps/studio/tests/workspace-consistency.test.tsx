@@ -24,6 +24,38 @@ afterEach(() => {
   cleanup();
   vi.clearAllMocks();
 });
+it("asks for a name and opens the workspace after creation", async () => {
+  mocks.session
+    .mockResolvedValueOnce({
+      csrf: "test",
+      nameRequired: true,
+      tenants: [],
+      me: null,
+    })
+    .mockResolvedValueOnce({ status: "selected" })
+    .mockResolvedValueOnce({
+      csrf: "test",
+      tenant: "personal",
+      tenants: [{ id: "personal", name: "My Workspace" }],
+      me: { principal: { principal_id: "principal" }, permissions: [] },
+    });
+  mocks.api.mockResolvedValue([]);
+  render(<Workspace />);
+  const name = await screen.findByLabelText("Workspace name");
+  const create = screen.getByRole("button", { name: "Create workspace" });
+  expect(create).toHaveProperty("disabled", true);
+  fireEvent.change(name, { target: { value: " My Workspace " } });
+  fireEvent.click(create);
+  expect(
+    await screen.findByRole("option", { name: "My Workspace" }),
+  ).toBeTruthy();
+  expect(mocks.session).toHaveBeenCalledWith(
+    "/auth/personal-tenant",
+    expect.objectContaining({ body: JSON.stringify({ name: "My Workspace" }) }),
+  );
+  expect(screen.queryByLabelText("Workspace name")).toBeNull();
+});
+
 it("keeps the newest ontology read when an older request completes after activation", async () => {
   mocks.session.mockResolvedValue({
     csrf: "test",

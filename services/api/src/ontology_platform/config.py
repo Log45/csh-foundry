@@ -30,6 +30,9 @@ class Settings(BaseSettings):
     oidc_ca_bundle: Path | None = None
     test_issuer: str | None = None
     test_subject: str | None = None
+    directory_provider_id: str | None = None
+    directory_client_id: str | None = None
+    directory_client_secret: SecretStr | None = None
     worker_access_token: SecretStr | None = None
     worker_client_secret: SecretStr | None = None
     worker_provider_id: str | None = None
@@ -110,6 +113,23 @@ class Settings(BaseSettings):
             or len({p.issuer for p in self.oidc_providers}) != len(self.oidc_providers)
         ):
             raise ValueError("Duplicate or excessive OIDC providers")
+        directory = (
+            self.directory_provider_id,
+            self.directory_client_id,
+            self.directory_client_secret,
+        )
+        if any(directory) and (
+            not all(directory)
+            or self.directory_client_id == self.worker_client_id
+            or any(self.directory_client_id in p.clients for p in self.oidc_providers)
+            or not any(
+                p.id == self.directory_provider_id and p.access_token_profile == "keycloak"
+                for p in self.oidc_providers
+            )
+        ):
+            raise ValueError(
+                "Directory search requires a separate client and a trusted Keycloak provider"
+            )
         if self.worker_subject and not any(
             provider.id == self.worker_provider_id and self.worker_client_id in provider.clients
             for provider in self.oidc_providers

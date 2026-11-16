@@ -69,6 +69,12 @@ export interface EndpointInput {
     operations["audit_api_v1_ontologies__ontology_id__actions_executions__execution_id__audit_get"]
   >;
   "shares.list": Input<operations["shares_api_v1_shares_get"]>;
+  "shares.targets": Input<
+    operations["share_targets_api_v1_shares_targets__target__get"]
+  >;
+  "shares.recipients": Input<
+    operations["share_recipients_api_v1_shares_recipients_get"]
+  >;
   "shares.invite": Input<operations["invite_api_v1_shares_post"]>;
   "shares.accept": Input<
     operations["accept_api_v1_shares__share_id__accept_post"]
@@ -395,6 +401,12 @@ export interface EndpointOutput {
     operations["audit_api_v1_ontologies__ontology_id__actions_executions__execution_id__audit_get"]
   >;
   "shares.list": Output<operations["shares_api_v1_shares_get"]>;
+  "shares.targets": Output<
+    operations["share_targets_api_v1_shares_targets__target__get"]
+  >;
+  "shares.recipients": Output<
+    operations["share_recipients_api_v1_shares_recipients_get"]
+  >;
   "shares.invite": Output<operations["invite_api_v1_shares_post"]>;
   "shares.accept": Output<
     operations["accept_api_v1_shares__share_id__accept_post"]
@@ -851,6 +863,16 @@ export function endpoints(send: Transport) {
         options?: RequestOptions,
       ): Promise<EndpointOutput["shares.list"]> =>
         send("GET", "/api/v1/shares", input, true, options),
+      targets: (
+        input: EndpointInput["shares.targets"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["shares.targets"]> =>
+        send("GET", "/api/v1/shares/targets/{target}", input, true, options),
+      recipients: (
+        input: EndpointInput["shares.recipients"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["shares.recipients"]> =>
+        send("GET", "/api/v1/shares/recipients", input, true, options),
       invite: (
         input: EndpointInput["shares.invite"],
         options?: RequestOptions,

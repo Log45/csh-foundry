@@ -22,6 +22,7 @@ const navigate = () =>
 export function Workspace() {
   const [tenantOffset, setTenantOffset] = useState(0);
   const [onboardingFailed, setOnboardingFailed] = useState(false);
+  const [workspaceName, setWorkspaceName] = useState("");
   useEffect(() => {
     const url = new URL(window.location.href);
     if (url.searchParams.get("signin") === "personal-tenant") {
@@ -167,9 +168,51 @@ export function Workspace() {
         {task.error && !["session_expired"].includes(task.error) && (
           <Notice>{task.error}</Notice>
         )}
-        <p className="muted">
-          Eligible accounts receive a personal workspace when they sign in.
-        </p>
+      </main>
+    );
+  if (session.nameRequired)
+    return (
+      <main className="login">
+        <Brand subtitle="DEVELOPER WORKSPACE" />
+        <h1>Name your workspace</h1>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            void task.run(async () => {
+              await auth("personal-tenant", { name: workspaceName.trim() });
+              await loadSession(0);
+            });
+          }}
+        >
+          <Field label="Workspace name">
+            <input
+              required
+              maxLength={200}
+              value={workspaceName}
+              onChange={(event) => setWorkspaceName(event.target.value)}
+            />
+          </Field>
+          <button
+            className="primary"
+            disabled={task.busy || !workspaceName.trim()}
+          >
+            {task.busy ? "Creating workspace…" : "Create workspace"}
+          </button>
+        </form>
+        {task.error && (
+          <Notice>Could not create your workspace. Please try again.</Notice>
+        )}
+        <button
+          disabled={task.busy}
+          onClick={() =>
+            void task.run(async () => {
+              const result = (await auth("logout")) as { logout?: string };
+              window.location.assign(result.logout ?? "/");
+            })
+          }
+        >
+          Sign out
+        </button>
       </main>
     );
   const navigation = [

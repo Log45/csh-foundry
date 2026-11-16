@@ -10,6 +10,7 @@ export type Page = components["schemas"]["QueryPage"];
 export interface BrowserSession {
   csrf: string;
   tenant?: string;
+  nameRequired?: boolean;
   tenants: { id: string; name: string }[];
   me: null | {
     principal: { principal_id: string; tenant_id: string };

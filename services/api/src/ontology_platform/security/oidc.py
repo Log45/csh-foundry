@@ -42,19 +42,25 @@ class Provider(QueryModel):
     clients: tuple[Name, ...] = Field(min_length=1, max_length=32)
     personal_tenant_client: Name | None = None
     personal_tenant_role: Name | None = None
+    personal_tenant_all_users: bool = False
     clock_skew: int = Field(default=30, ge=0, le=60)
     cache_seconds: int = Field(default=300, ge=30, le=3600)
 
     @model_validator(mode="after")
     def valid(self) -> "Provider":
         https_url(self.issuer)
-        if self.personal_tenant_client or self.personal_tenant_role:
+        if (
+            self.personal_tenant_client
+            or self.personal_tenant_role
+            or self.personal_tenant_all_users
+        ):
             if (
                 self.access_token_profile != "keycloak"
                 or self.personal_tenant_client not in self.clients
-                or not self.personal_tenant_role
             ):
-                raise ValueError("Personal onboarding requires a trusted Keycloak client and role")
+                raise ValueError("Personal onboarding requires a trusted Keycloak client")
+            if self.personal_tenant_all_users == (self.personal_tenant_role is not None):
+                raise ValueError("Personal onboarding requires one eligibility policy")
         if not self.algorithms:
             raise ValueError("At least one asymmetric algorithm required")
         return self
@@ -89,6 +95,19 @@ class OIDCVerifier:
         self.lock = threading.Lock()
 
     def document(self, url: str, *, form: dict[str, str] | None = None) -> dict[str, Any]:
+        result = self.response_json(url, form=form)
+        if not isinstance(result, dict):
+            raise ValueError("OIDC document must be an object")
+        return result
+
+    def response_json(
+        self,
+        url: str,
+        *,
+        form: dict[str, str] | None = None,
+        headers: dict[str, str] | None = None,
+        params: dict[str, str] | None = None,
+    ) -> Any:
         # Explicit Compose backchannel changes only the socket port. The configured issuer,
         # discovery/JWKS origin checks and TLS hostname/CA verification remain authoritative.
         if self.backchannel_port is not None:
@@ -101,7 +120,12 @@ class OIDCVerifier:
         started = time.monotonic()
         content = bytearray()
         with self.client.stream(
-            "POST" if form is not None else "GET", url, data=form, follow_redirects=False
+            "POST" if form is not None else "GET",
+            url,
+            data=form,
+            headers=headers,
+            params=params,
+            follow_redirects=False,
         ) as response:
             if response.status_code != 200:
                 raise ValueError("OIDC endpoint unavailable")
@@ -112,10 +136,7 @@ class OIDCVerifier:
                 content.extend(chunk)
                 if len(content) > 262144 or time.monotonic() - started > 5:
                     raise ValueError("OIDC response bound exceeded")
-        result = json.loads(content)
-        if not isinstance(result, dict):
-            raise ValueError("OIDC document must be an object")
-        return result
+        return json.loads(content)
 
     def refresh(self, provider: Provider) -> dict[str, dict[str, Any]]:
         now = time.monotonic()

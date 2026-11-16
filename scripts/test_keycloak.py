@@ -24,10 +24,17 @@ from ontology_platform.security.oidc import OIDCVerifier, Provider
 ISSUER = "https://identity.phase10.test/realms/phase10"
 ORIGIN = "https://studio.phase10.test"
 ONBOARDING_ROLE = "foundry-personal-workspace"
+DIRECTORY_ID = "foundry-directory-test"
+DIRECTORY_SUBJECT = "1512cd7d-fd13-4d2e-8c2f-ea0520a20156"
 
 
 def test_onboarding(
-    url: str, proxy: httpx.Client, token: str, worker_token: str, worker_subject: str
+    url: str,
+    proxy: httpx.Client,
+    token: str,
+    worker_token: str,
+    worker_subject: str,
+    directory_secret: str,
 ) -> None:
     from alembic import command
     from alembic.config import Config
@@ -35,6 +42,7 @@ def test_onboarding(
     from ontology_platform.config import Settings
     from ontology_platform.db.models import ExternalIdentity, Membership, PersonalTenant
     from ontology_platform.main import create_app
+    from pydantic import SecretStr
     from sqlalchemy import create_engine, select, text
 
     schema = "test_keycloak_phase22_" + uuid4().hex
@@ -65,6 +73,9 @@ def test_onboarding(
                 oidc_providers=(provider,),
                 worker_provider_id="keycloak",
                 worker_subject=worker_subject,
+                directory_provider_id="keycloak",
+                directory_client_id=DIRECTORY_ID,
+                directory_client_secret=SecretStr(directory_secret),
             )
         )
         app.state.oidc.client.close()
@@ -84,7 +95,27 @@ def test_onboarding(
                 assert session.scalars(select(PersonalTenant.tenant_id)).all() == [tenant]
                 identity = session.get(ExternalIdentity, (ISSUER, worker_subject))
                 assert session.get(Membership, (tenant, identity.principal_id)).enabled
+            human["X-Tenant-ID"] = str(tenant)
+            registered = api.post(
+                "/api/v1/security/identities",
+                headers=human,
+                json={
+                    "issuer": ISSUER,
+                    "subject": DIRECTORY_SUBJECT,
+                    "principal_type": "user",
+                },
+            )
+            assert registered.status_code == 201, registered.json()
+            directory = api.get("/api/v1/shares/recipients?search=Directory", headers=human)
+            assert directory.status_code == 200, directory.json()
+            assert directory.json() == [
+                {
+                    "id": registered.json()["principal_id"],
+                    "label": "directory-person",
+                }
+            ]
         print("PASS Keycloak realm role onboards one personal tenant and denies service onboarding")
+        print("PASS Keycloak directory search resolves username to a Foundry principal ID")
     finally:
         engine.dispose()
         with admin.begin() as connection:
@@ -117,6 +148,7 @@ def main() -> None:
         configuration["sslRequired"] = "none"
         password = secrets.token_urlsafe(32)
         worker_secret = secrets.token_urlsafe(32)
+        directory_secret = secrets.token_urlsafe(32)
         configuration["clients"][1]["secret"] = worker_secret
         configuration["users"] = [
             {
@@ -134,6 +166,35 @@ def main() -> None:
             configuration["scopeMappings"] = [{"client": "studio", "roles": [ONBOARDING_ROLE]}]
             configuration["clients"][0]["defaultClientScopes"].append("roles")
             configuration["users"][0]["realmRoles"] = [ONBOARDING_ROLE]
+            configuration["clients"].append(
+                {
+                    "clientId": DIRECTORY_ID,
+                    "protocol": "openid-connect",
+                    "enabled": True,
+                    "publicClient": False,
+                    "secret": directory_secret,
+                    "serviceAccountsEnabled": True,
+                    "standardFlowEnabled": False,
+                    "directAccessGrantsEnabled": False,
+                    "fullScopeAllowed": False,
+                    "defaultClientScopes": ["basic", "roles"],
+                }
+            )
+            configuration["clientScopeMappings"] = {
+                "realm-management": [{"client": DIRECTORY_ID, "roles": ["view-users"]}],
+            }
+            configuration["users"].extend(
+                [
+                    {
+                        "username": "service-account-" + DIRECTORY_ID,
+                        "enabled": True,
+                        "serviceAccountClientId": DIRECTORY_ID,
+                        "clientRoles": {"realm-management": ["view-users"]},
+                    },
+                    {"id": DIRECTORY_SUBJECT, "username": "directory-person", "enabled": True},
+                    {"username": "directory-unprovisioned", "enabled": True},
+                ]
+            )
         path = Path(directory) / "phase10-realm.json"
         path.write_text(json.dumps(configuration))
         path.chmod(0o644)  # Disposable generated test credentials, removed in finally.
@@ -236,8 +297,17 @@ def main() -> None:
             assert "refresh_token" not in tokens
 
             def transport(request):
-                # Only trusted discovery/JWKS calls are mapped to this local test container.
-                actual = client.get(local(request.url))
+                # Map trusted IdP calls to this disposable local container.
+                actual = client.request(
+                    request.method,
+                    local(request.url),
+                    content=request.content,
+                    headers={
+                        k: request.headers[k]
+                        for k in ("content-type", "authorization")
+                        if k in request.headers
+                    },
+                )
                 return httpx.Response(actual.status_code, stream=httpx.ByteStream(actual.content))
 
             provider = Provider(
@@ -284,6 +354,7 @@ def main() -> None:
                         tokens["access_token"],
                         worker_response.json()["access_token"],
                         service["sub"],
+                        directory_secret,
                     )
             assert client.post(token_url, data=payload).status_code == 400
             client.close()

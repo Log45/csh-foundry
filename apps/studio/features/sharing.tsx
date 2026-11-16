@@ -23,6 +23,90 @@ type Share = components["schemas"]["TenantShareView"];
 type Project = components["schemas"]["ProjectView"];
 type Folder = components["schemas"]["FolderView"];
 
+function SharePicker({
+  api,
+  endpoint,
+  label,
+  name,
+  minimum = 0,
+}: {
+  api: Client;
+  endpoint: string;
+  label: string;
+  name: string;
+  minimum?: number;
+}) {
+  const [search, setSearch] = useState("");
+  const [options, setOptions] = useState<
+    components["schemas"]["ShareOption"][]
+  >([]);
+  const [status, setStatus] = useState("");
+  const [value, setValue] = useState("");
+  const term = search.trim();
+  useEffect(() => {
+    if (term.length < minimum) return;
+    let live = true;
+    const handle = setTimeout(() => {
+      void api<components["schemas"]["ShareOption"][]>(
+        `${endpoint}?search=${encodeURIComponent(term)}`,
+      )
+        .then((items) => {
+          if (!live) return;
+          setOptions(items);
+          setStatus(items.length ? "" : "No matches.");
+        })
+        .catch(() => {
+          if (live)
+            setStatus(
+              name === "recipient"
+                ? "User search is unavailable. You can invite by principal ID."
+                : "Could not load shareable resources.",
+            );
+        });
+    }, 200);
+    return () => {
+      live = false;
+      clearTimeout(handle);
+    };
+  }, [api, endpoint, minimum, name, term]);
+  return (
+    <div>
+      <Field label={`Search ${label.toLowerCase()}`}>
+        <input
+          value={search}
+          maxLength={100}
+          onChange={(event) => {
+            if (event.target.value.trim() !== term) {
+              setOptions([]);
+              setValue("");
+              setStatus("");
+            }
+            setSearch(event.target.value);
+          }}
+        />
+      </Field>
+      <Field label={name === "resource" ? `${label} to share` : label}>
+        <select
+          name={name}
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
+          required
+        >
+          <option value="">Select {label.toLowerCase()}</option>
+          {options.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </Field>
+      <p role="status">
+        {term.length < minimum ? "Enter at least two characters." : status}
+      </p>
+    </div>
+  );
+}
+
 export function Sharing({
   session,
   api,
@@ -38,10 +122,13 @@ export function Sharing({
   const [shares, setShares] = useState<Share[]>([]);
   const [opened, setOpened] = useState<Share>();
   const [kind, setKind] = useState("project");
-  const [recipient, setRecipient] = useState("principal");
+  const [recipient, setRecipient] = useState("directory");
   const permissions = session.me?.permissions ?? [];
-  const manageProject = permissions.includes("project:manage");
+  const manageProject =
+    permissions.includes("project:read") &&
+    permissions.includes("project:manage");
   const manageTenant = permissions.includes("security:membership:manage");
+  const manageOntology = manageTenant && permissions.includes("ontology:read");
   const resourceKind = manageProject ? kind : "ontology";
   const query = `/api/v1/shares?direction=${direction}&limit=50&offset=${offset}`;
   async function refresh() {
@@ -88,7 +175,7 @@ export function Sharing({
           ))}
         </div>
         {task.error && <Notice>{task.error}</Notice>}
-        {direction === "outgoing" && (manageProject || manageTenant) && (
+        {direction === "outgoing" && (manageProject || manageOntology) && (
           <form
             onSubmit={(event) => {
               event.preventDefault();
@@ -97,7 +184,7 @@ export function Sharing({
                 await api("/api/v1/shares", "POST", {
                   [resourceKind === "project" ? "project_id" : "ontology_id"]:
                     form.get("resource"),
-                  [recipient === "principal"
+                  [recipient !== "tenant"
                     ? "recipient_principal_id"
                     : "recipient_tenant_id"]: form.get("recipient"),
                   access: form.get("access"),
@@ -113,34 +200,50 @@ export function Sharing({
                   onChange={(event) => setKind(event.target.value)}
                 >
                   {manageProject && <option value="project">Project</option>}
-                  {manageTenant && <option value="ontology">Ontology</option>}
+                  {manageOntology && <option value="ontology">Ontology</option>}
                 </select>
               </Field>
-              <Field
-                label={
-                  resourceKind === "project" ? "Project ID" : "Ontology ID"
-                }
-              >
-                <input name="resource" required maxLength={200} />
-              </Field>
+              <SharePicker
+                key={resourceKind}
+                api={api}
+                endpoint={`/api/v1/shares/targets/${resourceKind}`}
+                label={resourceKind === "project" ? "Project" : "Ontology"}
+                name="resource"
+              />
               <Field label="Recipient type">
                 <select
                   value={recipient}
                   onChange={(event) => setRecipient(event.target.value)}
                 >
-                  <option value="principal">Principal</option>
+                  <option value="directory">Keycloak user</option>
+                  <option value="principal">Principal ID</option>
                   <option value="tenant">Tenant</option>
                 </select>
               </Field>
-              <Field
-                label={
-                  recipient === "principal"
-                    ? "Recipient principal ID"
-                    : "Recipient tenant ID"
-                }
-              >
-                <input name="recipient" required maxLength={200} />
-              </Field>
+              {recipient === "directory" ? (
+                <SharePicker
+                  api={api}
+                  endpoint="/api/v1/shares/recipients"
+                  label="Recipient"
+                  name="recipient"
+                  minimum={2}
+                />
+              ) : (
+                <Field
+                  label={
+                    recipient === "principal"
+                      ? "Recipient principal ID"
+                      : "Recipient tenant ID"
+                  }
+                >
+                  <input
+                    key={recipient}
+                    name="recipient"
+                    required
+                    maxLength={200}
+                  />
+                </Field>
+              )}
               <Field label="Access">
                 <select name="access">
                   <option value="viewer">Viewer</option>

@@ -9,7 +9,7 @@ from uuid import UUID, uuid4
 
 from fastapi import FastAPI
 from pydantic import BaseModel, ConfigDict, Field, model_validator
-from sqlalchemy import or_, select
+from sqlalchemy import Select, String, cast, or_, select
 from sqlalchemy.orm import Session
 
 from ontology_platform.db.models import (
@@ -18,12 +18,14 @@ from ontology_platform.db.models import (
     Membership,
     Ontology,
     PlatformPrincipal,
+    Project,
     ProjectMember,
     Tenant,
     TenantShare,
 )
 from ontology_platform.projects.service import ProjectService
 from ontology_platform.security.audit import persist_audit
+from ontology_platform.security.directory import DirectoryUser
 from ontology_platform.security.interfaces import Principal
 from ontology_platform.security.service import PlatformAuthorizer, denied
 
@@ -109,6 +111,11 @@ def describe_share_header(app: FastAPI) -> None:
         return document
 
     app.openapi = schema  # type: ignore[method-assign]
+
+
+class ShareOption(BaseModel):
+    id: str
+    label: str
 
 
 class TenantShareInput(BaseModel):
@@ -237,6 +244,84 @@ class SharingService:
         with self.auth.sessions.begin() as s, self.auth.security_context(s, p):
             self.auth.identity(s, p)
             yield s
+
+    @staticmethod
+    def owned_projects(p: Principal) -> Select[tuple[Project]]:
+        return (
+            select(Project)
+            .join(
+                ProjectMember,
+                (ProjectMember.tenant_id == Project.tenant_id)
+                & (ProjectMember.project_id == Project.id),
+            )
+            .where(
+                Project.tenant_id == p.tenant_id,
+                Project.state == "ACTIVE",
+                ProjectMember.principal_id == p.principal_id,
+                ProjectMember.role == "owner",
+            )
+        )
+
+    def targets(
+        self, p: Principal, target: Literal["project", "ontology"], search: str
+    ) -> list[ShareOption]:
+        with self.scope(p) as s:
+            if target == "project":
+                for permission in ("project:read", "project:manage"):
+                    self.auth.require(p, permission, f"{p.tenant_id}/projects")
+                projects = self.owned_projects(p).where(
+                    or_(
+                        Project.name.icontains(search, autoescape=True),
+                        cast(Project.id, String).icontains(search, autoescape=True),
+                    )
+                )
+                return [
+                    ShareOption(id=str(row.id), label=row.name)
+                    for row in s.scalars(projects.order_by(Project.name, Project.id).limit(25))
+                ]
+            self.auth.require(p, "security:membership:manage", f"{p.tenant_id}/security")
+            self.auth.require(p, "ontology:read", f"{p.tenant_id}/ontologies")
+            ontologies = select(Ontology).where(
+                Ontology.tenant_id == p.tenant_id,
+                Ontology.id.icontains(search, autoescape=True),
+            )
+            return [
+                ShareOption(id=row.id, label=row.id)
+                for row in s.scalars(ontologies.order_by(Ontology.id).limit(25))
+            ]
+
+    def directory_access(self, s: Session, p: Principal) -> None:
+        permissions = self.auth.permissions(s, p)
+        if {"security:membership:manage", "ontology:read"} <= permissions:
+            return
+        if {"project:read", "project:manage"} <= permissions and s.scalar(
+            self.owned_projects(p).with_only_columns(Project.id).limit(1)
+        ):
+            return
+        raise denied()
+
+    def recipients(self, p: Principal, users: list[DirectoryUser]) -> list[ShareOption]:
+        with self.scope(p) as s:
+            self.directory_access(s, p)
+            bindings = {
+                subject: principal_id
+                for subject, principal_id in s.execute(
+                    select(ExternalIdentity.subject, PlatformPrincipal.id)
+                    .join(PlatformPrincipal, PlatformPrincipal.id == ExternalIdentity.principal_id)
+                    .where(
+                        ExternalIdentity.issuer == p.identity_provider,
+                        ExternalIdentity.subject.in_([user.subject for user in users]),
+                        PlatformPrincipal.enabled.is_(True),
+                        PlatformPrincipal.principal_type == "user",
+                        PlatformPrincipal.id != p.principal_id,
+                    )
+                )
+            }
+            return [
+                ShareOption(id=bindings[user.subject], label=user.label)
+                for user in users
+                if user.subject in bindings
+            ]
 
     def manager(
         self, s: Session, p: Principal, share: TenantShareInput, *, revoke: bool = False

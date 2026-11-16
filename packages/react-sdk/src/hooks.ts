@@ -177,6 +177,28 @@ export function useSharesList(
     options,
   );
 }
+export function useSharesTargets(
+  input: EndpointInput["shares.targets"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "shares.targets",
+    input,
+    (c, signal) => c.shares.targets(input, { signal }),
+    options,
+  );
+}
+export function useSharesRecipients(
+  input: EndpointInput["shares.recipients"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "shares.recipients",
+    input,
+    (c, signal) => c.shares.recipients(input, { signal }),
+    options,
+  );
+}
 export function useSharesInvite() {
   return useFoundryMutation<
     EndpointInput["shares.invite"],
