@@ -205,6 +205,16 @@
               "type": "string",
               "title": "Ontology Id"
             }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -251,6 +261,16 @@
             "schema": {
               "type": "string",
               "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -330,6 +350,16 @@
               "default": 0,
               "title": "Offset"
             }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -389,6 +419,16 @@
             "schema": {
               "type": "string",
               "title": "Version"
+            }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -461,6 +501,16 @@
               ],
               "title": "Expected Hash"
             }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "requestBody": {
@@ -526,6 +576,16 @@
             "schema": {
               "type": "string",
               "title": "Version"
+            }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -829,6 +889,16 @@
               "type": "string",
               "title": "Ontology Id"
             }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -889,6 +959,16 @@
             "schema": {
               "type": "string",
               "title": "Type Id"
+            }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -963,6 +1043,16 @@
               "type": "string",
               "title": "Object Id"
             }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -1025,6 +1115,16 @@
             "schema": {
               "type": "string",
               "title": "Object Id"
+            }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -1167,6 +1267,16 @@
               "type": "string",
               "title": "Object Id"
             }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -1229,6 +1339,16 @@
             "schema": {
               "type": "string",
               "title": "Object Id"
+            }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -1352,6 +1472,16 @@
             "schema": {
               "type": "string",
               "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -1522,6 +1652,16 @@
               "default": 0,
               "title": "Offset"
             }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -1636,6 +1776,16 @@
               "minimum": 0,
               "default": 0,
               "title": "Offset"
+            }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -1799,6 +1949,16 @@
               "format": "uuid",
               "title": "Project Id"
             }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -1844,6 +2004,16 @@
               "type": "string",
               "format": "uuid",
               "title": "Project Id"
+            }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -2134,6 +2304,16 @@
               "default": 0,
               "title": "Offset"
             }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -2183,6 +2363,16 @@
               "type": "string",
               "format": "uuid",
               "title": "Project Id"
+            }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -2252,6 +2442,16 @@
               "format": "uuid",
               "title": "Folder Id"
             }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -2307,6 +2507,16 @@
               "type": "string",
               "format": "uuid",
               "title": "Folder Id"
+            }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -10659,6 +10869,16 @@
               "type": "string",
               "title": "Type Id"
             }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "requestBody": {
@@ -10715,6 +10935,16 @@
             "schema": {
               "type": "string",
               "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -10773,6 +11003,16 @@
               "type": "string",
               "title": "Ontology Id"
             }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "requestBody": {
@@ -10829,6 +11069,16 @@
             "schema": {
               "type": "string",
               "title": "Ontology Id"
+            }
+          },
+          {
+            "name": "X-Resource-Share",
+            "in": "header",
+            "required": false,
+            "description": "Accepted resource share. X-Tenant-ID selects the acting tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -13498,6 +13748,32 @@
         }
       }
     },
+    "/api/v1/security/personal-tenant": {
+      "post": {
+        "tags": [
+          "security"
+        ],
+        "summary": "Personal Tenant",
+        "operationId": "personal_tenant_api_v1_security_personal_tenant_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnboardingResult"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/security/tenants": {
       "get": {
         "tags": [
@@ -13603,6 +13879,225 @@
                     "type": "string"
                   },
                   "title": "Response Revoke Job Grant Api V1 Security Job Grants  Key  Delete"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shares": {
+      "get": {
+        "tags": [
+          "sharing"
+        ],
+        "summary": "Shares",
+        "operationId": "shares_api_v1_shares_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "direction",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "enum": [
+                "incoming",
+                "outgoing"
+              ],
+              "type": "string",
+              "title": "Direction"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TenantShareView"
+                  },
+                  "title": "Response Shares Api V1 Shares Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "sharing"
+        ],
+        "summary": "Invite",
+        "operationId": "invite_api_v1_shares_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TenantShareInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TenantShareView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shares/{share_id}/accept": {
+      "post": {
+        "tags": [
+          "sharing"
+        ],
+        "summary": "Accept",
+        "operationId": "accept_api_v1_shares__share_id__accept_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "share_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Share Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TenantShareView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shares/{share_id}": {
+      "delete": {
+        "tags": [
+          "sharing"
+        ],
+        "summary": "Revoke Share",
+        "operationId": "revoke_share_api_v1_shares__share_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "share_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Share Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TenantShareView"
                 }
               }
             }
@@ -22313,6 +22808,24 @@
         ],
         "title": "ObjectView"
       },
+      "OnboardingResult": {
+        "properties": {
+          "personal_tenant_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Personal Tenant Id"
+          }
+        },
+        "type": "object",
+        "title": "OnboardingResult"
+      },
       "OntologyDefinition": {
         "properties": {
           "format_version": {
@@ -24994,6 +25507,175 @@
           "name"
         ],
         "title": "TenantRequest"
+      },
+      "TenantShareInput": {
+        "properties": {
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          },
+          "ontology_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ontology Id"
+          },
+          "recipient_principal_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recipient Principal Id"
+          },
+          "recipient_tenant_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recipient Tenant Id"
+          },
+          "access": {
+            "type": "string",
+            "enum": [
+              "viewer",
+              "collaborator"
+            ],
+            "title": "Access"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "access"
+        ],
+        "title": "TenantShareInput"
+      },
+      "TenantShareView": {
+        "properties": {
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          },
+          "ontology_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ontology Id"
+          },
+          "recipient_principal_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recipient Principal Id"
+          },
+          "recipient_tenant_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recipient Tenant Id"
+          },
+          "access": {
+            "type": "string",
+            "enum": [
+              "viewer",
+              "collaborator"
+            ],
+            "title": "Access"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "owner_tenant_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Owner Tenant Id"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "accepted",
+              "revoked"
+            ],
+            "title": "State"
+          },
+          "created_by": {
+            "type": "string",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "access",
+          "id",
+          "owner_tenant_id",
+          "state",
+          "created_by",
+          "created_at"
+        ],
+        "title": "TenantShareView"
       },
       "TenantView": {
         "properties": {

@@ -12,8 +12,6 @@ SECRETS_DIRECTORY=/srv/foundry/secrets
 TLS_DIRECTORY=/srv/foundry/tls
 WAL_ARCHIVE_DIRECTORY=/srv/foundry/encrypted-wal
 KEYCLOAK_IMPORT_DIRECTORY=/srv/foundry/realm-import
-WORKER_TENANT_ID=00000000-0000-0000-0000-000000000001
-WORKER_ONTOLOGY=manufacturing
 WORKER_CATALOG_FILE=/srv/foundry/secrets/FOUNDRY_INGESTION_CATALOG_JSON
 INGESTION_DIRECTORY=/srv/foundry/inputs
 
@@ -24,3 +22,6 @@ INGRESS_IMAGE=registry.example.org/foundry-ingress@sha256:REPLACE_WITH_APPROVED_
 # Owner mode needs no second application database role and no runtime table-grant refresh.
 # This exception covers ownership only; elevated PostgreSQL role flags remain rejected.
 FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE=false
+
+# Optional exact Keycloak worker token subject for personal tenant worker membership.
+FOUNDRY_WORKER_SUBJECT=

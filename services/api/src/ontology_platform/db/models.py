@@ -439,6 +439,12 @@ class OutboxEvent(Base):
         ),
         CheckConstraint("attempts >= 0 AND attempts <= 5", name="ck_event_attempts"),
         Index("ix_outbox_pending", "status", "next_attempt_at"),
+        Index(
+            "ix_outbox_events_worker_scope",
+            "tenant_id",
+            "status",
+            postgresql_where=text("status IN ('PENDING','CLAIMED')"),
+        ),
     )
 
 
@@ -667,6 +673,12 @@ class IngestionRun(Base):
             name="ck_ingestion_checkpoint",
         ),
         Index("ix_ingestion_pending", "tenant_id", "status", "lease_until"),
+        Index(
+            "ix_ingestion_runs_worker_scope",
+            "tenant_id",
+            "status",
+            postgresql_where=text("status IN ('PENDING','RUNNING')"),
+        ),
         Index("ix_ingestion_history", "tenant_id", "ontology_id", "created_at", "id"),
         Index(
             "ix_ingestion_shared_claim", "tenant_id", "ontology_id", "status", "created_at", "id"
@@ -906,6 +918,12 @@ class SemanticJob(Base):
         ),
         Index("ix_semantic_shared_claim", "tenant_id", "ontology_id", "status", "created_at", "id"),
         Index(
+            "ix_semantic_jobs_worker_scope",
+            "tenant_id",
+            "status",
+            postgresql_where=text("status IN ('PENDING','RUNNING')"),
+        ),
+        Index(
             "ix_semantic_claim", "tenant_id", "ontology_id", "principal_id", "status", "created_at"
         ),
     )
@@ -1052,6 +1070,18 @@ class Membership(Base):
     attributes: Mapped[dict[str, JsonValue]] = mapped_column(JSONB, default=dict)
 
 
+class PersonalTenant(Base):
+    __tablename__ = "personal_tenants"
+    principal_id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    tenant_id: Mapped[UUID] = mapped_column(unique=True)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "principal_id"],
+            ["tenant_memberships.tenant_id", "tenant_memberships.principal_id"],
+        ),
+    )
+
+
 class Role(Base):
     __tablename__ = "security_roles"
     tenant_id: Mapped[UUID] = mapped_column(
@@ -1133,6 +1163,8 @@ class AuthorizationAudit(Base):
     tenant_id: Mapped[UUID] = mapped_column(index=True)
     principal_id: Mapped[str] = mapped_column(Text)
     actor_id: Mapped[str | None] = mapped_column(Text)
+    acting_tenant_id: Mapped[UUID | None]
+    share_id: Mapped[UUID | None]
     job_id: Mapped[UUID | None]
     execution_grant_id: Mapped[UUID | None]
     execution_token: Mapped[UUID | None]
@@ -1326,6 +1358,39 @@ class Project(Base):
             unique=True,
             postgresql_where=text("state = 'ACTIVE'"),
         ),
+    )
+
+
+class TenantShare(Base):
+    __tablename__ = "tenant_shares"
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    owner_tenant_id: Mapped[UUID] = mapped_column(ForeignKey("tenants.id"))
+    project_id: Mapped[UUID | None]
+    ontology_id: Mapped[str | None] = mapped_column(Text)
+    recipient_principal_id: Mapped[str | None] = mapped_column(ForeignKey("principals.id"))
+    recipient_tenant_id: Mapped[UUID | None] = mapped_column(ForeignKey("tenants.id"))
+    access: Mapped[str] = mapped_column(String(20))
+    state: Mapped[str] = mapped_column(String(10))
+    created_by: Mapped[str] = mapped_column(ForeignKey("principals.id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["owner_tenant_id", "project_id"], ["projects.tenant_id", "projects.id"]
+        ),
+        ForeignKeyConstraint(
+            ["owner_tenant_id", "ontology_id"], ["ontologies.tenant_id", "ontologies.id"]
+        ),
+        CheckConstraint("num_nonnulls(project_id, ontology_id) = 1", name="ck_share_target"),
+        CheckConstraint(
+            "num_nonnulls(recipient_principal_id, recipient_tenant_id) = 1",
+            name="ck_share_recipient",
+        ),
+        CheckConstraint("owner_tenant_id <> recipient_tenant_id", name="ck_share_cross_tenant"),
+        CheckConstraint("state IN ('pending','accepted','revoked')", name="ck_share_state"),
+        CheckConstraint("access IN ('viewer','collaborator')", name="ck_share_access"),
+        Index("ix_tenant_share_owner", "owner_tenant_id", "created_at", "id"),
+        Index("ix_tenant_share_principal", "recipient_principal_id", "created_at", "id"),
+        Index("ix_tenant_share_recipient", "recipient_tenant_id", "created_at", "id"),
     )
 
 
@@ -1680,6 +1745,12 @@ class ExecutionJob(Base):
             name="ck_execution_contract",
         ),
         Index("ix_execution_queue", "state", "created_at"),
+        Index(
+            "ix_execution_jobs_worker_scope",
+            "tenant_id",
+            "state",
+            postgresql_where=text("state IN ('QUEUED','ADMITTED','RUNNING','CANCELLING')"),
+        ),
     )
 
 

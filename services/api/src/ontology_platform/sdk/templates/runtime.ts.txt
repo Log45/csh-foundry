@@ -16,7 +16,7 @@ export interface ActionResult { execution_id: string | null; action_id: string; 
 export class SDKError extends Error {
   constructor(public status: number, public code: string, public body: unknown, public response: Response) { super(code); }
 }
-export interface ClientOptions { baseUrl: string; tokenProvider: TokenProvider; tenantId: string; fetch?: typeof fetch; }
+export interface ClientOptions { baseUrl: string; tokenProvider: TokenProvider; tenantId: string; resourceShare?: string; fetch?: typeof fetch; }
 export class Transport {
   private base: string;
   constructor(private options: ClientOptions, ontology: string, private version: string) {
@@ -26,6 +26,7 @@ export class Transport {
     const url = this.base + path + (params ? "?" + new URLSearchParams(params).toString() : "");
     const response = await (this.options.fetch ?? fetch)(url, {
       method, headers: { Authorization: "Bearer " + await this.options.tokenProvider(), "X-Tenant-ID": this.options.tenantId,
+        ...(this.options.resourceShare ? {"X-Resource-Share": this.options.resourceShare} : {}),
         ...(body === undefined ? {} : {"Content-Type": "application/json"}) },
       body: body === undefined ? undefined : JSON.stringify(body, safeNumber), redirect: "error", signal: AbortSignal.timeout(30000),
     });

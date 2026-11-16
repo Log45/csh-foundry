@@ -39,7 +39,11 @@ export async function browserRequest<T>(
   }
   return data as T;
 }
-export function client(csrf: string, expectedTenant: string) {
+export function client(
+  csrf: string,
+  expectedTenant: string,
+  resourceShare?: string,
+) {
   return async function api<T = unknown>(
     path: string,
     method = "GET",
@@ -53,6 +57,7 @@ export function client(csrf: string, expectedTenant: string) {
         method,
         body,
         expected_tenant: expectedTenant,
+        resource_share: resourceShare,
       }),
     });
   };

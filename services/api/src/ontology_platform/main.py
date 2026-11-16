@@ -46,7 +46,9 @@ from ontology_platform.security.browser import router as browser_router
 from ontology_platform.security.local import LocalAuthorizer
 from ontology_platform.security.oidc import OIDCVerifier
 from ontology_platform.security.routes import router as security_router
+from ontology_platform.security.routes import sharing as sharing_router
 from ontology_platform.security.service import PlatformAuthorizer
+from ontology_platform.security.sharing import describe_share_header
 from ontology_platform.semantic.routes import router as semantic_router
 
 
@@ -179,6 +181,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(semantic_router)
     app.include_router(interchange_router)
     app.include_router(security_router)
+    app.include_router(sharing_router)
+    describe_share_header(app)
     app.include_router(browser_router)
     app.add_middleware(
         ActionPayloadLimit,

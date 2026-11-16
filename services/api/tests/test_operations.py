@@ -391,7 +391,6 @@ def test_worker_client_credentials_preserve_authority(world, monkeypatch):  # no
             "auth_mode": "oidc",
             "trusted_local_identity": False,
             "oidc_providers": verifier.providers,
-            "worker_tenant_id": world.actor.tenant_id,
             "worker_client_id": "studio",
             "worker_provider_id": "example",
             "worker_access_token": None,
@@ -399,9 +398,10 @@ def test_worker_client_credentials_preserve_authority(world, monkeypatch):  # no
         }
     )
     try:
-        actor, _ = workers.worker_context(settings, world.sessions, "outbox", "manufacturing")
-        assert actor.principal_type == "service"
-        assert actor.principal_id == worker
+        pool = workers.WorkerPool(settings, world.sessions)
+        assert pool.credential is not None
+        with world.sessions() as s:
+            assert pool.service_id(s, *pool.credential[:2]) == worker
         assert len(seen) == 1 and "grant_type=client_credentials" in seen[0]
     finally:
         original.close()

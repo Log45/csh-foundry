@@ -12,7 +12,7 @@ from ontology_platform.errors import ApplicationError
 from ontology_platform.security.interfaces import Authorizer, Principal
 from ontology_platform.security.query import TransactionAuthorizer
 
-SCHEMA_REVISION = "0028_job_execution_grants"
+SCHEMA_REVISION = "0029_personal_tenants"
 
 
 def missing(resource: str) -> ApplicationError:
@@ -98,6 +98,11 @@ class GovernedService:
             and ontology_id != principal.delegation_ontology
         ):
             raise ApplicationError("forbidden", "Delegation does not cover this ontology", 403)
+        if principal.share_id is not None:
+            from ontology_platform.security.sharing import live_share
+
+            if live_share(session, principal).ontology_id != ontology_id:
+                raise ApplicationError("forbidden", "Share does not cover this ontology", 403)
         # Coarse per-ontology locking serializes writes/cardinality/uniqueness and activation.
         # Readers take SHARE to observe schema and data from the same activation interval.
         row = session.scalar(

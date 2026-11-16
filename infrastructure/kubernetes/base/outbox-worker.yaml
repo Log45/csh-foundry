@@ -61,8 +61,6 @@ spec:
         - ontology_platform.jobs.supervisor
         - --kind
         - outbox
-        - --ontology
-        - manufacturing
         - --deadline
         - '120'
         env:

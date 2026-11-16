@@ -116,7 +116,8 @@ class ExecutionWorker:
                 self.service.authorizer.require(
                     self.actor, "worker:delegate", f"{self.actor.tenant_id}/projects"
                 )
-            s.execute(text("SELECT pg_advisory_xact_lock(14214001)"))
+            if not s.scalar(text("SELECT pg_try_advisory_xact_lock(14214001)")):
+                return None
             now = clock(s)
             expired = s.scalars(
                 select(ExecutionJob)
@@ -137,7 +138,14 @@ class ExecutionWorker:
                 else:
                     row.state = "QUEUED"
             s.flush()
-            active = list(s.scalars(select(ExecutionJob).where(ExecutionJob.state.in_(ACTIVE))))
+            active = list(
+                s.scalars(
+                    select(ExecutionJob).where(
+                        ExecutionJob.state.in_(ACTIVE),
+                        ExecutionJob.lease_until >= now,
+                    )
+                )
+            )
             if len(active) >= self.settings.concurrent_jobs:
                 return None
             candidates = s.scalars(

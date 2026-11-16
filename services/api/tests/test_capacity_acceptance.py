@@ -257,11 +257,30 @@ def test_staging_quota_failure_rollback_cancel_cleanup_and_recovery(tenants):
     from ontology_platform.ingestion.contracts import MappingRef, RunInput
     from ontology_platform.ingestion.service import IngestionService
     from ontology_platform.ingestion.worker import IngestionWorker
+    from ontology_platform.security.admin import SecurityAdministration
+    from ontology_platform.security.contracts import AssignmentInput, IdentityInput, RoleInput
+    from ontology_platform.security.onboarding import PERSONAL_WORKER
 
     world, actor, semantic, client, *_ = tenants[0]
     catalog = client.app.state.ingestion_catalog
     service = IngestionService(world.sessions, semantic.authorizer, catalog)
     worker = IngestionWorker(world.sessions, semantic.authorizer, catalog)
+    administration = SecurityAdministration(semantic.authorizer)
+    worker_id = administration.identity(
+        actor, IdentityInput(issuer=ISSUER, subject="capacity-worker", principal_type="service")
+    )
+    administration.role(
+        actor, RoleInput(id="capacity-worker", permissions=tuple(sorted(PERSONAL_WORKER)))
+    )
+    administration.assign(actor, AssignmentInput(principal_id=worker_id, role_id="capacity-worker"))
+    executor = resolve(
+        world.sessions,
+        ISSUER,
+        "capacity-worker",
+        actor.tenant_id,
+        method="oidc",
+        expires_at=datetime.now(UTC) + timedelta(hours=1),
+    )
     before = usage(world, actor.tenant_id)
     body = RunInput(
         idempotency_key="staging-limited",
@@ -269,27 +288,28 @@ def test_staging_quota_failure_rollback_cancel_cleanup_and_recovery(tenants):
         mappings=[MappingRef(id="Factory", version=1)],
     )
     run = service.submit(actor, "manufacturing", body)
-    key, token = worker.claim(actor, "manufacturing")
+    key, token = worker.claim(executor, "manufacturing")
     assert key == run.id
-    with pytest.raises(ApplicationError), world.sessions.begin() as sql:
+    with pytest.raises(ApplicationError) as error, world.sessions.begin() as sql:
         sql.execute(
             text("SELECT set_config('foundry.storage_limit', :n, true)"), {"n": str(before + 1)}
         )
         scoped = IngestionWorker(world.sessions, semantic.authorizer, catalog, session=sql)
-        scoped.step(actor, "manufacturing", key, token)
+        scoped.step(executor, "manufacturing", key, token)
+    assert error.value.code == "constraint_conflict"
     assert usage(world, actor.tenant_id) == before
     with world.sessions() as sql:
         assert sql.scalar(select(func.count()).select_from(IngestionStage)) == 0
         row = sql.get(IngestionRun, (actor.tenant_id, "manufacturing", key))
         assert row.checkpoint == 0
-    worker.fail(actor, "manufacturing", key, token, "constraint_conflict")
+    worker.fail(executor, "manufacturing", key, token, error.value.code)
     assert active_jobs(world, actor.tenant_id) == 0
     retry = service.submit(
         actor, "manufacturing", body.model_copy(update={"idempotency_key": "staging-retry"})
     )
-    key, token = worker.claim(actor, "manufacturing")
+    key, token = worker.claim(executor, "manufacturing")
     assert key == retry.id
-    worker.step(actor, "manufacturing", key, token)
+    worker.step(executor, "manufacturing", key, token)
     staged = usage(world, actor.tenant_id)
     assert staged > before
     service.cancel(actor, "manufacturing", key)

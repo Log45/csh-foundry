@@ -83,7 +83,9 @@ try:
             raise RuntimeError("Backend readiness timed out")
         processes.append(
             subprocess.Popen(
-                ["node", ".next/standalone/server.js"] if durable else ["npm", "run", "dev"],
+                ["node", ".next/standalone/server.js"]
+                if durable
+                else ["npm", "run", "dev", "--", "--webpack"],
                 cwd=app_directory,
                 stdout=frontend,
                 stderr=subprocess.STDOUT,

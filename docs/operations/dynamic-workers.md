@@ -1,5 +1,8 @@
 # Shared worker execution
 
+This document records the revision-0028 design and rollout. For current claim-time
+tenant selection and deployment settings, use the [Phase 22 runbook](phase-22-okd4.md).
+
 Workers authenticate with their own Keycloak/OIDC service identity. The submitting user remains
 the initiating principal. PostgreSQL creates a server-side grant after submission authorization,
 in the same transaction as the job and immutable input pins. No user access/refresh tokens,

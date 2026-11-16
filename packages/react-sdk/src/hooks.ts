@@ -71,6 +71,17 @@ export function useObjectsAggregate(
     options,
   );
 }
+export function useObjectsTraverse(
+  input: EndpointInput["objects.traverse"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "objects.traverse",
+    input,
+    (c, signal) => c.objects.traverse(input, { signal }),
+    options,
+  );
+}
 export function useObjectsGet(
   input: EndpointInput["objects.get"],
   options?: QueryOptions,
@@ -154,6 +165,69 @@ export function useActionsAudit(
     (c, signal) => c.actions.audit(input, { signal }),
     options,
   );
+}
+export function useSharesList(
+  input: EndpointInput["shares.list"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "shares.list",
+    input,
+    (c, signal) => c.shares.list(input, { signal }),
+    options,
+  );
+}
+export function useSharesInvite() {
+  return useFoundryMutation<
+    EndpointInput["shares.invite"],
+    EndpointOutput["shares.invite"]
+  >((c, input) => c.shares.invite(input));
+}
+export function useSharesAccept() {
+  return useFoundryMutation<
+    EndpointInput["shares.accept"],
+    EndpointOutput["shares.accept"]
+  >((c, input) => c.shares.accept(input));
+}
+export function useSharesRevoke() {
+  return useFoundryMutation<
+    EndpointInput["shares.revoke"],
+    EndpointOutput["shares.revoke"]
+  >((c, input) => c.shares.revoke(input));
+}
+export function useProjectsGet(
+  input: EndpointInput["projects.get"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "projects.get",
+    input,
+    (c, signal) => c.projects.get(input, { signal }),
+    options,
+  );
+}
+export function useProjectsUpdate() {
+  return useFoundryMutation<
+    EndpointInput["projects.update"],
+    EndpointOutput["projects.update"]
+  >((c, input) => c.projects.update(input));
+}
+export function useProjectsFolders(
+  input: EndpointInput["projects.folders"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "projects.folders",
+    input,
+    (c, signal) => c.projects.folders(input, { signal }),
+    options,
+  );
+}
+export function useProjectsCreateFolder() {
+  return useFoundryMutation<
+    EndpointInput["projects.createFolder"],
+    EndpointOutput["projects.createFolder"]
+  >((c, input) => c.projects.createFolder(input));
 }
 export function useProjectsList(
   input: EndpointInput["projects.list"],

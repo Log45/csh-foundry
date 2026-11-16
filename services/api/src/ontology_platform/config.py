@@ -34,8 +34,8 @@ class Settings(BaseSettings):
     worker_client_secret: SecretStr | None = None
     worker_provider_id: str | None = None
     worker_client_id: str = "worker"
+    worker_subject: str | None = Field(default=None, min_length=1, max_length=512)
     process_role: Literal["api", "worker"] = "api"
-    worker_tenant_id: UUID | None = None
     local_tenant_id: UUID | None = None
     local_principal_id: str | None = None
     trusted_local_identity: bool = False
@@ -110,6 +110,13 @@ class Settings(BaseSettings):
             or len({p.issuer for p in self.oidc_providers}) != len(self.oidc_providers)
         ):
             raise ValueError("Duplicate or excessive OIDC providers")
+        if self.worker_subject and not any(
+            provider.id == self.worker_provider_id and self.worker_client_id in provider.clients
+            for provider in self.oidc_providers
+        ):
+            raise ValueError("Worker subject requires a trusted provider and client")
+        if any(p.personal_tenant_client == self.worker_client_id for p in self.oidc_providers):
+            raise ValueError("Worker client cannot onboard human accounts")
         if self.auth_mode == "test" and not (self.test_issuer and self.test_subject):
             raise ValueError("Explicit deterministic test identity required")
         if self.auth_mode == "local" and not self.trusted_local_identity:

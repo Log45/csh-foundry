@@ -6,7 +6,6 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import MagicMock, Mock
-from uuid import uuid4
 
 import pytest
 from fastapi.testclient import TestClient
@@ -14,8 +13,7 @@ from ontology_platform.config import Settings
 from ontology_platform.db.session import require_runtime_role
 from ontology_platform.errors import ApplicationError
 from ontology_platform.main import create_app
-from ontology_platform.security.interfaces import Principal
-from ontology_platform.security.workers import worker_context
+from ontology_platform.security.workers import WorkerPool
 
 ROOT = Path(__file__).resolve().parents[3]
 ISSUER = "https://identity.example.test/realms/foundry"
@@ -42,7 +40,6 @@ def production(enabled):
         browser_state_secret="x" * 43,
         browser_state_keys="MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=",
         query_cursor_secret="x" * 32,
-        worker_tenant_id=uuid4(),
         worker_access_token="verified-by-test-verifier",
     )
 
@@ -97,48 +94,35 @@ def test_production_api_role_override_keeps_oidc_and_authentication(
 
 
 @pytest.mark.parametrize("enabled", [False, True])
-@pytest.mark.parametrize("kind", ["ingestion", "semantic", "execution", "outbox"])
-def test_all_worker_startups_keep_service_verification_and_authorization(
-    monkeypatch, enabled, kind
-):
+def test_worker_startup_verifies_credentials_without_tenant(monkeypatch, enabled):
     settings = production(enabled)
     verifier = Mock()
     verifier.verify.return_value = (
         SimpleNamespace(issuer=ISSUER),
-        {"sub": "service-subject", "exp": (datetime.now(UTC) + timedelta(hours=1)).timestamp()},
+        {
+            "sub": "service-subject",
+            "client_id": "worker",
+            "exp": (datetime.now(UTC) + timedelta(hours=1)).timestamp(),
+        },
     )
     monkeypatch.setattr(
         "ontology_platform.security.workers.OIDCVerifier", Mock(return_value=verifier)
     )
-    actor = Principal(
-        tenant_id=settings.worker_tenant_id,
-        principal_id="service",
-        authentication_method="oidc",
-        principal_type="service",
-    )
-    resolver = Mock(return_value=actor)
-    monkeypatch.setattr("ontology_platform.security.workers.resolve", resolver)
-    auth = Mock()
-    monkeypatch.setattr(
-        "ontology_platform.security.workers.PlatformAuthorizer", Mock(return_value=auth)
-    )
+    service = Mock(return_value=None)
+    monkeypatch.setattr(WorkerPool, "service_id", service)
     if not enabled:
         with pytest.raises(ApplicationError):
-            worker_context(settings, catalog(owner=True), kind, "manufacturing")
+            WorkerPool(settings, catalog(owner=True))
         verifier.verify.assert_not_called()
-        resolver.assert_not_called()
-        auth.require.assert_not_called()
+        service.assert_not_called()
         return
-    result, actual = worker_context(settings, catalog(owner=True), kind, "manufacturing")
-    assert result == actor and actual is auth
+    pool = WorkerPool(settings, catalog(owner=True))
+    assert pool.scopes("execution") == []
     verifier.verify.assert_called_once_with("verified-by-test-verifier")
     verifier.client.close.assert_called_once_with()
-    resolver.assert_called_once()
-    operation = "outbox:deliver" if kind == "outbox" else f"{kind}:claim"
-    auth.require.assert_called_once_with(actor, operation, f"{actor.tenant_id}/manufacturing")
 
 
-@pytest.mark.parametrize("failure", ["credentials", "token", "human", "permissions"])
+@pytest.mark.parametrize("failure", ["credentials", "token", "client", "human"])
 def test_owner_mode_does_not_bypass_worker_security(monkeypatch, failure):
     settings = production(True)
     if failure == "credentials":
@@ -146,35 +130,27 @@ def test_owner_mode_does_not_bypass_worker_security(monkeypatch, failure):
     verifier = Mock()
     verifier.verify.return_value = (
         SimpleNamespace(issuer=ISSUER),
-        {"sub": "worker", "exp": (datetime.now(UTC) + timedelta(hours=1)).timestamp()},
+        {
+            "sub": "worker",
+            "client_id": "studio" if failure == "client" else "worker",
+            "exp": (datetime.now(UTC) + timedelta(hours=1)).timestamp(),
+        },
     )
     if failure == "token":
         verifier.verify.side_effect = ApplicationError("invalid_token", "Invalid token", 401)
     monkeypatch.setattr(
         "ontology_platform.security.workers.OIDCVerifier", Mock(return_value=verifier)
     )
-    actor = Principal(
-        tenant_id=settings.worker_tenant_id,
-        principal_id="worker",
-        principal_type="user" if failure == "human" else "service",
-    )
-    monkeypatch.setattr("ontology_platform.security.workers.resolve", Mock(return_value=actor))
-    auth = Mock()
-    if failure == "permissions":
-        auth.require.side_effect = ApplicationError("forbidden", "Forbidden", 403)
-    monkeypatch.setattr(
-        "ontology_platform.security.workers.PlatformAuthorizer", Mock(return_value=auth)
-    )
+    sessions = catalog(owner=True)
+    connection = sessions.return_value.__enter__.return_value
+    connection.get.side_effect = [
+        SimpleNamespace(principal_id="worker"),
+        SimpleNamespace(principal_type="user", enabled=True),
+    ]
     with pytest.raises(ApplicationError) as error:
-        worker_context(settings, catalog(owner=True), "ingestion", "manufacturing")
-    assert (
-        error.value.code
-        == {
-            "credentials": "worker_identity_required",
-            "token": "invalid_token",
-            "human": "worker_identity_required",
-            "permissions": "forbidden",
-        }[failure]
+        WorkerPool(settings, sessions)
+    assert error.value.code == (
+        "invalid_token" if failure == "token" else "worker_identity_required"
     )
 
 

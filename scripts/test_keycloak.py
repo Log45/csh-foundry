@@ -1,9 +1,11 @@
 """Actual pinned broker Code/PKCE contract, in a disposable loopback-only container."""
 
+import argparse
 import base64
 import hashlib
 import html
 import json
+import os
 import re
 import secrets
 import subprocess
@@ -11,7 +13,7 @@ import tempfile
 import time
 from pathlib import Path
 from urllib.parse import parse_qs, urlencode, urlsplit
-from uuid import UUID
+from uuid import UUID, uuid4
 
 import httpx
 import jwt
@@ -21,9 +23,82 @@ from ontology_platform.security.oidc import OIDCVerifier, Provider
 
 ISSUER = "https://identity.phase10.test/realms/phase10"
 ORIGIN = "https://studio.phase10.test"
+ONBOARDING_ROLE = "foundry-personal-workspace"
+
+
+def test_onboarding(
+    url: str, proxy: httpx.Client, token: str, worker_token: str, worker_subject: str
+) -> None:
+    from alembic import command
+    from alembic.config import Config
+    from fastapi.testclient import TestClient
+    from ontology_platform.config import Settings
+    from ontology_platform.db.models import ExternalIdentity, Membership, PersonalTenant
+    from ontology_platform.main import create_app
+    from sqlalchemy import create_engine, select, text
+
+    schema = "test_keycloak_phase22_" + uuid4().hex
+    admin = create_engine(url)
+    with admin.begin() as connection:
+        connection.execute(text(f'CREATE SCHEMA "{schema}"'))
+    engine = create_engine(url, connect_args={"options": f"-c search_path={schema}"})
+    try:
+        configuration = Config(str(Path(__file__).resolve().parents[1] / "alembic.ini"))
+        with engine.begin() as connection:
+            configuration.attributes["connection"] = connection
+            command.upgrade(configuration, "head")
+        provider = Provider(
+            id="keycloak",
+            issuer=ISSUER,
+            audience="foundry-api",
+            clients=("studio", "worker"),
+            access_token_profile="keycloak",
+            personal_tenant_client="studio",
+            personal_tenant_role=ONBOARDING_ROLE,
+        )
+        app = create_app(
+            Settings(
+                _env_file=None,
+                database_url=url,
+                database_schema=schema,
+                auth_mode="oidc",
+                oidc_providers=(provider,),
+                worker_provider_id="keycloak",
+                worker_subject=worker_subject,
+            )
+        )
+        app.state.oidc.client.close()
+        app.state.oidc = OIDCVerifier((provider,), client=proxy)
+        with TestClient(app) as api:
+            path = "/api/v1/security/personal-tenant"
+            human = {"Authorization": "Bearer " + token}
+            worker = {"Authorization": "Bearer " + worker_token}
+            assert api.get("/api/v1/security/tenants", headers=human).status_code == 403
+            assert api.post(path, headers=worker).status_code == 403
+            first = api.post(path, headers=human)
+            assert first.status_code == 200, first.json()
+            tenant = UUID(first.json()["personal_tenant_id"])
+            assert api.post(path, headers=human).json() == first.json()
+            assert api.post(path, headers=worker).status_code == 403
+            with app.state.sessions() as session:
+                assert session.scalars(select(PersonalTenant.tenant_id)).all() == [tenant]
+                identity = session.get(ExternalIdentity, (ISSUER, worker_subject))
+                assert session.get(Membership, (tenant, identity.principal_id)).enabled
+        print("PASS Keycloak realm role onboards one personal tenant and denies service onboarding")
+    finally:
+        engine.dispose()
+        with admin.begin() as connection:
+            connection.execute(text(f'DROP SCHEMA "{schema}" CASCADE'))
+        admin.dispose()
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--phase22", action="store_true", help="Also verify personal onboarding")
+    phase22 = parser.parse_args().phase22
+    database_url = os.environ.get("TEST_DATABASE_URL", "")
+    if phase22 and not database_url:
+        parser.error("--phase22 needs TEST_DATABASE_URL pointing to a disposable database")
     container = None
     with tempfile.TemporaryDirectory(prefix="foundry-keycloak-test-") as directory:
         configuration = realm_configuration(
@@ -54,6 +129,11 @@ def main() -> None:
                 "credentials": [{"type": "password", "value": password, "temporary": False}],
             }
         ]
+        if phase22:
+            configuration["roles"] = {"realm": [{"name": ONBOARDING_ROLE}]}
+            configuration["scopeMappings"] = [{"client": "studio", "roles": [ONBOARDING_ROLE]}]
+            configuration["clients"][0]["defaultClientScopes"].append("roles")
+            configuration["users"][0]["realmRoles"] = [ONBOARDING_ROLE]
         path = Path(directory) / "phase10-realm.json"
         path.write_text(json.dumps(configuration))
         path.chmod(0o644)  # Disposable generated test credentials, removed in finally.
@@ -64,6 +144,7 @@ def main() -> None:
                     "run",
                     "--rm",
                     "-d",
+                    *(["--pull", "never"] if phase22 else []),
                     "-p",
                     "127.0.0.1::8080",
                     "-v",
@@ -195,6 +276,15 @@ def main() -> None:
                     assert error.status_code == 401
                 else:
                     raise AssertionError("ID token accepted as API bearer")
+                if phase22:
+                    assert ONBOARDING_ROLE in claims["realm_access"]["roles"]
+                    test_onboarding(
+                        database_url,
+                        proxy,
+                        tokens["access_token"],
+                        worker_response.json()["access_token"],
+                        service["sub"],
+                    )
             assert client.post(token_url, data=payload).status_code == 400
             client.close()
             print(

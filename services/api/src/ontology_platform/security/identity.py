@@ -1,14 +1,22 @@
 """External identity lookup; membership is platform state, never a token tenant claim."""
 
+import hashlib
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session, sessionmaker
 
 from ontology_platform.db.models import ExternalIdentity, Membership, PlatformPrincipal
 from ontology_platform.errors import ApplicationError
 from ontology_platform.security.interfaces import Principal
+
+
+def lock_binding(session: Session, issuer: str, subject: str) -> None:
+    digest = hashlib.sha256((issuer + "\0" + subject).encode()).digest()
+    session.execute(
+        select(func.pg_advisory_xact_lock(int.from_bytes(digest[:8], "big", signed=True)))
+    )
 
 
 def resolve(
@@ -27,20 +35,17 @@ def resolve(
             raise ApplicationError(
                 "identity_unavailable", "Identity must be provisioned and enabled", 403
             )
-        memberships = list(
-            session.scalars(
-                select(Membership).where(
-                    Membership.principal_id == row.id, Membership.enabled.is_(True)
-                )
-            )
+        memberships = select(Membership.tenant_id).where(
+            Membership.principal_id == row.id, Membership.enabled.is_(True)
         )
         if tenant is None:
-            if len(memberships) != 1:
+            eligible = session.scalars(memberships.limit(2)).all()
+            if len(eligible) != 1:
                 raise ApplicationError(
                     "tenant_selection_required", "Select an authorized tenant with X-Tenant-ID", 403
                 )
-            tenant = memberships[0].tenant_id
-        if not any(m.tenant_id == tenant for m in memberships):
+            tenant = eligible[0]
+        elif session.scalar(memberships.where(Membership.tenant_id == tenant)) is None:
             raise ApplicationError("forbidden", "Tenant membership is required", 403)
         return Principal(
             tenant_id=tenant,
@@ -57,19 +62,11 @@ def own_tenants(
     sessions: sessionmaker[Session], issuer: str, subject: str, limit: int = 100, offset: int = 0
 ) -> list[dict[str, str]]:
     """Identity-scoped membership discovery; never grants tenant authority."""
-    from ontology_platform.db.models import Tenant
+    from ontology_platform.db.models import PersonalTenant, Tenant
 
     with sessions.begin() as session:
         binding = session.get(ExternalIdentity, (issuer, subject))
-        row = (
-            session.scalar(
-                select(PlatformPrincipal)
-                .where(PlatformPrincipal.id == binding.principal_id)
-                .with_for_update(read=True)
-            )
-            if binding
-            else None
-        )
+        row = session.get(PlatformPrincipal, binding.principal_id) if binding else None
         if row is None or not row.enabled:
             raise ApplicationError("forbidden", "Identity is unavailable", 403)
         return [
@@ -77,8 +74,13 @@ def own_tenants(
             for tenant in session.scalars(
                 select(Tenant)
                 .join(Membership, Membership.tenant_id == Tenant.id)
+                .outerjoin(
+                    PersonalTenant,
+                    (PersonalTenant.tenant_id == Tenant.id)
+                    & (PersonalTenant.principal_id == row.id),
+                )
                 .where(Membership.principal_id == row.id, Membership.enabled.is_(True))
-                .order_by(Tenant.id)
+                .order_by(PersonalTenant.tenant_id.is_(None), Tenant.id)
                 .limit(limit)
                 .offset(offset)
             )

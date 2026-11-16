@@ -13,6 +13,7 @@ export type AuthStage =
   | "id_token_binding"
   | "access_token"
   | "access_token_binding"
+  | "personal_tenant"
   | "session_store"
   | "previous_session"
   | "response";

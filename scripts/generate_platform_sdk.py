@@ -21,6 +21,7 @@ manifest = {
     "objects": [
         ("query", "post", "/ontologies/{ontology_id}/objects/{type_id}/query"),
         ("aggregate", "post", "/ontologies/{ontology_id}/aggregate"),
+        ("traverse", "post", "/ontologies/{ontology_id}/traverse"),
         ("get", "get", "/ontologies/{ontology_id}/objects/{type_id}"),
         ("create", "post", "/ontologies/{ontology_id}/objects/{type_id}"),
         ("update", "patch", "/ontologies/{ontology_id}/objects/{type_id}"),
@@ -33,7 +34,17 @@ manifest = {
         ("execution", "get", "/ontologies/{ontology_id}/actions/executions/{execution_id}"),
         ("audit", "get", "/ontologies/{ontology_id}/actions/executions/{execution_id}/audit"),
     ],
+    "shares": [
+        ("list", "get", "/shares"),
+        ("invite", "post", "/shares"),
+        ("accept", "post", "/shares/{share_id}/accept"),
+        ("revoke", "delete", "/shares/{share_id}"),
+    ],
     "projects": [
+        ("get", "get", "/projects/{project_id}"),
+        ("update", "patch", "/projects/{project_id}"),
+        ("folders", "get", "/projects/{project_id}/folders"),
+        ("createFolder", "post", "/projects/{project_id}/folders"),
         ("list", "get", "/projects"),
         ("resources", "get", "/projects/{project_id}/resources"),
     ],
@@ -163,6 +174,7 @@ read_posts = {
     ("applications", "query"),
     ("objects", "query"),
     ("objects", "aggregate"),
+    ("objects", "traverse"),
     ("actions", "preview"),
     ("pipelines", "validate"),
     ("pipelines", "compileGraph"),

@@ -31,6 +31,7 @@ from ontology_platform.db.models import (
     SecurityPolicy,
     SecurityState,
     SemanticJob,
+    TenantShare,
     WorkerDelegation,
 )
 from ontology_platform.errors import ApplicationError
@@ -53,9 +54,10 @@ class SecuritySnapshot:
     job_clock: tuple[datetime, float] | None = None
     tenant_id: UUID | None = None
     revision: int = 0
-    members: dict[tuple[str, str | None, str | None, str, str], Membership] = field(
-        default_factory=dict
-    )
+    share: TenantShare | None = None
+    members: dict[
+        tuple[str, str | None, str | None, str, str, UUID | None, UUID | None], Membership
+    ] = field(default_factory=dict)
     permissions: dict[str, set[str]] = field(default_factory=dict)
     grants: dict[tuple[str, str, str], QueryGrant] = field(default_factory=dict)
     policies: list[SecurityPolicy] | None = None
@@ -132,11 +134,22 @@ class PlatformAuthorizer:
             p.external_subject,
             p.authentication_method,
             p.principal_type,
+            p.share_id,
+            p.acting_tenant_id,
         )
         if snapshot is not None and snapshot.tenant_id != p.tenant_id:
             raise denied()
         if snapshot is not None and cache_key in snapshot.members:
             return snapshot.members[cache_key]
+        if p.share_id is not None:
+            from ontology_platform.security.sharing import live_share, shared_identity
+
+            share = live_share(session, p)
+            shared_member = shared_identity(session, p)
+            if snapshot is not None:
+                snapshot.share = share
+                snapshot.members[cache_key] = shared_member
+            return shared_member
         row = session.scalar(
             select(PlatformPrincipal)
             .where(PlatformPrincipal.id == p.principal_id)
@@ -165,6 +178,12 @@ class PlatformAuthorizer:
         snapshot = self.snapshot.get()
         if snapshot is not None and p.principal_id in snapshot.permissions:
             return snapshot.permissions[p.principal_id]
+        if p.share_id is not None:
+            from ontology_platform.security.sharing import live_share, share_permissions
+
+            return share_permissions(
+                snapshot.share if snapshot and snapshot.share else live_share(session, p)
+            )
         rows = session.scalars(
             select(Role)
             .join(
@@ -246,6 +265,8 @@ class PlatformAuthorizer:
             tenant_id=p.tenant_id,
             principal_id=p.principal_id,
             actor_id=p.actor_id,
+            acting_tenant_id=p.acting_tenant_id,
+            share_id=p.share_id,
             job_id=p.job_id,
             execution_grant_id=p.execution_grant_id,
             execution_token=p.execution_token,
@@ -293,6 +314,11 @@ class PlatformAuthorizer:
                 raise denied()
             self.identity(session, p)
             category = "permission"
+            if p.share_id is not None:
+                from ontology_platform.security.sharing import protects
+
+                if snapshot.share is None or not protects(snapshot.share, resource):
+                    raise denied()
             if operation not in self.permissions(session, p):
                 raise denied()
             category = "delegation"
@@ -493,6 +519,18 @@ class PlatformAuthorizer:
         if session is None:
             with self.sessions.begin() as owned, self.security_context(owned, p):
                 return self.query_grant(p, ontology_id, object_type)
+        if p.share_id is not None:
+            from ontology_platform.security.sharing import protects
+
+            self.identity(session, p)
+            snapshot = self.snapshot.get()
+            if (
+                snapshot is None
+                or snapshot.share is None
+                or not protects(snapshot.share, f"{p.tenant_id}/{ontology_id}")
+                or snapshot.share.ontology_id != ontology_id
+            ):
+                raise denied()
         if p.authentication_method == "delegated" and ontology_id != p.delegation_ontology:
             raise denied()
         try:

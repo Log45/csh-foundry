@@ -20,7 +20,7 @@ from ontology_platform.functions.contracts import Invoke
 from ontology_platform.main import create_app
 from ontology_platform.queries.ast import QueryRequest
 from ontology_platform.security.oidc import OIDCVerifier
-from ontology_platform.security.workers import worker_context
+from ontology_platform.security.workers import WorkerPool
 from ontology_platform.semantic.contracts import CompileInput, ExportInput, JobInput
 from ontology_platform.semantic.service import SemanticService
 from sqlalchemy import select, text, update
@@ -73,7 +73,6 @@ def owner_environment(shared, idp, monkeypatch):
                 "database_url": w.settings.database_url,
                 "database_schema": schema,
                 "oidc_providers": providers,
-                "worker_tenant_id": alice.tenant_id,
                 "worker_access_token": token(
                     private, claims={"sub": "pool", "client_id": "worker"}
                 ),
@@ -86,13 +85,11 @@ def owner_environment(shared, idp, monkeypatch):
     return shared, settings, private
 
 
-def test_same_owner_migrates_0028_and_owner_opt_in_is_required(owner_environment):
+def test_same_owner_migrates_0029_and_owner_opt_in_is_required(owner_environment):
     shared, settings, _ = owner_environment
     w, _, _, _, _, _, _, _ = shared
     with w.sessions() as s:
-        assert (
-            s.scalar(text("SELECT version_num FROM alembic_version")) == "0028_job_execution_grants"
-        )
+        assert s.scalar(text("SELECT version_num FROM alembic_version")) == "0029_personal_tenants"
         assert s.scalar(
             text(
                 "SELECT c.relowner = (SELECT oid FROM pg_roles WHERE rolname=current_user) "
@@ -129,20 +126,17 @@ def test_production_api_owner_startup_and_live_authorization(owner_environment):
         pass
 
 
-@pytest.mark.parametrize("kind", ["ingestion", "semantic", "execution", "outbox"])
-def test_real_service_worker_startup_rejects_owner_without_opt_in(owner_environment, kind):
+def test_real_service_worker_startup_rejects_owner_without_opt_in(owner_environment):
     shared, settings, _ = owner_environment
     w, _, _, _, _, _, actor, _ = shared
-    ontology = "projects" if kind == "execution" else w.definition.id
     with pytest.raises(ApplicationError):
-        worker_context(
-            settings.model_copy(update={"allow_owner_runtime_role": False}),
-            w.sessions,
-            kind,
-            ontology,
-        )
-    actual, _ = worker_context(settings, w.sessions, kind, ontology)
-    assert actual.principal_id == actor.principal_id and actual.principal_type == "service"
+        WorkerPool(settings.model_copy(update={"allow_owner_runtime_role": False}), w.sessions)
+    pool = WorkerPool(settings, w.sessions)
+    assert pool.credential is not None
+    with w.sessions() as s:
+        assert pool.service_id(s, *pool.credential[:2]) == actor.principal_id
+    for kind in ("ingestion", "semantic", "execution", "automation", "outbox"):
+        assert pool.scopes(kind) == []
 
 
 def test_ingestion_cli_processes_job_as_owner_without_weakening_grants(

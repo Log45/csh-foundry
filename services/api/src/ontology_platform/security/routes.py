@@ -1,12 +1,12 @@
 """Production security administration and self introspection; no frontend login."""
 
-from typing import Annotated
+from typing import Annotated, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, Request, Security
 from fastapi.security import HTTPAuthorizationCredentials
 
-from ontology_platform.dependencies import bearer, get_principal, verified_identity
+from ontology_platform.dependencies import bearer, get_principal, verified_identity, verified_oidc
 from ontology_platform.security.admin import SecurityAdministration
 from ontology_platform.security.contracts import (
     AssignmentInput,
@@ -17,7 +17,9 @@ from ontology_platform.security.contracts import (
     RoleInput,
 )
 from ontology_platform.security.interfaces import Principal
+from ontology_platform.security.onboarding import OnboardingResult, onboard
 from ontology_platform.security.service import PlatformAuthorizer, denied
+from ontology_platform.security.sharing import SharingService, TenantShareInput, TenantShareView
 
 router = APIRouter(prefix="/api/v1/security", tags=["security"])
 Actor = Annotated[Principal, Depends(get_principal)]
@@ -112,6 +114,18 @@ def memberships(
     return admin.memberships(p, limit, offset)
 
 
+@router.post("/personal-tenant", response_model=OnboardingResult)
+def personal_tenant(
+    request: Request,
+    credential: Annotated[HTTPAuthorizationCredentials | None, Security(bearer)] = None,
+) -> OnboardingResult:
+    settings = request.app.state.settings
+    if settings.auth_mode != "oidc":
+        raise denied()
+    provider, claims, _ = verified_oidc(request)
+    return onboard(request.app.state.sessions, settings, provider, claims)
+
+
 @router.get("/tenants", response_model=list[dict[str, str]])
 def own_tenants(
     request: Request,
@@ -130,3 +144,32 @@ def own_tenants(
 def revoke_job_grant(key: UUID, p: Actor, admin: Admin) -> dict[str, str]:
     admin.revoke_job_grant(p, str(key))
     return {"status": "revoked"}
+
+
+sharing = APIRouter(prefix="/api/v1/shares", tags=["sharing"])
+
+
+@sharing.get("", response_model=list[TenantShareView])
+def shares(
+    p: Actor,
+    admin: Admin,
+    direction: Literal["incoming", "outgoing"],
+    limit: Limit = 50,
+    offset: Offset = 0,
+) -> list[TenantShareView]:
+    return SharingService(admin.auth).list(p, direction, limit, offset)
+
+
+@sharing.post("", response_model=TenantShareView, status_code=201)
+def invite(p: Actor, admin: Admin, body: TenantShareInput) -> TenantShareView:
+    return SharingService(admin.auth).invite(p, body)
+
+
+@sharing.post("/{share_id}/accept", response_model=TenantShareView)
+def accept(p: Actor, admin: Admin, share_id: UUID) -> TenantShareView:
+    return SharingService(admin.auth).transition(p, share_id, accept=True)
+
+
+@sharing.delete("/{share_id}", response_model=TenantShareView)
+def revoke_share(p: Actor, admin: Admin, share_id: UUID) -> TenantShareView:
+    return SharingService(admin.auth).transition(p, share_id, accept=False)

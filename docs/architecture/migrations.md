@@ -1,7 +1,7 @@
 # Database migrations
 
 Apply with `uv run alembic upgrade head`; inspect with `uv run alembic current` and
-`uv run alembic check`. Readiness expects `0017_capacity`.
+`uv run alembic check`. Readiness expects `0029_personal_tenants`.
 
 | Revision | Objects |
 |---|---|
@@ -162,3 +162,12 @@ must be resubmitted through authorized admission. Owner mode needs no runtime-ro
 Coordinated worker/API rollout remains an explicit operator action; see [dynamic workers](../operations/dynamic-workers.md).
 Audit correlation IDs deliberately have no deletion-blocking FKs so immutable audit evidence can
 outlive retained jobs and grants.
+
+## Phase 22
+
+Revision `0029_personal_tenants` is forward-only and additive. It adds the unique
+personal ownership record, composite foreign keys for Project and Ontology invitations,
+share audit correlation and partial worker queue indexes. Existing tenant, principal,
+Project, catalog share, ontology, job and grant IDs remain intact. It provisions no
+users and backfills no grants. Runtime readiness expects `0029_personal_tenants`.
+See the [coordinated rollout and backup recovery procedure](../operations/phase-22-okd4.md).

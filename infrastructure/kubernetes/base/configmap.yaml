@@ -16,7 +16,7 @@ data:
   FOUNDRY_DATABASE_POOL_SIZE: '3'
   FOUNDRY_DATABASE_POOL_OVERFLOW: '0'
   FOUNDRY_WORKER_PROVIDER_ID: keycloak
-  FOUNDRY_WORKER_TENANT_ID: 00000000-0000-0000-0000-000000000001
+  # Set FOUNDRY_WORKER_SUBJECT in the site ConfigMap to enable worker roles on onboarding.
   STUDIO_ENVIRONMENT: production
   STUDIO_ORIGIN: https://studio.example.test
   STUDIO_API_ORIGIN: http://api:8000

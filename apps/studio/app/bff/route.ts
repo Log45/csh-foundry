@@ -6,6 +6,7 @@ import {
   BoundaryError,
   csrfCheck,
   input,
+  isUuid,
   browserSession,
 } from "@/lib/server";
 export const runtime = "nodejs";
@@ -21,16 +22,27 @@ async function handle(request: Request) {
     csrfCheck(request, value);
     if (!value.tenant)
       throw new BoundaryError(403, "tenant_selection_required");
-    const { path, method, body, expected_tenant } = await input(request, true);
+    const { path, method, body, expected_tenant, resource_share } = await input(
+      request,
+      true,
+    );
     if (expected_tenant !== value.tenant)
       throw new BoundaryError(409, "tenant_changed");
     if (
+      (resource_share !== undefined && !isUuid(resource_share)) ||
       typeof path !== "string" ||
       typeof method !== "string" ||
       !["GET", "POST", "PUT", "PATCH", "DELETE"].includes(method)
     )
       throw new BoundaryError(400, "invalid_request");
-    const data = await backend(value, path, method, body);
+    const data = await backend(
+      value,
+      path,
+      method,
+      body,
+      value.tenant,
+      resource_share,
+    );
     return NextResponse.json(data, {
       headers: { "Cache-Control": "no-store" },
     });

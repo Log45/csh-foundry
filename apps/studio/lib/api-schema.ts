@@ -3037,6 +3037,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/security/personal-tenant": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Personal Tenant */
+        post: operations["personal_tenant_api_v1_security_personal_tenant_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/security/tenants": {
         parameters: {
             query?: never;
@@ -3052,6 +3069,75 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/security/job-grants/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Revoke Job Grant */
+        delete: operations["revoke_job_grant_api_v1_security_job_grants__key__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/shares": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Shares */
+        get: operations["shares_api_v1_shares_get"];
+        put?: never;
+        /** Invite */
+        post: operations["invite_api_v1_shares_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/shares/{share_id}/accept": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Accept */
+        post: operations["accept_api_v1_shares__share_id__accept_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/shares/{share_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Revoke Share */
+        delete: operations["revoke_share_api_v1_shares__share_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -5524,6 +5610,8 @@ export interface components {
         };
         /** JobInput */
         JobInput: {
+            /** Idempotency Key */
+            idempotency_key?: string | null;
             /**
              * Operation
              * @enum {string}
@@ -6202,6 +6290,11 @@ export interface components {
              * Format: date-time
              */
             updated_at: string;
+        };
+        /** OnboardingResult */
+        OnboardingResult: {
+            /** Personal Tenant Id */
+            personal_tenant_id?: string | null;
         };
         /** OntologyDefinition */
         OntologyDefinition: {
@@ -7281,6 +7374,60 @@ export interface components {
             /** Name */
             name: string;
         };
+        /** TenantShareInput */
+        TenantShareInput: {
+            /** Project Id */
+            project_id?: string | null;
+            /** Ontology Id */
+            ontology_id?: string | null;
+            /** Recipient Principal Id */
+            recipient_principal_id?: string | null;
+            /** Recipient Tenant Id */
+            recipient_tenant_id?: string | null;
+            /**
+             * Access
+             * @enum {string}
+             */
+            access: "viewer" | "collaborator";
+        };
+        /** TenantShareView */
+        TenantShareView: {
+            /** Project Id */
+            project_id?: string | null;
+            /** Ontology Id */
+            ontology_id?: string | null;
+            /** Recipient Principal Id */
+            recipient_principal_id?: string | null;
+            /** Recipient Tenant Id */
+            recipient_tenant_id?: string | null;
+            /**
+             * Access
+             * @enum {string}
+             */
+            access: "viewer" | "collaborator";
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Owner Tenant Id
+             * Format: uuid
+             */
+            owner_tenant_id: string;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "pending" | "accepted" | "revoked";
+            /** Created By */
+            created_by: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
         /** TenantView */
         TenantView: {
             /** Name */
@@ -7745,7 +7892,10 @@ export interface operations {
     get_ontology_api_v1_ontologies__ontology_id__get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
             };
@@ -7779,7 +7929,10 @@ export interface operations {
                 limit?: number;
                 offset?: number;
             };
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
             };
@@ -7810,7 +7963,10 @@ export interface operations {
     create_draft_api_v1_ontologies__ontology_id__versions_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
             };
@@ -7845,7 +8001,10 @@ export interface operations {
     get_version_api_v1_ontologies__ontology_id__versions__version__get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
                 version: string;
@@ -7879,7 +8038,10 @@ export interface operations {
             query?: {
                 expected_hash?: string | null;
             };
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
                 version: string;
@@ -7915,7 +8077,10 @@ export interface operations {
     validate_draft_api_v1_ontologies__ontology_id__versions__version__validate_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
                 version: string;
@@ -8087,7 +8252,10 @@ export interface operations {
     get_object_types_api_v1_ontologies__ontology_id__object_types_get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
             };
@@ -8122,7 +8290,10 @@ export interface operations {
             query: {
                 object_id: string;
             };
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
                 type_id: string;
@@ -8154,7 +8325,10 @@ export interface operations {
     create_object_api_v1_ontologies__ontology_id__objects__type_id__post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
                 type_id: string;
@@ -8225,7 +8399,10 @@ export interface operations {
             query: {
                 object_id: string;
             };
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
                 type_id: string;
@@ -8261,7 +8438,10 @@ export interface operations {
     get_object_api_v1_ontologies__ontology_id__objects__type_id___object_id__get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
                 type_id: string;
@@ -8327,7 +8507,10 @@ export interface operations {
     update_object_api_v1_ontologies__ontology_id__objects__type_id___object_id__patch: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
                 type_id: string;
@@ -8364,7 +8547,10 @@ export interface operations {
     create_link_api_v1_ontologies__ontology_id__links_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
             };
@@ -8436,7 +8622,10 @@ export interface operations {
                 limit?: number;
                 offset?: number;
             };
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
                 type_id: string;
@@ -8475,7 +8664,10 @@ export interface operations {
                 limit?: number;
                 offset?: number;
             };
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
                 type_id: string;
@@ -8573,7 +8765,10 @@ export interface operations {
     project_api_v1_projects__project_id__get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 project_id: string;
             };
@@ -8604,7 +8799,10 @@ export interface operations {
     update_project_api_v1_projects__project_id__patch: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 project_id: string;
             };
@@ -8747,7 +8945,10 @@ export interface operations {
                 limit?: number;
                 offset?: number;
             };
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 project_id: string;
             };
@@ -8778,7 +8979,10 @@ export interface operations {
     create_folder_api_v1_projects__project_id__folders_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 project_id: string;
             };
@@ -8813,7 +9017,10 @@ export interface operations {
     folder_api_v1_projects__project_id__folders__folder_id__get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 project_id: string;
                 folder_id: string;
@@ -8845,7 +9052,10 @@ export interface operations {
     update_folder_api_v1_projects__project_id__folders__folder_id__patch: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 project_id: string;
                 folder_id: string;
@@ -13390,7 +13600,10 @@ export interface operations {
     query_objects_api_v1_ontologies__ontology_id__objects__type_id__query_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
                 type_id: string;
@@ -13426,7 +13639,10 @@ export interface operations {
     query_set_api_v1_ontologies__ontology_id__traverse_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
             };
@@ -13461,7 +13677,10 @@ export interface operations {
     query_set_api_v1_ontologies__ontology_id__object_sets_query_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
             };
@@ -13496,7 +13715,10 @@ export interface operations {
     aggregate_api_v1_ontologies__ontology_id__aggregate_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Accepted resource share. X-Tenant-ID selects the acting tenant. */
+                "X-Resource-Share"?: string;
+            };
             path: {
                 ontology_id: string;
             };
@@ -14986,6 +15208,26 @@ export interface operations {
             };
         };
     };
+    personal_tenant_api_v1_security_personal_tenant_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OnboardingResult"];
+                };
+            };
+        };
+    };
     own_tenants_api_v1_security_tenants_get: {
         parameters: {
             query?: {
@@ -15007,6 +15249,167 @@ export interface operations {
                     "application/json": {
                         [key: string]: string;
                     }[];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    revoke_job_grant_api_v1_security_job_grants__key__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: string;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    shares_api_v1_shares_get: {
+        parameters: {
+            query: {
+                direction: "incoming" | "outgoing";
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TenantShareView"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    invite_api_v1_shares_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TenantShareInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TenantShareView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    accept_api_v1_shares__share_id__accept_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                share_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TenantShareView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    revoke_share_api_v1_shares__share_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                share_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TenantShareView"];
                 };
             };
             /** @description Validation Error */

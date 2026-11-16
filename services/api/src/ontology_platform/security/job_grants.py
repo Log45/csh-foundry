@@ -113,8 +113,8 @@ def create(s: Session, auth: Any, p: Principal, row: Job) -> None:
 
     if not isinstance(auth, PlatformAuthorizer):
         return  # Explicit trusted local development only; never used by the OIDC runtime.
-    if p.authentication_method == "job":
-        raise forbidden()  # A bounded grant cannot mint another grant.
+    if p.authentication_method == "job" or p.share_id is not None:
+        raise forbidden()
     auth.identity(s, p)
     kind = (
         "execution"
@@ -500,7 +500,7 @@ def claim_shared(svc: Any, actor: Principal, kind: str, ontology: str) -> tuple[
             .with_for_update(skip_locked=True)
             .limit(1)
         )
-        while True:
+        for _ in range(16):
             row = s.scalar(query)
             if row is None:
                 return None

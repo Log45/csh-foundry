@@ -7,6 +7,8 @@ x-api-environment: &api-environment
   FOUNDRY_ALLOWED_HOSTS: '["api","${API_HOST:?Set API_HOST}"]'
   FOUNDRY_AUTH_MODE: oidc
   FOUNDRY_OIDC_BACKCHANNEL_PORT: "8443"
+  FOUNDRY_WORKER_SUBJECT: "${FOUNDRY_WORKER_SUBJECT:-}"
+  FOUNDRY_WORKER_PROVIDER_ID: keycloak
   FOUNDRY_OIDC_PROVIDERS: &oidc-providers '[{"id":"keycloak","issuer":"https://${IDENTITY_HOST:?Set IDENTITY_HOST}/realms/${KEYCLOAK_REALM:-foundry}","audience":"foundry-api","clients":["studio","worker"],"algorithms":["RS256"],"access_token_profile":"rfc9068"}]'
   FOUNDRY_SECRETS_DIRECTORY: /run/secrets
 
@@ -188,11 +190,8 @@ services:
     environment:
       <<: *api-environment
       FOUNDRY_PROCESS_ROLE: worker
-      FOUNDRY_WORKER_PROVIDER_ID: keycloak
-      FOUNDRY_WORKER_TENANT_ID: ${WORKER_TENANT_ID:?Set WORKER_TENANT_ID}
     secrets: [FOUNDRY_DATABASE_URL, FOUNDRY_WORKER_CLIENT_SECRET]
-    command: [python, -m, ontology_platform.jobs.supervisor, --kind, ingestion,
-              --ontology, "${WORKER_ONTOLOGY:-manufacturing}"]
+    command: [python, -m, ontology_platform.jobs.supervisor, --kind, ingestion]
     networks: [front, data]
     volumes:
       - ${WORKER_CATALOG_FILE:?Set WORKER_CATALOG_FILE}:/run/secrets/FOUNDRY_INGESTION_CATALOG_JSON:ro
@@ -206,12 +205,10 @@ services:
     environment:
       <<: *api-environment
       FOUNDRY_PROCESS_ROLE: worker
-      FOUNDRY_WORKER_PROVIDER_ID: keycloak
-      FOUNDRY_WORKER_TENANT_ID: ${WORKER_TENANT_ID}
       OPEN_ONTOLOGIES_BIN: /usr/local/bin/open-ontologies
     secrets: [FOUNDRY_DATABASE_URL, FOUNDRY_WORKER_CLIENT_SECRET]
     command: [python, -m, ontology_platform.jobs.supervisor, --kind, semantic,
-              --ontology, "${WORKER_ONTOLOGY:-manufacturing}", --deadline, "60"]
+              --deadline, "60"]
     networks: [front, data]
     tmpfs: ["/tmp:size=128m,mode=1777"]
     mem_limit: 768m
@@ -225,12 +222,9 @@ services:
     environment:
       <<: *api-environment
       FOUNDRY_PROCESS_ROLE: worker
-      FOUNDRY_WORKER_PROVIDER_ID: keycloak
-      FOUNDRY_WORKER_TENANT_ID: ${WORKER_TENANT_ID}
       FOUNDRY_OUTBOX_DESTINATION: ${OUTBOX_DESTINATION:-}
     secrets: [FOUNDRY_DATABASE_URL, FOUNDRY_WORKER_CLIENT_SECRET]
-    command: [python, -m, ontology_platform.jobs.supervisor, --kind, outbox,
-              --ontology, "${WORKER_ONTOLOGY:-manufacturing}"]
+    command: [python, -m, ontology_platform.jobs.supervisor, --kind, outbox]
     networks: [front, data, egress]
 
 volumes:

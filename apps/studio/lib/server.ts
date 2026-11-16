@@ -168,13 +168,14 @@ export function consumeLogin(id: string, value: string) {
     throw new BoundaryError(401, "invalid_login_state");
   return login;
 }
-export function issueSession(token: string, expires: number) {
+export function issueSession(token: string, expires: number, tenant?: string) {
   prune(sessions);
   const id = random();
   sessions.set(digest(id), {
     token,
     expires: Math.min(expires, Date.now() + 3_600_000),
     csrf: random(),
+    tenant,
   });
   return id;
 }
@@ -258,12 +259,16 @@ export async function consumeBrowserLogin(id: string, value: string) {
     throw new BoundaryError(401, "invalid_login_state");
   return login;
 }
-export async function issueBrowserSession(token: string, expires: number) {
-  if (!durable()) return issueSession(token, expires);
+export async function issueBrowserSession(
+  token: string,
+  expires: number,
+  tenant?: string,
+) {
+  if (!durable()) return issueSession(token, expires, tenant);
   const id = random();
   const expiry = Math.min(expires, Date.now() + 3_599_000);
   await stateRequest("session", id, "PUT", {
-    data: { token, csrf: random(), expires: expiry },
+    data: { token, csrf: random(), expires: expiry, tenant },
     expires: expiry,
   });
   return id;
@@ -557,8 +562,29 @@ export async function exchange(
   )
     throw new BoundaryError(401, "invalid_access_token");
   // ID tokens are used only above; only the independently validated API access token is retained.
+  const expires = (p.exp as number) * 1000;
+  stage("personal_tenant");
+  let tenant: string | undefined;
+  try {
+    const result = (await callBackend(
+      tokens.access_token,
+      "/api/v1/security/personal-tenant",
+      "POST",
+    )) as { personal_tenant_id?: unknown };
+    if (
+      result?.personal_tenant_id !== null &&
+      !isUuid(result?.personal_tenant_id)
+    )
+      throw new Error("Invalid onboarding response");
+    tenant = result.personal_tenant_id ?? undefined;
+  } catch (error) {
+    throw new BoundaryError(
+      error instanceof BoundaryError && error.status === 403 ? 403 : 502,
+      "personal_tenant_onboarding_failed",
+    );
+  }
   stage("session_store");
-  return issueBrowserSession(tokens.access_token, (p.exp as number) * 1000);
+  return issueBrowserSession(tokens.access_token, expires, tenant);
 }
 export function allowed(path: string, method: string) {
   if (
@@ -623,23 +649,43 @@ export function allowed(path: string, method: string) {
     );
   });
 }
+export function isUuid(value: unknown): value is string {
+  return (
+    typeof value === "string" &&
+    /^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(value)
+  );
+}
+
 export async function backend(
   value: Session,
   path: string,
   method = "GET",
   body?: unknown,
   tenant = value.tenant,
+  share?: string,
 ) {
   if (!allowed(path, method))
     throw new BoundaryError(400, "unsupported_operation");
+  return callBackend(value.token, path, method, body, tenant, share);
+}
+
+async function callBackend(
+  token: string,
+  path: string,
+  method: string,
+  body?: unknown,
+  tenant?: string,
+  share?: string,
+) {
   const response = await diagnosticFetch(
     "backend_headers_ms",
     config().api + path,
     {
       method,
       headers: {
-        Authorization: `Bearer ${value.token}`,
+        Authorization: `Bearer ${token}`,
         ...(tenant ? { "X-Tenant-ID": tenant } : {}),
+        ...(share ? { "X-Resource-Share": share } : {}),
         ...(body === undefined ? {} : { "content-type": "application/json" }),
       },
       body: body === undefined ? undefined : JSON.stringify(body),

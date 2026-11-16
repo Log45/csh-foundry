@@ -436,3 +436,12 @@ See [DAG execution](docs/development/pipeline-dag-execution.md),
 [limits](docs/development/phase-20-limits.md) and the
 [Phase 20 report](docs/development/phase-20-report.md) for actual acceptance status and evidence.
 The shared developer database is not automatically migrated; production remains BLOCKED under §23B.
+
+### Personal workspaces and shared workers
+
+Phase 22 adds personal workspace onboarding for eligible Keycloak users and explicit
+cross-tenant invitations for Projects and Ontologies. Studio uses the selected tenant
+as the acting context, while shared requests and worker claims resolve the persisted
+owning tenant. See [API contracts](docs/api/tenant-sharing.md),
+[architecture](docs/architecture/personal-tenants-and-sharing.md), and the
+[OKD4 rollout runbook](docs/operations/phase-22-okd4.md).

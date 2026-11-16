@@ -61,8 +61,6 @@ spec:
         - ontology_platform.jobs.supervisor
         - --kind
         - semantic
-        - --ontology
-        - manufacturing
         - --deadline
         - '60'
         env:

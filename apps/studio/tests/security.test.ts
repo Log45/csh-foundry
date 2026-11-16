@@ -164,6 +164,12 @@ async function provider(
     .setExpirationTime(overrides.expired ? 1 : "5m")
     .sign(keys.privateKey);
   const mock = vi.fn(async (url: string, init?: RequestInit) => {
+    if (url.endsWith("/api/v1/security/personal-tenant")) {
+      expect((init?.headers as Record<string, string>).Authorization).toBe(
+        `Bearer ${access}`,
+      );
+      return Response.json({ personal_tenant_id: null });
+    }
     if (url.endsWith("openid-configuration"))
       return Response.json({
         issuer,

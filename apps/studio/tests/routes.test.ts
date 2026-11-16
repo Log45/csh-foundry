@@ -175,3 +175,46 @@ it.each(["artifacts", "datasets"])(
     );
   },
 );
+
+it("selects a verified tenant and forwards a share without replacing the acting tenant", async () => {
+  const tenant = "00000000-0000-0000-0000-000000000002";
+  const share = "00000000-0000-0000-0000-000000000003";
+  const fetch = vi.fn(async (_url: string, _init?: RequestInit) =>
+    Response.json({}),
+  );
+  vi.stubGlobal("fetch", fetch);
+  const selected = await auth(request({ tenant }), {
+    params: Promise.resolve({ operation: "tenant" }),
+  });
+  expect(selected.status).toBe(200);
+  expect(session(jar.id).tenant).toBe(tenant);
+  const path = "/api/v1/ontologies/manufacturing";
+  expect(
+    (
+      await POST(
+        request({
+          path,
+          method: "GET",
+          expected_tenant: tenant,
+          resource_share: share,
+        }),
+      )
+    ).status,
+  ).toBe(200);
+  expect(fetch.mock.calls[1]?.[1]?.headers).toMatchObject({
+    "X-Tenant-ID": tenant,
+    "X-Resource-Share": share,
+  });
+  expect(
+    (
+      await POST(
+        request({
+          path: "/api/v1/security/personal-tenant",
+          method: "POST",
+          expected_tenant: tenant,
+        }),
+      )
+    ).status,
+  ).toBe(400);
+  expect(fetch).toHaveBeenCalledTimes(2);
+});

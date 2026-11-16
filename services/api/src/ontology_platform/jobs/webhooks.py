@@ -184,12 +184,12 @@ def main() -> None:
 
     from ontology_platform.config import get_settings
     from ontology_platform.db.session import make_engine
-    from ontology_platform.security.workers import worker_context
+    from ontology_platform.security.workers import WorkerPool
 
     parser = argparse.ArgumentParser(
         description="Deliver up to 100 currently due action notifications"
     )
-    parser.add_argument("--ontology", required=True)
+    parser.add_argument("--ontology", help="Optional queue filter")
     parser.add_argument(
         "--destination", required=True, help="Server-managed HTTPS URL, no query or credentials"
     )
@@ -201,10 +201,20 @@ def main() -> None:
     engine = make_engine(configuration)
     try:
         sessions = sessionmaker(engine)
-        principal, authorizer = worker_context(configuration, sessions, "outbox", args.ontology)
-        runner = WebhookRunner(sessions, authorizer)
+        pool = WorkerPool(configuration, sessions)
+        runner = WebhookRunner(sessions, pool.authorizer)
         for _ in range(args.max_events):
-            if runner.run_one(principal, args.ontology, args.destination) is None:
+            if (
+                next(
+                    pool.run(
+                        "outbox",
+                        lambda actor, scope: runner.run_one(actor, scope, args.destination),
+                        args.ontology,
+                    ),
+                    None,
+                )
+                is None
+            ):
                 break
     finally:
         engine.dispose()

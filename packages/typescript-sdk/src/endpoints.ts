@@ -38,6 +38,9 @@ export interface EndpointInput {
   "objects.aggregate": Input<
     operations["aggregate_api_v1_ontologies__ontology_id__aggregate_post"]
   >;
+  "objects.traverse": Input<
+    operations["query_set_api_v1_ontologies__ontology_id__traverse_post"]
+  >;
   "objects.get": Input<
     operations["get_object_api_v1_ontologies__ontology_id__objects__type_id__get"]
   >;
@@ -64,6 +67,24 @@ export interface EndpointInput {
   >;
   "actions.audit": Input<
     operations["audit_api_v1_ontologies__ontology_id__actions_executions__execution_id__audit_get"]
+  >;
+  "shares.list": Input<operations["shares_api_v1_shares_get"]>;
+  "shares.invite": Input<operations["invite_api_v1_shares_post"]>;
+  "shares.accept": Input<
+    operations["accept_api_v1_shares__share_id__accept_post"]
+  >;
+  "shares.revoke": Input<
+    operations["revoke_share_api_v1_shares__share_id__delete"]
+  >;
+  "projects.get": Input<operations["project_api_v1_projects__project_id__get"]>;
+  "projects.update": Input<
+    operations["update_project_api_v1_projects__project_id__patch"]
+  >;
+  "projects.folders": Input<
+    operations["folders_api_v1_projects__project_id__folders_get"]
+  >;
+  "projects.createFolder": Input<
+    operations["create_folder_api_v1_projects__project_id__folders_post"]
   >;
   "projects.list": Input<operations["projects_api_v1_projects_get"]>;
   "projects.resources": Input<
@@ -343,6 +364,9 @@ export interface EndpointOutput {
   "objects.aggregate": Output<
     operations["aggregate_api_v1_ontologies__ontology_id__aggregate_post"]
   >;
+  "objects.traverse": Output<
+    operations["query_set_api_v1_ontologies__ontology_id__traverse_post"]
+  >;
   "objects.get": Output<
     operations["get_object_api_v1_ontologies__ontology_id__objects__type_id__get"]
   >;
@@ -369,6 +393,26 @@ export interface EndpointOutput {
   >;
   "actions.audit": Output<
     operations["audit_api_v1_ontologies__ontology_id__actions_executions__execution_id__audit_get"]
+  >;
+  "shares.list": Output<operations["shares_api_v1_shares_get"]>;
+  "shares.invite": Output<operations["invite_api_v1_shares_post"]>;
+  "shares.accept": Output<
+    operations["accept_api_v1_shares__share_id__accept_post"]
+  >;
+  "shares.revoke": Output<
+    operations["revoke_share_api_v1_shares__share_id__delete"]
+  >;
+  "projects.get": Output<
+    operations["project_api_v1_projects__project_id__get"]
+  >;
+  "projects.update": Output<
+    operations["update_project_api_v1_projects__project_id__patch"]
+  >;
+  "projects.folders": Output<
+    operations["folders_api_v1_projects__project_id__folders_get"]
+  >;
+  "projects.createFolder": Output<
+    operations["create_folder_api_v1_projects__project_id__folders_post"]
   >;
   "projects.list": Output<operations["projects_api_v1_projects_get"]>;
   "projects.resources": Output<
@@ -688,6 +732,17 @@ export function endpoints(send: Transport) {
           true,
           options,
         ),
+      traverse: (
+        input: EndpointInput["objects.traverse"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["objects.traverse"]> =>
+        send(
+          "POST",
+          "/api/v1/ontologies/{ontology_id}/traverse",
+          input,
+          true,
+          options,
+        ),
       get: (
         input: EndpointInput["objects.get"],
         options?: RequestOptions,
@@ -790,7 +845,61 @@ export function endpoints(send: Transport) {
           options,
         ),
     },
+    shares: {
+      list: (
+        input: EndpointInput["shares.list"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["shares.list"]> =>
+        send("GET", "/api/v1/shares", input, true, options),
+      invite: (
+        input: EndpointInput["shares.invite"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["shares.invite"]> =>
+        send("POST", "/api/v1/shares", input, false, options),
+      accept: (
+        input: EndpointInput["shares.accept"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["shares.accept"]> =>
+        send("POST", "/api/v1/shares/{share_id}/accept", input, false, options),
+      revoke: (
+        input: EndpointInput["shares.revoke"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["shares.revoke"]> =>
+        send("DELETE", "/api/v1/shares/{share_id}", input, false, options),
+    },
     projects: {
+      get: (
+        input: EndpointInput["projects.get"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["projects.get"]> =>
+        send("GET", "/api/v1/projects/{project_id}", input, true, options),
+      update: (
+        input: EndpointInput["projects.update"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["projects.update"]> =>
+        send("PATCH", "/api/v1/projects/{project_id}", input, false, options),
+      folders: (
+        input: EndpointInput["projects.folders"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["projects.folders"]> =>
+        send(
+          "GET",
+          "/api/v1/projects/{project_id}/folders",
+          input,
+          true,
+          options,
+        ),
+      createFolder: (
+        input: EndpointInput["projects.createFolder"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["projects.createFolder"]> =>
+        send(
+          "POST",
+          "/api/v1/projects/{project_id}/folders",
+          input,
+          false,
+          options,
+        ),
       list: (
         input: EndpointInput["projects.list"],
         options?: RequestOptions,

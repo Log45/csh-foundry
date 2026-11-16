@@ -11,6 +11,7 @@ import {
   csrfCheck,
   exchange,
   input,
+  isUuid,
   originCheck,
   browserSession,
   revokeBrowserSession,
@@ -104,8 +105,7 @@ async function handle(
     }
     if (operation === "tenant") {
       const { tenant } = await input(request);
-      if (typeof tenant !== "string" || !/^[a-f0-9-]{36}$/.test(tenant))
-        throw new BoundaryError(403, "forbidden");
+      if (!isUuid(tenant)) throw new BoundaryError(403, "forbidden");
       await backend(value, "/api/v1/security/me", "GET", undefined, tenant);
       await selectBrowserTenant(jar.get(sessionName)!.value, value, tenant);
       return NextResponse.json({ status: "selected" });
@@ -118,6 +118,16 @@ async function handle(
       error instanceof BoundaryError
         ? error
         : new BoundaryError(401, "authentication_failed");
+    if (
+      operation === "callback" &&
+      failure.code === "personal_tenant_onboarding_failed"
+    ) {
+      const retry = new URL("/", config().origin);
+      retry.searchParams.set("signin", "personal-tenant");
+      const response = NextResponse.redirect(retry, 303);
+      response.cookies.set(loginName, "", options(0));
+      return response;
+    }
     return NextResponse.json(
       { error: { code: failure.code } },
       { status: failure.status, headers: { "Cache-Control": "no-store" } },

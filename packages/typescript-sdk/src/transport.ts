@@ -18,6 +18,8 @@ export interface ClientConfig {
   /** New opaque generation for each login/identity/policy change; never a token. */
   sessionKey: string;
   projectId?: string;
+  /** Accepted share to use for all requests in this client. */
+  resourceShare?: string;
   auth: { csrf: string };
   timeoutMs?: number;
   readRetries?: 0 | 1 | 2;
@@ -112,8 +114,14 @@ export function operationPath(
   return path;
 }
 export function createTransport(config: ClientConfig) {
-  const { tenantId, principalId, sessionKey, projectId, onSessionExpired } =
-    config;
+  const {
+    tenantId,
+    principalId,
+    sessionKey,
+    projectId,
+    resourceShare,
+    onSessionExpired,
+  } = config;
   const csrf = config.auth?.csrf;
   if (
     ![tenantId, principalId, sessionKey, csrf].every(
@@ -125,6 +133,11 @@ export function createTransport(config: ClientConfig) {
     )
   )
     throw new FoundryError("validation", "identity_context_required");
+  if (
+    resourceShare !== undefined &&
+    !/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(resourceShare)
+  )
+    throw new FoundryError("validation", "invalid_resource_share");
   if (config.apiVersion && config.apiVersion !== "v1")
     throw new FoundryError("unsupported", "api_version");
   const baseUrl = localPath(config.baseUrl ?? "/api/v1");
@@ -161,6 +174,7 @@ export function createTransport(config: ClientConfig) {
       method,
       body: input.body,
       expected_tenant: tenantId,
+      resource_share: resourceShare,
     });
     const bodyLimit = /^\/api\/v1\/pipelines(?:\/|$)/.test(template)
       ? 524288
@@ -248,6 +262,7 @@ export function createTransport(config: ClientConfig) {
       baseUrl,
       bffUrl,
       tenantId,
+      resourceShare,
       principalId,
       sessionKey,
       projectId,
@@ -260,6 +275,8 @@ export function createTransport(config: ClientConfig) {
       family: "datasets" | "media-sets" = "datasets",
       preview = false,
     ): Promise<ReadableStream<Uint8Array>> {
+      if (resourceShare)
+        throw new FoundryError("unsupported", "shared_download");
       if (!active)
         throw new FoundryError("authentication", "client_invalidated");
       const uuid =

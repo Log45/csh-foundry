@@ -230,7 +230,7 @@ def test_semantic_worker_rechecks_revoked_delegation_before_output_commit(databa
 
 def test_verified_worker_factory_and_revoked_delegation(database, monkeypatch):
     from ontology_platform.config import Settings
-    from ontology_platform.security.workers import worker_context
+    from ontology_platform.security.workers import WorkerPool
     from test_security_oidc import idp as idp_fixture
     from test_security_oidc import token
 
@@ -243,7 +243,7 @@ def test_verified_worker_factory_and_revoked_delegation(database, monkeypatch):
         database_url=w.settings.database_url,
         auth_mode="oidc",
         oidc_providers=verifier.providers,
-        worker_tenant_id=p.tenant_id,
+        worker_client_id="studio",
         worker_access_token=token(private, claims={"sub": "worker-ingestion"}),
         _env_file=None,
     )
@@ -256,10 +256,11 @@ def test_verified_worker_factory_and_revoked_delegation(database, monkeypatch):
 
     monkeypatch.setattr("ontology_platform.security.workers.OIDCVerifier", verifier_factory)
     try:
-        actor, actual = worker_context(settings, w.sessions, "ingestion", w.definition.id)
-        assert actor.principal_id == delegated.actor_id
-        assert actor.actor_id is None and actor.principal_type == "service"
-        assert isinstance(actual, PlatformAuthorizer)
+        pool = WorkerPool(settings, w.sessions)
+        assert pool.credential is not None
+        with w.sessions() as s:
+            assert pool.service_id(s, *pool.credential[:2]) == delegated.actor_id
+        assert isinstance(pool.authorizer, PlatformAuthorizer)
     finally:
         fixture.close()
     admin.delegate(

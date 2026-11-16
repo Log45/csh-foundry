@@ -7,6 +7,8 @@ from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
 class Principal(BaseModel):
     model_config = ConfigDict(frozen=True)
     tenant_id: UUID
+    acting_tenant_id: UUID | None = None
+    share_id: UUID | None = None
     principal_id: str = Field(min_length=1)
     identity_provider: str | None = None
     external_subject: str | None = None

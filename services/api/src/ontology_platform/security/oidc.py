@@ -40,12 +40,21 @@ class Provider(QueryModel):
     algorithms: tuple[Literal["RS256", "ES256"], ...] = ("RS256",)
     access_token_profile: Literal["rfc9068", "keycloak"] = "rfc9068"
     clients: tuple[Name, ...] = Field(min_length=1, max_length=32)
+    personal_tenant_client: Name | None = None
+    personal_tenant_role: Name | None = None
     clock_skew: int = Field(default=30, ge=0, le=60)
     cache_seconds: int = Field(default=300, ge=30, le=3600)
 
     @model_validator(mode="after")
     def valid(self) -> "Provider":
         https_url(self.issuer)
+        if self.personal_tenant_client or self.personal_tenant_role:
+            if (
+                self.access_token_profile != "keycloak"
+                or self.personal_tenant_client not in self.clients
+                or not self.personal_tenant_role
+            ):
+                raise ValueError("Personal onboarding requires a trusted Keycloak client and role")
         if not self.algorithms:
             raise ValueError("At least one asymmetric algorithm required")
         return self

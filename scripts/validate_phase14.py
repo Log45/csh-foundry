@@ -159,6 +159,7 @@ with tempfile.TemporaryDirectory(prefix="foundry-phase14-") as directory:
                 *[
                     "services/api/tests/" + name
                     for name in (
+                        "test_phase22.py",
                         "test_job_execution.py",
                         "test_security_workflows.py",
                         "test_security_platform.py",
@@ -177,6 +178,7 @@ with tempfile.TemporaryDirectory(prefix="foundry-phase14-") as directory:
                         "test_media_functions_automations.py",
                         "test_datasets.py",
                         "test_artifacts.py",
+                        "test_platform_sdk.py",
                         "test_projects.py",
                         "test_observability.py",
                         "test_kubernetes.py",

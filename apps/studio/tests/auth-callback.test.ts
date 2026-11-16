@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { exportJWK, generateKeyPair, SignJWT } from "jose";
+const personalTenant = "2c52a53b-c2d9-4a4a-888c-958e37dfaf90";
 const jar = vi.hoisted(() => new Map<string, string>());
 vi.mock("next/headers", () => ({
   cookies: async () => ({ get: (name: string) => ({ value: jar.get(name) }) }),
@@ -32,6 +33,8 @@ afterEach(() => {
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
 });
+let keyPair: ReturnType<typeof generateKeyPair> | undefined;
+let otherKeyPair: ReturnType<typeof generateKeyPair> | undefined;
 async function callback(
   fault = "",
   options: {
@@ -43,13 +46,26 @@ async function callback(
   const login = beginLogin(),
     issuer = process.env.STUDIO_OIDC_ISSUER!;
   jar.set("foundry-login", fault === "cookie" ? "unknown" : login.id);
-  const keys = await generateKeyPair("RS256");
+  const keys = await (keyPair ??= generateKeyPair("RS256"));
   const jwk = {
     ...(await exportJWK(keys.publicKey)),
     kid: "test",
     alg: "RS256",
   };
   const fetch = vi.fn(async (url: string, init?: RequestInit) => {
+    if (url.endsWith("/api/v1/security/personal-tenant")) {
+      expect(init?.method).toBe("POST");
+      expect((init?.headers as Record<string, string>).Authorization).toMatch(
+        /^Bearer /,
+      );
+      expect(
+        (init?.headers as Record<string, string>)["X-Tenant-ID"],
+      ).toBeUndefined();
+      if (fault === "onboarding") return Response.json({}, { status: 503 });
+      return Response.json({
+        personal_tenant_id: fault === "ineligible" ? null : personalTenant,
+      });
+    }
     if (url.endsWith("openid-configuration")) {
       if (fault === "transport")
         throw new TypeError("private transport detail");
@@ -92,7 +108,7 @@ async function callback(
       .sign(keys.privateKey);
     const signer =
       fault === "signature"
-        ? (await generateKeyPair("RS256")).privateKey
+        ? (await (otherKeyPair ??= generateKeyPair("RS256"))).privateKey
         : keys.privateKey;
     const now = Math.floor(Date.now() / 1000);
     const claims: Record<string, unknown> = {
@@ -166,6 +182,7 @@ it("completes the callback with PKCE and a public client", async () => {
     response.headers.get("set-cookie")!,
   )![1];
   expect(session(id).token).toContain(".");
+  expect(session(id).tenant).toBe(personalTenant);
   expect(console.error).not.toHaveBeenCalled();
 });
 it.each([
@@ -434,4 +451,22 @@ it.each([
     audience_status: "omitted_invalid_or_oversized",
   });
   expect(sessions.size).toBe(0);
+});
+
+it("redirects to the Studio retry view without creating a session on onboarding failure", async () => {
+  const response = await callback("onboarding");
+  expect(response.status).toBe(303);
+  expect(
+    new URL(response.headers.get("location")!).searchParams.get("signin"),
+  ).toBe("personal-tenant");
+  expect(sessions.size).toBe(0);
+});
+
+it("leaves tenant selection open for existing users outside the onboarding role", async () => {
+  const response = await callback("ineligible");
+  expect(response.status).toBe(303);
+  const id = /foundry-session=([^;]+)/.exec(
+    response.headers.get("set-cookie")!,
+  )![1];
+  expect(session(id).tenant).toBeUndefined();
 });

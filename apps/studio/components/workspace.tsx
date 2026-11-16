@@ -10,6 +10,7 @@ import {
   type Version,
 } from "@/lib/api";
 import { Field, Notice, Task, useTask } from "./ui";
+import { Sharing } from "@/features/sharing";
 import { Projects } from "@/features/projects";
 import { Manager } from "@/features/manager";
 import { Explorer, Actions } from "@/features/explorer";
@@ -20,6 +21,15 @@ const navigate = () =>
   window.dispatchEvent(new Event("workspace-navigation", { cancelable: true }));
 export function Workspace() {
   const [tenantOffset, setTenantOffset] = useState(0);
+  const [onboardingFailed, setOnboardingFailed] = useState(false);
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("signin") === "personal-tenant") {
+      setOnboardingFailed(true);
+      url.searchParams.delete("signin");
+      window.history.replaceState(window.history.state, "", url);
+    }
+  }, []);
   const [session, setSession] = useState<BrowserSession>(),
     [expired, setExpired] = useState(false),
     [ontologies, setOntologies] = useState<Ontology[]>([]),
@@ -148,17 +158,23 @@ export function Workspace() {
             Sign in with OpenID Connect
           </button>
         )}
+        {onboardingFailed && (
+          <Notice>
+            Personal workspace setup failed. Sign in again to retry.
+          </Notice>
+        )}
         {expired && <Notice>Your session expired. Sign in to continue.</Notice>}
         {task.error && !["session_expired"].includes(task.error) && (
           <Notice>{task.error}</Notice>
         )}
         <p className="muted">
-          Access requires a provisioned platform membership.
+          Eligible accounts receive a personal workspace when they sign in.
         </p>
       </main>
     );
   const navigation = [
     ["projects", "Projects", "project:read"],
+    ["sharing", "Sharing", "tenant:read"],
     ["observability", "Lineage & observability", "project:read"],
     ["manager", "Ontology Manager", "schema:read"],
     ["explorer", "Objects & Object Sets", "object:query"],
@@ -375,7 +391,10 @@ export function Workspace() {
         {tab === "observability" && session.tenant && can("project:read") && (
           <Observability key={projectScope} api={api} />
         )}
-        {id && session.tenant && (
+        {tab === "sharing" && session.tenant && (
+          <Sharing key={projectScope} api={api} session={session} />
+        )}
+        {tab !== "sharing" && id && session.tenant && (
           <div key={`${session.tenant}-${id}-${tab}`}>
             {tab === "manager" && can("schema:read") && (
               <Manager

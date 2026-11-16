@@ -237,8 +237,8 @@ from .models import *
         client += "        pass\n"
     client += (
         "\nclass OntologyClient:\n"
-        "    def __init__(self, base_url: str, token_provider: TokenProvider, tenant_id: str, *, http: httpx.AsyncClient | None = None):\n"  # noqa: E501 - emitted source template
-        f"        self.transport = Transport(base_url, token_provider, tenant_id, {schema.id!r}, {schema.version!r}, http)\n"  # noqa: E501 - emitted source template
+        "    def __init__(self, base_url: str, token_provider: TokenProvider, tenant_id: str, *, http: httpx.AsyncClient | None = None, resource_share: str | None = None):\n"  # noqa: E501 - emitted source template
+        f"        self.transport = Transport(base_url, token_provider, tenant_id, {schema.id!r}, {schema.version!r}, http, resource_share=resource_share)\n"  # noqa: E501 - emitted source template
         "        self.actions = Actions(self.transport)\n"
     )
     for obj in sorted(schema.object_types, key=lambda o: o.id):

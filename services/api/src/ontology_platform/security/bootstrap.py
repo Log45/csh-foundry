@@ -17,7 +17,8 @@ from ontology_platform.db.models import (
 )
 from ontology_platform.db.session import make_engine
 from ontology_platform.errors import ApplicationError
-from ontology_platform.security.contracts import DEFAULT_ROLES, PERMISSIONS
+from ontology_platform.security.contracts import DEFAULT_ROLES
+from ontology_platform.security.identity import lock_binding
 
 
 def bootstrap(session: Session, tenant: UUID, issuer: str, subject: str, name: str) -> str:
@@ -40,6 +41,7 @@ def bootstrap(session: Session, tenant: UUID, issuer: str, subject: str, name: s
     else:
         session.add(SecurityState(tenant_id=tenant))
         session.flush()
+    lock_binding(session, issuer, subject)
     binding = session.get(ExternalIdentity, (issuer, subject))
     if binding is None:
         key = str(uuid4())
@@ -49,7 +51,6 @@ def bootstrap(session: Session, tenant: UUID, issuer: str, subject: str, name: s
     else:
         key = binding.principal_id
     session.add(Membership(tenant_id=tenant, principal_id=key, enabled=True, attributes={}))
-    session.add(Role(tenant_id=tenant, id="tenant-administrator", permissions=sorted(PERMISSIONS)))
     for role_id, permissions in DEFAULT_ROLES.items():
         session.add(Role(tenant_id=tenant, id=role_id, permissions=list(permissions)))
     session.flush()

@@ -16,6 +16,9 @@ from ontology_platform.main import create_app
 from ontology_platform.pipelines.contracts import Definition, StartRun
 from ontology_platform.pipelines.service import PipelineService
 from ontology_platform.projects.contracts import CreateProject, MemberChange, ShareChange
+from ontology_platform.security.contracts import AssignmentInput, IdentityInput, RoleInput
+from ontology_platform.security.identity import resolve
+from ontology_platform.security.onboarding import PERSONAL_WORKER
 from ontology_platform.security.service import PlatformAuthorizer
 from test_actions import world as action_world  # noqa: F401
 from test_artifacts import store  # noqa: F401
@@ -35,6 +38,27 @@ def test_built_sdk_against_governed_api(security, store):  # noqa: F811
         w, store, b"id,name\nSDK1,One\nSDK2,Two\n", prepared=True, actor=owner, auth=auth
     )
     pipes = PipelineService(w.sessions, auth, store.settings, store)
+    worker_id = admin.identity(
+        owner, IdentityInput(issuer=ISSUER, subject="sdk-worker", principal_type="service")
+    )
+    admin.role(owner, RoleInput(id="sdk-worker", permissions=tuple(sorted(PERSONAL_WORKER))))
+    admin.assign(owner, AssignmentInput(principal_id=worker_id, role_id="sdk-worker"))
+    executor = resolve(
+        w.sessions,
+        ISSUER,
+        "sdk-worker",
+        owner.tenant_id,
+        method="oidc",
+        expires_at=owner.expires_at,
+    )
+    owning_project = pipes.get_project(owner, resource.project_id)
+    pipes.member(
+        owner,
+        owning_project.id,
+        MemberChange(
+            principal_id=worker_id, role="editor", expected_revision=owning_project.revision
+        ),
+    )
     output = pipes.datasets().create(owner, resource.project_id, CreateArtifact(name="SDK output"))
     pipeline = pipes.create(owner, resource.project_id, CreateArtifact(name="SDK pipeline"))
     definition = pipes.publish(
@@ -97,7 +121,7 @@ def test_built_sdk_against_governed_api(security, store):  # noqa: F811
             "pipelineBody": run.model_dump(mode="json"),
             "mappingBody": body.model_dump(mode="json"),
         }
-        exercise(config, clients, ExecutionWorker(pipes))
+        exercise(config, clients, ExecutionWorker(pipes, executor))
 
 
 def exercise(config, clients, worker=None):

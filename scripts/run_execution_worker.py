@@ -10,7 +10,7 @@ from ontology_platform.config import get_settings
 from ontology_platform.db.session import make_engine
 from ontology_platform.execution.worker import ExecutionWorker
 from ontology_platform.pipelines.service import PipelineService
-from ontology_platform.security.workers import worker_context
+from ontology_platform.security.workers import WorkerPool
 from sqlalchemy.orm import sessionmaker
 
 
@@ -18,13 +18,6 @@ def main() -> None:
     settings, storage = get_settings(), StorageSettings()
     engine = make_engine(settings)
     sessions = sessionmaker(engine, expire_on_commit=False)
-    actor, auth = worker_context(settings, sessions, "execution", "projects")
-    worker = ExecutionWorker(
-        PipelineService(
-            sessions, auth, storage, S3ArtifactStore(storage) if storage.backend == "s3" else None
-        ),
-        actor,
-    )
     running = True
 
     def stop(signum: int, frame: object) -> None:
@@ -34,13 +27,28 @@ def main() -> None:
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
     try:
-        automations = AutomationService(
-            sessions, worker.service.authorizer, storage, worker.service.store
-        )
+        store = S3ArtifactStore(storage) if storage.backend == "s3" else None
         while running:
-            worker.actor, _ = worker_context(settings, sessions, "execution", "projects")
-            automations.tick(worker.actor)
-            if worker.run_one() is None:
+            pool = WorkerPool(settings, sessions)
+            service = PipelineService(sessions, pool.authorizer, storage, store)
+            automations = AutomationService(sessions, pool.authorizer, storage, store)
+            next(
+                pool.run(
+                    "automation",
+                    lambda actor, _, automations=automations: automations.tick(actor) or None,
+                ),
+                None,
+            )
+            if (
+                next(
+                    pool.run(
+                        "execution",
+                        lambda actor, _, service=service: ExecutionWorker(service, actor).run_one(),
+                    ),
+                    None,
+                )
+                is None
+            ):
                 time.sleep(1)
     finally:
         engine.dispose()

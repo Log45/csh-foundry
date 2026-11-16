@@ -91,6 +91,9 @@ class QueryService(GovernedService):
                         purpose="policy",
                     ),
                 }
+                if principal.share_id is not None:
+                    binding["share"] = str(principal.share_id)
+                    binding["acting_tenant"] = str(principal.acting_tenant_id)
                 sorts = [expr.label(f"sort_{i}") for i, (expr, _) in enumerate(sort)]
                 base = select(Object.object_id, Object.version, *sorts).where(
                     Object.object_id.in_(ids), compiler.scope(Object, final_type)
@@ -111,7 +114,9 @@ class QueryService(GovernedService):
                             "Active schema changed; restart pagination",
                             409,
                         )
-                    if any(token.get(key) != value for key, value in binding.items()):
+                    if any(token.get(key) != value for key, value in binding.items()) or (
+                        token.get("share") != binding.get("share")
+                    ):
                         raise ApplicationError(
                             "invalid_cursor", "Cursor does not match query or authorization", 400
                         )

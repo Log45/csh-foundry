@@ -163,7 +163,6 @@ class Acceptance:
             "KEYCLOAK_IMPORT_DIRECTORY": str(self.root / "realm"),
             "WORKER_CATALOG_FILE": str(self.root / "catalog.json"),
             "INGESTION_DIRECTORY": str(self.root / "ingestion"),
-            "WORKER_TENANT_ID": str(self.tenant),
         }
         self.values = values
         self.env.update(values)
@@ -325,7 +324,6 @@ networks:
         self.sessions = sessionmaker(self.engine, expire_on_commit=False)
         world, service, _ = setup((self.engine, self.sessions, self.url), self.root / "ingestion")
         self.tenant = world.actor.tenant_id
-        self.env["WORKER_TENANT_ID"] = str(self.tenant)
         catalog = [
             b.model_dump(mode="json") | {"root": "/data/ingestion"}
             for b in service.catalog.bindings.values()

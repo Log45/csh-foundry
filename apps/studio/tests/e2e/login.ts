@@ -1,6 +1,6 @@
 import type { Page } from "@playwright/test";
 import { expect } from "@playwright/test";
-export async function login(page: Page, subject = "operator") {
+export async function signIn(page: Page, subject = "operator") {
   await page.route("https://127.0.0.1/oidc/**", async (route) => {
     const target = new URL(
       route
@@ -21,6 +21,10 @@ export async function login(page: Page, subject = "operator") {
     .getByRole("button", { name: "Sign in with OpenID Connect" })
     .click();
   await expect(page.getByLabel("Tenant", { exact: true })).toBeVisible();
+}
+
+export async function login(page: Page, subject = "operator") {
+  await signIn(page, subject);
   const option = page
     .getByLabel("Tenant", { exact: true })
     .locator("option")

@@ -139,12 +139,14 @@ class TextField(Field[str]):
 
 class Transport:
     def __init__(self, base_url: str, token_provider: TokenProvider, tenant_id: str,
-                 ontology_id: str, schema_version: str, http: httpx.AsyncClient | None = None):
+                 ontology_id: str, schema_version: str, http: httpx.AsyncClient | None = None,
+                 *, resource_share: str | None = None):
         self.http = http or httpx.AsyncClient(timeout=30, follow_redirects=False, trust_env=False)
         self.owned = http is None
         self.base = base_url.rstrip("/") + "/api/v1/ontologies/" + quote(ontology_id, safe="")
         self.token_provider, self.tenant_id = token_provider, tenant_id
         self.schema_version = schema_version
+        self.resource_share = resource_share
 
     async def close(self) -> None:
         if self.owned:
@@ -153,8 +155,10 @@ class Transport:
     async def request(self, method: str, path: str, body: Any = None,
                       params: dict[str, Any] | None = None) -> Any:
         token = await self.token_provider()
-        async with self.http.stream(method, self.base + path,
-            headers={"Authorization": "Bearer " + token, "X-Tenant-ID": self.tenant_id},
+        headers = {"Authorization": "Bearer " + token, "X-Tenant-ID": self.tenant_id}
+        if self.resource_share is not None:
+            headers["X-Resource-Share"] = self.resource_share
+        async with self.http.stream(method, self.base + path, headers=headers,
             json=body, params=params, follow_redirects=False) as response:
             chunks, size = [], 0
             async for chunk in response.aiter_bytes():

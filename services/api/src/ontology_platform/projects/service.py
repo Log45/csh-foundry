@@ -74,7 +74,26 @@ class ProjectService(GovernedService):
         self, s: Session, p: Principal, key: UUID, *, write: bool = False, manage: bool = False
     ) -> tuple[Project, ProjectMember]:
         row = s.get(Project, (p.tenant_id, key))
-        member = s.get(ProjectMember, (p.tenant_id, key, p.principal_id))
+        member: ProjectMember | None
+        if p.share_id is not None:
+            from ontology_platform.security.sharing import live_share
+
+            snapshot = (
+                self.authorizer.snapshot.get()
+                if isinstance(self.authorizer, PlatformAuthorizer)
+                else None
+            )
+            share = snapshot.share if snapshot and snapshot.share else live_share(s, p)
+            if share.project_id != key or manage or row is None or row.state != "ACTIVE":
+                raise missing("Project")
+            member = ProjectMember(
+                tenant_id=p.tenant_id,
+                project_id=key,
+                principal_id=p.principal_id,
+                role="editor" if share.access == "collaborator" else "viewer",
+            )
+        else:
+            member = s.get(ProjectMember, (p.tenant_id, key, p.principal_id))
         if row is None or member is None:
             if isinstance(self.authorizer, PlatformAuthorizer):
                 self.authorizer.policy_denial(p, "project:read", f"{p.tenant_id}/projects/{key}")
@@ -112,6 +131,8 @@ class ProjectService(GovernedService):
                     tenant_id=p.tenant_id,
                     principal_id=p.principal_id,
                     actor_id=p.actor_id,
+                    share_id=p.share_id,
+                    acting_tenant_id=p.acting_tenant_id,
                     job_id=p.job_id,
                     execution_grant_id=p.execution_grant_id,
                     execution_token=p.execution_token,
@@ -192,7 +213,8 @@ class ProjectService(GovernedService):
         self, p: Principal, key: UUID, body: UpdateProject | None, revision: int
     ) -> ProjectView:
         with self.scope(p) as s:
-            row, member = self.project(s, p, key, manage=True)
+            share_edit = p.share_id is not None and body is not None
+            row, member = self.project(s, p, key, manage=not share_edit, write=share_edit)
             expected(row, revision)
             if body:
                 row.name, row.description = body.name, body.description

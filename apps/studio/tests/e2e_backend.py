@@ -33,7 +33,6 @@ from ontology_platform.security.bootstrap import bootstrap
 from ontology_platform.security.browser import BrowserStore
 from ontology_platform.security.contracts import (
     AssignmentInput,
-    DelegationInput,
     IdentityInput,
     RoleInput,
 )
@@ -113,7 +112,11 @@ def main():
             or params.get("code_challenge_method") != "S256"
         ):
             return {"error": "invalid_client"}
-        if params.get("login_hint", "operator") not in {"operator", "application-viewer"}:
+        if params.get("login_hint", "operator") not in {
+            "operator",
+            "application-viewer",
+            "newcomer",
+        }:
             return {"error": "invalid_subject"}
         code = token_urlsafe(32)
         codes[code] = params
@@ -161,7 +164,13 @@ def main():
                 headers={"kid": "e2e"},
             ),
             "access_token": jwt.encode(
-                common | {"aud": "foundry", "jti": params["code"], "client_id": "studio"},
+                common
+                | {"aud": "foundry", "jti": params["code"], "client_id": "studio"}
+                | (
+                    {"realm_access": {"roles": ["e2e-human"]}}
+                    if common["sub"] == "newcomer"
+                    else {}
+                ),
                 private,
                 algorithm="RS256",
                 headers={"kid": "e2e", "typ": "at+jwt"},
@@ -243,30 +252,13 @@ def main():
             ),
         )
         admin.assign(p, AssignmentInput(principal_id=viewer_id, role_id="application-viewer"))
-        workers = {}
-        for kind in ["ingestion", "semantic"]:
-            wid = admin.identity(
-                p, IdentityInput(issuer=ISSUER, subject="worker-" + kind, principal_type="service")
-            )
-            admin.assign(p, AssignmentInput(principal_id=wid, role_id="tenant-administrator"))
-            admin.delegate(
-                p,
-                DelegationInput(
-                    worker_id=wid,
-                    principal_id=p.principal_id,
-                    ontology_id=definition.id,
-                    kind=kind,
-                    expires_at=p.expires_at,
-                ),
-            )
-            workers[kind] = p.model_copy(
-                update={
-                    "authentication_method": "delegated",
-                    "actor_id": wid,
-                    "delegation_kind": kind,
-                    "delegation_ontology": definition.id,
-                }
-            )
+        worker_id = admin.identity(
+            p, IdentityInput(issuer=ISSUER, subject="worker", principal_type="service")
+        )
+        admin.assign(p, AssignmentInput(principal_id=worker_id, role_id="tenant-administrator"))
+        worker = resolve(
+            w.sessions, ISSUER, "worker", p.tenant_id, method="oidc", expires_at=p.expires_at
+        )
         stop = threading.Event()
 
         def work():
@@ -280,11 +272,12 @@ def main():
             execution = ExecutionWorker(
                 PipelineService(
                     w.sessions, auth, app.state.artifact_settings, app.state.artifact_store
-                )
+                ),
+                worker,
             )
             while not stop.wait(0.3):
-                ingestion.run_one(workers["ingestion"], definition.id)
-                semantic.run_one(workers["semantic"], definition.id)
+                ingestion.run_one(worker, definition.id)
+                semantic.run_one(worker, definition.id)
                 if app.state.artifact_store is not None:
                     execution.run_one()
 
@@ -295,7 +288,15 @@ def main():
             local_tenant_id=None,
             local_principal_id=None,
             oidc_providers=(
-                Provider(id="e2e", issuer=ISSUER, audience="foundry", clients=("studio",)),
+                Provider(
+                    id="e2e",
+                    issuer=ISSUER,
+                    audience="foundry",
+                    clients=("studio",),
+                    access_token_profile="keycloak",
+                    personal_tenant_client="studio",
+                    personal_tenant_role="e2e-human",
+                ),
             ),
             _env_file=None,
         )

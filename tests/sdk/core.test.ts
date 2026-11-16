@@ -388,3 +388,25 @@ it("omits nullable optional query values while preserving JSON body nulls", asyn
     ).body.properties.nullable,
   ).toBeNull();
 });
+
+it("binds shared requests to an immutable grant and the acting tenant", async () => {
+  const share = "b1f65ec7-9767-461e-a48c-8044321981f7";
+  const fetch = vi.fn(async (_url: RequestInfo | URL, _init?: RequestInit) =>
+    response({}),
+  );
+  const supplied = { ...config, resourceShare: share, fetch };
+  const client = createFoundryClient(supplied);
+  supplied.resourceShare = "00000000-0000-0000-0000-000000000000";
+  await client.ontologies.get({ path: { ontology_id: "manufacturing" } });
+  expect(JSON.parse(fetch.mock.calls[0]?.[1]?.body as string)).toMatchObject({
+    expected_tenant: "tenant",
+    resource_share: share,
+  });
+  const owningContext = createFoundryClient({ ...config, fetch });
+  await owningContext.shares.list({ query: { direction: "outgoing" } });
+  expect(JSON.parse(fetch.mock.calls[1]?.[1]?.body as string)).toEqual({
+    expected_tenant: "tenant",
+    method: "GET",
+    path: "/api/v1/shares?direction=outgoing",
+  });
+});

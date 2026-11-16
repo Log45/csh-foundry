@@ -38,7 +38,7 @@ def run_child(command: list[str], stop: threading.Event, deadline: float = 120) 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--kind", choices=("ingestion", "semantic", "outbox"), required=True)
-    parser.add_argument("--ontology", required=True)
+    parser.add_argument("--ontology", help="Optional queue filter")
     parser.add_argument("--deadline", type=float, default=120)
     args = parser.parse_args()
     if not 1 <= args.deadline <= 600:
@@ -49,10 +49,11 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     failures = 0
     module = "ontology_platform." + (args.kind if args.kind != "outbox" else "jobs.outbox")
+    command = [sys.executable, "-m", module]
+    if args.ontology:
+        command.extend(["--ontology", args.ontology])
     while not stop.is_set():
-        code = run_child(
-            [sys.executable, "-m", module, "--ontology", args.ontology], stop, args.deadline
-        )
+        code = run_child(command, stop, args.deadline)
         failures = min(failures + 1, 6) if code else 0
         # Liveness is local process progress, never an assertion of successful authorization.
         Path("/tmp/foundry-worker-heartbeat").touch()

@@ -32,6 +32,7 @@ from ontology_platform.security.contracts import (
     PolicyInput,
     RoleInput,
 )
+from ontology_platform.security.identity import lock_binding
 from ontology_platform.security.interfaces import Principal
 from ontology_platform.security.service import PlatformAuthorizer, denied
 
@@ -105,6 +106,7 @@ class SecurityAdministration:
     def identity(self, p: Principal, body: IdentityInput) -> str:
         with self.operation(p, "security:membership:manage", write=True) as session:
             # Stable issuer+subject identity; never rebind existing identities.
+            lock_binding(session, body.issuer, body.subject)
             binding = session.get(ExternalIdentity, (body.issuer, body.subject))
             if binding is None:
                 key = str(uuid4())
@@ -277,6 +279,8 @@ class SecurityAdministration:
                     "id": str(r.id),
                     "principal_id": r.principal_id,
                     "actor_id": r.actor_id,
+                    "acting_tenant_id": r.acting_tenant_id,
+                    "share_id": r.share_id,
                     "job_id": str(r.job_id) if r.job_id else None,
                     "execution_grant_id": str(r.execution_grant_id)
                     if r.execution_grant_id
