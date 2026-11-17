@@ -86,3 +86,39 @@ def test_directory_queries_only_configured_realm_and_returns_enabled_users():
         assert [user.model_dump() for user in search_users(config, verifier, ISSUER, "Ali")] == [
             {"subject": "first", "label": "alice"},
         ]
+
+
+def test_directory_sources_preserve_legacy_and_ignore_disabled_credentials():
+    config = settings()
+    assert config.enabled_directory_sources == ("keycloak",)
+    base = config.model_dump() | {"directory_client_secret": None}
+    for sources in (("ldap",), ()):
+        updated = Settings(
+            _env_file=None,
+            **(
+                base
+                | {
+                    "directory_sources": sources,
+                    "directory_ldap_url": "ldap://node.example.test",
+                    "directory_ldap_base_dn": "ou=users,dc=example,dc=test",
+                }
+            ),
+        )
+        assert updated.enabled_directory_sources == sources
+        with pytest.raises(ApplicationError) as error:
+            search_users(updated, None, ISSUER, "al")
+        assert error.value.code == "directory_unconfigured"
+
+    for url in ("ldaps://node.example.test", "ldap://secret@node.example.test", "ldap://"):
+        with pytest.raises(ValueError, match="StartTLS URL"):
+            Settings(
+                _env_file=None,
+                **(
+                    base
+                    | {
+                        "directory_sources": ("ldap",),
+                        "directory_ldap_url": url,
+                        "directory_ldap_base_dn": "ou=users,dc=example,dc=test",
+                    }
+                ),
+            )

@@ -11,6 +11,7 @@ import {
 } from "@/lib/api";
 import { Field, Notice, Task, useTask } from "./ui";
 import { Sharing } from "@/features/sharing";
+import { ShareClaim, usePendingInvitation } from "@/features/share-claim";
 import { Projects } from "@/features/projects";
 import { Manager } from "@/features/manager";
 import { Explorer, Actions } from "@/features/explorer";
@@ -23,6 +24,7 @@ export function Workspace() {
   const [tenantOffset, setTenantOffset] = useState(0);
   const [onboardingFailed, setOnboardingFailed] = useState(false);
   const [workspaceName, setWorkspaceName] = useState("");
+  const { invitation, clear: clearInvitation } = usePendingInvitation();
   useEffect(() => {
     const url = new URL(window.location.href);
     if (url.searchParams.get("signin") === "personal-tenant") {
@@ -214,6 +216,23 @@ export function Workspace() {
           Sign out
         </button>
       </main>
+    );
+  if (invitation && session.tenant)
+    return (
+      <ShareClaim
+        key={invitation.id}
+        api={api}
+        invitation={invitation}
+        onAccepted={() => {
+          clearInvitation();
+          setTab("sharing");
+        }}
+        onDismiss={clearInvitation}
+        onSignOut={async () => {
+          const result = (await auth("logout")) as { logout?: string };
+          window.location.assign(result.logout ?? "/");
+        }}
+      />
     );
   const navigation = [
     ["projects", "Projects", "project:read"],

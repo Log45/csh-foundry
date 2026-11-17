@@ -126,7 +126,13 @@ def test_onboarding(
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase22", action="store_true", help="Also verify personal onboarding")
-    phase22 = parser.parse_args().phase22
+    parser.add_argument(
+        "--directory-profile",
+        action="store_true",
+        help="Verify preferred_username with a disposable Studio client that permits profile",
+    )
+    args = parser.parse_args()
+    phase22 = args.phase22
     database_url = os.environ.get("TEST_DATABASE_URL", "")
     if phase22 and not database_url:
         parser.error("--phase22 needs TEST_DATABASE_URL pointing to a disposable database")
@@ -161,6 +167,8 @@ def main() -> None:
                 "credentials": [{"type": "password", "value": password, "temporary": False}],
             }
         ]
+        if args.directory_profile:
+            configuration["clients"][0]["optionalClientScopes"].append("profile")
         if phase22:
             configuration["roles"] = {"realm": [{"name": ONBOARDING_ROLE}]}
             configuration["scopeMappings"] = [{"client": "studio", "roles": [ONBOARDING_ROLE]}]
@@ -252,7 +260,7 @@ def main() -> None:
                 "client_id": "studio",
                 "redirect_uri": ORIGIN + "/auth/callback",
                 "response_type": "code",
-                "scope": "openid",
+                "scope": "openid profile" if args.directory_profile else "openid",
                 "state": secrets.token_urlsafe(32),
                 "nonce": secrets.token_urlsafe(32),
                 "code_challenge": challenge,
@@ -317,6 +325,10 @@ def main() -> None:
                 oidc = OIDCVerifier((provider,), client=proxy)
                 _, claims = oidc.verify(tokens["access_token"])
                 assert claims["client_id"] == "studio"
+                if args.directory_profile:
+                    assert claims["preferred_username"] == "operator"
+                    assert claims["sub"]
+                    print("PASS verified Studio access token carries the invited username")
                 assert jwt.get_unverified_header(tokens["access_token"])["typ"] == "at+jwt"
                 keys = oidc.cache["keycloak"][1]
                 kid = jwt.get_unverified_header(tokens["id_token"])["kid"]

@@ -12,6 +12,7 @@ class Principal(BaseModel):
     principal_id: str = Field(min_length=1)
     identity_provider: str | None = None
     external_subject: str | None = None
+    verified_username: str | None = Field(default=None, exclude=True)
     authentication_method: Literal["local", "oidc", "test", "delegated", "job"] = "local"
     principal_type: Literal["user", "service"] = "user"
     expires_at: AwareDatetime | None = None

@@ -1,6 +1,10 @@
 import type { Page } from "@playwright/test";
 import { expect } from "@playwright/test";
-export async function signIn(page: Page, subject = "operator") {
+export async function startSignIn(
+  page: Page,
+  subject = "operator",
+  path = "/",
+) {
   await page.route("https://127.0.0.1/oidc/**", async (route) => {
     const target = new URL(
       route
@@ -16,10 +20,14 @@ export async function signIn(page: Page, subject = "operator") {
     });
     await route.fulfill({ response: result });
   });
-  await page.goto("/");
+  await page.goto(path);
   await page
     .getByRole("button", { name: "Sign in with OpenID Connect" })
     .click();
+}
+
+export async function signIn(page: Page, subject = "operator") {
+  await startSignIn(page, subject);
   await expect(page.getByLabel("Tenant", { exact: true })).toBeVisible();
 }
 

@@ -41,3 +41,35 @@ React SDK exposes matching hooks. Create a separate SDK client with `resourceSha
 shared operations. Its `tenantId` is the acting tenant. Generated ontology TypeScript clients
 also accept `resourceShare`. Generated Python clients accept `resource_share` with the same
 meaning. API operations still decide whether a method may use the grant.
+
+
+## Recipient lookup and private invitations
+
+`GET /api/v1/shares/recipient-directory?search=` lists available recipients for share managers
+in the acting tenant. The page contains `results`, `next_cursor`, and `unavailable_sources`.
+Each result has a `source`, a selectable `id`, a `username` and a `display_name`. A blank query
+browses LDAP. Send the same `search` and the returned `cursor` to load more LDAP entries.
+`DELETE /api/v1/shares/recipient-directory?cursor=…` releases a page held by the caller.
+On `directory_restart` discard the cursor and start the search again. Keycloak results
+continue to use ordinary principal invitations. The legacy `GET /api/v1/shares/recipients`
+keeps its Keycloak response and behavior.
+
+For an LDAP result, send its selection ID as `selection` to
+`POST /api/v1/shares/directory-invitations` along with the resource and access level.
+Selections are signed for the caller, issuer/subject and acting tenant, and expire after
+10 minutes. The response returns a pending share and a 24-hour, single-use `claim_secret`.
+Studio places the secret in a private link fragment and removes it from the address bar
+before OIDC sign-in. It keeps the claim in tab-local storage through the callback and
+personal workspace naming. An SDK client must pass the secret privately and submit it only
+in the JSON body to `POST /api/v1/shares/{share_id}/claim`.
+
+LDAP visibility never provisions a principal. The configured directory exposes a UID but
+no trusted immutable realm subject, so every LDAP selection uses the claim flow. The
+recipient must already have resolved their membership through an authenticated Foundry
+principal. A claim checks the unexpired secret digest, exact verified Keycloak issuer and
+username, immutable subject binding, current recipient membership, and the original
+sender's current permission on the owning resource. The accepted share references the
+verified Foundry principal. Acceptance clears the digest and pending directory data.
+Revocation and acceptance lock the same PostgreSQL row. A recipient without a signed
+username receives `invitation_username_unavailable` and can try again after signing in
+with the intended account. Neither a directory selection nor a pending claim grants access.

@@ -14041,6 +14041,226 @@
         }
       }
     },
+    "/api/v1/shares/recipient-directory": {
+      "get": {
+        "tags": [
+          "sharing"
+        ],
+        "summary": "Recipient Directory",
+        "operationId": "recipient_directory_api_v1_shares_recipient_directory_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "default": "",
+              "title": "Search"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipientPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "sharing"
+        ],
+        "summary": "Cancel Recipient Directory",
+        "operationId": "cancel_recipient_directory_api_v1_shares_recipient_directory_delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Cancel Recipient Directory Api V1 Shares Recipient Directory Delete"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shares/directory-invitations": {
+      "post": {
+        "tags": [
+          "sharing"
+        ],
+        "summary": "Invite Directory",
+        "operationId": "invite_directory_api_v1_shares_directory_invitations_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DirectoryShareInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DirectoryShareInvitation"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/shares/{share_id}/claim": {
+      "post": {
+        "tags": [
+          "sharing"
+        ],
+        "summary": "Claim Directory",
+        "operationId": "claim_directory_api_v1_shares__share_id__claim_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "share_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Share Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DirectoryClaimInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TenantShareView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/shares": {
       "get": {
         "tags": [
@@ -18890,6 +19110,120 @@
           "created_at"
         ],
         "title": "DiagnosticView"
+      },
+      "DirectoryClaimInput": {
+        "properties": {
+          "secret": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{43}$",
+            "title": "Secret"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "secret"
+        ],
+        "title": "DirectoryClaimInput"
+      },
+      "DirectoryRecipient": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "ldap",
+              "keycloak"
+            ],
+            "title": "Source"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "id",
+          "username",
+          "display_name"
+        ],
+        "title": "DirectoryRecipient"
+      },
+      "DirectoryShareInput": {
+        "properties": {
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          },
+          "ontology_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ontology Id"
+          },
+          "access": {
+            "type": "string",
+            "enum": [
+              "viewer",
+              "collaborator"
+            ],
+            "title": "Access"
+          },
+          "selection": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 1,
+            "title": "Selection"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "access",
+          "selection"
+        ],
+        "title": "DirectoryShareInput"
+      },
+      "DirectoryShareInvitation": {
+        "properties": {
+          "share": {
+            "$ref": "#/components/schemas/TenantShareView"
+          },
+          "claim_secret": {
+            "type": "string",
+            "title": "Claim Secret"
+          }
+        },
+        "type": "object",
+        "required": [
+          "share",
+          "claim_secret"
+        ],
+        "title": "DirectoryShareInvitation"
       },
       "Download": {
         "properties": {
@@ -24277,6 +24611,46 @@
         ],
         "title": "ReceiptView"
       },
+      "RecipientPage": {
+        "properties": {
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/DirectoryRecipient"
+            },
+            "type": "array",
+            "title": "Results"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "unavailable_sources": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "ldap",
+                "keycloak"
+              ]
+            },
+            "type": "array",
+            "title": "Unavailable Sources"
+          }
+        },
+        "type": "object",
+        "required": [
+          "results",
+          "unavailable_sources"
+        ],
+        "title": "RecipientPage"
+      },
       "RelationshipMapping-Output": {
         "properties": {
           "link_type": {
@@ -25719,6 +26093,14 @@
             ],
             "title": "Ontology Id"
           },
+          "access": {
+            "type": "string",
+            "enum": [
+              "viewer",
+              "collaborator"
+            ],
+            "title": "Access"
+          },
           "recipient_principal_id": {
             "anyOf": [
               {
@@ -25743,14 +26125,6 @@
               }
             ],
             "title": "Recipient Tenant Id"
-          },
-          "access": {
-            "type": "string",
-            "enum": [
-              "viewer",
-              "collaborator"
-            ],
-            "title": "Access"
           }
         },
         "additionalProperties": false,
@@ -25787,12 +26161,18 @@
             ],
             "title": "Ontology Id"
           },
+          "access": {
+            "type": "string",
+            "enum": [
+              "viewer",
+              "collaborator"
+            ],
+            "title": "Access"
+          },
           "recipient_principal_id": {
             "anyOf": [
               {
-                "type": "string",
-                "maxLength": 200,
-                "minLength": 1
+                "type": "string"
               },
               {
                 "type": "null"
@@ -25812,13 +26192,28 @@
             ],
             "title": "Recipient Tenant Id"
           },
-          "access": {
-            "type": "string",
-            "enum": [
-              "viewer",
-              "collaborator"
+          "directory_username": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
             ],
-            "title": "Access"
+            "title": "Directory Username"
+          },
+          "directory_expires_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Directory Expires At"
           },
           "id": {
             "type": "string",

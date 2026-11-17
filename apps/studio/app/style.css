@@ -683,3 +683,47 @@ aside .row:has(button:disabled + button:disabled) {
   white-space: nowrap;
   word-break: normal;
 }
+
+.recipient-picker {
+  position: relative;
+  min-width: min(100%, 16rem);
+}
+
+.recipient-popup {
+  position: absolute;
+  z-index: 3;
+  inset-inline: 0;
+  background: var(--panel);
+  border: 1px solid var(--control-line);
+  border-radius: 0.4rem;
+  padding: 0.35rem;
+  box-shadow: 0 0.5rem 1.25rem rgb(0 0 0 / 28%);
+}
+
+.recipient-popup ul {
+  max-height: 14rem;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recipient-popup li {
+  cursor: pointer;
+  padding: 0.4rem;
+  overflow-wrap: anywhere;
+}
+
+.recipient-popup li:hover,
+.recipient-popup li[aria-selected="true"] {
+  background: var(--selected);
+}
+
+.recipient-popup small,
+.recipient-popup p {
+  color: var(--muted);
+}
+
+.recipient-popup p {
+  margin: 0.35rem;
+}

@@ -1,6 +1,7 @@
 import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from threading import BoundedSemaphore
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, Request
@@ -43,6 +44,7 @@ from ontology_platform.queries.routes import router as query_router
 from ontology_platform.sdk.routes import router as sdk_router
 from ontology_platform.security.browser import BrowserStore
 from ontology_platform.security.browser import router as browser_router
+from ontology_platform.security.ldap_directory import LdapDirectory
 from ontology_platform.security.local import LocalAuthorizer
 from ontology_platform.security.oidc import OIDCVerifier
 from ontology_platform.security.routes import router as security_router
@@ -87,6 +89,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 await asyncio.to_thread(app.state.oidc.warm)
             yield
         finally:
+            app.state.ldap_directory.close()
             if hasattr(app.state, "oidc"):
                 app.state.oidc.client.close()
             engine.dispose()
@@ -211,6 +214,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         else None
     )
     app.state.settings = configuration
+    app.state.directory_selections = CursorCodec(
+        bytes.fromhex(app.state.query_cursors.bind("", purpose="ldap-selection-signing"))
+    )
+    app.state.ldap_directory = LdapDirectory(configuration)
+    app.state.directory_requests = BoundedSemaphore(8)
     app.state.engine = engine
     app.state.sessions = sessionmaker(engine, expire_on_commit=False)
     app.state.browser_store = BrowserStore(app.state.sessions, configuration)
@@ -236,7 +244,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
     app.add_middleware(
         ActionPayloadLimit,
-        paths=("/security",),
+        paths=("/security", "/shares"),
         code="security_payload_too_large",
         message="Security request exceeds 64 KiB",
     )

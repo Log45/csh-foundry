@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { components } from "@/lib/api-schema";
 import {
   client,
@@ -18,6 +18,8 @@ import {
   useTask,
 } from "@/components/ui";
 import { Explorer } from "./explorer";
+import { invitationLink } from "./share-claim";
+import { RecipientPicker, type Recipient } from "./recipient-picker";
 
 type Share = components["schemas"]["TenantShareView"];
 type Project = components["schemas"]["ProjectView"];
@@ -28,13 +30,11 @@ function SharePicker({
   endpoint,
   label,
   name,
-  minimum = 0,
 }: {
   api: Client;
   endpoint: string;
   label: string;
   name: string;
-  minimum?: number;
 }) {
   const [search, setSearch] = useState("");
   const [options, setOptions] = useState<
@@ -44,7 +44,6 @@ function SharePicker({
   const [value, setValue] = useState("");
   const term = search.trim();
   useEffect(() => {
-    if (term.length < minimum) return;
     let live = true;
     const handle = setTimeout(() => {
       void api<components["schemas"]["ShareOption"][]>(
@@ -56,19 +55,14 @@ function SharePicker({
           setStatus(items.length ? "" : "No matches.");
         })
         .catch(() => {
-          if (live)
-            setStatus(
-              name === "recipient"
-                ? "User search is unavailable. You can invite by principal ID."
-                : "Could not load shareable resources.",
-            );
+          if (live) setStatus("Could not load shareable resources.");
         });
     }, 200);
     return () => {
       live = false;
       clearTimeout(handle);
     };
-  }, [api, endpoint, minimum, name, term]);
+  }, [api, endpoint, term]);
   return (
     <div>
       <Field label={`Search ${label.toLowerCase()}`}>
@@ -100,9 +94,7 @@ function SharePicker({
           ))}
         </select>
       </Field>
-      <p role="status">
-        {term.length < minimum ? "Enter at least two characters." : status}
-      </p>
+      <p role="status">{status}</p>
     </div>
   );
 }
@@ -123,6 +115,14 @@ export function Sharing({
   const [opened, setOpened] = useState<Share>();
   const [kind, setKind] = useState("project");
   const [recipient, setRecipient] = useState("directory");
+  const [selectedRecipient, setSelectedRecipient] = useState<Recipient>();
+  const [claimLink, setClaimLink] = useState("");
+  const [copyStatus, setCopyStatus] = useState("");
+  const [directoryUnconfigured, setDirectoryUnconfigured] = useState(false);
+  const usePrincipalId = useCallback(() => {
+    setDirectoryUnconfigured(true);
+    setRecipient("principal");
+  }, []);
   const permissions = session.me?.permissions ?? [];
   const manageProject =
     permissions.includes("project:read") &&
@@ -166,6 +166,8 @@ export function Sharing({
                 if (direction === tab) return;
                 setShares([]);
                 setOpened(undefined);
+                setSelectedRecipient(undefined);
+                setClaimLink("");
                 setDirection(tab);
                 setOffset(0);
               }}
@@ -180,15 +182,42 @@ export function Sharing({
             onSubmit={(event) => {
               event.preventDefault();
               const form = new FormData(event.currentTarget);
+              if (recipient === "directory" && !selectedRecipient) return;
+              setCopyStatus("");
               void task.run(async () => {
-                await api("/api/v1/shares", "POST", {
+                const target = {
                   [resourceKind === "project" ? "project_id" : "ontology_id"]:
                     form.get("resource"),
-                  [recipient !== "tenant"
-                    ? "recipient_principal_id"
-                    : "recipient_tenant_id"]: form.get("recipient"),
                   access: form.get("access"),
-                });
+                };
+                if (
+                  recipient === "directory" &&
+                  selectedRecipient?.source === "ldap"
+                ) {
+                  const invitation = await api<
+                    components["schemas"]["DirectoryShareInvitation"]
+                  >("/api/v1/shares/directory-invitations", "POST", {
+                    ...target,
+                    selection: selectedRecipient.id,
+                  });
+                  setClaimLink(
+                    invitationLink(
+                      invitation.share.id,
+                      invitation.claim_secret,
+                    ),
+                  );
+                } else {
+                  await api("/api/v1/shares", "POST", {
+                    ...target,
+                    [recipient === "tenant"
+                      ? "recipient_tenant_id"
+                      : "recipient_principal_id"]:
+                      recipient === "directory"
+                        ? selectedRecipient?.id
+                        : form.get("recipient"),
+                  });
+                  setClaimLink("");
+                }
                 await refresh();
               });
             }}
@@ -213,20 +242,24 @@ export function Sharing({
               <Field label="Recipient type">
                 <select
                   value={recipient}
-                  onChange={(event) => setRecipient(event.target.value)}
+                  onChange={(event) => {
+                    setSelectedRecipient(undefined);
+                    setRecipient(event.target.value);
+                  }}
                 >
-                  <option value="directory">Keycloak user</option>
+                  {!directoryUnconfigured && (
+                    <option value="directory">Directory user</option>
+                  )}
                   <option value="principal">Principal ID</option>
                   <option value="tenant">Tenant</option>
                 </select>
               </Field>
               {recipient === "directory" ? (
-                <SharePicker
+                <RecipientPicker
                   api={api}
-                  endpoint="/api/v1/shares/recipients"
-                  label="Recipient"
-                  name="recipient"
-                  minimum={2}
+                  selected={selectedRecipient}
+                  onSelect={setSelectedRecipient}
+                  onDirectoryUnconfigured={usePrincipalId}
                 />
               ) : (
                 <Field
@@ -251,7 +284,48 @@ export function Sharing({
                 </select>
               </Field>
             </div>
-            <button disabled={task.busy}>Send invitation</button>
+            {directoryUnconfigured && recipient === "principal" && (
+              <p role="status">
+                Ask the recipient for the Principal ID shown on their Sharing
+                page.
+              </p>
+            )}
+            <button
+              disabled={
+                task.busy || (recipient === "directory" && !selectedRecipient)
+              }
+            >
+              Send invitation
+            </button>
+            {claimLink && (
+              <div>
+                <p>
+                  Send this private, single-use link to the recipient. It
+                  expires in 24 hours.
+                </p>
+                <Field label="Invitation link">
+                  <input
+                    readOnly
+                    value={claimLink}
+                    onFocus={(event) => event.target.select()}
+                  />
+                </Field>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(claimLink);
+                      setCopyStatus("Link copied.");
+                    } catch {
+                      setCopyStatus("Select the invitation link and copy it.");
+                    }
+                  }}
+                >
+                  Copy invitation link
+                </button>
+                <p role="status">{copyStatus}</p>
+              </div>
+            )}
           </form>
         )}
         <ul>
@@ -272,7 +346,9 @@ export function Sharing({
                 <p>
                   Recipient{" "}
                   <code>
-                    {share.recipient_principal_id ?? share.recipient_tenant_id}
+                    {share.recipient_principal_id ??
+                      share.recipient_tenant_id ??
+                      share.directory_username}
                   </code>
                 </p>
               )}

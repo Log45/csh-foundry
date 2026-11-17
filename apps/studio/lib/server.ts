@@ -438,6 +438,7 @@ export async function discovery() {
     token_endpoint: string;
     jwks_uri: string;
     end_session_endpoint?: string;
+    scopes_supported?: string[];
   };
 }
 export async function brokerLogout() {
@@ -460,7 +461,13 @@ export async function authorization(login: ReturnType<typeof beginLogin>) {
     client_id: c.client,
     redirect_uri: c.origin + "/auth/callback",
     response_type: "code",
-    scope: "openid",
+    scope:
+      c.profile === "keycloak" &&
+      process.env.STUDIO_OIDC_REQUEST_PROFILE === "true" &&
+      Array.isArray(metadata.scopes_supported) &&
+      metadata.scopes_supported.includes("profile")
+        ? "openid profile"
+        : "openid",
     state: login.state,
     nonce: login.nonce,
     code_challenge: digest(login.verifier),

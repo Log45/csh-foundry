@@ -85,11 +85,11 @@ def owner_environment(shared, idp, monkeypatch):
     return shared, settings, private
 
 
-def test_same_owner_migrates_0029_and_owner_opt_in_is_required(owner_environment):
+def test_same_owner_migrates_current_head_and_owner_opt_in_is_required(owner_environment):
     shared, settings, _ = owner_environment
     w, _, _, _, _, _, _, _ = shared
     with w.sessions() as s:
-        assert s.scalar(text("SELECT version_num FROM alembic_version")) == "0029_personal_tenants"
+        assert s.scalar(text("SELECT version_num FROM alembic_version")) == "0030_directory_shares"
         assert s.scalar(
             text(
                 "SELECT c.relowner = (SELECT oid FROM pg_roles WHERE rolname=current_user) "

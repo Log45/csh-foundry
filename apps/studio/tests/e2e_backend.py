@@ -37,6 +37,7 @@ from ontology_platform.security.contracts import (
     RoleInput,
 )
 from ontology_platform.security.identity import resolve
+from ontology_platform.security.ldap_directory import Person
 from ontology_platform.security.oidc import OIDCVerifier, Provider
 from ontology_platform.security.service import PlatformAuthorizer
 from ontology_platform.semantic.engine import OpenOntologiesAdapter
@@ -52,6 +53,7 @@ CERTS = Path(os.environ.get("STUDIO_E2E_DIRECTORY", str(ROOT / "artifacts/studio
 
 
 def main():
+    ldap_test = os.environ.get("STUDIO_E2E_LDAP") == "true"
     CERTS.mkdir(parents=True, exist_ok=True)
     private = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "Foundry E2E local CA")])
@@ -116,6 +118,7 @@ def main():
             "operator",
             "application-viewer",
             "newcomer",
+            "invite-newcomer",
         }:
             return {"error": "invalid_subject"}
         code = token_urlsafe(32)
@@ -165,7 +168,12 @@ def main():
             ),
             "access_token": jwt.encode(
                 common
-                | {"aud": "foundry", "jti": params["code"], "client_id": "studio"}
+                | {
+                    "aud": "foundry",
+                    "jti": params["code"],
+                    "client_id": "studio",
+                    "preferred_username": common["sub"],
+                }
                 | (
                     {"realm_access": {"roles": ["e2e-human"]}}
                     if common["sub"] == "newcomer"
@@ -295,12 +303,23 @@ def main():
                     clients=("studio",),
                     access_token_profile="keycloak",
                     personal_tenant_client="studio",
-                    personal_tenant_role="e2e-human",
+                    personal_tenant_role=None if ldap_test else "e2e-human",
+                    personal_tenant_all_users=ldap_test,
                 ),
             ),
             _env_file=None,
+            directory_sources=("ldap",) if ldap_test else (),
+            directory_ldap_url="ldap://127.0.0.1" if ldap_test else None,
+            directory_ldap_base_dn="ou=members,dc=e2e,dc=test" if ldap_test else None,
         )
         app = create_app(settings)
+        if ldap_test:
+
+            def recipients(_scope, query, _cursor):
+                person = Person("invite-newcomer", "Invited Newcomer")
+                return ([person] if person.username.startswith(query) else [], None)
+
+            app.state.ldap_directory.page = recipients
         app.state.sessions = w.sessions
         app.state.browser_store = BrowserStore(w.sessions, settings)
         app.state.authorizer = auth

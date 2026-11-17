@@ -371,7 +371,7 @@ def test_g_migration_upgrade_preserves_previous_data_and_drift(historical_databa
     with engine.begin() as c:
         assert c.scalar(text("SELECT value FROM phase17_sentinel")) == "preserved"
         c.execute(text("DROP TABLE phase17_sentinel"))
-        assert c.scalar(text("SELECT version_num FROM alembic_version")) == "0029_personal_tenants"
+        assert c.scalar(text("SELECT version_num FROM alembic_version")) == "0030_directory_shares"
         config = Config(str(ROOT / "alembic.ini"))
         config.attributes["connection"] = c
         command.check(config)

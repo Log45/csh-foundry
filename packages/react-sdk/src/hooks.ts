@@ -199,6 +199,35 @@ export function useSharesRecipients(
     options,
   );
 }
+export function useSharesRecipientDirectory(
+  input: EndpointInput["shares.recipientDirectory"],
+  options?: QueryOptions,
+) {
+  return useFoundryQuery(
+    "shares.recipientDirectory",
+    input,
+    (c, signal) => c.shares.recipientDirectory(input, { signal }),
+    options,
+  );
+}
+export function useSharesCancelRecipientDirectory() {
+  return useFoundryMutation<
+    EndpointInput["shares.cancelRecipientDirectory"],
+    EndpointOutput["shares.cancelRecipientDirectory"]
+  >((c, input) => c.shares.cancelRecipientDirectory(input));
+}
+export function useSharesInviteDirectory() {
+  return useFoundryMutation<
+    EndpointInput["shares.inviteDirectory"],
+    EndpointOutput["shares.inviteDirectory"]
+  >((c, input) => c.shares.inviteDirectory(input));
+}
+export function useSharesClaimDirectory() {
+  return useFoundryMutation<
+    EndpointInput["shares.claimDirectory"],
+    EndpointOutput["shares.claimDirectory"]
+  >((c, input) => c.shares.claimDirectory(input));
+}
 export function useSharesInvite() {
   return useFoundryMutation<
     EndpointInput["shares.invite"],

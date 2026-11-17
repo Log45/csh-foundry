@@ -1,9 +1,11 @@
 """Cross-tenant invitations and explicit resource-scoped authorization."""
 
 import hashlib
+import hmac
+import secrets
 from collections.abc import Iterator
 from contextlib import contextmanager
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any, Literal
 from uuid import UUID, uuid4
 
@@ -23,10 +25,12 @@ from ontology_platform.db.models import (
     Tenant,
     TenantShare,
 )
+from ontology_platform.errors import ApplicationError
 from ontology_platform.projects.service import ProjectService
 from ontology_platform.security.audit import persist_audit
 from ontology_platform.security.directory import DirectoryUser
 from ontology_platform.security.interfaces import Principal
+from ontology_platform.security.recipient_directory import DirectoryRecipient
 from ontology_platform.security.service import PlatformAuthorizer, denied
 
 ONTOLOGY_READ = {
@@ -118,30 +122,55 @@ class ShareOption(BaseModel):
     label: str
 
 
-class TenantShareInput(BaseModel):
+class ShareTarget(BaseModel):
     model_config = ConfigDict(extra="forbid")
     project_id: UUID | None = None
     ontology_id: str | None = Field(None, min_length=1, max_length=200)
-    recipient_principal_id: str | None = Field(None, min_length=1, max_length=200)
-    recipient_tenant_id: UUID | None = None
     access: Literal["viewer", "collaborator"]
 
     @model_validator(mode="after")
-    def exactly_one(self) -> "TenantShareInput":
+    def one_resource(self) -> "ShareTarget":
         if (self.project_id is None) == (self.ontology_id is None):
             raise ValueError("Choose one resource")
+        return self
+
+
+class TenantShareInput(ShareTarget):
+    recipient_principal_id: str | None = Field(None, min_length=1, max_length=200)
+    recipient_tenant_id: UUID | None = None
+
+    @model_validator(mode="after")
+    def one_recipient(self) -> "TenantShareInput":
         if (self.recipient_tenant_id is None) == (self.recipient_principal_id is None):
             raise ValueError("Choose one recipient")
         return self
 
 
-class TenantShareView(TenantShareInput):
+class DirectoryShareInput(ShareTarget):
+    selection: str = Field(min_length=1, max_length=2048)
+
+
+class DirectoryClaimInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    secret: str = Field(pattern=r"^[A-Za-z0-9_-]{43}$")
+
+
+class TenantShareView(ShareTarget):
     model_config = ConfigDict(extra="forbid", from_attributes=True)
+    recipient_principal_id: str | None = None
+    recipient_tenant_id: UUID | None = None
+    directory_username: str | None = None
+    directory_expires_at: datetime | None = None
     id: UUID
     owner_tenant_id: UUID
     state: Literal["pending", "accepted", "revoked"]
     created_by: str
     created_at: datetime
+
+
+class DirectoryShareInvitation(BaseModel):
+    share: TenantShareView
+    claim_secret: str
 
 
 def share_principal(
@@ -300,7 +329,9 @@ class SharingService:
             return
         raise denied()
 
-    def recipients(self, p: Principal, users: list[DirectoryUser]) -> list[ShareOption]:
+    def keycloak_recipients(
+        self, p: Principal, users: list[DirectoryUser]
+    ) -> list[DirectoryRecipient]:
         with self.scope(p) as s:
             self.directory_access(s, p)
             bindings = {
@@ -318,13 +349,18 @@ class SharingService:
                 )
             }
             return [
-                ShareOption(id=bindings[user.subject], label=user.label)
+                DirectoryRecipient(
+                    id=bindings[user.subject],
+                    source="keycloak",
+                    username=user.label,
+                    display_name=user.display_name or user.label,
+                )
                 for user in users
                 if user.subject in bindings
             ]
 
     def manager(
-        self, s: Session, p: Principal, share: TenantShareInput, *, revoke: bool = False
+        self, s: Session, p: Principal, share: ShareTarget, *, revoke: bool = False
     ) -> None:
         if share.project_id is not None:
             self.auth.require(p, "project:read", f"{p.tenant_id}/projects/{share.project_id}")
@@ -391,6 +427,100 @@ class SharingService:
             s.flush()
             self.audit(s, p, row, "invite")
             return TenantShareView.model_validate(row)
+
+    def invite_directory(
+        self, p: Principal, body: DirectoryShareInput, username: str
+    ) -> DirectoryShareInvitation:
+        if p.authentication_method != "oidc" or not p.identity_provider or not p.external_subject:
+            raise denied()
+        secret = secrets.token_urlsafe(32)
+        with self.scope(p) as s:
+            self.manager(s, p, body)
+            row = TenantShare(
+                id=uuid4(),
+                owner_tenant_id=p.tenant_id,
+                **body.model_dump(exclude={"selection"}),
+                state="pending",
+                created_by=p.principal_id,
+                directory_username=username,
+                directory_issuer=p.identity_provider,
+                directory_sender_subject=p.external_subject,
+                directory_digest=hashlib.sha256(secret.encode()).hexdigest(),
+                directory_expires_at=datetime.now(UTC) + timedelta(hours=24),
+            )
+            s.add(row)
+            s.flush()
+            self.audit(s, p, row, "invite")
+            return DirectoryShareInvitation(
+                share=TenantShareView.model_validate(row), claim_secret=secret
+            )
+
+    def claim_directory(
+        self, p: Principal, key: UUID, username: str | None, secret: str
+    ) -> TenantShareView:
+        invalid = ApplicationError(
+            "invitation_unavailable", "The invitation is unavailable for this account.", 403
+        )
+        if p.authentication_method != "oidc" or p.principal_type != "user" or p.share_id:
+            raise invalid
+        with self.auth.sessions.begin() as s:
+            with self.auth.security_context(s, p):
+                self.auth.identity(s, p)
+                row = s.get(TenantShare, key)
+                if row is None or row.directory_issuer != p.identity_provider:
+                    raise invalid
+                # Pending invitation provenance is immutable until the atomic claim.
+                sender = Principal(
+                    tenant_id=row.owner_tenant_id,
+                    principal_id=row.created_by,
+                    identity_provider=row.directory_issuer,
+                    external_subject=row.directory_sender_subject,
+                    authentication_method="oidc",
+                    expires_at=p.expires_at,
+                )
+
+            # Use the same owner authorization lock order as revocation.
+            with self.auth.security_context(s, sender):
+                row = s.get(TenantShare, key, with_for_update=True, populate_existing=True)
+                if (
+                    row is None
+                    or row.state != "pending"
+                    or row.directory_digest is None
+                    or row.directory_issuer != p.identity_provider
+                    or row.directory_expires_at is None
+                    or row.directory_expires_at <= datetime.now(UTC)
+                    or row.created_by == p.principal_id
+                    or not hmac.compare_digest(
+                        row.directory_digest, hashlib.sha256(secret.encode()).hexdigest()
+                    )
+                ):
+                    raise invalid
+                if username is None:
+                    raise ApplicationError(
+                        "invitation_username_unavailable",
+                        "Sign in again with the invited account. "
+                        "If this persists, contact support.",
+                        403,
+                    )
+                if row.directory_username != username:
+                    raise invalid
+                owner_membership = s.get(Membership, (row.owner_tenant_id, p.principal_id))
+                if owner_membership is not None and not owner_membership.enabled:
+                    raise invalid
+
+                self.auth.identity(s, sender)
+                self.manager(s, sender, TenantShareView.model_validate(row))
+                if row.directory_expires_at <= datetime.now(UTC):
+                    raise invalid
+                row.recipient_principal_id = p.principal_id
+                row.directory_username = None
+                row.directory_issuer = None
+                row.directory_sender_subject = None
+                row.directory_digest = None
+                row.directory_expires_at = None
+                row.state = "accepted"
+                self.audit(s, p, row, "accept")
+                return TenantShareView.model_validate(row)
 
     def list(
         self, p: Principal, direction: Literal["incoming", "outgoing"], limit: int, offset: int

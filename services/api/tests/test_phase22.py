@@ -64,7 +64,7 @@ def profile():
     )
 
 
-def phase22(database, idp, monkeypatch, provider=None):
+def phase22(database, idp, monkeypatch, provider=None, **settings_overrides):
     engine, sessions, url = database
     private, identity_state, verifier = idp
     provider = provider or profile()
@@ -97,6 +97,7 @@ def phase22(database, idp, monkeypatch, provider=None):
         worker_subject="pool",
         worker_provider_id=provider.id,
         worker_access_token=token(private, claims={"client_id": "worker", "sub": "pool"}),
+        **settings_overrides,
     )
 
     def headers(subject, tenant=None, share=None, **claims):

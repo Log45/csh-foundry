@@ -37,7 +37,25 @@ def get_principal(
         return Principal(
             tenant_id=settings.local_tenant_id, principal_id=settings.local_principal_id
         )
-    issuer, subject, method, expiry = verified_identity(request)
+    username = None
+    if settings.auth_mode == "oidc":
+        provider, claims, expiry = verified_oidc(request)
+        issuer, subject, method = provider.issuer, claims["sub"], "oidc"
+        client = claims.get("client_id", claims.get("azp"))
+        if (
+            provider.access_token_profile == "keycloak"
+            and client != settings.worker_client_id
+            and (
+                provider.personal_tenant_client is None or client == provider.personal_tenant_client
+            )
+        ):
+            from ontology_platform.security.ldap_directory import valid_username
+
+            value = claims.get("preferred_username")
+            if isinstance(value, str) and valid_username(value):
+                username = value
+    else:
+        issuer, subject, method, expiry = verified_identity(request)
     selected = request.headers.get("x-tenant-id")
     try:
         tenant = UUID(selected) if selected else None
@@ -46,6 +64,8 @@ def get_principal(
     p = resolve(
         request.app.state.sessions, issuer, subject, tenant, method=method, expires_at=expiry
     )
+    if username is not None and p.principal_type == "user":
+        p = p.model_copy(update={"verified_username": username})
     if share_headers:
         from ontology_platform.security.sharing import share_principal
 

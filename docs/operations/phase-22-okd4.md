@@ -57,6 +57,126 @@ Set `FOUNDRY_DIRECTORY_PROVIDER_ID` to the existing trusted Keycloak provider ID
 able to reach the issuer and its Admin REST user search endpoint over HTTPS. The manual
 principal ID option works without this configuration.
 
+## LDAP recipient picker in `csh-foundry`
+
+1. Select project **csh-foundry** in the OKD web console. Open **Workloads → Config Maps →
+   foundry-config → YAML**. Merge these keys into the existing `data` map and save.
+   Keep existing ConfigMap entries. [OKD ConfigMap guide](https://docs.okd.io/4.19/nodes/pods/nodes-pods-configmaps.html)
+
+   ```yaml
+   data:
+     FOUNDRY_DIRECTORY_SOURCES: '["ldap"]'
+     FOUNDRY_DIRECTORY_LDAP_URL: 'ldap://ldap.csh.rit.edu'
+     FOUNDRY_DIRECTORY_LDAP_BASE_DN: 'cn=users,cn=accounts,dc=csh,dc=rit,dc=edu'
+   ```
+
+   This uses anonymous verified StartTLS on TCP 389. The system trust store is the default. If
+   the directory uses a private CA, mount the approved CA through the API Deployment's existing
+   trust volume and set `FOUNDRY_DIRECTORY_LDAP_CA_BUNDLE` to its PEM path under `/run/trust`.
+   Set `FOUNDRY_DIRECTORY_LDAP_PROVIDER_ID` when multiple trusted Keycloak realms are configured.
+   The configured realm must use the same unique, case-sensitive username as the LDAP UID.
+   If the directory operator supplies an approved member filter, set
+   `FOUNDRY_DIRECTORY_LDAP_MEMBER_FILTER` to the complete parenthesized LDAP filter. The directory
+   branch includes administrative accounts. Studio sign-in and claim authorization still apply.
+2. Open **Networking → NetworkPolicies → api → YAML**. Keep the DNS, database and HTTPS
+   rules. Add an egress rule under `spec.egress` for the approved address ranges of
+   `ldap.csh.rit.edu`, TCP port 389, and save. Use only the directory addresses supplied by
+   the network operator. Standard NetworkPolicy uses CIDRs, so update them if the endpoint
+   addresses change or use the cluster's approved DNS-aware egress controls.
+   [OKD NetworkPolicy guide](https://docs.okd.io/4.19/networking/network_security/network_policy/creating-network-policy.html)
+
+   ```yaml
+     - to:
+       - ipBlock:
+           cidr: <approved-LDAP-IPv4-address>/32
+       ports:
+       - protocol: TCP
+         port: 389
+   ```
+
+3. Keep Keycloak's existing configuration. Confirm with the identity operator that the current
+   Studio client supplies `preferred_username` in its signed API access token. If the existing
+   client permits the optional `profile` scope, set `STUDIO_OIDC_REQUEST_PROFILE: 'true'` in
+   Studio's environment or the shared ConfigMap. Studio adds `profile` for Keycloak when the
+   discovery document advertises it. If the signed username is absent, a valid link remains
+   pending and the recipient gets a sign-in/support message. Check the claim locally during
+   a controlled sign-in without copying tokens into logs or browser URLs.
+   [Keycloak client scopes](https://www.keycloak.org/docs/26.8.1/server_admin/#_client_scopes)
+4. In the approved maintenance window run the version-matched migration Job to
+   `0030_directory_shares` and update the image digests as described below. Under **Workloads →
+   Deployments**, confirm `api` and `studio` use the new image and their current pod templates
+   reference `foundry-config`. If only ConfigMap environment values changed, choose
+   **Actions → Restart rollout** on the affected Deployment. Watch **Workloads → Pods** until
+   the new pods are Ready. [OKD deployment guide](https://docs.okd.io/4.19/applications/deployments/managing-deployment-processes.html)
+5. Open **Workloads → Pods → the new API pod → Terminal** and select container `api`.
+   Run the following inside the API image. It requests at most three five-entry pages on one
+   connection and prints counts only. It uses the API's trust bundle and membership filter
+   when those are configured. Run using the image's Python environment.
+
+   ```bash
+   python - <<'PY'
+   from ldap3 import DEREF_NEVER, LEVEL
+   from ontology_platform.config import get_settings
+   from ontology_platform.security.ldap_directory import (
+       LdapDirectory, PAGE_CONTROL, search_filter,
+   )
+
+   api_settings = get_settings()
+   assert api_settings.directory_ldap_url == "ldap://ldap.csh.rit.edu"
+   base = "cn=users,cn=accounts,dc=csh,dc=rit,dc=edu"
+   assert api_settings.directory_ldap_base_dn == base
+   directory = LdapDirectory(api_settings)
+   connection = directory.connect()
+   seen = set()
+   cookie = b""
+   try:
+       for page in range(1, 4):
+           connection.search(
+               base, search_filter("", api_settings.directory_ldap_member_filter),
+               search_scope=LEVEL, dereference_aliases=DEREF_NEVER,
+               attributes=["uid", "displayName", "cn"],
+               time_limit=3, paged_size=5, paged_criticality=True, paged_cookie=cookie,
+           )
+           assert connection.result["result"] == 0
+           entries = {row["dn"] for row in connection.response if row["type"] == "searchResEntry"}
+           assert 0 < len(entries) <= 5 and seen.isdisjoint(entries)
+           seen.update(entries)
+           print(f"PASS verified LDAP page {page}, {len(entries)} entries")
+           cookie = connection.result["controls"][PAGE_CONTROL]["value"]["cookie"]
+           if not cookie:
+               break
+   finally:
+       directory.disconnect(connection)
+   PY
+   ```
+
+6. In Studio, as an owner, choose **Sharing → Shared by me**, select a resource, and focus
+   **Recipient** with an empty input. Browse, select **Load more** and check a known name and
+   UID prefix. Share a Viewer invitation privately with an eligible test user who has never
+   signed in. Have them open the link, sign in, name a workspace, accept, and open the resource
+   from **Shared with me**. Test a wrong account, revoked link, replay, and direct Principal ID
+   sharing. Record sanitized outcomes. A second source can be verified with
+   `["ldap","keycloak"]` if Keycloak directory credentials already exist.
+
+`["keycloak"]` uses only the existing Keycloak search, which resolves registered Foundry
+principals. An unset source list retains the legacy Keycloak behavior for configured clients.
+`[]` disables directory lookup. Principal ID and tenant ID entry work in every mode.
+
+Each API process holds the LDAP connection and RFC 2696 cursor for up to 45 idle seconds.
+The first continuation consumes an opaque Foundry cursor and returns a new one for the
+next page. API replicas can verify the selected recipient using the shared cursor signing key,
+and PostgreSQL handles claims across replicas. A continuation must reach the same live API
+process. If it arrives at another process, expires, or loses the LDAP connection, restart the
+search from the first page. The baseline API runs one pod with one process. To paginate
+through a multi-replica rollout, verify that the Studio-to-API routing preserves affinity
+for the whole browse session. For example, with one API process per pod, test
+`sessionAffinity: ClientIP` on the API Service from the same Studio pod, plus ingress
+affinity if Studio has multiple replicas. A restart stays safe even without sticky routing.
+
+Disable LDAP immediately through the source list and restart the API if lookup needs to be
+withdrawn. Revoke outstanding links individually from **Shared by me** if they must be withdrawn.
+Already issued invitations otherwise remain valid until expiry or revocation.
+
 ## Coordinated rollout
 
 1. Use **Workloads → Deployments** to scale all worker replicas to zero and suspend any
@@ -65,10 +185,10 @@ principal ID option works without this configuration.
 2. Using **Import YAML**, create the release migration Job from the reviewed migration
    manifest with the matching API digest and a unique Job name. Use the existing migration
    owner credentials. On **Workloads → Jobs → Pods → Logs**, verify it reached
-   `0029_personal_tenants`. Under owner runtime mode keep
-   `FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE=true`. For distinct migration and runtime roles,
-   apply the approved runtime DML grants for the new tables before restarting. Inspect the
-   Job result and schema revision from its authorized administrative pod terminal.
+   `0030_directory_shares`. Under owner runtime mode keep
+   `FOUNDRY_ALLOW_OWNER_RUNTIME_ROLE=true`. For a Phase 22 baseline upgrade with distinct
+   migration and runtime roles, confirm runtime DML access to `tenant_shares` before
+   restarting. Inspect the Job result and schema revision from its authorized administrative pod terminal.
 3. In the ConfigMap YAML remove `FOUNDRY_WORKER_TENANT_ID`. Remove any deployment-level
    equivalent and remove the fixed `--ontology` selector from each shared worker Deployment
    command. The optional CLI filter remains for deliberate diagnostics. Update all enabled

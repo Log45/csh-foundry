@@ -3125,6 +3125,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/shares/recipient-directory": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Recipient Directory */
+        get: operations["recipient_directory_api_v1_shares_recipient_directory_get"];
+        put?: never;
+        post?: never;
+        /** Cancel Recipient Directory */
+        delete: operations["cancel_recipient_directory_api_v1_shares_recipient_directory_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/shares/directory-invitations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Invite Directory */
+        post: operations["invite_directory_api_v1_shares_directory_invitations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/shares/{share_id}/claim": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Claim Directory */
+        post: operations["claim_directory_api_v1_shares__share_id__claim_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/shares": {
         parameters: {
             query?: never;
@@ -4803,6 +4855,45 @@ export interface components {
              */
             created_at: string;
         };
+        /** DirectoryClaimInput */
+        DirectoryClaimInput: {
+            /** Secret */
+            secret: string;
+        };
+        /** DirectoryRecipient */
+        DirectoryRecipient: {
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "ldap" | "keycloak";
+            /** Id */
+            id: string;
+            /** Username */
+            username: string;
+            /** Display Name */
+            display_name: string;
+        };
+        /** DirectoryShareInput */
+        DirectoryShareInput: {
+            /** Project Id */
+            project_id?: string | null;
+            /** Ontology Id */
+            ontology_id?: string | null;
+            /**
+             * Access
+             * @enum {string}
+             */
+            access: "viewer" | "collaborator";
+            /** Selection */
+            selection: string;
+        };
+        /** DirectoryShareInvitation */
+        DirectoryShareInvitation: {
+            share: components["schemas"]["TenantShareView"];
+            /** Claim Secret */
+            claim_secret: string;
+        };
         /** Download */
         Download: {
             /** Filename */
@@ -6325,10 +6416,20 @@ export interface components {
              */
             updated_at: string;
         };
+        /** OnboardingInput */
+        OnboardingInput: {
+            /** Name */
+            name: string;
+        };
         /** OnboardingResult */
         OnboardingResult: {
             /** Personal Tenant Id */
             personal_tenant_id?: string | null;
+            /**
+             * Name Required
+             * @default false
+             */
+            name_required?: boolean;
         };
         /** OntologyDefinition */
         OntologyDefinition: {
@@ -6883,6 +6984,15 @@ export interface components {
              */
             created_at: string;
         };
+        /** RecipientPage */
+        RecipientPage: {
+            /** Results */
+            results: components["schemas"]["DirectoryRecipient"][];
+            /** Next Cursor */
+            next_cursor?: string | null;
+            /** Unavailable Sources */
+            unavailable_sources: ("ldap" | "keycloak")[];
+        };
         /** RelationshipMapping */
         "RelationshipMapping-Output": {
             /** Link Type */
@@ -7421,15 +7531,15 @@ export interface components {
             project_id?: string | null;
             /** Ontology Id */
             ontology_id?: string | null;
-            /** Recipient Principal Id */
-            recipient_principal_id?: string | null;
-            /** Recipient Tenant Id */
-            recipient_tenant_id?: string | null;
             /**
              * Access
              * @enum {string}
              */
             access: "viewer" | "collaborator";
+            /** Recipient Principal Id */
+            recipient_principal_id?: string | null;
+            /** Recipient Tenant Id */
+            recipient_tenant_id?: string | null;
         };
         /** TenantShareView */
         TenantShareView: {
@@ -7437,15 +7547,19 @@ export interface components {
             project_id?: string | null;
             /** Ontology Id */
             ontology_id?: string | null;
-            /** Recipient Principal Id */
-            recipient_principal_id?: string | null;
-            /** Recipient Tenant Id */
-            recipient_tenant_id?: string | null;
             /**
              * Access
              * @enum {string}
              */
             access: "viewer" | "collaborator";
+            /** Recipient Principal Id */
+            recipient_principal_id?: string | null;
+            /** Recipient Tenant Id */
+            recipient_tenant_id?: string | null;
+            /** Directory Username */
+            directory_username?: string | null;
+            /** Directory Expires At */
+            directory_expires_at?: string | null;
             /**
              * Id
              * Format: uuid
@@ -15256,7 +15370,11 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["OnboardingInput"] | null;
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -15265,6 +15383,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OnboardingResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -15387,6 +15514,139 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ShareOption"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    recipient_directory_api_v1_shares_recipient_directory_get: {
+        parameters: {
+            query?: {
+                search?: string;
+                cursor?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecipientPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cancel_recipient_directory_api_v1_shares_recipient_directory_delete: {
+        parameters: {
+            query: {
+                cursor: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: string;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    invite_directory_api_v1_shares_directory_invitations_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DirectoryShareInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DirectoryShareInvitation"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    claim_directory_api_v1_shares__share_id__claim_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                share_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DirectoryClaimInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TenantShareView"];
                 };
             };
             /** @description Validation Error */

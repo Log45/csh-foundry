@@ -190,7 +190,7 @@ def test_fresh_migration_and_drift(database):
 
     engine, _, _ = database
     with engine.begin() as c:
-        assert c.scalar(text("select version_num from alembic_version")) == "0029_personal_tenants"
+        assert c.scalar(text("select version_num from alembic_version")) == "0030_directory_shares"
         config = Config(str(ROOT / "alembic.ini"))
         config.attributes["connection"] = c
         command.check(config)

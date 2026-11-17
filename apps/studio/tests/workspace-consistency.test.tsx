@@ -97,3 +97,55 @@ it("keeps the newest ontology read when an older request completes after activat
   });
   expect(screen.getByText("Active 1.0.0")).toBeTruthy();
 });
+
+it("carries a private claim through reload and workspace naming", async () => {
+  const key = "51630840-7207-4bdc-a318-6e602b82d8a9";
+  const secret = "A".repeat(43);
+  window.history.replaceState(null, "", "/#share=" + key + "." + secret);
+  mocks.session.mockRejectedValueOnce(new Error("session_expired"));
+  const signedOut = render(<Workspace />);
+  await screen.findByRole("button", { name: "Sign in with OpenID Connect" });
+  expect(window.location.hash).toBe("");
+  signedOut.unmount();
+
+  mocks.session
+    .mockResolvedValueOnce({
+      csrf: "test",
+      nameRequired: true,
+      tenants: [],
+      me: null,
+    })
+    .mockResolvedValueOnce({ status: "selected" })
+    .mockResolvedValueOnce({
+      csrf: "test",
+      tenant: "personal",
+      tenants: [{ id: "personal", name: "My Workspace" }],
+      me: {
+        principal: { principal_id: "principal" },
+        permissions: ["tenant:read"],
+      },
+    });
+  mocks.api.mockImplementation((path: string) =>
+    path.endsWith("/claim")
+      ? Promise.resolve({ state: "accepted" })
+      : Promise.resolve([]),
+  );
+  render(<Workspace />);
+  fireEvent.change(await screen.findByLabelText("Workspace name"), {
+    target: { value: "My Workspace" },
+  });
+  expect(
+    screen.queryByRole("button", { name: "Accept invitation" }),
+  ).toBeNull();
+  fireEvent.click(screen.getByRole("button", { name: "Create workspace" }));
+  fireEvent.click(
+    await screen.findByRole("button", { name: "Accept invitation" }),
+  );
+  expect(mocks.api).toHaveBeenCalledWith(
+    "/api/v1/shares/" + key + "/claim",
+    "POST",
+    { secret },
+  );
+  await screen.findByRole("button", { name: "Shared with me" });
+  expect(Object.values(sessionStorage)).not.toContain(key + "." + secret);
+});

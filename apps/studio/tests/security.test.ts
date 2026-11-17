@@ -252,3 +252,45 @@ it("uses an explicit backchannel socket without changing public issuer or browse
     "invalid_oidc_backchannel",
   );
 });
+
+it("requests profile only for opted-in Keycloak clients with advertised support", async () => {
+  vi.stubEnv(
+    "FOUNDRY_OIDC_PROVIDERS",
+    JSON.stringify([
+      {
+        id: "keycloak",
+        issuer: "https://identity.example/realm",
+        audience: "foundry",
+        clients: ["studio"],
+        access_token_profile: "keycloak",
+      },
+    ]),
+  );
+  const { issuer } = config();
+  let scopes = ["openid", "profile"];
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async () =>
+      Response.json({
+        issuer,
+        code_challenge_methods_supported: ["S256"],
+        authorization_endpoint: issuer + "/authorize",
+        token_endpoint: issuer + "/token",
+        jwks_uri: issuer + "/keys",
+        scopes_supported: scopes,
+      }),
+    ),
+  );
+  vi.stubEnv("STUDIO_OIDC_REQUEST_PROFILE", "");
+  expect((await authorization(beginLogin())).searchParams.get("scope")).toBe(
+    "openid",
+  );
+  vi.stubEnv("STUDIO_OIDC_REQUEST_PROFILE", "true");
+  expect((await authorization(beginLogin())).searchParams.get("scope")).toBe(
+    "openid profile",
+  );
+  scopes = ["openid"];
+  expect((await authorization(beginLogin())).searchParams.get("scope")).toBe(
+    "openid",
+  );
+});

@@ -10,6 +10,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from ontology_platform.security.oidc import Provider
 
+DirectorySource = Literal["ldap", "keycloak"]
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -30,6 +32,12 @@ class Settings(BaseSettings):
     oidc_ca_bundle: Path | None = None
     test_issuer: str | None = None
     test_subject: str | None = None
+    directory_sources: tuple[DirectorySource, ...] | None = None
+    directory_ldap_url: str | None = None
+    directory_ldap_base_dn: str | None = Field(default=None, min_length=1, max_length=2048)
+    directory_ldap_ca_bundle: Path | None = None
+    directory_ldap_member_filter: str | None = Field(default=None, max_length=2048)
+    directory_ldap_provider_id: str | None = None
     directory_provider_id: str | None = None
     directory_client_id: str | None = None
     directory_client_secret: SecretStr | None = None
@@ -56,6 +64,28 @@ class Settings(BaseSettings):
     diagnostic_timing: bool = False
     database_pool_size: int = 5
     database_pool_overflow: int = 5
+
+    @property
+    def enabled_directory_sources(self) -> tuple[DirectorySource, ...]:
+        if self.directory_sources is not None:
+            return self.directory_sources
+        return (
+            ("keycloak",)
+            if any(
+                (self.directory_provider_id, self.directory_client_id, self.directory_client_secret)
+            )
+            else ()
+        )
+
+    @property
+    def ldap_provider(self) -> Provider | None:
+        providers = [
+            p
+            for p in self.oidc_providers
+            if p.access_token_profile == "keycloak"
+            and (self.directory_ldap_provider_id is None or p.id == self.directory_ldap_provider_id)
+        ]
+        return providers[0] if len(providers) == 1 else None
 
     @model_validator(mode="after")
     def local_context(self) -> "Settings":
@@ -118,7 +148,32 @@ class Settings(BaseSettings):
             self.directory_client_id,
             self.directory_client_secret,
         )
-        if any(directory) and (
+        sources = self.enabled_directory_sources
+        if len(sources) != len(set(sources)):
+            raise ValueError("Duplicate directory sources")
+        if "ldap" in sources:
+            ldap = urlsplit(self.directory_ldap_url or "")
+            if (
+                ldap.scheme != "ldap"
+                or not ldap.hostname
+                or ldap.port == 0
+                or ldap.username is not None
+                or ldap.password is not None
+                or ldap.path not in ("", "/")
+                or ldap.query
+                or ldap.fragment
+                or not self.directory_ldap_base_dn
+                or self.ldap_provider is None
+            ):
+                raise ValueError(
+                    "LDAP requires a StartTLS URL, base DN, and trusted Keycloak realm"
+                )
+            if self.directory_ldap_member_filter and not (
+                self.directory_ldap_member_filter.startswith("(")
+                and self.directory_ldap_member_filter.endswith(")")
+            ):
+                raise ValueError("LDAP member filter must be a parenthesized LDAP filter")
+        if "keycloak" in sources and (
             not all(directory)
             or self.directory_client_id == self.worker_client_id
             or any(self.directory_client_id in p.clients for p in self.oidc_providers)

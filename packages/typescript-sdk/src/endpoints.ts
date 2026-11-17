@@ -75,6 +75,18 @@ export interface EndpointInput {
   "shares.recipients": Input<
     operations["share_recipients_api_v1_shares_recipients_get"]
   >;
+  "shares.recipientDirectory": Input<
+    operations["recipient_directory_api_v1_shares_recipient_directory_get"]
+  >;
+  "shares.cancelRecipientDirectory": Input<
+    operations["cancel_recipient_directory_api_v1_shares_recipient_directory_delete"]
+  >;
+  "shares.inviteDirectory": Input<
+    operations["invite_directory_api_v1_shares_directory_invitations_post"]
+  >;
+  "shares.claimDirectory": Input<
+    operations["claim_directory_api_v1_shares__share_id__claim_post"]
+  >;
   "shares.invite": Input<operations["invite_api_v1_shares_post"]>;
   "shares.accept": Input<
     operations["accept_api_v1_shares__share_id__accept_post"]
@@ -406,6 +418,18 @@ export interface EndpointOutput {
   >;
   "shares.recipients": Output<
     operations["share_recipients_api_v1_shares_recipients_get"]
+  >;
+  "shares.recipientDirectory": Output<
+    operations["recipient_directory_api_v1_shares_recipient_directory_get"]
+  >;
+  "shares.cancelRecipientDirectory": Output<
+    operations["cancel_recipient_directory_api_v1_shares_recipient_directory_delete"]
+  >;
+  "shares.inviteDirectory": Output<
+    operations["invite_directory_api_v1_shares_directory_invitations_post"]
+  >;
+  "shares.claimDirectory": Output<
+    operations["claim_directory_api_v1_shares__share_id__claim_post"]
   >;
   "shares.invite": Output<operations["invite_api_v1_shares_post"]>;
   "shares.accept": Output<
@@ -873,6 +897,38 @@ export function endpoints(send: Transport) {
         options?: RequestOptions,
       ): Promise<EndpointOutput["shares.recipients"]> =>
         send("GET", "/api/v1/shares/recipients", input, true, options),
+      recipientDirectory: (
+        input: EndpointInput["shares.recipientDirectory"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["shares.recipientDirectory"]> =>
+        send("GET", "/api/v1/shares/recipient-directory", input, true, options),
+      cancelRecipientDirectory: (
+        input: EndpointInput["shares.cancelRecipientDirectory"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["shares.cancelRecipientDirectory"]> =>
+        send(
+          "DELETE",
+          "/api/v1/shares/recipient-directory",
+          input,
+          false,
+          options,
+        ),
+      inviteDirectory: (
+        input: EndpointInput["shares.inviteDirectory"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["shares.inviteDirectory"]> =>
+        send(
+          "POST",
+          "/api/v1/shares/directory-invitations",
+          input,
+          false,
+          options,
+        ),
+      claimDirectory: (
+        input: EndpointInput["shares.claimDirectory"],
+        options?: RequestOptions,
+      ): Promise<EndpointOutput["shares.claimDirectory"]> =>
+        send("POST", "/api/v1/shares/{share_id}/claim", input, false, options),
       invite: (
         input: EndpointInput["shares.invite"],
         options?: RequestOptions,

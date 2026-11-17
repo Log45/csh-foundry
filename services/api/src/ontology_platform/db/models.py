@@ -1369,6 +1369,11 @@ class TenantShare(Base):
     ontology_id: Mapped[str | None] = mapped_column(Text)
     recipient_principal_id: Mapped[str | None] = mapped_column(ForeignKey("principals.id"))
     recipient_tenant_id: Mapped[UUID | None] = mapped_column(ForeignKey("tenants.id"))
+    directory_username: Mapped[str | None] = mapped_column(String(200))
+    directory_issuer: Mapped[str | None] = mapped_column(String(2048))
+    directory_sender_subject: Mapped[str | None] = mapped_column(String(512))
+    directory_digest: Mapped[str | None] = mapped_column(String(64))
+    directory_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     access: Mapped[str] = mapped_column(String(20))
     state: Mapped[str] = mapped_column(String(10))
     created_by: Mapped[str] = mapped_column(ForeignKey("principals.id"))
@@ -1382,7 +1387,10 @@ class TenantShare(Base):
         ),
         CheckConstraint("num_nonnulls(project_id, ontology_id) = 1", name="ck_share_target"),
         CheckConstraint(
-            "num_nonnulls(recipient_principal_id, recipient_tenant_id) = 1",
+            "num_nonnulls(recipient_principal_id, recipient_tenant_id, directory_digest) = 1 "
+            "AND (directory_digest IS NULL OR state IN ('pending', 'revoked')) "
+            "AND num_nonnulls(directory_username, directory_issuer, directory_sender_subject, "
+            "directory_digest, directory_expires_at) IN (0, 5)",
             name="ck_share_recipient",
         ),
         CheckConstraint("owner_tenant_id <> recipient_tenant_id", name="ck_share_cross_tenant"),

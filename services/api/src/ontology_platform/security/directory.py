@@ -3,7 +3,7 @@
 from urllib.parse import urlsplit
 
 import httpx
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from ontology_platform.config import Settings
 from ontology_platform.errors import ApplicationError
@@ -13,11 +13,14 @@ from ontology_platform.security.oidc import OIDCVerifier, https_url
 class DirectoryUser(BaseModel):
     subject: str
     label: str
+    display_name: str | None = Field(default=None, exclude=True)
 
 
 def search_users(
     settings: Settings, verifier: OIDCVerifier, issuer: str | None, search: str
 ) -> list[DirectoryUser]:
+    if "keycloak" not in settings.enabled_directory_sources:
+        raise ApplicationError("directory_unconfigured", "Recipient directory is unavailable", 503)
     provider = next(
         (
             p
@@ -71,7 +74,16 @@ def search_users(
         if not isinstance(users, list) or len(users) > 50:
             raise ValueError("Invalid directory response")
         return [
-            DirectoryUser(subject=user["id"], label=user["username"][:200])
+            DirectoryUser(
+                subject=user["id"],
+                label=user["username"][:200],
+                display_name=" ".join(
+                    user[key][:200].strip()
+                    for key in ("firstName", "lastName")
+                    if isinstance(user.get(key), str) and user[key].strip()
+                )[:200]
+                or None,
+            )
             for user in users
             if isinstance(user, dict)
             and user.get("enabled") is True
