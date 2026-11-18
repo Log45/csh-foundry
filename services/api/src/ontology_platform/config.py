@@ -45,6 +45,7 @@ class Settings(BaseSettings):
     worker_client_secret: SecretStr | None = None
     worker_provider_id: str | None = None
     worker_client_id: str = "worker"
+    worker_auto_provision: bool = True
     worker_subject: str | None = Field(default=None, min_length=1, max_length=512)
     process_role: Literal["api", "worker"] = "api"
     local_tenant_id: UUID | None = None

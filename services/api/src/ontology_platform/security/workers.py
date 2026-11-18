@@ -4,6 +4,7 @@ from collections.abc import Callable, Iterator
 from datetime import UTC, datetime, timedelta
 from typing import Any, Literal, TypeVar
 from urllib.parse import urlsplit
+from uuid import UUID
 
 from sqlalchemy import exists, func, or_, select
 from sqlalchemy.exc import DBAPIError
@@ -16,9 +17,11 @@ from ontology_platform.db.models import (
     ExternalIdentity,
     GovernedDefinition,
     IngestionRun,
+    JobExecutionGrant,
     Membership,
     OutboxEvent,
     PlatformPrincipal,
+    Resource,
     Role,
     RoleAssignment,
     SemanticJob,
@@ -122,8 +125,13 @@ class WorkerPool:
         )
         self.credential = None if self.local else credentials(settings)
         if self.credential:
-            with sessions() as s:
-                self.service_id(s, *self.credential[:2])
+            with sessions.begin() as s:
+                if settings.worker_auto_provision:
+                    from ontology_platform.security.worker_registration import register
+
+                    register(s, *self.credential[:2])
+                else:
+                    self.service_id(s, *self.credential[:2])
 
     @staticmethod
     def service_id(s: Session, issuer: str, subject: str) -> str | None:
@@ -177,6 +185,8 @@ class WorkerPool:
         criteria = [ready]
         if ontology and ontology_column is not None:
             criteria.append(ontology_column == ontology)
+        if not self.local and self.settings.worker_auto_provision:
+            self.enroll_queues(model, criteria, kind)
         with self.sessions() as s:
             if self.local:
                 settings = self.settings
@@ -253,6 +263,73 @@ class WorkerPool:
                     )
                 result.append((actor, row[1] if ontology_column is not None else "projects"))
             return result
+
+    def enroll_queues(self, model: Any, criteria: list[Any], kind: Kind) -> None:
+        from ontology_platform.security.worker_registration import enroll
+
+        assert self.credential is not None
+        with self.sessions() as s:
+            discovery = select(model.tenant_id)
+            if kind == "automation":
+                discovery = discovery.join(
+                    GovernedDefinition,
+                    (GovernedDefinition.tenant_id == AutomationState.tenant_id)
+                    & (GovernedDefinition.resource_id == AutomationState.automation_id)
+                    & (GovernedDefinition.id == AutomationState.definition_id),
+                ).where(GovernedDefinition.specification["trigger"]["kind"].astext != "manual")
+            tenants = list(
+                s.scalars(
+                    discovery.where(*criteria)
+                    .group_by(model.tenant_id)
+                    .order_by(func.random())
+                    .limit(16)
+                )
+            )
+        for tenant in tenants:
+            with self.sessions.begin() as s:
+                principal = self.service_id(s, *self.credential[:2])
+                if principal is None:
+                    return
+                projects: set[UUID] = set()
+                if kind == "execution":
+                    grants = s.scalars(
+                        select(JobExecutionGrant)
+                        .join(
+                            ExecutionJob,
+                            (ExecutionJob.tenant_id == JobExecutionGrant.tenant_id)
+                            & (ExecutionJob.id == JobExecutionGrant.execution_id),
+                        )
+                        .where(
+                            JobExecutionGrant.tenant_id == tenant,
+                            JobExecutionGrant.revoked_at.is_(None),
+                            JobExecutionGrant.expires_at > func.now(),
+                            *criteria,
+                        )
+                        .order_by(ExecutionJob.created_at, ExecutionJob.id)
+                        .limit(100)
+                    )
+                    for grant in grants:
+                        projects.update(UUID(value) for value in grant.projects)
+                elif kind == "automation":
+                    projects.update(
+                        s.scalars(
+                            select(Resource.project_id)
+                            .join(
+                                AutomationState,
+                                (Resource.tenant_id == AutomationState.tenant_id)
+                                & (Resource.id == AutomationState.automation_id),
+                            )
+                            .join(
+                                GovernedDefinition,
+                                (GovernedDefinition.tenant_id == AutomationState.tenant_id)
+                                & (GovernedDefinition.resource_id == AutomationState.automation_id)
+                                & (GovernedDefinition.id == AutomationState.definition_id),
+                            )
+                            .where(AutomationState.tenant_id == tenant, *criteria)
+                            .limit(100)
+                        )
+                    )
+                enroll(s, tenant, principal, projects)
 
     def run(
         self,

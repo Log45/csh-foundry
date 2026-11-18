@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: execution-controller
+  namespace: csh-foundry
+  labels:
+    app.kubernetes.io/part-of: foundry
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: execution-controller
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: execution-controller
+        app.kubernetes.io/part-of: foundry
+    spec:
+      serviceAccountName: foundry
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 45
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: execution-controller
+          image: image-registry.openshift-image-registry.svc:5000/csh-foundry/foundry-api@sha256:6b1004e6197e15e17f6f82c5ce09dd9c7360ffb02884280a5354d23f5f315b3c
+          imagePullPolicy: IfNotPresent
+          workingDir: /app
+          command:
+            - python
+            - scripts/run_execution_worker.py
+          envFrom:
+            - configMapRef:
+                name: foundry-config
+          env:
+            - name: FOUNDRY_PROCESS_ROLE
+              value: worker
+            - name: FOUNDRY_SECRETS_DIRECTORY
+              value: /opt/foundry/secrets
+            - name: FOUNDRY_WORKER_PROVIDER_ID
+              value: keycloak
+            - name: FOUNDRY_WORKER_CLIENT_ID
+              value: foundry-worker
+            - name: AWS_REQUEST_CHECKSUM_CALCULATION
+              value: when_required
+            # The controller's StorageSettings reads S3 credentials from the environment.
+            - name: FOUNDRY_ARTIFACT_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: foundry-api
+                  key: FOUNDRY_ARTIFACT_ACCESS_KEY
+            - name: FOUNDRY_ARTIFACT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: foundry-api
+                  key: FOUNDRY_ARTIFACT_SECRET_KEY
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+              ephemeral-storage: 1Gi
+            limits:
+              cpu: "2"
+              memory: 3Gi
+              ephemeral-storage: 7Gi
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: credentials
+              mountPath: /opt/foundry/secrets
+              readOnly: true
+            - name: trust
+              mountPath: /run/trust
+              readOnly: true
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 6Gi
+        - name: credentials
+          secret:
+            secretName: foundry-worker
+            defaultMode: 292
+        - name: trust
+          secret:
+            secretName: foundry-trust
+            defaultMode: 292

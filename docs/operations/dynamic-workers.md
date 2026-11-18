@@ -10,12 +10,17 @@ per-user Deployments, manual per-user delegation, or administrator impersonation
 
 ## Authorization and claims
 
-The OIDC service must be provisioned as a Foundry `service` principal with enabled membership in
-its configured tenant. Grant consumption requires `worker:delegate`, the queue capability
+The pool registers the verified operator-configured worker as a Foundry `service` principal.
+Automatic enrollment defaults to enabled and adds missing tenant and Project access for due work,
+including existing queued work. No subject setting or manual per-tenant API calls are required.
+Grant consumption requires `worker:delegate`, the queue capability
 (`ingestion:claim`, `semantic:claim`, or `execution:claim`), and each operation's ordinary RBAC
-permission. Provision a bounded worker role through the security role/assignment APIs. For Project
-jobs, explicitly add the service as a Project editor in the Projects it serves. This does not grant
-users any new access. A worker credential does not discover other tenants' queues.
+permission. New tenant memberships receive the bounded `system-worker-v1` role. Live execution
+grants identify Projects that receive missing editor membership. The normal authorization checks
+still apply. Existing disabled identities and memberships, role restrictions, and Project viewer
+memberships remain effective. Set `FOUNDRY_WORKER_AUTO_PROVISION=false` for manual enrollment.
+In automatic mode, deleting a Project membership permits enrollment again; retain a viewer
+membership to deny writes or disable the worker's tenant membership to suspend all its work.
 
 Ingestion and semantic workers use `FOR UPDATE SKIP LOCKED LIMIT 1` to claim a pending job or an
 expired lease. They resolve the initiator from the grant, validate current authority and then assign
@@ -72,8 +77,8 @@ the infrastructure-only retry API. No grant can create another job grant.
 
 ## Alice and Bob
 
-1. Provision one worker service in tenant T and give it the queue/operation capabilities and Project
-   access needed for its workload. Configure one Deployment with T and service credentials.
+1. Configure the shared worker Deployment with its trusted provider, client ID and service
+   credentials. It registers its service identity and enrolls missing access as tenant work appears.
 2. Alice submits an ingestion run through her authenticated API session. Submission authorizes Alice
    and creates Alice's job grant. Bob submits another run; it receives Bob's grant.
 3. Any replica in that pool may claim either run. It reconstructs Alice's or Bob's context per job;
@@ -112,13 +117,12 @@ No deployment or external resource changes are performed by this implementation.
    covers the new grant table: **no separate runtime table grants or refresh are required**.
    Constraints, immutable audit/grant protections and all Foundry security checks remain active.
    Non-owner mode retains its existing DML grants procedure after migrations.
-4. Provision/update tenant service roles with `worker:delegate`, required claim/operation permissions,
-   and `automation:dispatch` if scheduling. Existing persisted roles are not silently broadened.
-   Add explicit worker Project memberships for execution jobs. Provision before creating semantic
-   exports because tenant security revisions invalidate earlier export policy hashes.
+4. Missing worker memberships are enrolled automatically when work appears. Existing persisted
+   roles are not silently broadened. Enroll the tenant by discovering its pending work before
+   preparing semantic exports if the workflow pins the tenant security revision.
 5. Remove `FOUNDRY_WORKER_SUBJECT_ID` / `WORKER_SUBJECT_ID` from ConfigMaps, Compose settings and
    operator environments. There is no replacement global user setting and no compatibility fallback.
-   Keep `FOUNDRY_WORKER_TENANT_ID`, `FOUNDRY_WORKER_PROVIDER_ID`, `FOUNDRY_WORKER_CLIENT_ID`, and the
+   Remove `FOUNDRY_WORKER_TENANT_ID`. Keep `FOUNDRY_WORKER_PROVIDER_ID`, `FOUNDRY_WORKER_CLIENT_ID`, and the
    mounted `FOUNDRY_WORKER_CLIENT_SECRET`. Existing verified short-lived service access tokens remain
    supported; client credentials are preferred for refresh between bounded invocations.
 6. Deploy the matching API and workers, preserving restricted SCC/non-root contexts, secrets mounts,
@@ -138,7 +142,7 @@ request and isolated parser budget; it is not a shared-worker queue and does not
 identity. No additional fixed-subject background queues were found.
 
 The existing execution-controller entry point is `uv run python scripts/run_execution_worker.py`.
-It now uses the same service credentials and configured tenant as the ontology workers; scheduling
+It uses the same service credentials and discovers due work across tenants; scheduling
 also requires `automation:dispatch`. The base OKD4 manifests currently instantiate ingestion and
 semantic pools; provisioning an execution-controller Deployment remains an operator rollout action.
 No controller Deployment or new external infrastructure is created automatically.

@@ -18,12 +18,13 @@ See the [OKD4 baseline](okd4-deployment.md) and [OKD 4.19 web console guide](htt
    Include separate artifact storage in the recovery point if enabled. Rehearse restoring into a
    disposable target before changing the shared database. Keep backup material on approved
    storage outside the application pod or workstation.
-3. Inventory the shared worker's membership, roles and Project memberships in legacy tenants.
-   Existing permissions stay in force. To enable another existing tenant, its authorized
-   membership admin registers the exact verified worker issuer and subject with
-   `POST /api/v1/security/identities` as `principal_type: service`. Use the role and assignment
-   APIs to give it only the claim and execution operations its queues need. Add explicit Project
-   editor access for execution jobs and automations it serves. The service identity is reused.
+3. Automatic worker enrollment defaults to enabled. The authenticated worker registers its own
+   verified issuer and subject and enrolls missing tenant and Project access as persisted work
+   appears. This includes already queued jobs in existing tenants and new personal workspaces.
+   Set `FOUNDRY_WORKER_AUTO_PROVISION: 'false'` only for explicitly manual deployments.
+   Existing disabled memberships and restrictive roles remain in force. To suspend a tenant,
+   disable the worker membership. To restrict a Project, retain a viewer membership. Removing
+   a Project membership in automatic mode allows missing access to be enrolled again.
 4. Configure eligibility on the trusted Keycloak provider in `FOUNDRY_OIDC_PROVIDERS` using
    `access_token_profile: keycloak` and `personal_tenant_client` set to the existing Studio client.
    Set `personal_tenant_all_users: true` to let every human who can sign in to that client name
@@ -36,10 +37,10 @@ See the [OKD4 baseline](okd4-deployment.md) and [OKD 4.19 web console guide](htt
    for eligible humans and scoped out of service accounts. Match version and provider policy in Studio.
    Use the approved identity configuration process for any realm changes.
    [Keycloak server administration guide](https://www.keycloak.org/docs/26.8.1/server_admin/)
-5. Set `FOUNDRY_WORKER_SUBJECT` on the API and workers to the same exact verified Keycloak
-   service token subject to enable automatic ingestion, semantic and execution capabilities for
-   new personal tenants. Optional Project memberships, tenant outbox and scheduling
-   permissions are granted explicitly. Outbox-enabled tenants use the configured fixed
+5. `FOUNDRY_WORKER_SUBJECT` is an optional identity pin. Automatic pools derive their service
+   subject from the verified token and require no per-user or per-tenant provisioning commands.
+   The configured client ID must be the worker service client, never the Studio client.
+   Outbox-enabled tenants use the configured fixed
    server-side HTTPS receiver for new deliveries. Verify it is intended to receive those
    tenants' data. Existing pinned destinations remain with their delivery records.
 
@@ -198,7 +199,7 @@ Already issued invitations otherwise remain valid until expiry or revocation.
    using the console. Restore the worker replica counts and schedule settings. Watch
    workload events, readiness and logs. Check `worker_cycle` exits and actual queue progress.
 5. Jobs with valid revision-0028 grants remain resumable using their persisted owner tenants
-   and leases. Give the worker the required permissions before opening the queues. There is
+   and leases. Automatic enrollment handles missing worker permissions for new memberships. There is
    no grant backfill for pre-0028 jobs. Missing, invalid, expired or revoked grants fail
    closed. Review the cause and resubmit via the original authorized path with a fresh
    idempotency key after correcting the condition. Do not edit queued grants or pin jobs to a

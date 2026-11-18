@@ -22,11 +22,21 @@ Ontology shares use the normal schema and object services and owner ABAC. Attrib
 the acting tenant do not satisfy owner policy. Share requests cannot submit background jobs,
 export data, manage security, or transfer ownership.
 
-Worker authentication verifies the existing service identity before any queue selection.
-Tenant eligibility comes from existing enabled service memberships and bounded roles.
-Candidate discovery uses due persisted rows and the applicable role. The existing claim
-transaction rechecks capability, job grants, current initiator authority and fencing. A
-server-configured worker binding can receive ingestion, semantic and execution capabilities atomically
-in a new personal tenant. Automation and webhook delivery require separate
-tenant permissions. Execution and automation retain explicit Project access. No new
-service, queue, or database is required.
+Worker authentication verifies the operator-configured OIDC worker client before queue selection.
+With the default `FOUNDRY_WORKER_AUTO_PROVISION=true`, the pool registers the verified issuer and
+subject as a service principal without a manually configured subject. Bounded discovery of due work
+enrolls missing tenant memberships with the immutable `system-worker-v1` role. This role contains
+worker execution and delivery operations and excludes security administration, schema publication,
+and ownership management. Active execution grants determine which Projects receive missing worker
+editor memberships. Due automations use the Project of their persisted definition.
+
+Enrollment is transactional, serialized with tenant security administration, and audited. Existing
+memberships and role assignments remain authoritative. A disabled principal or membership stays
+disabled, and an existing Project viewer membership is not promoted. Automatic mode treats an
+absent Project membership as work awaiting enrollment; to deny a Project explicitly, retain a viewer
+membership, or disable the tenant's worker membership to suspend all its queues. Operators needing
+fully manual enrollment can set `FOUNDRY_WORKER_AUTO_PROVISION=false`.
+
+The existing claim transaction still rechecks capability, job grants, current initiator authority,
+Project and resource permissions, ABAC, expiry, revocation, and fencing. Worker enrollment grants
+no permissions to users. No migration, new database, or Keycloak configuration change is required.

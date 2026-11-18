@@ -528,6 +528,150 @@ def test_worker_idle_then_claims_in_two_tenants_with_concurrent_replicas(
     assert svc.get(owner, w.definition.id, denied.id).status == "PENDING"
 
 
+def test_worker_auto_enrolls_existing_and_new_tenant_projects_without_subject_configuration(
+    database, idp, monkeypatch
+):
+    from ontology_platform.artifacts.config import StorageSettings
+    from ontology_platform.artifacts.contracts import CreateArtifact
+    from ontology_platform.db.models import ExecutionJob, ProjectMember, RoleAssignment
+    from ontology_platform.errors import ApplicationError
+    from ontology_platform.execution.worker import ExecutionWorker
+    from ontology_platform.functions.contracts import Invoke
+    from ontology_platform.functions.service import FunctionService
+    from ontology_platform.pipelines.service import PipelineService
+    from ontology_platform.projects.contracts import CreateProject
+    from pydantic import SecretStr
+    from test_media_functions_automations import definition
+
+    _, sessions, settings, _ = phase22(database, idp, monkeypatch)
+    settings = settings.model_copy(update={"worker_subject": None})
+    # Leave the service unregistered in manual mode, then start two automatic replicas.
+    manual = WorkerPool(settings.model_copy(update={"worker_auto_provision": False}), sessions)
+    with sessions() as s:
+        assert manual.service_id(s, *manual.credential[:2]) is None
+    with ThreadPoolExecutor(max_workers=2) as replicas:
+        pools = list(replicas.map(lambda _: WorkerPool(settings, sessions), range(2)))
+    pool = pools[0]
+    assert pool.scopes("execution") == []
+    svc = FunctionService(sessions, pool.authorizer, StorageSettings(_env_file=None), None)
+    pipeline = PipelineService(sessions, pool.authorizer, svc.settings, None)
+    jobs = []
+    owners = []
+    projects = []
+    for index in range(2):
+        tenant = uuid4()
+        subject = f"auto-owner-{index}"
+        with sessions.begin() as s:
+            bootstrap(s, tenant, ISSUER, subject, subject)
+        owner = actor(sessions, subject, tenant)
+        owners.append(owner)
+        project = svc.create_project(owner, CreateProject(name=f"Automatic {index}"))
+        projects.append(project)
+        resource = svc.create(owner, project.id, CreateArtifact(name="Identity"))
+        published = svc.publish_function(owner, resource.id, definition())
+        job = svc.invoke(
+            owner,
+            resource.id,
+            Invoke(
+                definition_id=published.id,
+                inputs={"text": subject},
+                idempotency_key=uuid4().hex,
+            ),
+        )
+        jobs.append(job)
+        # No service provisioning, role assignment, or Project membership calls.
+        with ThreadPoolExecutor(max_workers=2) as replicas:
+            scopes = list(replicas.map(lambda replica: replica.scopes("execution"), pools))
+        assert all(any(p.tenant_id == tenant for p, _ in scope) for scope in scopes)
+        assert (
+            next(pool.run("execution", lambda p, _: ExecutionWorker(pipeline, p).run_one()), None)
+            == job.id
+        )
+        assert svc.status(owner, job.id).state == "SUCCEEDED"
+        assert svc.result(owner, job.id).values == {"text": subject}
+        with sessions() as s:
+            service_id = pool.service_id(s, *pool.credential[:2])
+            assert s.get(ProjectMember, (tenant, project.id, service_id)).role == "editor"
+            assert s.get(Membership, (tenant, service_id)).enabled
+            roles = list(
+                s.scalars(
+                    select(RoleAssignment.role_id).where(
+                        RoleAssignment.tenant_id == tenant,
+                        RoleAssignment.principal_id == service_id,
+                    )
+                )
+            )
+            assert roles == ["system-worker-v1"]
+
+    # Tenant-level suspension survives automatic enrollment and repeated discovery.
+    first = owners[0]
+    with sessions.begin() as s:
+        s.get(Membership, (first.tenant_id, service_id)).enabled = False
+    resource = svc.create(first, projects[0].id, CreateArtifact(name="Suspended"))
+    published = svc.publish_function(first, resource.id, definition())
+    waiting = svc.invoke(
+        first,
+        resource.id,
+        Invoke(definition_id=published.id, inputs={"text": "wait"}, idempotency_key=uuid4().hex),
+    )
+    assert pool.scopes("execution") == []
+    assert svc.status(first, waiting.id).state == "QUEUED"
+    with sessions() as s:
+        assert not s.get(Membership, (first.tenant_id, service_id)).enabled
+    # An explicit Project viewer restriction also remains in force.
+    second = owners[1]
+    with sessions.begin() as s:
+        s.get(ProjectMember, (second.tenant_id, projects[1].id, service_id)).role = "viewer"
+    resource = svc.create(second, projects[1].id, CreateArtifact(name="Read only"))
+    published = svc.publish_function(second, resource.id, definition())
+    restricted = svc.invoke(
+        second,
+        resource.id,
+        Invoke(definition_id=published.id, inputs={"text": "deny"}, idempotency_key=uuid4().hex),
+    )
+    assert (
+        next(pool.run("execution", lambda p, _: ExecutionWorker(pipeline, p).run_one()), None)
+        is None
+    )
+    assert svc.status(second, restricted.id).state == "QUEUED"
+    with sessions() as s:
+        assert s.get(ProjectMember, (second.tenant_id, projects[1].id, service_id)).role == "viewer"
+        assert (
+            s.scalar(
+                select(func.count())
+                .select_from(AuthorizationAudit)
+                .where(AuthorizationAudit.operation == "worker:auto_enroll:committed")
+            )
+            == 2
+        )
+    # Automatic worker access cannot restore a disabled job initiator's authority.
+    project = svc.create_project(second, CreateProject(name="Revoked initiator"))
+    resource = svc.create(second, project.id, CreateArtifact(name="Denied"))
+    published = svc.publish_function(second, resource.id, definition())
+    denied_job = svc.invoke(
+        second,
+        resource.id,
+        Invoke(definition_id=published.id, inputs={"text": "deny"}, idempotency_key=uuid4().hex),
+    )
+    with sessions.begin() as s:
+        s.get(PlatformPrincipal, second.principal_id).enabled = False
+    next(pool.run("execution", lambda p, _: ExecutionWorker(pipeline, p).run_one()), None)
+    with sessions() as s:
+        row = s.get(ExecutionJob, (second.tenant_id, denied_job.id))
+        assert row.state == "FAILED"
+        assert row.error == "job_authorization_denied"
+    with sessions.begin() as s:
+        s.get(PlatformPrincipal, service_id).enabled = False
+    with pytest.raises(ApplicationError):
+        WorkerPool(settings, sessions)
+    # An existing human binding can never be converted into a worker.
+    human_token = token(idp[0], claims={"client_id": "worker", "sub": "auto-owner-0"})
+    with pytest.raises(ApplicationError):
+        WorkerPool(
+            settings.model_copy(update={"worker_access_token": SecretStr(human_token)}), sessions
+        )
+
+
 @pytest.fixture
 def upgrade_database():
     yield from database.__wrapped__(None, "0028_job_execution_grants")
