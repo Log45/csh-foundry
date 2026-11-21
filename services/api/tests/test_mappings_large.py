@@ -17,6 +17,8 @@ from test_artifacts import store  # noqa: F401
 from test_mappings import machine_spec, setup_mapping
 from test_phase1 import database, historical_database, world  # noqa: F401
 
+pytestmark = pytest.mark.scale
+
 
 @pytest.fixture
 def controller_memory():

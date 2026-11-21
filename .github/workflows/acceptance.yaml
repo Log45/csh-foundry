@@ -1,0 +1,20 @@
+name: Extended acceptance
+on:
+  schedule:
+    - cron: '23 7 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: acceptance-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  acceptance:
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [scale, browser-scale, operations]
+    uses: ./.github/workflows/ci-suite.yaml
+    with:
+      suite: ${{ matrix.suite }}
+      timeout_minutes: 90

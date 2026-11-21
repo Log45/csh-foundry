@@ -1,0 +1,153 @@
+name: Isolated integration suite
+on:
+  workflow_call:
+    inputs:
+      suite:
+        required: true
+        type: string
+      timeout_minutes:
+        type: number
+        default: 20
+      shard:
+        type: string
+        default: ''
+      artifact_suffix:
+        type: string
+        default: single
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout_minutes }}
+    defaults:
+      run:
+        shell: bash
+    services:
+      postgres:
+        image: postgres:17.6-bookworm
+        env:
+          POSTGRES_USER: foundry
+          POSTGRES_DB: foundry_test
+          POSTGRES_PASSWORD: ${{ github.run_id }}
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U foundry -d foundry_test"
+          --health-interval 2s --health-timeout 3s --health-retries 20
+    env:
+      FOUNDRY_DATABASE_URL: postgresql+psycopg://foundry:${{ github.run_id }}@localhost:5432/foundry_test
+      TEST_DATABASE_URL: postgresql+psycopg://foundry:${{ github.run_id }}@localhost:5432/foundry_test
+      OPEN_ONTOLOGIES_BIN: ${{ github.workspace }}/.external/open-ontologies
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e
+        with:
+          version: "0.9.5"
+          enable-cache: true
+      - run: uv sync --frozen --python 3.12
+      - name: Validate suite selector
+        env:
+          SUITE: ${{ inputs.suite }}
+        run: |
+          case "$SUITE" in
+            regression|browser|directory|owner|scale|browser-scale|operations) ;;
+            *) exit 1 ;;
+          esac
+      - run: uv run python scripts/install_semantic_engine.py
+      - name: Check clean database migrations and model drift
+        if: inputs.suite == 'regression'
+        run: |
+          uv run alembic upgrade head
+          uv run alembic check
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        if: inputs.suite == 'regression'
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: OWL import and export compatibility
+        if: inputs.suite == 'regression'
+        run: mvn -q -f integrations/protege/pom.xml compile exec:java '-Dexec.args=fixtures/manufacturing.ttl artifacts/manufacturing.owl'
+      - name: Pull pinned isolated storage images
+        if: inputs.suite != 'owner' && inputs.suite != 'operations'
+        run: |
+          POSTGRES_PASSWORD=ci docker compose --env-file /dev/null -f infrastructure/compose.yaml --profile minio pull minio minio-init
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        if: contains(fromJSON('["regression", "scale", "browser", "directory", "browser-scale"]'), inputs.suite)
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            apps/studio/package-lock.json
+      - name: Install TypeScript compiler for generated SDK integration tests
+        if: inputs.suite == 'regression'
+        run: npm ci --prefix apps/studio
+      - name: Build production Studio and install Chromium
+        if: contains(fromJSON('["browser", "directory", "browser-scale"]'), inputs.suite)
+        run: |
+          npm ci
+          npm run build -w @foundry/sdk
+          npm ci --prefix apps/studio
+          npm run build --prefix apps/studio
+          cd apps/studio
+          npx playwright install --with-deps chromium
+      - name: Run selected suite against real PostgreSQL and MinIO
+        if: inputs.suite != 'owner' && inputs.suite != 'operations'
+        env:
+          SUITE: ${{ inputs.suite }}
+          SHARD: ${{ inputs.shard }}
+        run: |
+          if [ -n "$SHARD" ]; then
+            uv run python scripts/validate_phase15.py --ci "$SUITE" --ci-shard "$SHARD"
+          else
+            uv run python scripts/validate_phase15.py --ci "$SUITE"
+          fi
+      - name: Run as a non-superuser migration and table owner
+        if: inputs.suite == 'owner'
+        env:
+          FOUNDRY_OWNER_RUNTIME_TEST: 'true'
+          FOUNDRY_ARTIFACT_BACKEND: disabled
+        run: |
+          mkdir -p artifacts/ci
+          uv run python - <<'PYCODE'
+          import os, subprocess
+          import psycopg
+          from psycopg import sql
+          from sqlalchemy.engine import make_url
+          url = make_url(os.environ["TEST_DATABASE_URL"])
+          with psycopg.connect(url.set(drivername="postgresql").render_as_string(hide_password=False), autocommit=True) as connection:
+              connection.execute(sql.SQL("CREATE ROLE foundry_owner LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION PASSWORD {}").format(sql.Literal(url.password)))
+              connection.execute("ALTER DATABASE foundry_test OWNER TO foundry_owner")
+          env = os.environ | {"TEST_DATABASE_URL": url.set(username="foundry_owner").render_as_string(hide_password=False)}
+          subprocess.run(["uv", "run", "pytest", "services/api/tests/test_owner_runtime_override.py", "services/api/tests/test_owner_runtime_postgres.py", "--junitxml=artifacts/ci/owner.xml", "-ra", "--tb=short"], env=env, check=True)
+          PYCODE
+          uv run python scripts/check_test_report.py artifacts/ci/owner.xml
+      - name: Operational acceptance
+        if: inputs.suite == 'operations'
+        run: |
+          mkdir -p artifacts/ci
+          uv run python scripts/test_keycloak.py 2>&1 | tee artifacts/ci/keycloak.log
+          uv run python scripts/test_recovery.py 2>&1 | tee artifacts/ci/recovery.log
+          uv run python scripts/load_phase10.py 2>&1 | tee artifacts/ci/load.log
+          docker build -t csh-foundry-ingress:phase10 -f infrastructure/docker/ingress.Dockerfile .
+          uv run python scripts/test_ingress.py 2>&1 | tee artifacts/ci/ingress.log
+      - name: Record suite result
+        if: always()
+        env:
+          SUITE: ${{ inputs.suite }}
+          RESULT: ${{ job.status }}
+          SHARD: ${{ inputs.shard }}
+        run: |
+          echo "### $SUITE $SHARD: $RESULT" >> "$GITHUB_STEP_SUMMARY"
+          echo 'Required suites reject unexpected skips; one documented strict compatibility xfail remains explicit. Scale tests run in Extended acceptance; owner tests run separately.' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: results-${{ inputs.suite }}-${{ inputs.artifact_suffix }}
+          path: |
+            artifacts/ci/
+            artifacts/phase15-browser/*.log
+            artifacts/manufacturing.owl
+            apps/studio/test-results/
+          if-no-files-found: warn
+          retention-days: 7

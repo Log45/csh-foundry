@@ -1,6 +1,15 @@
 name: Reviewed release artifacts
 on:
   workflow_dispatch:
+    inputs:
+      candidate_run_id:
+        description: 'Run containing reviewed-candidate images; leave both inputs empty to build a candidate'
+        type: string
+        default: ''
+      acceptance_run_id:
+        description: 'Run containing release-acceptance evidence for the exact candidate images and revision'
+        type: string
+        default: ''
 permissions:
   contents: read
 jobs:
@@ -9,6 +18,7 @@ jobs:
   package:
     permissions:
       contents: read
+      actions: read
       id-token: write
       attestations: write
     needs: validation
@@ -20,15 +30,51 @@ jobs:
         with: {version: "0.9.5"}
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with: {node-version: "24"}
-      - run: uv sync --frozen && npm ci --prefix apps/studio
+      - name: Require paired candidate and acceptance inputs
+        env:
+          CANDIDATE: ${{ inputs.candidate_run_id }}
+          ACCEPTANCE: ${{ inputs.acceptance_run_id }}
+        run: |
+          python - <<'PYCODE'
+          import os
+          values = [os.environ["CANDIDATE"], os.environ["ACCEPTANCE"]]
+          if any(values) and not all(value.isdecimal() for value in values):
+              raise SystemExit("Supply both numeric run IDs, or leave both empty to build a candidate")
+          PYCODE
+      - run: uv sync --frozen --python 3.12 && npm ci --prefix apps/studio
+      - name: Download exact previously tested candidate images
+        if: inputs.candidate_run_id != ''
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: reviewed-candidate
+          path: artifacts/release
+          run-id: ${{ inputs.candidate_run_id }}
+          github-token: ${{ github.token }}
+      - name: Verify candidate archive and load images without rebuilding
+        if: inputs.candidate_run_id != ''
+        working-directory: artifacts/release
+        run: |
+          sha256sum -c SHA256SUMS
+          python - <<'PYCODE'
+          import os
+          from pathlib import Path
+          if Path("SOURCE_REVISION").read_text().strip() != os.environ["GITHUB_SHA"]:
+              raise SystemExit("Candidate was built from a different source revision")
+          PYCODE
+          docker load -i images.tar
       - run: uv export --frozen --no-dev --no-emit-workspace -o requirements.txt
       - run: uvx --python 3.12 --from pip-audit==2.9.0 pip-audit --disable-pip --no-deps -r requirements.txt
       - run: npm audit --omit=dev --prefix apps/studio
-      - run: docker build -t csh-foundry-api:phase10 -f infrastructure/docker/api.Dockerfile .
-      - run: docker build -t csh-foundry-studio:phase10 -f infrastructure/docker/studio.Dockerfile .
-      - run: docker build --build-arg BASE_IMAGE=csh-foundry-api:phase10 -t csh-foundry-semantic:phase10 -f infrastructure/docker/semantic.Dockerfile .
-      - run: docker build -t csh-foundry-postgres:phase10 -f infrastructure/docker/postgres.Dockerfile .
-      - run: docker build -t csh-foundry-ingress:phase10 -f infrastructure/docker/ingress.Dockerfile .
+      - if: inputs.candidate_run_id == ''
+        run: docker build -t csh-foundry-api:phase10 -f infrastructure/docker/api.Dockerfile .
+      - if: inputs.candidate_run_id == ''
+        run: docker build -t csh-foundry-studio:phase10 -f infrastructure/docker/studio.Dockerfile .
+      - if: inputs.candidate_run_id == ''
+        run: docker build --build-arg BASE_IMAGE=csh-foundry-api:phase10 -t csh-foundry-semantic:phase10 -f infrastructure/docker/semantic.Dockerfile .
+      - if: inputs.candidate_run_id == ''
+        run: docker build -t csh-foundry-postgres:phase10 -f infrastructure/docker/postgres.Dockerfile .
+      - if: inputs.candidate_run_id == ''
+        run: docker build -t csh-foundry-ingress:phase10 -f infrastructure/docker/ingress.Dockerfile .
       - run: FOUNDRY_INGRESS_TEST_IMAGE=csh-foundry-ingress:phase10 uv run python scripts/test_ingress.py
       - run: |
           docker pull quay.io/keycloak/keycloak:26.8.1@sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332
@@ -43,7 +89,16 @@ jobs:
           name: security-evidence
           path: artifacts/supply-chain/*.json
           if-no-files-found: error
+      - name: Download acceptance evidence for these exact images
+        if: inputs.acceptance_run_id != ''
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: release-acceptance
+          path: artifacts/acceptance
+          run-id: ${{ inputs.acceptance_run_id }}
+          github-token: ${{ github.token }}
       - name: Require acceptance evidence for these release images
+        if: inputs.acceptance_run_id != ''
         run: |
           uv run python scripts/verify_release_evidence.py artifacts/acceptance/release-manifest.json \
             --revision "$GITHUB_SHA" \
@@ -55,18 +110,35 @@ jobs:
             --image "keycloak=$(docker image inspect quay.io/keycloak/keycloak:26.8.1@sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332 --format '{{.Id}}')"
       - run: |
           mkdir -p artifacts/release
-          docker save csh-foundry-api:phase10 csh-foundry-studio:phase10 csh-foundry-semantic:phase10 csh-foundry-ingress:phase10 csh-foundry-postgres:phase10 -o artifacts/release/images.tar
-          sha256sum artifacts/release/images.tar > artifacts/release/SHA256SUMS
-      - uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a
+          docker save csh-foundry-api:phase10 csh-foundry-studio:phase10 csh-foundry-semantic:phase10 csh-foundry-ingress:phase10 csh-foundry-postgres:phase10 quay.io/keycloak/keycloak:26.8.1@sha256:3f3c5f8e03c614774b4bd9173b88391fefa4153bfc010d8012d59ad825377332 -o artifacts/release/images.tar
+          python - <<'PYCODE'
+          import os
+          from pathlib import Path
+          Path("artifacts/release/SOURCE_REVISION").write_text(os.environ["GITHUB_SHA"] + "\n")
+          PYCODE
+          (cd artifacts/release && sha256sum images.tar SOURCE_REVISION > SHA256SUMS)
+      - name: Save candidate for separate acceptance testing
+        if: inputs.candidate_run_id == ''
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: reviewed-candidate
+          path: artifacts/release/
+          if-no-files-found: error
+          retention-days: 14
+      - if: inputs.acceptance_run_id != ''
+        uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a
         with:
           subject-path: artifacts/release/images.tar
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - if: inputs.acceptance_run_id != ''
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: reviewed-release
           path: |
             artifacts/release/
             artifacts/supply-chain/*.json
+            artifacts/acceptance/
   approve:
+    if: inputs.acceptance_run_id != ''
     needs: package
     runs-on: ubuntu-latest
     environment: production-approval

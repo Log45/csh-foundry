@@ -40,9 +40,11 @@ from ontology_platform.security.identity import resolve
 from ontology_platform.security.ldap_directory import Person
 from ontology_platform.security.oidc import OIDCVerifier, Provider
 from ontology_platform.security.service import PlatformAuthorizer
+from ontology_platform.security.workers import WorkerPool
 from ontology_platform.semantic.engine import OpenOntologiesAdapter
 from ontology_platform.semantic.worker import SemanticWorker
 from ontology_schema.models import OntologyDefinition
+from pydantic import SecretStr
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "services/api/tests"))
@@ -277,17 +279,21 @@ def main():
             from ontology_platform.execution.worker import ExecutionWorker
             from ontology_platform.pipelines.service import PipelineService
 
-            execution = ExecutionWorker(
-                PipelineService(
-                    w.sessions, auth, app.state.artifact_settings, app.state.artifact_store
-                ),
-                worker,
+            pipelines = PipelineService(
+                w.sessions, auth, app.state.artifact_settings, app.state.artifact_store
             )
+            # Exercise the production pool's governed enrollment for browser-created Projects.
+            # A tenant role alone does not authorize a worker to access private Project jobs.
+            pool = WorkerPool(settings, w.sessions)
             while not stop.wait(0.3):
                 ingestion.run_one(worker, definition.id)
                 semantic.run_one(worker, definition.id)
                 if app.state.artifact_store is not None:
-                    execution.run_one()
+                    for _ in pool.run(
+                        "execution",
+                        lambda actor, _scope: ExecutionWorker(pipelines, actor).run_one(),
+                    ):
+                        pass
 
         settings = Settings(
             database_url=w.settings.database_url,
@@ -300,7 +306,7 @@ def main():
                     id="e2e",
                     issuer=ISSUER,
                     audience="foundry",
-                    clients=("studio",),
+                    clients=("studio", "worker"),
                     access_token_profile="keycloak",
                     personal_tenant_client="studio",
                     personal_tenant_role=None if ldap_test else "e2e-human",
@@ -308,6 +314,26 @@ def main():
                 ),
             ),
             _env_file=None,
+            oidc_ca_bundle=cert_path,
+            oidc_backchannel_port=8443,
+            worker_provider_id="e2e",
+            worker_subject="worker",
+            worker_access_token=SecretStr(
+                jwt.encode(
+                    {
+                        "iss": ISSUER,
+                        "sub": "worker",
+                        "aud": "foundry",
+                        "client_id": "worker",
+                        "jti": "e2e-worker",
+                        "iat": int(time.time()),
+                        "exp": int(time.time()) + 3600,
+                    },
+                    private,
+                    algorithm="RS256",
+                    headers={"kid": "e2e", "typ": "at+jwt"},
+                )
+            ),
             directory_sources=("ldap",) if ldap_test else (),
             directory_ldap_url="ldap://127.0.0.1" if ldap_test else None,
             directory_ldap_base_dn="ou=members,dc=e2e,dc=test" if ldap_test else None,

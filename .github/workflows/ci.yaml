@@ -1,62 +1,128 @@
-name: Platform and Studio validation
-on: [push, pull_request, workflow_call]
+name: CI
+on: [push, pull_request, merge_group, workflow_call, workflow_dispatch]
 permissions:
   contents: read
 concurrency:
-  group: validation-${{ github.ref }}
+  group: regression-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  foundation:
+  static:
+    name: Static checks and contracts
     runs-on: ubuntu-latest
-    timeout-minutes: 45
-    services:
-      postgres:
-        image: postgres:17.6-bookworm
-        env:
-          POSTGRES_USER: foundry
-          POSTGRES_DB: foundry_test
-          POSTGRES_PASSWORD: ${{ github.run_id }}
-        ports: ["5432:5432"]
-        options: >-
-          --health-cmd "pg_isready -U foundry -d foundry_test"
-          --health-interval 2s --health-timeout 3s --health-retries 20
-    env:
-      FOUNDRY_DATABASE_URL: postgresql+psycopg://foundry:${{ github.run_id }}@localhost:5432/foundry_test
-      OPEN_ONTOLOGIES_BIN: ${{ github.workspace }}/.external/open-ontologies
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e
         with:
           version: "0.9.5"
           enable-cache: true
       - run: uv sync --frozen --python 3.12
-      - run: uv run python scripts/install_semantic_engine.py
-      - run: uv run alembic upgrade head
-      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
-        with:
-          distribution: temurin
-          java-version: "17"
-      - run: mvn -q -f integrations/protege/pom.xml compile exec:java '-Dexec.args=fixtures/manufacturing.ttl artifacts/manufacturing.owl'
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: "24"
           cache: npm
-          cache-dependency-path: apps/studio/package-lock.json
+          cache-dependency-path: |
+            package-lock.json
+            apps/studio/package-lock.json
       - run: npm ci
-        working-directory: apps/studio
+      - run: npm ci --prefix apps/studio
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run mypy
+      - run: npm run format:check
+      - name: Check generated API and SDK contracts against current backend
+        run: |
+          uv run python scripts/export_openapi.py
+          npm run generate:api --prefix apps/studio
+          npm run check:generated
+          git diff --exit-code -- apps/studio/lib/openapi.json apps/studio/lib/api-schema.ts packages/typescript-sdk/src/schema.ts
+  sdk:
+    name: SDK regression and consumer build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            apps/studio/package-lock.json
       - run: npm ci
-      - run: npm run build && npm run typecheck && npm test && npm run check:generated && npm run test:consumer
-      - run: uv run python scripts/validate_phase0.py
-      - run: uv run python scripts/export_openapi.py
-      - run: npm run generate:api
-        working-directory: apps/studio
-      - run: git diff --exit-code -- apps/studio/lib/openapi.json apps/studio/lib/api-schema.ts
-      - run: npm run format:check && npm run typecheck && npm test && npm run build
-        working-directory: apps/studio
-      - run: npx playwright install --with-deps chromium
-        working-directory: apps/studio
-      - run: uv run python scripts/test_studio.py
-      - run: uv run python scripts/test_keycloak.py
-      - run: uv run python scripts/test_recovery.py
-      - run: STUDIO_E2E_DURABLE=true uv run python scripts/test_studio.py
-      - run: uv run python scripts/load_phase10.py
+      - run: npm run build
+      - run: npm run typecheck
+      - run: npm test -- --reporter=default --reporter=junit --outputFile=artifacts/ci/sdk.xml
+      - run: python3 scripts/check_test_report.py artifacts/ci/sdk.xml
+      - run: npm run test:consumer
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: sdk-results
+          path: artifacts/ci/
+          if-no-files-found: warn
+  studio:
+    name: Studio component regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            apps/studio/package-lock.json
+      - run: npm ci
+      - run: npm run build -w @foundry/sdk
+      - run: npm ci --prefix apps/studio
+      - run: npm run format:check --prefix apps/studio
+      - run: npm run typecheck --prefix apps/studio
+      - run: npm test --prefix apps/studio -- --reporter=default --reporter=junit --outputFile=../../artifacts/ci/studio.xml
+      - run: python3 scripts/check_test_report.py artifacts/ci/studio.xml
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: studio-results
+          path: artifacts/ci/
+          if-no-files-found: warn
+  backend:
+    name: Backend (${{ matrix.shard }}/4)
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    uses: ./.github/workflows/ci-suite.yaml
+    with:
+      suite: regression
+      shard: ${{ format('{0}/4', matrix.shard) }}
+      artifact_suffix: ${{ format('shard-{0}', matrix.shard) }}
+  integration:
+    name: Regression (${{ matrix.suite }})
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [browser, directory, owner]
+    uses: ./.github/workflows/ci-suite.yaml
+    with:
+      suite: ${{ matrix.suite }}
+  regression:
+    name: CI / regression
+    if: always()
+    needs: [static, sdk, studio, backend, integration]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require every regression job to succeed
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          python - <<'PYCODE'
+          import json, os
+          results = json.loads(os.environ["RESULTS"])
+          failed = {name: job["result"] for name, job in results.items() if job["result"] != "success"}
+          if failed:
+              raise SystemExit(f"Regression gate failed: {failed}")
+          print("PASS: all required regression jobs succeeded")
+          PYCODE

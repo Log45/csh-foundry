@@ -1,6 +1,18 @@
 import { defineConfig } from "@playwright/test";
+const profile = process.env.STUDIO_E2E_PROFILE;
+if (profile && !["browser", "directory", "browser-scale"].includes(profile)) {
+  throw new Error(`Unknown Studio CI profile: ${profile}`);
+}
 export default defineConfig({
   testDir: "./tests/e2e",
+  ...(profile === "browser"
+    ? { testIgnore: ["**/maximum.spec.ts", "**/directory-sharing.spec.ts"] }
+    : profile === "directory"
+      ? { testMatch: "**/directory-sharing.spec.ts" }
+      : profile === "browser-scale"
+        ? { testMatch: "**/maximum.spec.ts" }
+        : {}),
+  retries: 0,
   workers: 1,
   timeout: 120000,
   use: {

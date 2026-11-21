@@ -26,12 +26,28 @@ parser.add_argument(
 parser.add_argument("--full", action="store_true")
 parser.add_argument("--large", action="store_true")
 parser.add_argument(
+    "--ci",
+    choices=("regression", "scale", "browser", "directory", "browser-scale"),
+    help="Explicit CI selection with JUnit reporting and no unexpected skips",
+)
+parser.add_argument("--ci-shard", help="Zero-based backend regression INDEX/TOTAL")
+parser.add_argument(
     "--pytest-file", action="append", default=[], help="Explicit focused test file(s)"
 )
 parser.add_argument(
     "--large-selection", default="", help="Optional pytest expression for scale cases"
 )
 args = parser.parse_args()
+if args.ci and (args.browser or args.browser_only or args.full or args.large or args.pytest_file):
+    parser.error("--ci cannot be combined with other suite selectors")
+if args.ci_shard and args.ci != "regression":
+    parser.error("--ci-shard requires --ci regression")
+if args.ci:
+    if not os.environ.get("TEST_DATABASE_URL"):
+        parser.error("--ci requires an explicit disposable TEST_DATABASE_URL")
+    if not (root / ".external/open-ontologies").is_file():
+        parser.error("--ci requires the pinned semantic engine")
+    args.browser_only = args.ci in {"browser", "directory", "browser-scale"}
 args.browser = args.browser or args.browser_only
 project = "phase15-" + uuid4().hex[:12]
 with socket.socket() as sock:
@@ -55,6 +71,14 @@ env["TEST_DATABASE_URL"] = (
     os.environ.get("TEST_DATABASE_URL") or get_settings().database_url.get_secret_value()
 )
 env["OPEN_ONTOLOGIES_BIN"] = str(root / ".external/open-ontologies")
+report = root / "artifacts/ci" / f"{args.ci}.xml"
+if args.ci:
+    report.parent.mkdir(parents=True, exist_ok=True)
+    report.unlink(missing_ok=True)
+    env["STUDIO_E2E_PROFILE"] = args.ci
+    env["PLAYWRIGHT_JUNIT_OUTPUT_FILE"] = str(report)
+    if args.ci == "directory":
+        env["STUDIO_E2E_LDAP"] = "true"
 if args.browser:
     for name, value in {
         "STUDIO_E2E_PORT": "3100",
@@ -137,7 +161,26 @@ with tempfile.TemporaryDirectory(prefix="foundry-phase15-") as directory:
         run(*compose, "run", "--rm", "--no-deps", "minio-init")
         store.verify(key, 10, checksum)
         print("PASS MinIO initialization repeated and bytes retained after restart", flush=True)
-        if args.browser_only:
+        if args.ci in {"regression", "scale"}:
+            selection = "not scale and not owner_runtime" if args.ci == "regression" else "scale"
+            print(f"CI selection: {selection}; exclusions run in dedicated jobs", flush=True)
+            run(
+                "uv",
+                "run",
+                "python",
+                "-m",
+                "pytest",
+                *(["-p", "scripts.ci_shard", "--ci-shard", args.ci_shard] if args.ci_shard else []),
+                "-m",
+                selection,
+                "--strict-markers",
+                "--junitxml",
+                str(report),
+                "--durations=20",
+                "-ra",
+                "--tb=short",
+            )
+        elif args.browser_only:
             print("Python suite NOT RUN in this explicit browser-only selection", flush=True)
         elif args.pytest_file:
             run("uv", "run", "pytest", *args.pytest_file, "-ra", "--tb=short")
@@ -168,7 +211,15 @@ with tempfile.TemporaryDirectory(prefix="foundry-phase15-") as directory:
                 "--tb=short",
             )
         if args.browser:
-            run("uv", "run", "python", "scripts/test_studio.py")
+            run(
+                "uv",
+                "run",
+                "python",
+                "scripts/test_studio.py",
+                *(["--reporter=list,junit"] if args.ci else []),
+            )
+        if args.ci:
+            run("uv", "run", "python", "scripts/check_test_report.py", str(report))
     finally:
         subprocess.run(
             compose + ["down", "--volumes", "--remove-orphans"], cwd=root, env=env, check=True

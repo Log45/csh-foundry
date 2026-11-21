@@ -41,6 +41,9 @@ def production(enabled):
         browser_state_keys="MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=",
         query_cursor_secret="x" * 32,
         worker_access_token="verified-by-test-verifier",
+        # These tests mock an already provisioned service identity. Automatic enrollment
+        # has separate integration coverage in test_phase22.py.
+        worker_auto_provision=False,
     )
 
 

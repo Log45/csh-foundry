@@ -215,7 +215,6 @@ def test_generated_sdk_packages_manufacturing(database, idp, tmp_path):  # noqa:
     )
     app = create_app(settings)
     app.state.sessions, app.state.authorizer, app.state.oidc = w.sessions, auth, verifier
-    signed = token(private, claims={"sub": "operator"})
     generated = {
         lang: generate(w.definition, lang, app.openapi()) for lang in ("python", "typescript")
     }
@@ -277,6 +276,9 @@ def test_generated_sdk_packages_manufacturing(database, idp, tmp_path):  # noqa:
             break
         time.sleep(0.02)
     assert server.started
+    # Package installation and builds may take longer on cold CI runners. Issue the
+    # normal short-lived credential when the live client is ready to use it.
+    signed = token(private, claims={"sub": "operator"})
     env = os.environ | {
         "SDK_URL": f"http://127.0.0.1:{port}",
         "SDK_TOKEN": signed,

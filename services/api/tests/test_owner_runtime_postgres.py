@@ -31,6 +31,7 @@ from test_phase1 import database  # noqa: F401
 from test_security_oidc import idp, token  # noqa: F401
 
 ROOT = Path(__file__).resolve().parents[3]
+pytestmark = pytest.mark.owner_runtime
 
 
 @pytest.fixture

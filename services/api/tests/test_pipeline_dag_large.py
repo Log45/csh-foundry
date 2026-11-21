@@ -3,6 +3,7 @@
 # ruff: noqa: F811
 import json
 
+import pytest
 from large_sources import generate
 from ontology_platform.artifacts.contracts import CreateArtifact
 from ontology_platform.artifacts.storage import ObjectKey
@@ -17,6 +18,8 @@ from sqlalchemy import select
 from test_artifacts import store  # noqa: F401
 from test_datasets import dataset, make_service
 from test_phase1 import database, world  # noqa: F401
+
+pytestmark = pytest.mark.scale
 
 
 def test_exact_gib_shared_branch_multi_output(world, store, tmp_path, monkeypatch):

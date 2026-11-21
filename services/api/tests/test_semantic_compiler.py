@@ -2,7 +2,6 @@
 
 import os
 from pathlib import Path
-from uuid import uuid4
 
 import pytest
 from ontology_platform.errors import ApplicationError
@@ -55,7 +54,7 @@ def test_deterministic_schema_and_ordering(schema):
         ("boolean", True, XSD.boolean),
         ("date", "2026-01-01", XSD.date),
         ("timestamp", "2026-01-01T12:00:00+00:00", XSD.dateTime),
-        ("uuid", str(uuid4()), XSD.string),
+        ("uuid", "7261f1a4-dcd5-4117-bae8-f18ad668fde3", XSD.string),
         ("decimal", "12.30", XSD.decimal),
     ],
 )

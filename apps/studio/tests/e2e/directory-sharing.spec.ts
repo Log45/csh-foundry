@@ -18,10 +18,16 @@ test("claims a directory invitation after OIDC and workspace naming", async ({
   await nameWorkspace(sender, "Sender workspace");
   const tenant = sender.getByLabel("Tenant", { exact: true });
   await tenant.selectOption({ label: "Manufacturing test tenant" });
+  await expect(
+    sender.getByRole("heading", { name: "manufacturing", exact: true }),
+  ).toBeVisible();
   await sender.getByRole("button", { name: "Sharing", exact: true }).click();
   await sender.getByRole("button", { name: "Shared by me" }).click();
   await sender.getByLabel("Resource", { exact: true }).selectOption("ontology");
-  await sender.getByLabel("Ontology to share").selectOption("manufacturing");
+  await sender.getByLabel("Search ontology", { exact: true }).fill("manuf");
+  const ontology = sender.getByLabel("Ontology to share", { exact: true });
+  await expect(ontology.locator("option[value=manufacturing]")).toHaveCount(1);
+  await ontology.selectOption("manufacturing");
   const picker = sender.getByRole("combobox", {
     name: "Recipient",
     exact: true,

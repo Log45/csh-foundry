@@ -22,6 +22,8 @@ from test_artifacts import store  # noqa: F401
 from test_datasets import dataset, make_service
 from test_phase1 import database, historical_database, world  # noqa: F401
 
+pytestmark = pytest.mark.scale
+
 
 @pytest.mark.parametrize("size", [8 * 1024**2, 100 * 1024**2, 500 * 1024**2, 1024**3])
 @pytest.mark.parametrize("format", ["csv", "ndjson", "json", "parquet"])
