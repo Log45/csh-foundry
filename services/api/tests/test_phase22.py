@@ -837,3 +837,48 @@ def test_live_pool_processes_semantic_and_tenant_scoped_delivery(
             first.tenant_id: "DELIVERED",
             second.tenant_id: "PENDING",
         }
+
+
+def test_idle_worker_indexes_metadata_without_queued_execution_and_respects_revocation(
+    database, idp, monkeypatch
+):
+    from ontology_platform.artifacts.config import StorageSettings
+    from ontology_platform.artifacts.contracts import CreateArtifact
+    from ontology_platform.execution.worker import ExecutionWorker
+    from ontology_platform.functions.service import FunctionService
+    from ontology_platform.observability.service import ObservabilityService
+    from ontology_platform.pipelines.service import PipelineService
+    from ontology_platform.projects.contracts import CreateProject
+    from ontology_platform.security.admin import SecurityAdministration
+
+    _, sessions, settings, _ = phase22(database, idp, monkeypatch)
+    pool = WorkerPool(settings, sessions)
+    tenant = uuid4()
+    with sessions.begin() as s:
+        bootstrap(s, tenant, ISSUER, "metadata-owner", "Metadata owner")
+    owner = actor(sessions, "metadata-owner", tenant)
+    storage = StorageSettings(_env_file=None, backend="disabled")
+    svc = FunctionService(sessions, pool.authorizer, storage, None)
+    project = svc.create_project(owner, CreateProject(name="Idle metadata"))
+    resource = svc.create(owner, project.id, CreateArtifact(name="Unqueued function"))
+    observations = ObservabilityService(sessions, pool.authorizer, storage, None)
+    pipelines = PipelineService(sessions, pool.authorizer, storage, None)
+    assert pool.scopes("execution") == []
+    assert not observations.status_index(owner, resource.id).complete
+    assert {p.tenant_id for p, _ in pool.scopes("maintenance")} == {tenant}
+    for _ in range(20):
+        list(pool.run("maintenance", lambda p, _scope: ExecutionWorker(pipelines, p).maintain()))
+        if not pool.scopes("maintenance"):
+            break
+    assert observations.status_index(owner, resource.id).complete
+    assert pool.scopes("execution") == []
+    assert pool.credential is not None
+    with sessions() as s:
+        service_id = pool.service_id(s, *pool.credential[:2])
+    assert service_id is not None
+    SecurityAdministration(pool.authorizer).member(
+        owner, service_id, MembershipInput(enabled=False)
+    )
+    private = svc.create(owner, project.id, CreateArtifact(name="After revocation"))
+    assert pool.scopes("maintenance") == []
+    assert not observations.status_index(owner, private.id).complete

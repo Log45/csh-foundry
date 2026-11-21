@@ -595,7 +595,7 @@ class ExecutionWorker:
                 {"error": code, "attempt": row.attempts},
             )
 
-    def run_one(self) -> UUID | None:
+    def maintain(self) -> None:
         from ontology_platform.pipelines.dag_worker import sweep
 
         try:
@@ -610,6 +610,9 @@ class ExecutionWorker:
         except SQLAlchemyError:
             # Canonical execution remains available; pending generations expose index lag.
             pass
+
+    def run_one(self) -> UUID | None:
+        self.maintain()
         claim = self.claim()
         if claim is None:
             return None

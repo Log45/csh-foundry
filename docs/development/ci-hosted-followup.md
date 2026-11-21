@@ -113,7 +113,11 @@ not treated as passing runs. The completed owner run used the pinned Linux execu
 portable Polars runtime described above. Temporary databases, volumes and networks were
 removed after the checks.
 
-Known limitation: the original hosted owner failure remains unconfirmed and can still block
+Historical limitation at this report's revision: the original hosted owner failure remained unconfirmed and could still block
 CI. The improved failure message will expose its persisted error and metrics if it recurs.
 Recommended next step: run the updated workflows on GitHub, inspect those diagnostics if
 needed, and measure cold versus warm storage-cache timing. No new product phase was started.
+
+The subsequent hosted diagnostics exposed inherited Linux peak-memory accounting. See
+[the worker regression follow-up](ci-worker-regression-validation.md) for its diagnosis,
+corrective changes, and new validation results.

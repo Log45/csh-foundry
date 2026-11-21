@@ -241,12 +241,20 @@ test("visual DAG branches converge and two outputs commit together", async ({
   await expect(
     observations.getByLabel("Immutable lineage version").locator("option"),
   ).toHaveCount(2);
-  await observations
-    .getByRole("button", { name: "Explore lineage", exact: true })
-    .click();
-  await expect(
-    observations.getByRole("table", { name: "Dependency evidence" }),
-  ).toContainText("PRODUCES");
+  // Lineage is a bounded asynchronous projection; exploration returns a snapshot.
+  await expect
+    .poll(
+      async () => {
+        await observations
+          .getByRole("button", { name: "Explore lineage", exact: true })
+          .click();
+        return observations
+          .getByRole("table", { name: "Dependency evidence" })
+          .innerText();
+      },
+      { timeout: 5000 },
+    )
+    .toContain("PRODUCES");
   await expect(
     observations.getByRole("table", { name: "Accessible lineage node list" }),
   ).toContainText("EXECUTION");

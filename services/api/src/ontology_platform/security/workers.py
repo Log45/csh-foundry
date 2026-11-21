@@ -18,6 +18,7 @@ from ontology_platform.db.models import (
     GovernedDefinition,
     IngestionRun,
     JobExecutionGrant,
+    LineagePending,
     Membership,
     OutboxEvent,
     PlatformPrincipal,
@@ -33,7 +34,9 @@ from ontology_platform.security.local import LocalAuthorizer
 from ontology_platform.security.oidc import OIDCVerifier, https_url
 from ontology_platform.security.service import PlatformAuthorizer
 
-Kind = Literal["ingestion", "semantic", "outbox", "execution", "automation", "cleanup"]
+Kind = Literal[
+    "ingestion", "semantic", "outbox", "execution", "automation", "cleanup", "maintenance"
+]
 T = TypeVar("T")
 PERMISSIONS = {
     "ingestion": ("ingestion:claim", "ingestion:execute", "worker:delegate"),
@@ -42,6 +45,7 @@ PERMISSIONS = {
     "execution": ("execution:claim", "worker:delegate"),
     "automation": ("automation:dispatch",),
     "cleanup": ("ingestion:cleanup",),
+    "maintenance": ("execution:claim", "worker:delegate"),
 }
 
 
@@ -151,7 +155,15 @@ class WorkerPool:
         # Select tenants before ontologies so adding more queues cannot multiply a tenant's weight.
         now = func.now()
         model: Any
-        if kind == "execution":
+        if kind == "maintenance":
+            from ontology_platform.observability.index import INDEX_PREFIX
+
+            model = LineagePending
+            ready = or_(
+                model.generation != model.indexed_generation,
+                ~model.cursor.startswith(INDEX_PREFIX),
+            )
+        elif kind == "execution":
             model = ExecutionJob
             ready = or_(
                 model.state == "QUEUED",

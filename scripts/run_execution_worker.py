@@ -32,6 +32,15 @@ def main() -> None:
             pool = WorkerPool(settings, sessions)
             service = PipelineService(sessions, pool.authorizer, storage, store)
             automations = AutomationService(sessions, pool.authorizer, storage, store)
+            # Published metadata can dirty the lineage index after the last job finishes.
+            # Discover that pending work independently of the execution queue.
+            next(
+                pool.run(
+                    "maintenance",
+                    lambda actor, _, service=service: ExecutionWorker(service, actor).maintain(),
+                ),
+                None,
+            )
             next(
                 pool.run(
                     "automation",

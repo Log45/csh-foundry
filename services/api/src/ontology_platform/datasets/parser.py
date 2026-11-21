@@ -6,7 +6,6 @@ import io
 import json
 import math
 import multiprocessing
-import resource
 import subprocess
 import sys
 import tempfile
@@ -19,6 +18,8 @@ from typing import Any, BinaryIO
 
 import polars as pl
 import pyarrow.parquet as pq  # type: ignore[import-untyped]
+
+from ontology_platform.execution.isolation import dataset_child as worker
 
 WALL_SECONDS = 30
 MAX_BYTES = 8 * 1024 * 1024
@@ -197,26 +198,6 @@ def parse(data: bytes, format: str) -> dict[str, Any]:
         "validation": "full-content",
         "format": format,
     }
-
-
-def worker(path: str, output: str, format: str) -> None:
-    resource.setrlimit(resource.RLIMIT_CPU, (20, 20))
-    if sys.platform == "linux":
-        resource.setrlimit(resource.RLIMIT_AS, (2 * 1024**3, 2 * 1024**3))
-    try:
-        from ontology_platform.datasets.streaming import validate_path
-        from ontology_platform.execution.config import ExecutionSettings
-
-        result = validate_path(Path(path), format, ExecutionSettings())
-    except InvalidDataset as exc:
-        result = {"error": "invalid_dataset", "message": str(exc)}
-    except Exception:
-        # Parser diagnostics can include private source values; publish a fixed category only.
-        result = {
-            "error": "invalid_dataset",
-            "message": "Content violates format or validation limits",
-        }
-    Path(output).write_text(json.dumps(result, allow_nan=False))
 
 
 def _validate(source: BinaryIO, format: str) -> dict[str, Any]:

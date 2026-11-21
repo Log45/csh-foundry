@@ -132,3 +132,18 @@ def test_actual_required_gate_rejects_unsuccessful_dependencies(status, dependen
         text=True,
     )
     assert (result.returncode == 0) == (status == "success")
+
+
+def test_openapi_export_needs_no_dotenv_database_or_service(tmp_path):
+    output = tmp_path / "openapi.json"
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/export_openapi.py"), "--output", str(output)],
+        cwd=tmp_path,
+        env={key: value for key, value in os.environ.items() if not key.startswith("FOUNDRY_")},
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert json.loads(output.read_text()) == json.loads(
+        (ROOT / "apps/studio/lib/openapi.json").read_text()
+    )

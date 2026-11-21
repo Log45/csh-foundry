@@ -87,9 +87,13 @@ jobs:
           cache-dependency-path: |
             package-lock.json
             apps/studio/package-lock.json
-      - name: Install TypeScript compiler for generated SDK integration tests
+      - name: Build SDK packages and install generated SDK test compiler
         if: inputs.suite == 'regression'
-        run: npm ci --prefix apps/studio
+        run: |
+          npm ci
+          npm run build -w @foundry/sdk
+          npm run build -w @foundry/react
+          npm ci --prefix apps/studio
       - name: Build production Studio and install Chromium
         if: contains(fromJSON('["browser", "directory", "browser-scale"]'), inputs.suite)
         run: |

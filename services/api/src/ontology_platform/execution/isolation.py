@@ -16,14 +16,59 @@ from typing import Any
 from ontology_platform.execution.config import ExecutionSettings
 
 
-def child(
-    operation: str, request: dict[str, Any], directory: str, limits: ExecutionSettings
-) -> None:
+def peak_memory_bytes() -> int:
+    if sys.platform == "linux":
+        # ru_maxrss survives exec on Linux and can include the controller's pre-exec
+        # footprint. VmHWM belongs to this executable's memory map instead.
+        for line in Path("/proc/self/status").read_text().splitlines():
+            if line.startswith("VmHWM:"):
+                return int(line.split()[1]) * 1024
+        raise RuntimeError("Linux process high-water memory accounting unavailable")
+    peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    return peak if sys.platform == "darwin" else peak * 1024
+
+
+def configure_child() -> None:
     # Trusted adapters need local paths and budgets, never controller credentials.
     allowed_environment = {"PATH", "PYTHONPATH", "LANG", "LC_ALL", "LC_CTYPE", "TZ"}
     for variable in tuple(os.environ):
         if variable not in allowed_environment:
             del os.environ[variable]
+    os.environ["POLARS_MAX_THREADS"] = "2"
+    if sys.platform == "linux":
+        # Keep native arenas inside the address-space budget before loading libraries.
+        os.environ["_RJEM_MALLOC_CONF"] = "narenas:2,background_thread:false,retain:false"
+        os.environ["ARROW_DEFAULT_MEMORY_POOL"] = "system"
+        os.environ["ARROW_IO_THREADS"] = "2"
+
+
+def dataset_child(path: str, output: str, format: str) -> None:
+    # This target must live outside datasets.parser: importing that module first loads
+    # native allocators before the child can bound their arena/thread configuration.
+    configure_child()
+    resource.setrlimit(resource.RLIMIT_CPU, (20, 20))
+    if sys.platform == "linux":
+        resource.setrlimit(resource.RLIMIT_AS, (2 * 1024**3, 2 * 1024**3))
+    try:
+        from ontology_platform.datasets.parser import InvalidDataset
+        from ontology_platform.datasets.streaming import validate_path
+
+        try:
+            result = validate_path(Path(path), format, ExecutionSettings())
+        except InvalidDataset as exc:
+            result = {"error": "invalid_dataset", "message": str(exc)}
+    except Exception:
+        result = {
+            "error": "invalid_dataset",
+            "message": "Content violates format or validation limits",
+        }
+    Path(output).write_text(json.dumps(result, allow_nan=False))
+
+
+def child(
+    operation: str, request: dict[str, Any], directory: str, limits: ExecutionSettings
+) -> None:
+    configure_child()
     # Native parser diagnostics can contain private values; only the bounded JSON result leaves.
     sink = os.open(os.devnull, os.O_WRONLY)
     os.dup2(sink, 1)
@@ -43,7 +88,6 @@ def child(
     os.environ["POLARS_TEMP_DIR"] = str(scratch)
     os.environ["TMPDIR"] = str(scratch)
     tempfile.tempdir = str(scratch)
-    os.environ["POLARS_MAX_THREADS"] = "2"
     resource.setrlimit(resource.RLIMIT_CPU, (limits.cpu_seconds, limits.cpu_seconds))
     resource.setrlimit(resource.RLIMIT_FSIZE, (limits.temporary_bytes, limits.temporary_bytes))
     if sys.platform == "linux":
@@ -73,10 +117,9 @@ def child(
     except Exception:
         # Native errors may contain source values or local paths.
         result = {"error": "invalid_data_or_plan", "message": "Content or plan violates limits"}
-    peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     result["metrics"] = {
         "seconds": time.monotonic() - started,
-        "peak_memory_bytes": peak if sys.platform == "darwin" else peak * 1024,
+        "peak_memory_bytes": peak_memory_bytes(),
     }
     Path(directory, "result.json").write_text(json.dumps(result, allow_nan=False))
 

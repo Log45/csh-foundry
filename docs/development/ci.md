@@ -14,8 +14,10 @@ startup/jobs under a non-superuser migration/table owner. Browser jobs build Stu
 standalone production output; they do not run Next's development server. Chromium is the
 only browser in the push gate, and retries are disabled.
 
-Backend jobs also install Node 24 and Studio's locked TypeScript compiler because the
-generated SDK integration tests compile and execute real standalone TypeScript packages.
+Backend jobs also install Node 24, build both SDK packages, and install Studio's locked
+TypeScript compiler because the generated SDK integration tests compile and execute real
+standalone TypeScript packages. Schema export uses explicit offline settings and requires
+no developer `.env` or running database.
 Scale jobs need Node during collection of that test module, even though it is deselected.
 
 PostgreSQL 17, the checksum-verified Open Ontologies binary, and source-pinned MinIO are
@@ -92,10 +94,13 @@ checks set `FOUNDRY_DATABASE_URL` to that same database.
 docker build -t csh-foundry-minio:2025-source -f infrastructure/docker/minio.Dockerfile .
 uv run alembic upgrade head
 uv run alembic check
+npm ci
+npm run build -w @foundry/sdk
+npm run build -w @foundry/react
+npm ci --prefix apps/studio
 uv run python scripts/validate_phase15.py --ci regression
 # Optional single hosted-equivalent shard:
 uv run python scripts/validate_phase15.py --ci regression --ci-shard 0/4
-npm run build -w @foundry/sdk
 npm run build --prefix apps/studio
 uv run python scripts/validate_phase15.py --ci browser
 uv run python scripts/validate_phase15.py --ci directory

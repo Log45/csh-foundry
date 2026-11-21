@@ -288,6 +288,11 @@ def main():
             while not stop.wait(0.3):
                 ingestion.run_one(worker, definition.id)
                 semantic.run_one(worker, definition.id)
+                for _ in pool.run(
+                    "maintenance",
+                    lambda actor, _scope: ExecutionWorker(pipelines, actor).maintain(),
+                ):
+                    pass
                 if app.state.artifact_store is not None:
                     for _ in pool.run(
                         "execution",
