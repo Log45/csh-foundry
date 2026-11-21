@@ -16,8 +16,8 @@
     "build": "npm run build -w @foundry/sdk && npm run build -w @foundry/react && npm run build -w @foundry/sdk-example",
     "typecheck": "tsc --noEmit -p tsconfig.tests.json && npm run typecheck -w @foundry/sdk-example",
     "test": "vitest run",
-    "format": "prettier --write packages/{typescript-sdk,react-sdk}/src apps/sdk-example/{src,app,tests} apps/sdk-example/*.ts tests/sdk scripts/*.mjs",
-    "format:check": "prettier --check packages/{typescript-sdk,react-sdk}/src apps/sdk-example/{src,app,tests} apps/sdk-example/*.ts tests/sdk scripts/*.mjs",
+    "format": "prettier --write \"packages/{typescript-sdk,react-sdk}/src/**/*.{ts,tsx}\" \"apps/sdk-example/{src,app,tests}/**/*.{ts,tsx}\" \"apps/sdk-example/*.ts\" \"tests/sdk/**/*.{ts,tsx,mjs}\" \"scripts/*.mjs\"",
+    "format:check": "prettier --check \"packages/{typescript-sdk,react-sdk}/src/**/*.{ts,tsx}\" \"apps/sdk-example/{src,app,tests}/**/*.{ts,tsx}\" \"apps/sdk-example/*.ts\" \"tests/sdk/**/*.{ts,tsx,mjs}\" \"scripts/*.mjs\"",
     "test:consumer": "node scripts/smoke_sdk_consumer.mjs"
   },
   "devDependencies": {

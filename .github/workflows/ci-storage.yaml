@@ -1,0 +1,33 @@
+name: Build pinned test storage
+on:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        id: cache
+        with:
+          path: artifacts/ci-storage
+          key: ci-storage-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('infrastructure/docker/minio.Dockerfile') }}
+      - name: Build and export pinned source image on cache miss
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          docker build -t csh-foundry-minio:2025-source -f infrastructure/docker/minio.Dockerfile .
+          mkdir -p artifacts/ci-storage
+          docker save csh-foundry-minio:2025-source -o artifacts/ci-storage/image.tar
+          cd artifacts/ci-storage
+          sha256sum image.tar > SHA256SUMS
+      - name: Verify cache or build output
+        working-directory: artifacts/ci-storage
+        run: sha256sum -c SHA256SUMS
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ci-storage-image
+          path: artifacts/ci-storage/
+          if-no-files-found: error
+          retention-days: 1

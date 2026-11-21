@@ -67,10 +67,18 @@ jobs:
       - name: OWL import and export compatibility
         if: inputs.suite == 'regression'
         run: mvn -q -f integrations/protege/pom.xml compile exec:java '-Dexec.args=fixtures/manufacturing.ttl artifacts/manufacturing.owl'
-      - name: Pull pinned isolated storage images
+      - name: Download pinned source storage image
         if: inputs.suite != 'owner' && inputs.suite != 'operations'
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: ci-storage-image
+          path: artifacts/ci-storage
+      - name: Verify and load isolated storage image
+        if: inputs.suite != 'owner' && inputs.suite != 'operations'
+        working-directory: artifacts/ci-storage
         run: |
-          POSTGRES_PASSWORD=ci docker compose --env-file /dev/null -f infrastructure/compose.yaml --profile minio pull minio minio-init
+          sha256sum -c SHA256SUMS
+          docker load -i image.tar
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         if: contains(fromJSON('["regression", "scale", "browser", "directory", "browser-scale"]'), inputs.suite)
         with:

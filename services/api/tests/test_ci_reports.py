@@ -116,7 +116,9 @@ def test_invalid_shard_is_a_usage_error(value):
 
 
 @pytest.mark.parametrize("status", ["success", "failure", "cancelled", "skipped"])
-@pytest.mark.parametrize("dependency", ["static", "sdk", "studio", "backend", "integration"])
+@pytest.mark.parametrize(
+    "dependency", ["storage", "static", "sdk", "studio", "backend", "integration"]
+)
 def test_actual_required_gate_rejects_unsuccessful_dependencies(status, dependency):
     workflow = yaml.safe_load((ROOT / ".github/workflows/ci.yaml").read_text())
     gate = workflow["jobs"]["regression"]

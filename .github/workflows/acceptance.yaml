@@ -9,7 +9,10 @@ concurrency:
   group: acceptance-${{ github.ref }}
   cancel-in-progress: false
 jobs:
+  storage:
+    uses: ./.github/workflows/ci-storage.yaml
   acceptance:
+    needs: storage
     strategy:
       fail-fast: false
       matrix:

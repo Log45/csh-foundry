@@ -18,8 +18,12 @@ Backend jobs also install Node 24 and Studio's locked TypeScript compiler becaus
 generated SDK integration tests compile and execute real standalone TypeScript packages.
 Scale jobs need Node during collection of that test module, even though it is deselected.
 
-PostgreSQL 17, the checksum-verified Open Ontologies binary, and digest-pinned MinIO are
-real dependencies. `validate_phase15.py` gives each invocation a private Compose project,
+PostgreSQL 17, the checksum-verified Open Ontologies binary, and source-pinned MinIO are
+real dependencies. `ci-storage.yaml` builds the existing MinIO server/client releases from
+checksum-verified upstream source archives on digest-pinned Go/Alpine images. It caches the
+result by Dockerfile content, then distributes one checksummed image artifact to all storage
+jobs. A cold cache adds compilation time; subsequent pushes restore the image. Removed
+upstream Docker repositories and binary archives are not required. `validate_phase15.py` gives each invocation a private Compose project,
 volume, port, and storage credentials, and cleans up its own resources. Backend fixtures
 create isolated migrated PostgreSQL schemas. The browser fixture signs a local service
 token and uses the actual `WorkerPool` enrollment path for new private Projects, preserving
@@ -80,11 +84,12 @@ other. Separate workflow/event concurrency groups prevent releases from cancelli
 ## Local commands
 
 Install locked dependencies, the pinned semantic engine, Node 24, Studio dependencies and
-Chromium, and pull the pinned `minio` and `minio-init` images from Compose. Point
+Chromium, and build the pinned local storage image with the command below. Point
 `TEST_DATABASE_URL` at a disposable PostgreSQL database, never production. For clean-schema
 checks set `FOUNDRY_DATABASE_URL` to that same database.
 
 ```sh
+docker build -t csh-foundry-minio:2025-source -f infrastructure/docker/minio.Dockerfile .
 uv run alembic upgrade head
 uv run alembic check
 uv run python scripts/validate_phase15.py --ci regression

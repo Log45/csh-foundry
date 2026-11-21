@@ -223,7 +223,8 @@ def test_execution_controller_main_uses_owner_mode_for_startup_and_refresh(
     finally:
         for sig, handler in previous.items():
             signal.signal(sig, handler)
-    assert svc.status(alice, job.id).state == "SUCCEEDED"
+    status = svc.status(alice, job.id)
+    assert status.state == "SUCCEEDED", (status.error, status.metrics)
 
 
 def test_migration_utility_checks_current_schema_as_same_owner(owner_environment):

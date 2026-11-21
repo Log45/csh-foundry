@@ -6,6 +6,8 @@ concurrency:
   group: regression-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  storage:
+    uses: ./.github/workflows/ci-storage.yaml
   static:
     name: Static checks and contracts
     runs-on: ubuntu-latest
@@ -88,6 +90,7 @@ jobs:
           path: artifacts/ci/
           if-no-files-found: warn
   backend:
+    needs: storage
     name: Backend (${{ matrix.shard }}/4)
     strategy:
       fail-fast: false
@@ -99,6 +102,7 @@ jobs:
       shard: ${{ format('{0}/4', matrix.shard) }}
       artifact_suffix: ${{ format('shard-{0}', matrix.shard) }}
   integration:
+    needs: storage
     name: Regression (${{ matrix.suite }})
     strategy:
       fail-fast: false
@@ -110,7 +114,7 @@ jobs:
   regression:
     name: CI / regression
     if: always()
-    needs: [static, sdk, studio, backend, integration]
+    needs: [storage, static, sdk, studio, backend, integration]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
