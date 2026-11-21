@@ -2,9 +2,11 @@
 
 ## Architecture, Implementation Roadmap, and Coding Agent Specification
 
-**Project status (2026-11-03 roadmap decision):** Phases 0–9 implemented; Phase 10 engineering complete on the reported local-validation basis, NOT production-certified; remaining release/security/organization-target gates deferred to the final Production Readiness phase. **Phase 11 (Projects, folders, resource registry, and governance) is the only newly authorized implementation phase.** Subsequent phases require separate approval.
+**Current source status (2026-11-21 documentation refresh):** The repository includes Phases 0–22, directory-based recipient sharing and subsequent worker/CI fixes. See the [README](README.md) for current capabilities and setup, the [Phase 21 report](docs/development/phase-21-report.md), [Phase 22 report](docs/development/phase-22-report.md), and [directory-sharing follow-up](docs/development/phase-22-ldap-recipient-search-report.md) for executed evidence and limitations. The migration head is `0030_directory_shares`. Production remains **BLOCKED / NOT PRODUCTION-CERTIFIED** under Section 23B.
 
-**Document version:** 1.6 (Phase 10 engineering closure, explicit production-readiness deferral, and Phase 11 authorization; Spark/Rust and MinIO roadmap retained)
+**Roadmap interpretation:** The original 2026-11-03 baseline and dated authorization addenda below preserve their historical scope. Later scoped approvals supersede earlier “not authorized” statements for the work they explicitly cover. This documentation refresh grants no new implementation or deployment authorization.
+
+**Document version:** 1.7 (current-source status and documentation navigation; historical roadmap and authorization records preserved)
 
 **Primary language:** Python
 

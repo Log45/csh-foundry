@@ -1,9 +1,18 @@
-# Foundry Studio — Phase 8
+# Foundry Studio
 
-One Next.js application for native Ontology Manager and operational Ontology Studio.
+One Next.js application for Ontology Manager, object exploration, Projects, datasets, pipelines,
+visual applications, lineage, observability and sharing.
 The canonical registry, data, authorization and jobs remain in the existing FastAPI/PostgreSQL backend.
 
-Use **Node 22 or newer** (verified Node 24), npm and the Phase 7 API. From this directory:
+Use **Node 22 or newer** (CI uses Node 24), npm and the migrated current API
+(`0030_directory_shares`). Build the local SDK dependency from the repository root first:
+
+```bash
+npm ci
+npm run build -w @foundry/sdk
+```
+
+Then from this directory:
 
 ```
 npm ci
@@ -27,15 +36,27 @@ audience, the configured `client_id` and the documented Phase 7 claims. An expli
 `keycloak` profile also supports securely bound `azp` access tokens; Studio and API use the same
 `FOUNDRY_OIDC_PROVIDERS` policy. See [token profiles and OKD web-console setup](../../docs/development/oidc-token-profiles.md). API configuration must trust that issuer and
 allow the studio client. Browser ID tokens and API access tokens have separate audiences. Provision
-issuer/subject platform memberships through Phase 7 tooling; login grants nothing automatically.
+issuer/subject platform memberships through the security tooling, or explicitly configure eligible
+Keycloak personal-workspace onboarding. Successful login alone does not grant arbitrary tenant access.
+See [personal workspaces and sharing](../../docs/api/tenant-sharing.md).
 
-The server keeps access tokens in a bounded process-local session store. Browser cookies contain
-opaque random IDs, HttpOnly, SameSite=Lax, Path=/ and Secure for HTTPS origins. Production origins
-must use HTTPS; HTTP is accepted only on explicit loopback origins for local development. Sessions
-expire at access-token expiry or one hour, whichever comes first. No refresh tokens are requested
-or persisted. Sign out invalidates the local session; broker-wide single logout is not implemented.
-Restart clears sessions. Run **one Next process/replica**; horizontal session persistence is deferred.
-Never expose development mode or the deterministic test provider publicly.
+Browser cookies contain opaque random IDs, HttpOnly, SameSite=Lax, Path=/ and Secure for
+HTTPS origins. Production origins must use HTTPS; HTTP is accepted only on explicit loopback
+origins for local development. Sessions expire at access-token expiry or one hour, whichever
+comes first. No refresh tokens are requested or persisted.
+
+Without `STUDIO_STATE_SECRET`, development uses bounded process-local sessions: restart clears
+state and replicas do not share it. Production (`STUDIO_ENVIRONMENT=production`) requires
+`STUDIO_STATE_SECRET` and the API's encrypted PostgreSQL browser-state service. Configure the
+matching `FOUNDRY_BROWSER_STATE_SECRET` and `FOUNDRY_BROWSER_STATE_KEYS` in the API using the
+[production runbook](../../docs/operations/production.md). Durable state supports multiple Studio
+replicas, restart continuity and shared logout. Sign out invalidates shared state first and can
+offer broker logout; previously issued API tokens retain their independently governed lifetime.
+See [ADR 0033](../../docs/decisions/0033-durable-browser-state.md).
+
+Supply server environment variables to the Next.js process or its app-local environment file;
+host Studio does not automatically read the repository-root `.env`. Never expose development
+mode or the deterministic test provider publicly.
 
 Select a tenant, then an ontology. Manager provides a native graph, object/property/relationship forms,
 action-definition editor, drafts/history, compatibility, separate publication/activation and OWL
@@ -103,8 +124,7 @@ Phase 13 adds independent, Project-governed datasets with immutable source versi
 CSV/JSON/NDJSON/Parquet validation, schema history and bounded previews. See the
 [dataset API and validation contract](../../docs/api/datasets.md). Studio supports dataset creation, upload,
 validation errors, source download, version history, schema and preview in Project folders.
-Production remains blocked; Phase 14 is not implemented.
-
+Production remains blocked under PLANS.md §23B; pipeline execution is implemented as described below.
 
 Phase 14 adds a structured JSON pipeline editor, immutable definition publication, pinned run inputs,
 run monitoring/cancellation/retry and authorized lineage. Dataset checksums use 1 MiB slices, and
@@ -119,3 +139,29 @@ sample preview, durable full-source validation, materialization, run refresh/can
 counts, canonical object inspection and access-controlled provenance. Samples are labeled separately
 from full validation. Partial transactional batch visibility is shown explicitly. Existing BFF session,
 CSRF and tenant-context rules apply; no storage/worker credentials enter the browser.
+
+## Personal workspaces and directory sharing
+
+Eligible configured Keycloak users can create and name a personal workspace on first sign-in.
+The selected tenant is the acting context. Project and Ontology shares show owner attribution
+and support inbound acceptance and owner revocation. Recipient search can use configured
+Keycloak and LDAP directories; LDAP invitations use a private claim link with a bounded lifetime.
+Manual principal and tenant invitations remain available. Share-only access cannot submit jobs
+or transfer ownership. See [sharing contracts](../../docs/api/tenant-sharing.md) and the
+[current rollout guide](../../docs/operations/phase-22-okd4.md).
+
+Lineage and execution views use governed, bounded backend projections and explicitly report
+indexing completeness. The execution controller must run to reconcile pending lineage, including
+metadata-only changes. See [Studio lineage](../../docs/development/studio-lineage.md) and
+[observability](../../docs/development/execution-observability.md).
+
+
+## Visual builders and published applications
+
+Project pipeline resources support visual graph drafts, branches, transformed joins/unions,
+pinned input versions and multiple output datasets through the existing Polars DAG engine.
+The application editor publishes immutable declarative widget definitions that invoke governed
+queries and actions. Media Sets, trusted typed functions and automations use the same Project
+workspace and durable backend jobs. See [pipeline authoring](../../docs/development/visual-pipeline-authoring.md),
+[application authoring](../../docs/development/visual-application-authoring.md) and
+[media/functions/automations](../../docs/api/media-functions-automations.md).

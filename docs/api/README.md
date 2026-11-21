@@ -1,14 +1,41 @@
-# Persistence API — Phases 1–2
+# API reference and persistence workflow
 
 Run `uv run uvicorn ontology_platform.main:create_app --factory --host 127.0.0.1`.
 OpenAPI: `/api/v1/openapi.json`; interactive documentation: `/docs`.
 Public `/health/live` returns `{"status":"ok"}`; `/health/ready` returns
-`{"status":"ready"}` after PostgreSQL connectivity and revision `0013_security` checks.
+`{"status":"ready"}` after PostgreSQL connectivity and revision `0030_directory_shares` checks.
 
-All endpoints below are under `/api/v1` and require the explicit server-configured local
-principal. Missing context returns 401; unauthorized/unprovisioned context returns 403.
-There is no trusted client tenant/user header. All reads/writes invoke the authorization
-interface. Cross-tenant resources are not found; foreign tenant schema bodies return 403.
+All domain endpoints below are under `/api/v1` and require authenticated platform context.
+OIDC mode verifies access tokens and authorized tenant selection; the trusted local profile
+uses the explicitly configured server principal. Missing authentication returns 401;
+unauthorized or unprovisioned context is denied. A tenant header never grants access.
+Reads and writes use governed services, current memberships, RBAC and restrictive ABAC.
+Explicit shares provide only their documented resource scope. See [security](security.md)
+and [personal workspaces and sharing](tenant-sharing.md).
+
+## API areas
+
+| Area | Reference |
+| --- | --- |
+| Identity, policies and service workers | [Security](security.md) |
+| Personal tenants, invitations and directory recipients | [Tenant sharing](tenant-sharing.md) |
+| Ontology registry, versions, objects and links | Persistence workflow below |
+| Queries, traversal, aggregation and Object Sets | [Queries](queries.md) |
+| Actions, history, audit and outbox | [Actions](actions.md) |
+| Registered sources and ingestion | [Ingestion](ingestion.md) |
+| Semantic compilation, exports and jobs | [Semantics](semantic.md) |
+| OWL import/export | [Interchange](interchange.md) |
+| Branches and ontology-specific SDK generation | [Branches and SDKs](branching-sdk.md) |
+| Projects, folders and resource governance | [Projects](projects.md) |
+| Immutable binary content | [Artifacts](artifacts.md) |
+| Versioned tabular sources and previews | [Datasets](datasets.md) |
+| Polars definitions, visual graphs and DAG runs | [Pipelines](pipelines.md) |
+| Dataset-to-ontology materialization | [Mappings](mappings.md) |
+| Published declarative applications | [Applications](applications.md) |
+| Media Sets, trusted functions and triggers | [Media, functions and automations](media-functions-automations.md) |
+| Lineage, impact, freshness and operational events | [Lineage contracts](../development/lineage-observability.md), [execution observability](../development/execution-observability.md) |
+
+## Registry, objects and links
 
 | Method / path | Behavior |
 |---|---|
@@ -101,8 +128,7 @@ Errors use `{"error":{"code":"...","message":"..."}}`. In particular: `invalid_p
 (422), `identity_mismatch` (422), `revision_conflict` (409), `cardinality_conflict` (409),
 `unique_conflict` (409), `migration_required` / `invalid_plan` (409), and `activation_too_large` (409).
 No database details or credentials are exposed. Phase 1 activation is capped at 1,000 objects and
-5,000 links; larger jobs are deferred. Full authorization, advanced queries, actions and ingestion
-are not implemented by this API.
+5,000 links; larger jobs are deferred. Authorization applies throughout; query, action and ingestion endpoints are documented separately above.
 
 Phase 2 query/traversal/aggregation endpoints and internal Object Sets are documented in [queries.md](queries.md).
 
@@ -145,10 +171,10 @@ runs under the existing ontology write lock before replacement. A stale editor r
 previous API contract. Published versions remain immutable. Studio sends this parameter on saves.
 
 Phase 9 adds [governed branches, three-way merges and published-schema SDK generation](branching-sdk.md).
-The current readiness migration is `0015_sdk`; publication and activation remain separate.
+Publication and activation remain separate; SDK generation uses immutable published versions.
 
 Project/folder/resource governance routes and current lifecycle/permission contracts are documented
-in [projects.md](projects.md). Current source readiness requires migration `0018_projects`.
+in [projects.md](projects.md). Current source readiness requires migration `0030_directory_shares`.
 Production OIDC and verified tenant selection are described in [security.md](security.md);
 the local-identity descriptions above describe the original development profile.
 
@@ -158,7 +184,7 @@ Phase 13 adds independent, Project-governed datasets with immutable source versi
 CSV/JSON/NDJSON/Parquet validation, schema history and bounded previews. See the
 [dataset API and validation contract](datasets.md). Studio supports dataset creation, upload,
 validation errors, source download, version history, schema and preview in Project folders.
-Production remains blocked; Phase 14 is not implemented.
+Production remains blocked under PLANS.md §23B. Pipeline execution is documented in [pipelines.md](pipelines.md).
 
 - [Media Sets, Functions and Automations](media-functions-automations.md): immutable media snapshots,
   typed trusted logic, shared durable execution and governed manual/scheduled/action-event triggers.

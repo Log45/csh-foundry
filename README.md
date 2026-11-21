@@ -1,447 +1,214 @@
-# CSH Foundry — operational ontology platform
+# CSH Foundry
 
-Phase 10 production hardening with Keycloak, extending governed schema branching, SDKs and Ontology Manager
-and Ontology Studio for the modular platform specified in [PLANS.md](PLANS.md).
-PostgreSQL owns operational state; canonical metadata is independent of RDF/OWL.
-Open Ontologies supplies external semantic checks. Protégé is optional authoring tooling.
-Phases 0–5 provide governed schema publication/activation, tenant-scoped objects/links and a
-schema-aware SQL query engine with projection, keyset pagination, traversal, aggregates and internal
-Object Sets, transactional actions, previews, durable idempotency/history/audit/outbox, bounded
-webhook delivery, property edit reconciliation and durable governed CSV/Parquet/NDJSON/PostgreSQL
-ingestion, deterministic RDF/OWL/SHACL compilation, governed RDF exports, durable semantic jobs
-and separately approved derived facts. Phase 6 adds explicit Turtle/RDF/XML authoring imports into
-unpublished canonical drafts, source preservation, diagnostics, IRI conflicts and deterministic exports.
-Phase 7 adds verified OIDC access tokens, platform tenant membership, RBAC, restrictive SQL ABAC,
-security administration/audit and delegated service workers. Phase 9 adds governed branches and generated SDKs. Phase 10 adds production configuration, durable sessions, a Keycloak broker profile and operational controls; production acceptance remains gated by the readiness matrix. Phase 11 is not implemented.
+An open-source operational ontology platform inspired by Palantir Foundry. CSH Foundry
+connects governed data, typed objects, transactional actions, pipelines and applications
+in one tenant-aware platform.
 
-## Local setup
+The current source includes Phases 0–22, directory-based sharing, shared worker execution
+and subsequent CI and worker fixes. PostgreSQL is the authoritative operational datastore;
+canonical metadata stays independent of RDF/OWL. Open Ontologies is a separate semantic
+engine, and Protégé is optional authoring tooling.
 
-Requirements: uv (tested 0.7.11; CI/container pinned 0.9.5), Python 3.12, Docker with Compose.
-For the authoring compatibility check: Java 17+ and Maven. No local Rust toolchain is required.
+**Status:** implemented capabilities have local validation evidence, with limitations recorded
+in the phase reports. Production release remains **BLOCKED / NOT PRODUCTION-CERTIFIED** under
+[PLANS.md §23B](PLANS.md). Historical test counts and image scans describe their recorded
+candidates, not certification of the current checkout.
+
+## Current capabilities
+
+| Area | Implemented functionality | Documentation |
+| --- | --- | --- |
+| Ontology management | Canonical types, properties, relationships and actions; drafts, immutable publication, separate activation, governed migrations, branches and three-way merges | [Registry API](docs/api/README.md), [branches and generated SDKs](docs/api/branching-sdk.md) |
+| Operational data | Tenant-scoped objects and links, schema-aware queries, signed cursor pagination, traversal, aggregation and Object Sets | [Query API](docs/api/queries.md) |
+| Governed actions | Preview, transactional execution, idempotency, history, audit, outbox delivery and property edit reconciliation | [Action API](docs/api/actions.md) |
+| Ingestion and semantics | Registered CSV/Parquet/NDJSON/PostgreSQL sources, durable ingestion, RDF/OWL/SHACL compilation, exports, semantic jobs and separately approved derived facts | [Ingestion](docs/api/ingestion.md), [semantics](docs/api/semantic.md), [OWL interchange](docs/api/interchange.md) |
+| Projects and data assets | Projects, folders and resource governance; immutable artifacts; versioned datasets with validation, schema history and previews | [Projects](docs/api/projects.md), [artifacts](docs/api/artifacts.md), [datasets](docs/api/datasets.md) |
+| Pipelines and materialization | Visual pipeline authoring, versioned DAGs, Polars execution, pinned inputs, multiple atomically published outputs and dataset-to-ontology mapping | [Pipelines](docs/api/pipelines.md), [mappings](docs/api/mappings.md) |
+| Applications and automation | Published declarative visual applications, Media Sets, trusted typed functions and durable manual/scheduled/event automations | [Applications](docs/api/applications.md), [media, functions and automations](docs/api/media-functions-automations.md) |
+| Lineage and operations | Governed resource and column lineage, impact analysis, freshness policies, execution details and operational events | [Lineage](docs/development/lineage-observability.md), [observability](docs/development/execution-observability.md) |
+| Identity and collaboration | OIDC/Keycloak, memberships, RBAC and restrictive ABAC, personal workspaces, explicit Project/Ontology invitations, Keycloak/LDAP recipient discovery | [Security](docs/api/security.md), [tenant sharing](docs/api/tenant-sharing.md) |
+| Developer tooling | Generated ontology-specific Python/TypeScript packages, platform TypeScript SDK, React hooks and a starter application | [TypeScript SDK](packages/typescript-sdk/README.md), [React SDK](packages/react-sdk/README.md), [starter](apps/sdk-example/README.md) |
+
+Studio is the Next.js application for Ontology Manager, object exploration, Projects,
+data workflows, visual builders, lineage and sharing. All operations use the governed
+FastAPI application services and current authorization checks.
+
+## Local API quick start
+
+Requirements: Python 3.12, [uv](https://docs.astral.sh/uv/), Docker with Compose.
+Studio and SDK development also require Node.js 22 or newer and npm; CI uses Node 24.
+Java 17+ and Maven are needed only for the OWLAPI authoring compatibility check.
+No platform Rust toolchain is required.
+
+Run from the repository root, using a **new disposable local database**:
 
 ```bash
 uv sync --frozen
 cp .env.example .env
-# Choose POSTGRES_PASSWORD and set the matching FOUNDRY_DATABASE_URL in .env.
-# Use URL-safe password characters or URL-encode them in the SQLAlchemy URL.
+```
+
+Edit `.env`: choose `POSTGRES_PASSWORD` and set the matching `FOUNDRY_DATABASE_URL`.
+Use URL-safe password characters or URL-encode the password in the database URL. To enable
+one trusted local developer, set:
+
+```dotenv
+FOUNDRY_AUTH_MODE=local
+FOUNDRY_TRUSTED_LOCAL_IDENTITY=true
+FOUNDRY_LOCAL_TENANT_ID=00000000-0000-0000-0000-000000000001
+FOUNDRY_LOCAL_PRINCIPAL_ID=developer
+```
+
+Then initialize and run:
+
+```bash
 docker compose --env-file .env -f infrastructure/compose.yaml up -d --wait postgres
-uv run alembic upgrade head
+uv run alembic -c alembic.ini upgrade head
+uv run python -m ontology_platform.bootstrap --name "Local manufacturing"
 uv run uvicorn ontology_platform.main:create_app --factory --host 127.0.0.1
 ```
 
-The API serves `/health/live`, `/health/ready`, `/docs` and `/api/v1/openapi.json` on port
-8000. Readiness requires the database and current migration. The database binds loopback
-port 55432 by default. `.env` is ignored; no database password is committed.
-To run the API in Compose instead of on the host:
+The API is at [localhost:8000](http://127.0.0.1:8000), with interactive docs at
+[/docs](http://127.0.0.1:8000/docs) and OpenAPI at
+[/api/v1/openapi.json](http://127.0.0.1:8000/api/v1/openapi.json).
+`/health/live` checks liveness; `/health/ready` checks PostgreSQL and the required migration.
+The current migration head is **`0030_directory_shares`**. PostgreSQL binds loopback port
+55432 by default. Bootstrap provisions the configured tenant once; repeating it returns a conflict.
+The default disabled authentication mode denies domain access.
+
+Use the [manufacturing API walkthrough](docs/api/README.md#manufacturing-quick-start) to
+create a draft, publish, activate and create an object. Its sample tenant UUID matches the
+configuration above. The fixtures model 63 objects and 70 forward links; vocabulary includes
+`machineId`, `machineName`, `operationalStatus`, `temperatureCelsius` and `locatedInFactory`.
+
+The trusted local profile is for loopback development. For an existing or shared database,
+inspect the target, back up and follow the [migration guide](docs/development/alembic-migrations.md)
+and [rollout runbook](docs/operations/phase-22-okd4.md) before upgrading. Several migrations
+are forward-only. API startup does not run migrations.
+
+To run the API in a container after database initialization:
 
 ```bash
 docker compose --env-file .env -f infrastructure/compose.yaml --profile api up -d --build
 ```
 
-This development environment is local-only. Domain endpoints deny access by default. To enable
-one explicitly trusted local principal, configure these variables in `.env` or export them for
-each host command (use your own tenant UUID if the sample tenant is inappropriate):
+For this disposable local stack, `docker compose --env-file .env -f infrastructure/compose.yaml down`
+stops services while preserving named volumes. Shared environments require targeted rollout operations.
+
+## Studio and authenticated workspaces
+
+Studio uses OIDC Authorization Code with PKCE and an opaque browser session cookie. Configure
+a trusted broker, API token audience/client policy and platform access before using it;
+the local API principal above does not provide browser login. Eligible Keycloak users can
+receive a personal workspace through explicitly configured onboarding. Other identities require
+provisioned access. Project and Ontology shares preserve owning-tenant authorization and
+have a bounded scope; share-only authority cannot submit background jobs.
+
+Follow [Studio setup](apps/studio/README.md), [OIDC token profiles](docs/development/oidc-token-profiles.md)
+and [local Keycloak setup](docs/development/keycloak-local.md). Build the local SDK dependency
+before starting Studio:
 
 ```bash
-export FOUNDRY_TRUSTED_LOCAL_IDENTITY=true
-export FOUNDRY_LOCAL_TENANT_ID=00000000-0000-0000-0000-000000000001
-export FOUNDRY_LOCAL_PRINCIPAL_ID=developer
-uv run python -m ontology_platform.bootstrap --name "Local manufacturing"
-uv run uvicorn ontology_platform.main:create_app --factory --host 127.0.0.1
+npm ci
+npm run build -w @foundry/sdk
+npm ci --prefix apps/studio
+npm run dev --prefix apps/studio
 ```
 
-Bootstrap runs once and provisions only that configured tenant. Repeating provisioning returns
-an explicit conflict. Every operational request uses the server-configured principal; client
-headers cannot select a tenant. Compose forwards the same variables to the API container.
-This is a trusted local administration mechanism. For verified production identities use
-[the Phase 7 security configuration and API](docs/api/security.md). Keep this instance on loopback. See [the persistence API](docs/api/README.md) for the
-create → draft → publish → activate → CRUD workflow and approved migration plans.
+Studio serves [localhost:3000](http://127.0.0.1:3000). Its server-side configuration includes
+`STUDIO_ORIGIN`, `STUDIO_API_ORIGIN`, `STUDIO_OIDC_ISSUER`, `STUDIO_OIDC_CLIENT_ID` and
+`STUDIO_API_AUDIENCE`. These must be supplied to the Next.js process; the repository-root
+`.env` is not automatically loaded by a host Studio process.
 
-## Validation
+Development can use process-local sessions. Production requires encrypted PostgreSQL-backed
+browser state through the internal API, with shared secrets and encryption keys configured
+as described in the [production runbook](docs/operations/production.md). Durable sessions
+support multiple Studio replicas and restart continuity. API tokens remain server-side;
+refresh tokens are not persisted.
+
+## Storage and workers
+
+Ontology-only development can leave artifact storage disabled. Artifacts, datasets, media
+and pipeline outputs use the existing S3-compatible ArtifactStore. The optional development
+MinIO profile uses a persistent volume and a source-built pinned image. Configure server-side
+storage credentials and matching API/worker settings using the
+[artifact setup guide](docs/development/artifact-storage.md) and
+[development storage guide](docs/development/development-object-storage.md).
+
+Submitting a job does not execute it in the API request. With the database, storage, source
+catalog and worker authentication configured, the existing entry points are:
+
+```bash
+# Process one eligible ingestion or semantic job, respectively.
+uv run python -m ontology_platform.ingestion
+uv run python -m ontology_platform.semantic
+# Run the execution controller, automation dispatch and idle lineage maintenance.
+uv run python scripts/run_execution_worker.py
+```
+
+Ingestion and semantic commands accept an optional `--ontology` queue filter. OIDC workers
+use their own verified service identity and immutable job-scoped grants; they resolve the
+initiating user and owning tenant per job. They recheck both identities' current authority.
+No startup tenant or ontology is required. Outbox delivery uses explicit service permissions.
+See [worker entry points](services/worker/README.md),
+[dynamic worker authorization](docs/operations/dynamic-workers.md) and
+[execution limits](docs/development/execution-workers.md).
+
+The semantic worker needs the pinned Open Ontologies 2.1.0 executable:
 
 ```bash
 uv run python scripts/install_semantic_engine.py
-uv run python scripts/validate_phase0.py
 uv run python scripts/semantic_smoke.py
-mvn -q -f integrations/protege/pom.xml compile exec:java \
-  '-Dexec.args=fixtures/manufacturing.ttl artifacts/manufacturing.owl'
 ```
 
-The installer checks v2.1.0 release bytes against committed SHA256 sums. macOS ARM64/x86_64
-and Linux x86_64 downloads are supported. For other hosts build the pinned source with
-`cargo build --locked --release` and set `OPEN_ONTOLOGIES_BIN` (required features for the
-exercised RDF/SHACL/reasoning commands: none). This builds an upstream dependency, not a
-platform Rust accelerator. Source pins and licenses are in `integrations/dependencies.json`.
+The installer verifies committed SHA-256 checksums for supported macOS and Linux downloads.
+Other platforms need a build of the pinned upstream source and `OPEN_ONTOLOGIES_BIN`.
+See [dependency compatibility](docs/architecture/semantic-compatibility.md) and
+`integrations/dependencies.json`. Semantic results and derived facts remain separate from
+operational objects; approval does not mutate objects or execute actions.
 
-The existing `validate_phase0.py` command now runs the entire current suite, including Phase 4.
-The validation script requires a migrated disposable PostgreSQL database and the pinned
-engine; it uses `.env` by default or `TEST_DATABASE_URL`. Never point migration downgrade
-checks manually at a database with valuable data. Phase 1 integration tests create and drop
-unique PostgreSQL schemas and run upgrade/downgrade checks only inside those test schemas. `uv run pytest -ra` alone explicitly skips
-unconfigured PostgreSQL/engine tests; skips are NOT RUN, never PASS. CI configures both.
-The raw pySHACL compatibility test is a strict expected failure, reported separately;
-Open Ontologies validates the unchanged fixtures. The normalized pySHACL check and nine
-negative cases test RDF 1.1 string-term normalization in memory. See the compatibility report.
-
-`make lint`, `make typecheck`, and `make test` are shortcuts. Application source has strict
-mypy checks. API and schema packages are separate uv workspace members. Reserved directories
-record later phase boundaries; the Next.js app is in `apps/studio`; no native extension is implemented.
-A bounded PostgreSQL ingestion worker is available through the API package CLI.
-A bounded outbox delivery runner is included; production scheduling is deferred.
-
-## Architecture and next work
-
-- [Architecture](docs/architecture/overview.md) and [canonical contracts](docs/architecture/canonical-schema.md).
-- [Dependency/semantic compatibility](docs/architecture/semantic-compatibility.md).
-- [Phase 0 report](docs/development/phase-0-report.md).
-- [Architecture decisions](docs/decisions/) and [API contract](docs/api/README.md).
-- [Phase 1 report](docs/development/phase-1-report.md), [Phase 2 report](docs/development/phase-2-report.md),
-  and [query API](docs/api/queries.md).
-- [Phase 3 report](docs/development/phase-3-report.md), [action API](docs/api/actions.md),
-  [Phase 4 report](docs/development/phase-4-report.md), [ingestion API](docs/api/ingestion.md),
-  and [Phase 5 report](docs/development/phase-5-report.md); [Phase 6 report](docs/development/phase-6-report.md) and [interchange API](docs/api/interchange.md).
-
-Canonical fixtures are preserved. Section 24 of PLANS.md uses conceptual shorthand;
-examples/tests use actual `machineId`, `machineName`, `operationalStatus`,
-`temperatureCelsius`, `locatedInFactory` and the other supplied vocabulary.
-Stop development services with `docker compose --env-file .env -f infrastructure/compose.yaml down`.
-This preserves the PostgreSQL named volume.
-
-## Query development
-
-Query documentation and manufacturing examples are in [docs/api/queries.md](docs/api/queries.md).
-New endpoints live under `/api/v1/ontologies/{ontology}`: `/objects/{type}/query`,
-`/object-sets/query`, `/traverse`, `/aggregate`. Existing CRUD routes remain available.
-Set optional `FOUNDRY_QUERY_CURSOR_SECRET` to a random secret of at least 32 UTF-8 bytes for
-cursor validity across API restarts/processes; otherwise a process-local key is generated.
-Never commit a real key. Cursor pagination is not a historical snapshot.
-
-Run `uv run python scripts/benchmark_queries.py` for isolated PostgreSQL measurements. This
-creates/drops a random test schema and synthetic data through governed services, records plans
-under `docs/architecture/evidence/phase-2/`, and never modifies operational tenant data. It is
-a developer benchmark, not an ingestion implementation or production performance guarantee.
-
-## Governed actions and edit ownership
-
-Include the definitions in `ontologies/examples/manufacturing-actions.json` in an approved ontology
-draft, then use the registry's publish/activate workflow. The action API supports preview, execute
-with required idempotency keys, history and redacted audit. See [actions](docs/api/actions.md) for
-contracts, permissions, three-second/64 KiB limits, retry semantics and webhook configuration.
-Direct CRUD and action edits record property ownership; future source updates preserve governed
-edits by default through ReconciliationService. Bounded ingestion is implemented in Phase 4;
-production identity, scheduling and workload admission remain deferred.
-
-`uv run python scripts/benchmark_actions.py` and `uv run python scripts/smoke_actions.py` use
-disposable PostgreSQL schemas. `uv run python scripts/smoke_action_container.py` checks the built
-`csh-foundry-phase3` image with identity disabled and does not mutate operational data.
-
-## Governed ingestion
-
-Configure tenant-owned server registrations with `FOUNDRY_INGESTION_CATALOG_JSON` (secret server
-configuration), publish source/mapping versions and submit durable ingestion runs. No client request
-can provide a path, SQL or credentials. Run one eligible job with:
+## Development and validation
 
 ```bash
-uv run python -m ontology_platform.ingestion --ontology manufacturing
-uv run python -m ontology_platform.ingestion --ontology manufacturing --cleanup-days 7
-```
-
-See [ingestion contracts](docs/api/ingestion.md) for connector configuration, null/conversion rules,
-atomicity, source/edit ownership, quotas, retries, cancellation and explicit staging maintenance.
-Use `scripts/smoke_ingestion.py`, `scripts/benchmark_ingestion.py` and
-`scripts/smoke_ingestion_container.py` for reproducible HTTP, private-schema workload and final-image
-checks. The canonical fixture workflow produces 63 objects and 70 forward links; unchanged repeats
-do not increment revisions. Full production orchestration/security is not claimed.
-
-
-## Semantic compilation and jobs
-
-See [the semantic API](docs/api/semantic.md) and [Phase 5 report](docs/development/phase-5-report.md).
-Compile published metadata, export authorized bounded query selections, then submit validation,
-reasoning or native graph-diff jobs. Run a separate worker under the initiating configured principal:
-
-```bash
-uv run python -m ontology_platform.semantic --ontology manufacturing
-```
-
-Artifacts, reports, proofs and derived facts remain separate from operational state. Reading results
-rechecks input permissions and freshness. Set-level approval appends audit history and never updates
-objects/relationships or triggers actions. Open Ontologies remains pinned at 2.1.0; certificates are
-generated but independent Lean proof checking is NOT RUN on this host. The raw pySHACL mismatch and
-base owl-rl fixture limitation remain.
-
-## Optional Protégé file authoring
-
-See [interchange API](docs/api/interchange.md). Select explicit class/property/link IRIs and canonical
-constraint definitions, preview the import, then request CREATE_DRAFT. Original semantic axioms stay
-private and downloadable; publication and activation use separate existing registry APIs. No Protégé
-application or WebProtégé deployment is required. Turtle and RDF/XML are supported; OWL/XML is not.
-Run `uv run python scripts/smoke_semantic.py --interchange` for the actual local HTTP import plus
-semantic workflow, and `scripts/smoke_semantic_container.py --interchange` for the Phase 6 image smoke.
-Phase 7 security is documented in [security.md](docs/api/security.md); Phase 8 browser integration is documented below.
-
-
-## Production authentication and authorization
-
-Read [the security API and configuration](docs/api/security.md) before exposing domain endpoints.
-Set `FOUNDRY_AUTH_MODE=oidc`, configure trusted providers/audience/client allowlists, disable local
-identity, migrate to `0013_security`, and explicitly provision the first administrator through
-`python -m ontology_platform.security.bootstrap`. Only the documented JWT API access-token profile
-is supported. Unknown identities receive no membership or administrator role. Use Authorization
-Bearer tokens and, for multi-tenant users, an authorized X-Tenant-ID selection.
-
-RBAC and restrictive ABAC extend the existing governed service and SQL grant interfaces. Security
-administration, policy versions, revocation, audit and worker delegation use PostgreSQL. Workers need
-service credentials, automatic job-scoped grants and both identities' current permissions. See the
-[Phase 7 report](docs/development/phase-7-report.md) for validation and limitations. Phase 8 adds the Studio UI; no
-production deployment is included; Phase 10 operational hardening remains separate work.
-
-## Native Ontology Manager and Ontology Studio (Phase 8)
-
-`apps/studio` now contains a single Next.js/React/TypeScript application. Use Node >=22 and follow
-[Studio setup](apps/studio/README.md) for the server-side OIDC client, API audience and local runtime.
-Configure Phase 7 OIDC and explicit platform memberships first. The browser stores an opaque session
-cookie; FastAPI still verifies the API access token and applies current RBAC/ABAC on every operation.
-Live Microsoft/Google sign-in remains deferred. Local deterministic OIDC exists only in test tooling.
-
-Manager edits the canonical registry through a native graph, type/property/relationship editors,
-action declarations, drafts, compatibility, version history, separate publication/activation and OWL
-mapping diagnostics. Studio explores authorized objects and queries, traverses relationships,
-previews/executes governed actions and manages ingestion and semantic jobs/results. Workers remain
-separate. Complex developer contracts use labeled JSON editors. Phase 9 branch and SDK integration is described below.
-
-```
-cd apps/studio
+make lint
+make typecheck
+# Fixture checks without a database:
+uv run pytest services/api/tests/test_fixtures.py -ra
+# Python suite; configure disposable integrations for full coverage:
+make test
+# Platform SDKs:
 npm ci
-npm run dev
+npm run build
+npm run typecheck
+npm test
+# Studio (after SDK build and Studio dependency installation):
+npm run typecheck --prefix apps/studio
+npm test --prefix apps/studio
+npm run build --prefix apps/studio
 ```
 
-For container development use `docker compose --env-file .env -f infrastructure/compose.yaml
---profile studio up --build` (one command). See [the Phase 8 API checklist](docs/development/phase-8.md),
-[browser architecture](docs/decisions/0029-browser-session-and-studio.md) and completion report.
+Consult [fixtures/VALIDATION.md](fixtures/VALIDATION.md) for acceptance criteria and
+[the CI guide](docs/development/ci.md) for the current regression, browser, owner-role,
+real PostgreSQL/MinIO/semantic-engine and extended scale profiles. The historical
+`scripts/validate_phase0.py` name runs lint, types, migration drift and the current Python
+suite, not just Phase 0. It uses configured database settings unless `TEST_DATABASE_URL`
+is supplied; use a disposable database and prepare Node dependencies as documented in CI.
 
-The existing local Keycloak connection and certificate configuration are documented in
-[local Keycloak setup](docs/development/keycloak-local.md). Its public CA is mounted read-only into
-API/Studio through the normal Compose configuration; private keys remain in ignored local artifacts.
+Unconfigured integration tests may skip locally: report them as **NOT RUN**, never PASS.
+Raw pySHACL has a preserved strict expected failure for RDFLib string-term identity;
+normalized SHACL and Open Ontologies checks are separate. The pinned base `owl-rl` profile
+does not infer the fixture's CriticalMachines; `owl-rl-ext` does. Interactive Protégé and
+external identity/cluster acceptance require their own executed evidence.
 
-## Governed schema branches and generated SDKs (Phase 9)
+## Architecture, operations and roadmap
 
-Ontology Manager now includes persistent branch development, immutable revision history, stable-ID
-comparison, deterministic three-way merges with explicit conflict resolution and exact preview/revision
-preconditions. Merge results stay in a development branch; explicit handoff creates an ordinary draft.
-Existing migration approval, publication and separate activation remain authoritative.
+- [Architecture overview](docs/architecture/overview.md), [canonical schema](docs/architecture/canonical-schema.md) and [architectural decisions](docs/decisions/).
+- [API reference index](docs/api/README.md) and [migration instructions](docs/development/alembic-migrations.md).
+- [Phase 21 lineage and rollout report](docs/development/phase-21-report.md), [Phase 22 report](docs/development/phase-22-report.md) and [directory-sharing follow-up](docs/development/phase-22-ldap-recipient-search-report.md).
+- [Production operations](docs/operations/production.md), [readiness gates](docs/operations/readiness.md), [OKD4 deployment](docs/operations/okd4-deployment.md) and [current sharing rollout](docs/operations/phase-22-okd4.md).
+- [Roadmap and authorization history](PLANS.md). Dated reports preserve their original evidence and scope; later implementation supersedes their historical “not implemented” statements.
 
-Generate independent Python or TypeScript packages from immutable published versions through the
-Manager, authorized API or `uv run python -m ontology_platform.sdk`. Generated SDKs use the actual
-query AST, typed object/action access, traversal, cursor pages, expected revisions and stable
-caller-supplied action idempotency keys. Async token providers accept platform API bearer tokens;
-no browser/worker/connector secrets enter packages. Source/ZIP generation is deterministic.
-
-Read [branch/SDK contracts and usage](docs/api/branching-sdk.md),
-[Phase 9 report](docs/development/phase-9-report.md),
-[branch decision](docs/decisions/0030-governed-schema-branches.md) and
-[SDK decision](docs/decisions/0031-canonical-sdk-compilation.md).
-Migrate local development to `0015_sdk`. CI installs Node/npm dependencies before the Python suite
-because that suite independently builds generated TypeScript packages. Run
-`uv run python scripts/benchmark_phase9.py` with Node >=22 for disposable local samples, and
-`scripts/smoke_phase9_containers.py` after building the `csh-foundry-phase9` and
-`csh-foundry-studio:phase9` images. No external deployment is performed.
-
-Scope limits include same-published-base merges, JSON branch editing, explicit history/query bounds,
-JavaScript safe integer limits and current active-schema SDK alignment. Production hardening and
-live Microsoft/Google sign-in follow the approved [Phase 10 readiness gates](docs/development/phase-10.md).
-
-## Phase 10 hardening and Keycloak
-
-Keycloak is the selected replaceable broker. Runtime authentication stays standard OIDC/RFC 9068;
-PostgreSQL principal bindings, memberships and RBAC/ABAC remain authoritative. Shared encrypted
-PostgreSQL browser sessions support two tested Studio processes, restart continuity and shared
-logout. New production configuration fails closed and rejects owner/superuser runtime DB roles.
-
-The opt-in production Compose profile includes TLS ingress, network boundaries, nonroot application
-images, separate bounded workers, file-backed secrets, workload admission and monitoring foundations.
-Read the [operator runbooks](docs/operations/production.md), [implementation checklist](docs/development/phase-10-checklist.md),
-[readiness matrix](docs/operations/readiness.md) and [Phase 10 report](docs/development/phase-10-report.md).
-Migrate to `0017_capacity` after a verified backup; earlier destructive downgrade warnings still apply.
-
-Validation commands include `scripts/test_keycloak.py`, `scripts/test_ingress.py`,
-`scripts/test_recovery.py`, `scripts/load_phase10.py`, and `STUDIO_E2E_DURABLE=true uv run python
-scripts/test_studio.py` after a Studio build. These use disposable local resources; do not point
-fault or restoration tests at production. Image vulnerability findings and missing target acceptance
-are release gates. Live Entra/Google/Workspace sign-in is NOT RUN / NOT CERTIFIED without external
-registrations, credentials and test organizations. No production deployment or Phase 11 work was done.
-
-The [Phase 10 acceptance-closure evidence](docs/architecture/evidence/phase-10-closure/) now includes
-combined production-template manufacturing/security/runtime checks and a
-[per-match vulnerability disposition](docs/operations/vulnerability-disposition.md). The high-severity
-container gate remains **FAIL / BLOCKED**. Application regression, local deployment tests and live
-provider/production certification are separate decisions; consult the updated report/readiness matrix.
-The disposable runner is `scripts/accept_phase10.py`; local alert delivery is
-`scripts/test_alert_delivery.py`. Setup, generated private evidence and promotion requirements are
-in the [operator runbook](docs/operations/production.md#acceptance-closure--disposable-production-profile).
-
-The [acceptance continuation](docs/architecture/evidence/phase-10-closure-2/) closes full-profile
-PostgreSQL 17.11 PITR and concurrent job admission, including a fix for API audit-pool starvation.
-Final checks include **529 Python passes + one preserved strict xfail**, **27 frontend tests**,
-**38 passing deployment assertions**, and five browser E2E passes retained from earlier closure.
-The latest paced sample has zero errors but misses the provisional read-latency target. The
-patched ingress image passes scanning; retained application-base high findings and supplier
-PostgreSQL/Keycloak critical findings still block promotion. No production certification is claimed.
-
-Phase 10 continuation 3 records 549 Python passes/one strict xfail, 27 frontend tests and five
-isolated browser passes, with extended restored-application, quota, identity/artifact fault and
-real-API monitoring evidence. Acceptance remains **BLOCKED** by container findings and inconsistent
-provisional read latency. See the [continuation matrix](docs/architecture/evidence/phase-10-closure-3/README.md)
-and [report](docs/development/phase-10-report.md). Grype now uses one shared locked cache; twelve
-verified duplicate databases were removed. No Phase 11 work was started.
-
-## Phase 10 Acceptance Closure 4 — 2026-11-03
-
-[Closure 4 evidence](docs/architecture/evidence/phase-10-closure-4/README.md) records **558 Python
-passes/one strict xfail/zero skips**, **29 frontend tests**, five isolated E2E passes and unchanged
-`0017_capacity`. Optional correlated API/BFF/SQL timing, bounded resource sampling and write/fault
-coverage preserve existing authorization, audit, transactions and developer services. All 3,320
-measured read/SDK requests meet the current protocol's p95 targets; 246 timed writes have zero
-unexpected errors. A captured 1,079 ms tail stall remains causally unresolved. No speculative
-performance optimization was applied.
-
-The six-image policy still **FAILS: 274 high/two critical matches across 32 distinct advisories**.
-The Keycloak system-CA correction is verified already present; its scanner finding is retained.
-PostgreSQL libxml2 remains UNFIXED. No new package vulnerability was patched or risk accepted.
-Implementation PASS; local/production-like acceptance BLOCKED; production certification NOT RUN.
-Remaining work is Phase 10 security disposition, causal/fault/target evidence and external operator
-certification. Phase 11 remains unapproved.
-
-## Phase 10 security remediation — 2026-11-03
-
-Current [security closure evidence](docs/architecture/evidence/phase-10-security-closure/README.md)
-reviews all 32 baseline advisories and selects minimized API/semantic and PostgreSQL runtimes.
-GnuPG build tools are removed from PostgreSQL; API excludes the dependency installer/cache.
-Raw selected inventory: **251 high/two critical, 31 distinct IDs** (previously 274/two, 32).
-Both critical matches remain blocking; the Keycloak CA fix is technically verified already present,
-with no approved scanner exception. Six SBOM/scan identities are verified; unchanged image/database
-reports retain their original execution dates. No risk approval, publication or external deployment occurred.
-Production now requires `POSTGRES_IMAGE` for the derived reviewed image; see the operator runbook.
-Regression: 585 Python passes/one strict xfail/zero skips, 29 frontend and five browser passes.
-Implementation PASS; local/production-like acceptance BLOCKED; production certification NOT RUN.
-Historical latency diagnostics are retained and are not an independent release blocker in this
-security scope. Continue Phase 10 supported remediation/independent approval and external gates only.
-
-The final candidate additionally removes the optional `mount` command package from API, Studio,
-semantic and PostgreSQL using apt. Sixteen util-linux source-package matches disappear; required
-util-linux/libmount components and their four advisories remain unresolved. No full advisory fix
-is inferred from these command removals. The earlier 267-high candidate and its deployment evidence
-are retained separately; final candidate counts are 251 high/two critical.
-
-Final exact-candidate combined deployment **PASS: 58 assertions / 50 distinct checks**, including
-physical PITR/restored applications, worker recovery, authorization/governance, durable sessions,
-TLS, rotations and rollback. Final isolated browser E2E **five PASS**; an earlier final attempt
-retains one stale activation-header failure despite successful activation. Its cause remains
-unresolved and is recorded as an intermittent validation limitation, not erased by the passing
-rerun. Final security/release/recovery focused suite: **55 PASS**. No assertions/timeouts changed.
-
-## Phase 10 OKD4 deployment profile
-
-The [OKD4 deployment guide](docs/operations/okd4-deployment.md) provides portable Kustomize resources,
-restricted security contexts, arbitrary-UID application images, external PostgreSQL/Keycloak
-configuration, Routes and explicit migration ordering. Studio retains its Next.js BFF server;
-OKD needs no nginx. [The storage audit](docs/architecture/storage-audit.md) finds no current S3
-requirement; registered file sources still require shared read-only storage.
-
-See the [administrator request](docs/operations/okd4-infrastructure-request.md) and
-[readiness evidence](docs/architecture/evidence/phase-10-okd4-readiness/README.md) for exact validation,
-image identities and remaining gates. The application image security gate remains FAIL and release
-remains BLOCKED. Local container tests do not establish OKD SCC admission or production certification.
-The user’s future roadmap in PLANS.md is preserved; Phase 11 remains unapproved.
-
-## Project governance and resource workspace (Phase 11)
-
-Projects now provide explicit owner/editor/viewer collaboration, nested logical folders, stable
-resource references, and revocable read-only sharing within a tenant. Studio's **Projects** view
-supports creation, navigation, membership, rename/move/archive, sharing and bounded registration of
-existing published ontology assets. Open a resource in the existing Ontology Manager; schema and
-operational permissions remain independent and cumulative. Existing ontology-only clients continue
-to work. No dataset, storage backend, pipeline or application execution is introduced.
-
-See [Project API and lifecycle contracts](docs/api/projects.md),
-[design decisions](docs/decisions/0036-project-resource-governance.md) and
-[Phase 11 validation report](docs/development/phase-11-report.md).
-The new migration is `0018_projects`, following the verified `0017_capacity` head. Existing assets
-are not automatically assigned to Projects. Existing administrator role history is preserved;
-explicit Project membership is still required. Back up before applying a developer migration.
-This implementation did not migrate the shared developer database or restart its services.
-
-Run `PATH=/opt/homebrew/opt/node/bin:$PATH uv run python scripts/validate_phase11.py` on this host
-(or use Node >=22 on PATH elsewhere) for migration drift and Python regression in disposable
-PostgreSQL schemas. Frontend checks remain `npm test`, `npm run typecheck`, `npm run format:check`,
-and `npm run build` in `apps/studio`. The validation runner uses configured PostgreSQL and the
-pinned `.external/open-ontologies` binary; unavailable integration prerequisites are NOT RUN.
-
-Current authorization supersedes the historical Phase 11-unapproved statements above. Phase 10
-engineering is closed; deferred release gates remain mandatory under PLANS.md Section 23B.
-Production remains **BLOCKED / NOT PRODUCTION-CERTIFIED**. Phase 12 needs separate authorization.
-
-## Phase 12: immutable generic artifacts
-
-Authorized Phase 12 adds Project-governed generic artifact resources, immutable verified versions,
-an optional S3-compatible store and opt-in local MinIO. PostgreSQL remains authoritative; no
-dataset catalog or Phase 13 features are included. Ontology-only workflows keep storage disabled.
-See [artifact API](docs/api/artifacts.md), [storage setup and recovery](docs/development/artifact-storage.md),
-[ADR 0037](docs/decisions/0037-immutable-artifact-storage.md) and
-[validation report](docs/development/phase-12-report.md). Production remains blocked under Section 23B.
-
-Phase 13 adds independent, Project-governed datasets with immutable source versions, full-content
-CSV/JSON/NDJSON/Parquet validation, schema history and bounded previews. See the
-[dataset API and validation contract](docs/api/datasets.md). Studio supports dataset creation, upload,
-validation errors, source download, version history, schema and preview in Project folders.
-Phase 14 adds immutable pipeline definitions, pinned dataset inputs, Polars runs, durable validation
-and bounded 1 GiB ingestion. See [pipeline contracts](docs/api/pipelines.md),
-[worker setup and limits](docs/development/execution-workers.md) and
-[Phase 14 validation status](docs/development/phase-14-report.md).
-Production remains blocked; Phase 15 is not authorized.
-
-Phase 15 adds governed dataset-to-ontology mapping and materialization. See
-[the mapping API](docs/api/mappings.md), [architecture](docs/architecture/materialization.md),
-[ADR 0040](docs/decisions/0040-governed-materialization.md) and
-[validation report](docs/development/phase-15-report.md). Materialization reuses the existing execution
-worker and canonical reconciliation services; committed batches are visible during incomplete runs.
-The additive migration is `0022_materialization`; never apply it to shared data without authorization.
-Phase 16 is excluded. Production remains blocked under Section 23B.
-
-Phase 16 developer packages: [TypeScript SDK](packages/typescript-sdk/README.md),
-[React hooks](packages/react-sdk/README.md), [local starter application](apps/sdk-example/README.md),
-and [future workspace design contract](docs/development/code-workspace-sdk-contract.md).
-Packages are local build artifacts; production remains blocked under PLANS.md Section 23B.
-
-Phase 17 adds governed Media Sets, trusted typed functions and durable automations. See
-[API/workflow contracts](docs/api/media-functions-automations.md),
-[resource limits and trust boundary](docs/development/phase-17-limits.md), and the
-[Phase 17 validation report](docs/development/phase-17-report.md). Use disposable test schemas;
-`0023_media_functions` is not automatically applied to the shared developer database.
-
-Phase 19 adds Project-governed visual applications: private revisioned drafts, a declarative widget
-renderer, structured visual authoring and immutable publication through the existing BFF/SDK and
-canonical query/action services. See [authoring and manufacturing walkthrough](docs/development/visual-application-authoring.md),
-[application API](docs/api/applications.md), [ADR 0044](docs/decisions/0044-visual-applications.md),
-[limits](docs/development/phase-19-limits.md) and [validation report](docs/development/phase-19-report.md).
-Migration `0025_applications` is forward-only; shared developer data is never automatically migrated.
-Phase 20 and production certification remain outside this authorization.
-
-Phase 20 extends the governed pipeline engine with versioned general DAG definitions, shared
-Parquet intermediates, persisted node execution, and multiple atomically published output datasets.
-The existing visual builder authors branches, transformed joins/unions and per-output targets.
-Historical linear definitions and v1 graphs retain their original execution/compilation path.
-See [DAG execution](docs/development/pipeline-dag-execution.md),
-[atomic publication](docs/development/atomic-multi-output-publication.md),
-[limits](docs/development/phase-20-limits.md) and the
-[Phase 20 report](docs/development/phase-20-report.md) for actual acceptance status and evidence.
-The shared developer database is not automatically migrated; production remains BLOCKED under §23B.
-
-### Personal workspaces and shared workers
-
-Phase 22 adds personal workspace onboarding for eligible Keycloak users and explicit
-cross-tenant invitations for Projects and Ontologies. Studio uses the selected tenant
-as the acting context, while shared requests and worker claims resolve the persisted
-owning tenant. See [API contracts](docs/api/tenant-sharing.md),
-[architecture](docs/architecture/personal-tenants-and-sharing.md), and the
-[OKD4 rollout runbook](docs/operations/phase-22-okd4.md).
+The backend remains a modular FastAPI/Pydantic/SQLAlchemy application, with Polars for tabular
+transformations. PostgreSQL owns governance and operational transactions; optional S3 storage
+holds immutable binary content. No Rust accelerator, Spark engine, arbitrary user-code execution,
+Code Workspace/IDE hosting or ownership-transfer API is implemented. Target OKD4, live
+organizational identity and production release gates still require separate acceptance.

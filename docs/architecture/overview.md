@@ -1,32 +1,38 @@
-# Operational architecture — Phases 0–4
+# Operational architecture
 
-PostgreSQL remains the authoritative operational store. The backend is a modular Python
-monolith. Canonical JSON/Pydantic metadata is independent of RDF/OWL. Open Ontologies is
-an external semantic process; Protégé is optional file-based authoring tooling. Semantic
-adapter code and fixtures are unchanged through Phase 4. Studio and SDKs remain later roadmap
-work. Governed actions, outbox delivery and a bounded PostgreSQL ingestion runner are implemented.
-Phase 2 operational queries share the existing governed transactions and active registry.
+CSH Foundry is a modular FastAPI/Pydantic/SQLAlchemy backend with a Next.js Studio and
+Python/TypeScript developer tooling. Current source covers Phases 0–22 and subsequent
+worker and directory-sharing fixes. PostgreSQL is authoritative for operational state,
+metadata, authorization, jobs, audit, lineage and browser sessions. Optional S3-compatible
+storage holds immutable binary artifacts; it does not replace PostgreSQL governance.
+
+Canonical JSON/Pydantic metadata is independent of RDF/OWL. Open Ontologies is an external
+semantic process; Protégé is optional file-based authoring tooling. Publication, activation,
+object mutations and derived-fact approval remain distinct governed operations.
 
 Public application contracts live in `ontology_platform/contracts.py`. HTTP routes depend
 on application services; services use the shared public governed unit-of-work and database
 models. Registry storage helpers expose canonical snapshots to object services. Object
 validation and persistence checks expose an explicit interface to schema activation.
-The API never writes ORM entities directly. No service imports the semantic engine.
+The API never writes ORM entities directly. Domain services access semantic functionality through the separate adapter boundary.
 
 ## Tenant and transaction boundaries
 
-The server-configured trusted local principal is opt-in and fails closed. Each service
-operation invokes an authorization interface, resolves an existing tenant, and owns a
-transaction. Provisioning is the sole exception to preexisting tenant resolution and can
-create only the principal's own configured tenant. Clients cannot select tenant identity
-through headers. Canonical schema bodies include tenant identity and are rejected if it
-differs from the principal. OIDC/RBAC/ABAC and public deployment remain out of scope.
+Authentication defaults to disabled domain access. Trusted local identity is an opt-in
+loopback development profile with a server-configured tenant and principal. OIDC mode
+verifies provider access tokens, resolves platform-controlled memberships and applies RBAC
+and restrictive SQL ABAC. An authorized `X-Tenant-ID` selects acting context; a client header
+never grants membership. Eligible configured Keycloak identities can provision one personal
+tenant through the governed onboarding transaction.
 
 Every persisted ontology/version/type/object/link/plan/activation is tenant-owned through
 composite foreign keys. Object/link lookup, counts and navigation include tenant predicates.
-No cross-tenant sharing is supported. Database RLS is not enabled: the application database
-role is trusted, and direct unrestricted SQL is not an authenticated API. All operational
-mutations must pass through governed services.
+Explicit Project/Ontology invitations can authorize bounded cross-tenant access. Shared
+requests resolve the persisted owning tenant and enforce owner policy plus share scope;
+share-only authority cannot submit jobs. See [personal tenants and sharing](personal-tenants-and-sharing.md).
+Database RLS is not enabled: the application database role is trusted, and direct SQL is not
+an authenticated API. All operational mutations pass through governed services and own a
+PostgreSQL transaction.
 
 Writers lock the owning ontology row `FOR UPDATE`. Readers needing a consistent active
 schema/data interval use `FOR SHARE`. This intentionally coarse foundation serializes
@@ -89,7 +95,7 @@ produces parameterized SQL; `service.py` handles bounded results, projections, a
 signed keyset pagination; `object_set.py` composes the same requests lazily. Each traversal step
 uses an authorized materialized identity CTE over existing forward links. JSONB property casts
 are type/scope guarded. QueryGrant expresses SQL-visible rows and properties; legacy providers
-without query grants fail closed. No production policy engine is introduced.
+without query grants fail closed. Current security grants apply RBAC and restrictive ABAC before SQL execution.
 
 Measured fixed-width status equality and C-collation identity ordering indexes complement the existing identity/link indexes.
 Other property index jobs remain deferred. Per-ontology shared/exclusive locks are unchanged.
@@ -100,9 +106,8 @@ See ADRs 0013–0017, the query API reference and the Phase 2 report for exact s
 Governed actions compose existing object/link services in one caller-owned PostgreSQL transaction.
 History/idempotency, redacted immutable audits, outbox and action overlays commit together. Preview
 rolls back a savepoint. A bounded leased runner delivers notifications outside action transactions.
-Property ownership/reconciliation services protect edits without introducing ingestion. See
-[the action contract](../api/actions.md) and ADRs 0018–0020. PostgreSQL and ontology locks remain
-authoritative; no semantic, UI, SDK or production identity expansion is included.
+Property ownership/reconciliation services protect edits during subsequent ingestion and materialization. See
+[the action contract](../api/actions.md) and ADRs 0018–0020. PostgreSQL and ontology locks remain authoritative across API, UI, SDK and worker callers.
 
 ## Phase 4 ingestion
 
@@ -138,3 +143,40 @@ Transaction-local snapshots only reuse lock-protected security state. Independen
 audit survives request rollback. Shared workers intersect current service/initiator authority through
 immutable job-scoped grants, dynamically resolved per attempt. See ADR 0047 and the
 [worker rollout guide](../operations/dynamic-workers.md). No RLS or production deployment is claimed.
+
+
+## Projects, assets and execution
+
+Project membership, resource governance and canonical ontology permissions are cumulative.
+Generic artifacts have immutable verified versions; datasets add format/schema validation,
+previews and immutable source versions. Pipelines pin inputs and published definitions.
+The visual builder compiles closed graph documents into the existing Polars execution
+contracts, including versioned DAGs and atomically published multiple outputs. Mapping
+materialization reuses canonical object/link reconciliation; committed batches can remain
+visible when a later batch fails. See [materialization](materialization.md) and the
+[pipeline API](../api/pipelines.md).
+
+Media Sets, trusted typed functions and automations use the same governed resources and
+durable execution control plane. Published declarative applications invoke canonical query
+and action services through the existing BFF/SDK. No arbitrary user code is executed.
+
+Workers authenticate as services and resolve the owning tenant and initiating user from
+immutable job grants at claim time. Leases, attempt fencing and current user/worker authority
+guard publication. The execution controller also dispatches automations and reconciles
+pending lineage while no execution is queued; see [ADR 0052](../decisions/0052-worker-memory-and-idle-maintenance.md).
+
+## Studio, lineage and deployment boundaries
+
+Studio's BFF keeps API tokens server-side and uses opaque HttpOnly browser cookies.
+Production browser state is encrypted in PostgreSQL through a credential-protected internal
+API; multiple Studio replicas share state. Process-local sessions remain a development option.
+See [ADR 0033](../decisions/0033-durable-browser-state.md).
+
+Lineage is a governed projection of canonical resources, immutable versions and executions.
+Transactional invalidation and bounded reconciliation expose completeness explicitly.
+Impact, column lineage, freshness and operational events independently enforce visibility;
+see [lineage contracts](../development/lineage-observability.md).
+
+The current readiness revision is `0030_directory_shares`. Compose and OKD4 deployment
+profiles exist, but implementation and local checks do not establish production certification.
+Release remains blocked by [the readiness gates](../operations/readiness.md) and PLANS.md §23B.
