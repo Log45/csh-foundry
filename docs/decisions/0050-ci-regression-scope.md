@@ -2,6 +2,10 @@
 
 Status: accepted for the CI maintenance request.
 
+The later [ADR 0053](0053-documentation-only-ci.md) permits confirmed documentation-only
+events to skip expensive regression through an explicit aggregate-gate policy. All other
+regression scope and reporting requirements below remain in force.
+
 A green push check must represent ordinary behavior across existing features. The former
 single validation job combined development browser runs, large-data tests, and operational
 drills while storage-dependent tests could silently skip without MinIO.

@@ -186,6 +186,10 @@ npm test --prefix apps/studio
 npm run build --prefix apps/studio
 ```
 
+Confirmed documentation-only pushes and PRs skip expensive CI jobs while retaining the required
+`CI / regression` check. Code, configuration, fixtures and uncertain comparisons run full regression;
+manual dispatch also runs the full suite. See [CI scope rules](docs/development/ci.md#documentation-only-changes).
+
 Consult [fixtures/VALIDATION.md](fixtures/VALIDATION.md) for acceptance criteria and
 [the CI guide](docs/development/ci.md) for the current regression, browser, owner-role,
 real PostgreSQL/MinIO/semantic-engine and extended scale profiles. The historical

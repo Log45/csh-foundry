@@ -1,11 +1,55 @@
 # Continuous integration
 
-Every push and pull request runs the same broad regression checks. `merge_group` also
-validates a queued merge. The required aggregate check is **CI / regression**; configure
+Every push, pull request and `merge_group` starts a lightweight change-detection job.
+Confirmed documentation-only changes skip the expensive regression jobs; all other changes
+run the same broad checks. The required aggregate check is **CI / regression**; configure
 that name in the repository ruleset after the first hosted run. Repository settings are
-not changed by these workflow files.
+not changed by these workflow files. Keep that aggregate required rather than requiring
+individual jobs that intentionally skip on documentation-only changes.
 
-The jobs run in parallel: Python lint/types and generated contracts, SDK tests/builds and
+## Documentation-only changes
+
+The implemented plan is to classify the complete Git comparison first, gate every expensive
+job on that result, and retain an unconditional aggregate check. `scripts/ci_changes.py`
+uses only Git and Python's standard library, so this decision needs no dependency install,
+storage image, database, Node setup or application build.
+
+The documentation allowlist is deliberately narrow:
+
+- Files named `README.md`, `CHANGELOG.md` or `AGENTS.md` anywhere in the repository.
+- Root `PLANS.md` and `fixtures/VALIDATION.md`.
+- Markdown files ending in `.md` beneath `docs/`.
+
+All changed paths must match. Code, dependencies and lockfiles, workflows, infrastructure,
+canonical fixtures, executable examples, MDX and unclassified files run full regression,
+including when mixed with documentation. Documentation images and other assets also run
+full regression under this policy. A rename checks both the removed and added paths.
+
+Existing-branch pushes compare event `before` and `after` commits. Pull requests compare
+their merge base to the PR head, so a documentation follow-up does not hide earlier code
+changes in the same PR. Merge queues compare the group's base and head. Checkout fetches
+full history; comparison uses NUL-delimited local Git output without an API file-list cap.
+New/deleted refs, missing history, malformed payloads, ambiguous merge bases, empty diffs
+and unknown events conservatively request full regression. Manual dispatch always requests
+the full suite. Reusable calls use the caller's event context; unsupported contexts run full CI.
+
+For confirmed documentation-only changes, storage, static/contracts, SDK, Studio, all backend
+shards and all browser/directory/owner jobs skip. The aggregate requires successful change
+detection, an exact `run_ci=false` output, and every expensive dependency to be `skipped`.
+It reports those tests as intentionally **NOT RUN**, not passed tests. For full regression,
+every dependency must succeed. Detector failure, cancellation, missing output or an unexpected
+dependency result fails the gate. The job summary records the scope decision.
+
+Workflow triggers stay active: GitHub can leave required checks pending when an entire workflow
+is filtered out. Job conditions plus the always-running aggregate preserve a terminal required
+check. See [GitHub's required-check guidance](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks)
+and [ADR 0053](../decisions/0053-documentation-only-ci.md).
+
+Weekly/manual extended acceptance and release workflows retain their existing behavior.
+This change does not deduplicate push and pull-request runs for code changes.
+
+After change detection requests full regression, jobs run in parallel: Python lint/types and
+generated contracts, SDK tests/builds and
 consumer installation, Studio component tests/types/formatting, and isolated integration
 suites. The backend is divided into four deterministic collection shards; their union
 runs every ordinary test exactly once. There are no per-shard feature allowlists. The
@@ -33,7 +77,7 @@ worker/initiator authorization checks. The ordinary database suite also checks m
 to head and Alembic model drift. The owner job provisions an unprivileged role
 only inside its disposable service database. It does not use development database roles.
 
-## Scope and reporting
+## Regression scope and reporting
 
 All ordinary Python tests are collected, including new tests in the configured test roots.
 Do not select regression tests by phase number or changed filenames. Dependency markers
@@ -79,7 +123,7 @@ monitoring, rollout, and production drills remain governed by the release runboo
 The normal regression jobs have 15–20 minute timeouts. The wall-time target is 10–15 minutes,
 with a roughly 20-minute cold-cache budget. These are targets pending hosted measurements,
 not measured guarantees. Use `--durations=20`, report timings, and job timings to tune setup
-or fixtures before removing coverage. No version matrix, path filtering, or automatic retry
+or fixtures before removing coverage. No version matrix, workflow-level path filtering, or automatic retry
 is used. New pushes cancel obsolete regression runs; acceptance runs do not cancel each
 other. Separate workflow/event concurrency groups prevent releases from cancelling PR CI.
 

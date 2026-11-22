@@ -117,13 +117,14 @@ def test_invalid_shard_is_a_usage_error(value):
 
 @pytest.mark.parametrize("status", ["success", "failure", "cancelled", "skipped"])
 @pytest.mark.parametrize(
-    "dependency", ["storage", "static", "sdk", "studio", "backend", "integration"]
+    "dependency", ["changes", "storage", "static", "sdk", "studio", "backend", "integration"]
 )
 def test_actual_required_gate_rejects_unsuccessful_dependencies(status, dependency):
     workflow = yaml.safe_load((ROOT / ".github/workflows/ci.yaml").read_text())
     gate = workflow["jobs"]["regression"]
     results = {name: {"result": "success"} for name in gate["needs"]}
-    results[dependency] = {"result": status}
+    results["changes"]["outputs"] = {"run_ci": "true"}
+    results[dependency]["result"] = status
     result = subprocess.run(
         ["bash", "-eo", "pipefail", "-c", gate["steps"][0]["run"]],
         cwd=ROOT,
@@ -132,6 +133,60 @@ def test_actual_required_gate_rejects_unsuccessful_dependencies(status, dependen
         text=True,
     )
     assert (result.returncode == 0) == (status == "success")
+
+
+@pytest.mark.parametrize("run_ci", ["false", "true", "", "invalid", None])
+def test_actual_gate_only_accepts_skips_confirmed_by_change_detection(run_ci):
+    workflow = yaml.safe_load((ROOT / ".github/workflows/ci.yaml").read_text())
+    gate = workflow["jobs"]["regression"]
+    results = {name: {"result": "skipped"} for name in gate["needs"]}
+    results["changes"] = {"result": "success", "outputs": {"run_ci": run_ci}}
+    result = subprocess.run(
+        ["bash", "-eo", "pipefail", "-c", gate["steps"][0]["run"]],
+        cwd=ROOT,
+        env=os.environ | {"RESULTS": json.dumps(results)},
+        capture_output=True,
+        text=True,
+    )
+    assert (result.returncode == 0) == (run_ci == "false")
+    if run_ci == "false":
+        assert "intentionally NOT RUN" in result.stdout
+
+
+@pytest.mark.parametrize("status", ["failure", "cancelled", "skipped"])
+def test_actual_gate_rejects_failed_detector_even_when_outputs_say_docs_only(status):
+    workflow = yaml.safe_load((ROOT / ".github/workflows/ci.yaml").read_text())
+    gate = workflow["jobs"]["regression"]
+    results = {name: {"result": "skipped"} for name in gate["needs"]}
+    results["changes"] = {"result": status, "outputs": {"run_ci": "false"}}
+    result = subprocess.run(
+        ["bash", "-eo", "pipefail", "-c", gate["steps"][0]["run"]],
+        cwd=ROOT,
+        env=os.environ | {"RESULTS": json.dumps(results)},
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0
+
+
+@pytest.mark.parametrize("status", ["success", "failure", "cancelled"])
+@pytest.mark.parametrize(
+    "dependency", ["storage", "static", "sdk", "studio", "backend", "integration"]
+)
+def test_documentation_gate_rejects_unexpected_execution_results(status, dependency):
+    workflow = yaml.safe_load((ROOT / ".github/workflows/ci.yaml").read_text())
+    gate = workflow["jobs"]["regression"]
+    results = {name: {"result": "skipped"} for name in gate["needs"]}
+    results["changes"] = {"result": "success", "outputs": {"run_ci": "false"}}
+    results[dependency]["result"] = status
+    result = subprocess.run(
+        ["bash", "-eo", "pipefail", "-c", gate["steps"][0]["run"]],
+        cwd=ROOT,
+        env=os.environ | {"RESULTS": json.dumps(results)},
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0
 
 
 def test_openapi_export_needs_no_dotenv_database_or_service(tmp_path):

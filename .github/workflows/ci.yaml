@@ -6,9 +6,27 @@ concurrency:
   group: regression-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  changes:
+    name: Detect documentation-only changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      run_ci: ${{ steps.scope.outputs.run_ci }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - id: scope
+        name: Determine regression scope
+        run: python3 scripts/ci_changes.py
   storage:
+    needs: changes
+    if: needs.changes.outputs.run_ci == 'true'
     uses: ./.github/workflows/ci-storage.yaml
   static:
+    needs: changes
+    if: needs.changes.outputs.run_ci == 'true'
     name: Static checks and contracts
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -39,6 +57,8 @@ jobs:
           npm run check:generated
           git diff --exit-code -- apps/studio/lib/openapi.json apps/studio/lib/api-schema.ts packages/typescript-sdk/src/schema.ts
   sdk:
+    needs: changes
+    if: needs.changes.outputs.run_ci == 'true'
     name: SDK regression and consumer build
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -64,6 +84,8 @@ jobs:
           path: artifacts/ci/
           if-no-files-found: warn
   studio:
+    needs: changes
+    if: needs.changes.outputs.run_ci == 'true'
     name: Studio component regression
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -90,7 +112,8 @@ jobs:
           path: artifacts/ci/
           if-no-files-found: warn
   backend:
-    needs: storage
+    needs: [changes, storage]
+    if: needs.changes.outputs.run_ci == 'true'
     name: Backend (${{ matrix.shard }}/4)
     strategy:
       fail-fast: false
@@ -102,7 +125,8 @@ jobs:
       shard: ${{ format('{0}/4', matrix.shard) }}
       artifact_suffix: ${{ format('shard-{0}', matrix.shard) }}
   integration:
-    needs: storage
+    needs: [changes, storage]
+    if: needs.changes.outputs.run_ci == 'true'
     name: Regression (${{ matrix.suite }})
     strategy:
       fail-fast: false
@@ -114,19 +138,27 @@ jobs:
   regression:
     name: CI / regression
     if: always()
-    needs: [storage, static, sdk, studio, backend, integration]
+    needs: [changes, storage, static, sdk, studio, backend, integration]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
-      - name: Require every regression job to succeed
+      - name: Require successful regression or confirmed documentation-only skips
         env:
           RESULTS: ${{ toJSON(needs) }}
         run: |
           python - <<'PYCODE'
           import json, os
           results = json.loads(os.environ["RESULTS"])
-          failed = {name: job["result"] for name, job in results.items() if job["result"] != "success"}
+          changes = results.pop("changes")
+          run_ci = changes.get("outputs", {}).get("run_ci")
+          if changes["result"] != "success" or run_ci not in ("true", "false"):
+              raise SystemExit("Regression gate failed: change detection did not succeed")
+          expected = "success" if run_ci == "true" else "skipped"
+          failed = {name: job["result"] for name, job in results.items() if job["result"] != expected}
           if failed:
               raise SystemExit(f"Regression gate failed: {failed}")
-          print("PASS: all required regression jobs succeeded")
+          if run_ci == "true":
+              print("PASS: all required regression jobs succeeded")
+          else:
+              print("PASS: documentation-only changes; expensive regression intentionally NOT RUN")
           PYCODE
