@@ -136,12 +136,14 @@ jobs:
           uv run python scripts/check_test_report.py artifacts/ci/owner.xml
       - name: Operational acceptance
         if: inputs.suite == 'operations'
+        env:
+          FOUNDRY_INGRESS_TEST_IMAGE: csh-foundry-ingress:acceptance
         run: |
           mkdir -p artifacts/ci
           uv run python scripts/test_keycloak.py 2>&1 | tee artifacts/ci/keycloak.log
           uv run python scripts/test_recovery.py 2>&1 | tee artifacts/ci/recovery.log
           uv run python scripts/load_phase10.py 2>&1 | tee artifacts/ci/load.log
-          docker build -t csh-foundry-ingress:phase10 -f infrastructure/docker/ingress.Dockerfile .
+          docker build -t "$FOUNDRY_INGRESS_TEST_IMAGE" -f infrastructure/docker/ingress.Dockerfile .
           uv run python scripts/test_ingress.py 2>&1 | tee artifacts/ci/ingress.log
       - name: Record suite result
         if: always()

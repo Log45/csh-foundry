@@ -120,6 +120,11 @@ create a complete release acceptance manifest. Target-specific security, nonroot
 monitoring, rollout, and production drills remain governed by the release runbooks and
 `fixtures/VALIDATION.md`.
 
+Operational acceptance sets `FOUNDRY_INGRESS_TEST_IMAGE` explicitly and uses it for both
+the Docker build tag and `scripts/test_ingress.py`. Keep the two tied to the same setting;
+the smoke runner's standalone default may differ from the CI candidate. The
+[2026-11-23 fix report](ci-ingress-acceptance-fix.md) records the observed mismatch and validation.
+
 The normal regression jobs have 15–20 minute timeouts. The wall-time target is 10–15 minutes,
 with a roughly 20-minute cold-cache budget. These are targets pending hosted measurements,
 not measured guarantees. Use `--durations=20`, report timings, and job timings to tune setup

@@ -202,3 +202,63 @@ def test_openapi_export_needs_no_dotenv_database_or_service(tmp_path):
     assert json.loads(output.read_text()) == json.loads(
         (ROOT / "apps/studio/lib/openapi.json").read_text()
     )
+
+
+def test_operational_acceptance_builds_the_image_requested_by_ingress(tmp_path, monkeypatch):
+    workflow = yaml.safe_load((ROOT / ".github/workflows/ci-suite.yaml").read_text())
+    step = next(
+        step
+        for step in workflow["jobs"]["test"]["steps"]
+        if step.get("name") == "Operational acceptance"
+    )
+    # Execute the actual shell step, recording commands without running operational drills.
+    commands = tmp_path / "commands.jsonl"
+    executables = tmp_path / "bin"
+    executables.mkdir()
+    for name in ("docker", "uv"):
+        executable = executables / name
+        executable.write_text(
+            f"#!{sys.executable}\n"
+            "import json, os, sys\n"
+            "with open(os.environ['COMMAND_LOG'], 'a') as log:\n"
+            "    log.write(json.dumps({'args': sys.argv, 'image': "
+            "os.environ.get('FOUNDRY_INGRESS_TEST_IMAGE')}) + '\\n')\n"
+        )
+        executable.chmod(0o755)
+    subprocess.run(
+        ["bash", "-eo", "pipefail", "-c", step["run"]],
+        cwd=tmp_path,
+        env=os.environ
+        | step["env"]
+        | {
+            "PATH": str(executables) + os.pathsep + os.environ["PATH"],
+            "COMMAND_LOG": str(commands),
+        },
+        check=True,
+    )
+    calls = [json.loads(line) for line in commands.read_text().splitlines()]
+    build = next(call["args"] for call in calls if call["args"][1] == "build")
+    image = build[build.index("-t") + 1]
+    ingress = next(call for call in calls if "scripts/test_ingress.py" in call["args"])
+    assert image and ingress["image"] == image
+
+    # Confirm the real smoke runner requests that same image, before any container starts.
+    spec = importlib.util.spec_from_file_location(
+        "test_ingress_runner", ROOT / "scripts/test_ingress.py"
+    )
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    monkeypatch.setenv("FOUNDRY_INGRESS_TEST_IMAGE", ingress["image"])
+
+    class ContainerStartIntercepted(Exception):
+        pass
+
+    def intercept(command, **kwargs):
+        assert command[:4] == ["docker", "run", "--rm", "-d"]
+        assert command[-1] == image
+        raise ContainerStartIntercepted
+
+    monkeypatch.setattr(module.subprocess, "check_output", intercept)
+    with pytest.raises(ContainerStartIntercepted):
+        module.main()
